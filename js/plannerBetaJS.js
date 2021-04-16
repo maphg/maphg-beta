@@ -5760,28 +5760,29 @@ const obtenerOpcionesMaterialesEquipo = (idEquipo, tipoAsignacion) => {
 
                const codigo = `
                   <tr class="hover:bg-gray-200 cursor-pointer text-xs font-normal">
-                     <td class="border-b border-gray-200 uppercase text-center px-2 py-1 w-auto" data-title-material="${cod2bend}">
-                           <h1 class="truncate w-auto">${cod2bend}</h1>
+             
+                     <td class="border-b border-gray-200 uppercase text-center px-2 py-1" data-title-material="${cod2bend}">
+                           <h1 class="truncate w-16">${cod2bend}</h1>
                      </td>
 
                      <td class="border-b border-gray-200 uppercase text-center px-2 py-1 w-auto" data-title-material="${descripcion}">
-                           <h1 class="truncate w-auto">${descripcion}</h1>
+                           <h1 class="truncate w-40">${descripcion}</h1>
                      </td>
 
                      <td class="border-b border-gray-200 uppercase text-center px-2 py-1 w-auto" data-title-material="${sstt}">
-                           <h1 class="truncate w-auto">${sstt}</h1>
+                           <h1 class="truncate w-40">${sstt}</h1>
                      </td>
 
                      <td class="border-b border-gray-200 uppercase text-center px-2 py-1 w-auto" data-title-material="${caracteristicas}">
-                           <h1 class="truncate w-auto">${caracteristicas}</h1>
+                           <h1 class="truncate w-32">${caracteristicas}</h1>
                      </td>
 
                      <td class="border-b border-gray-200 uppercase text-center px-2 py-1 w-auto" data-title-material="${marca}">
-                           <h1 class="truncate w-auto">${marca}</h1>
+                           <h1 class="truncate w-24">${marca}</h1>
                      </td>
 
                      <td class="border-b border-gray-200 uppercase text-center px-2 py-1 w-auto" data-title-material="${modelo}">
-                           <h1 class="truncate w-auto">${modelo}</h1>
+                           <h1 class="truncate w-24">${modelo}</h1>
                      </td>
 
                      <td class="border-b border-gray-200 uppercase text-center px-2 py-1 w-12">
@@ -12986,28 +12987,29 @@ const obtenerMaterialesIncidencias = (idIncidencia, tipoIncidencia) => {
 
                const codigo = `
                   <tr class="hover:bg-gray-200 cursor-pointer text-xs font-normal">
-                     <td class="border-b border-gray-200 uppercase text-center px-2 py-1 w-auto" data-title-material="${cod2bend}">
-                           <h1 class="truncate w-auto">${cod2bend}</h1>
+                    
+                     <td class="border-b border-gray-200 uppercase text-center px-2 py-1" data-title-material="${cod2bend}">
+                           <h1 class="truncate w-16">${cod2bend}</h1>
                      </td>
 
                      <td class="border-b border-gray-200 uppercase text-center px-2 py-1 w-auto" data-title-material="${descripcion}">
-                           <h1 class="truncate w-auto">${descripcion}</h1>
+                           <h1 class="truncate w-40">${descripcion}</h1>
                      </td>
 
                      <td class="border-b border-gray-200 uppercase text-center px-2 py-1 w-auto" data-title-material="${sstt}">
-                           <h1 class="truncate w-auto">${sstt}</h1>
+                           <h1 class="truncate w-40">${sstt}</h1>
                      </td>
 
                      <td class="border-b border-gray-200 uppercase text-center px-2 py-1 w-auto" data-title-material="${caracteristicas}">
-                           <h1 class="truncate w-auto">${caracteristicas}</h1>
+                           <h1 class="truncate w-32">${caracteristicas}</h1>
                      </td>
 
                      <td class="border-b border-gray-200 uppercase text-center px-2 py-1 w-auto" data-title-material="${marca}">
-                           <h1 class="truncate w-auto">${marca}</h1>
+                           <h1 class="truncate w-24">${marca}</h1>
                      </td>
 
                      <td class="border-b border-gray-200 uppercase text-center px-2 py-1 w-auto" data-title-material="${modelo}">
-                           <h1 class="truncate w-auto">${modelo}</h1>
+                           <h1 class="truncate w-24">${modelo}</h1>
                      </td>
 
                      <td class="border-b border-gray-200 uppercase text-center px-2 py-1 w-12">
