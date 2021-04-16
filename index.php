@@ -4312,7 +4312,7 @@
                             <table class="min-w-full divide-y divide-gray-200 table-fixed border rounded sortable">
                                 <thead>
                                     <tr class="cursor-pointer">
-                                        <td class="px-2 py-1  border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase sticky top-0 w-12">
+                                        <td class="px-2 py-1 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase sticky top-0 w-12">
                                             <h1>COD2BEND</h1>
                                         </td>
 

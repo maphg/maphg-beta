@@ -5490,6 +5490,7 @@ if (isset($_GET['action'])) {
     }
 
 
+    // ACTUALIZA O INSERTA LA CANTIDAD DE MATERIAL ASIGNADO A UNA INCIDENCIA
     if ($action == "asignarMaterialIncidencia") {
         $idItem = $_GET['idItem'];
         $idIncidencia = $_GET['idIncidencia'];
@@ -5520,7 +5521,7 @@ if (isset($_GET['action'])) {
             }
         } elseif ($tipoIncidencia == "INCIDENCIAGENERAL") {
             $query = "SELECT id FROM t_mp_np_materiales 
-            WHERE id_mc = $idIncidencia and id_item_global = $idItem and activo = 1";
+            WHERE id_mp_np = $idIncidencia and id_item_global = $idItem and activo = 1";
             if ($result = mysqli_query($conn_2020, $query)) {
                 foreach ($result as $x) {
                     $idRegistro = $x['id'];
