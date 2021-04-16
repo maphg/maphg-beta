@@ -1474,7 +1474,7 @@
             <!-- CONTENIDO TAREAS FALLAS -->
             <div id="pendientesFallasTareas" class="p-2 flex justify-center items-center flex-col w-full">
 
-                <div class="overflow-x-auto scrollbar">
+                <div class="overflow-x-auto scrollbar" style="max-width: 100%;">
                     <div class="align-middle inline-block min-w-full shadow-md border rounded border-b border-gray-200" style="max-height: 45vh;">
                         <table class="min-w-full divide-y divide-gray-200 table-fixed border rounded sortable">
                             <thead>
@@ -1521,12 +1521,15 @@
                                         EMPRESA
                                     </th>
 
+                                    <th class="px-4 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                        MATERIALES
+                                    </th>
+
                                 </tr>
                             </thead>
 
-                            <tbody id="dataPendientesX" class="bg-white divide-y divide-gray-200">
-                                <!-- More rows... -->
-                            </tbody>
+                            <!-- More rows... -->
+                            <tbody id="dataPendientesX" class="bg-white divide-y divide-gray-200"></tbody>
 
                         </table>
                     </div>

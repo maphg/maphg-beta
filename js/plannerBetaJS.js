@@ -3171,7 +3171,7 @@ function obtenerComentariosEquipos(idEquipo) {
       dataType: 'JSON',
       success: function (array) {
          document.getElementById("dataComentarios").innerHTML = '';
-         if (array.length > 0) {
+         if (array.length) {
             for (let x = 0; x < array.length; x++) {
                const idComentario = array[x].idComentario;
                const comentario = array[x].comentario;
@@ -6280,7 +6280,7 @@ function opcionesJerarquiaEquipo(idEquipo) {
          .then(array => {
 
             let opcionesEquipo = `<option value="0">Equipo Principal </option>`;
-            if (array.length > 0) {
+            if (array.length) {
                for (let index = 0; index < array.length; index++) {
                   var id = array[index].id;
                   var equipo = array[index].equipo;
@@ -8019,7 +8019,7 @@ function obtenerActividadesOT(idTipo, tipo) {
       .then(array => array.json())
       .then(array => {
          document.getElementById("dataActividadesGeneral").innerHTML = '';
-         if (array.length > 0) {
+         if (array.length) {
             for (let x = 0; x < array.length; x++) {
                const idActividad = array[x].id;
                const idTipo = array[x].idTipo;
@@ -8253,6 +8253,7 @@ const datosFallasTareas = params => {
       var iconoStatus = '<i class="fas fa-ellipsis-h  text-lg"></i>';
       var enlaceToltip = `FALLA${idRegistro}`;
       var fVerEnPlanner = `onclick="obtenerIncidenciaEquipos(${idRegistro}); toggleModalTailwind('modalVerEnPlannerIncidencia');"`;
+      var fMateriales = `onclick="obtenerMaterialesIncidencias(${idRegistro}, 'INCIDENCIA')"`;
    } else if (params.status == "SOLUCIONADO" && params.tipo == "FALLA") {
       var statusX = 'S-SOLUCIONADO';
       var fResponsable = '';
@@ -8265,6 +8266,7 @@ const datosFallasTareas = params => {
       var iconoStatus = '<i class="fas fa-undo fa-lg text-red-500"></i>';
       var enlaceToltip = `FALLA${idRegistro}`;
       var fVerEnPlanner = ``;
+      var fMateriales = '';
    } else if (params.status == "PENDIENTE" && params.tipo == "TAREA") {
       var statusX = 'S-PENDIENTE';
       var fResponsable = `onclick="obtenerUsuarios('asignarTarea', ${idRegistro});"`;
@@ -8277,6 +8279,7 @@ const datosFallasTareas = params => {
       var iconoStatus = '<i class="fas fa-ellipsis-h  text-lg"></i>';
       var enlaceToltip = `TAREA${idRegistro}`;
       var fVerEnPlanner = `onclick="obtenerIncidenciaGeneral(${idRegistro}); toggleModalTailwind('modalVerEnPlannerIncidencia');"`;
+      var fMateriales = `onclick="obtenerMaterialesIncidencias(${idRegistro}, 'INCIDENCIAGENERAL')"`;
    } else if (params.status == "SOLUCIONADO" && params.tipo == "TAREA") {
       var statusX = 'S-SOLUCIONADO';
       var fResponsable = `onclick="obtenerUsuarios('asignarTarea', ${idRegistro});"`;
@@ -8289,6 +8292,7 @@ const datosFallasTareas = params => {
       var iconoStatus = '<i class="fas fa-undo fa-lg text-red-500"></i>';
       var enlaceToltip = `TAREA${idRegistro}`;
       var fVerEnPlanner = ``;
+      var fMateriales = `onclick="obtenerMaterialesIncidencias(${idRegistro}, 'INCIDENCIA')"`;
    }
 
    // DISEÑO TIPO INCIDENCIA
@@ -8302,6 +8306,10 @@ const datosFallasTareas = params => {
                : params.tipoIncidencia == "ALERTA" ?
                   `<span class="text-blue-500 text-xs">${params.tipoIncidencia}</span>`
                   : `<span class="text-teal-500 text-xs">${params.tipoIncidencia}</span>`;
+
+   // DISEÑO PARA MATERIALES ASIGNADOS
+   const materialesAsignados = params.materialesAsignados > 0 ? `${params.materialesAsignados}`
+      : '<i class="fad fa-minus text-xl text-red-400"></i>';
 
    return `
       <tr class="hover:bg-gray-200 cursor-pointer text-xs font-normal 
@@ -8368,6 +8376,10 @@ const datosFallasTareas = params => {
 
          <td class="px-2 whitespace-no-wrap border-b border-gray-200 text-center py-3">
             <h1>${params.empresa}</h1>
+         </td>
+
+         <td class="px-2 whitespace-no-wrap border-b border-gray-200 text-center py-3" ${fMateriales}>
+            <h1>${materialesAsignados}</h1>
          </td>
       </tr>
    `;
@@ -8579,6 +8591,7 @@ function obtenerFallas(idEquipo = 0) {
    let idSeccion = localStorage.getItem('idSeccion');
    let idSubseccion = localStorage.getItem("idSubseccion");
    let tipoPendiente = 'FALLAS';
+
    const action = "obtenerFallas";
    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}&idSubseccion=${idSubseccion}`;
 
@@ -8595,6 +8608,9 @@ function obtenerFallas(idEquipo = 0) {
       setAttribute('onclick', 'iniciarFormularioInicidencias()');
    document.getElementById("ganttFallaTarea").
       setAttribute('onclick', `ganttFallas(${idEquipo}, 'PENDIENTE')`);
+
+   document.getElementById("opcionFallaPendiente").
+      setAttribute("onclick", `obtenerFallas(${idEquipo})`);
 
    document.getElementById("exportarFallaTarea").
       setAttribute('onclick', 'reporteFallas(' + idEquipo + ')');
@@ -8618,7 +8634,7 @@ function obtenerFallas(idEquipo = 0) {
       })
       .then(array => {
          if (array) {
-            if (array.length > 0) {
+            if (array.length) {
                for (let x = 0; x < array.length; x++) {
                   const id = array[x].id;
                   const ot = array[x].ot;
@@ -8639,6 +8655,7 @@ function obtenerFallas(idEquipo = 0) {
                   const tipoIncidencia = array[x].tipoIncidencia;
                   const sEP = array[x].sEP;
                   const empresa = array[x].empresa;
+                  const materialesAsignados = array[x].materialesAsignados;
 
                   const data = datosFallasTareas({
                      id: id,
@@ -8659,7 +8676,8 @@ function obtenerFallas(idEquipo = 0) {
                      tipo: tipo,
                      tipoIncidencia: tipoIncidencia,
                      sEP: sEP,
-                     empresa: empresa
+                     empresa: empresa,
+                     materialesAsignados: materialesAsignados
                   });
                   document.getElementById("dataPendientesX").insertAdjacentHTML('beforeend', data);
                }
@@ -8809,7 +8827,10 @@ function obtenerTareas(idEquipo = 0) {
       .then(array => array.json())
       .then(array => {
          document.getElementById("dataPendientesX").innerHTML = '';
-         if (array.length > 0) {
+         return array;
+      })
+      .then(array => {
+         if (array.length) {
             for (let x = 0; x < array.length; x++) {
                const id = array[x].id;
                const ot = array[x].ot;
@@ -8830,6 +8851,7 @@ function obtenerTareas(idEquipo = 0) {
                const tipoIncidencia = array[x].tipoIncidencia;
                const sEP = array[x].sEP;
                const empresa = array[x].empresa;
+               const materialesAsignados = array[x].materialesAsignados;
 
                const data = datosFallasTareas({
                   id: id,
@@ -8851,10 +8873,13 @@ function obtenerTareas(idEquipo = 0) {
                   tipoIncidencia: tipoIncidencia,
                   sEP: sEP,
                   empresa: empresa,
+                  materialesAsignados: materialesAsignados
                });
 
                document.getElementById("dataPendientesX").insertAdjacentHTML('beforeend', data);
             }
+         } else {
+            alertaImg('No se Encontraron Incidencias', '', 'info', 1500);
          }
       })
       .then(function () {
@@ -9007,7 +9032,7 @@ function ganttTareas(idEquipo, status) {
       .then(array => array.json())
       .then(array => {
          document.getElementById("dataGanttFallasPendientes").innerHTML = '';
-         if (array.length > 0) {
+         if (array.length) {
 
             for (var i = 0; i < array.length; i++) {
                var colorSet = new am4core.ColorSet();
@@ -9097,7 +9122,7 @@ function ganttFallas(idEquipo, status) {
       .then(array => array.json())
       .then(array => {
          document.getElementById("dataGanttFallasPendientes").innerHTML = '';
-         if (array.length > 0) {
+         if (array.length) {
 
             for (var i = 0; i < array.length; i++) {
                var colorSet = new am4core.ColorSet();
@@ -9964,8 +9989,6 @@ function reporteFallas(idEquipo) {
    const action = "reporteFallas";
    const URL = `php/exportar_excel_GET.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}`;
 
-   console.log(URL);
-
    window.location = URL;
    setTimeout(() => {
       alertaImg('Generando Reporte...', '', 'success', 1500);
@@ -10683,7 +10706,7 @@ function obtenerComentariosTest(idTest) {
       .then(array => array.json())
       .then(array => {
          contenedor.innerHTML = '';
-         if (array.length > 0) {
+         if (array.length) {
             for (let x = 0; x < array.length; x++) {
                const idComentario = array[x].idComentario;
                const comentario = array[x].comentario;
@@ -12875,7 +12898,6 @@ const crearEntregas = () => {
       })
          .then(array => array.json())
          .then(array => {
-            console.log(array)
             if (array.resp == 1) {
                alertaImg(`Incidencia Entregas de Proyecto, Agregada`, '', 'success', 1500);
                cerrarmodal('modalAgregarIncidenciasEntrega');
@@ -12897,7 +12919,6 @@ const crearEntregas = () => {
 
 // AGREGA LOS ADJUNTOS DE INCIDENCIAS DE LAS ENTREGAS DE PROYECTO
 const agregarAdjuntosEntregas = (idIncidencia, tipoIncidencia) => {
-   console.log(idIncidencia, tipoIncidencia);
    let idDestino = localStorage.getItem('idDestino');
    let idUsuario = localStorage.getItem('usuario');
 
@@ -12932,5 +12953,119 @@ const agregarAdjuntosEntregas = (idIncidencia, tipoIncidencia) => {
                inputAdjuntosEntregas.value = '';
             })
       }
+   }
+}
+
+
+// OBTIENE LOS MATERIALES DE LAS INCIDENCIAS
+const obtenerMaterialesIncidencias = (idIncidencia, tipoIncidencia) => {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+
+   abrirmodal('modalOpcionesMaterialesEquipo');
+
+   const action = "obtenerMaterialesIncidencias";
+   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idIncidencia=${idIncidencia}&tipoIncidencia=${tipoIncidencia}`;
+
+   fetch(URL)
+      .then(array => array.json())
+      .then(array => {
+         dataOpcionesMaterialesEquipo.innerHTML = '';
+         return array;
+      })
+      .then(array => {
+         if (array.length) {
+            for (let x = 0; x < array.length; x++) {
+               const idItem = array[x].idItem;
+               const cod2bend = array[x].cod2bend;
+               const descripcion = array[x].descripcion;
+               const sstt = array[x].sstt;
+               const caracteristicas = array[x].caracteristicas;
+               const marca = array[x].marca;
+               const modelo = array[x].modelo;
+               const cantidad = array[x].cantidad;
+
+               const codigo = `
+                  <tr class="hover:bg-gray-200 cursor-pointer text-xs font-normal">
+                     <td class="border-b border-gray-200 uppercase text-center px-2 py-1 w-auto" data-title-material="${cod2bend}">
+                           <h1 class="truncate w-auto">${cod2bend}</h1>
+                     </td>
+
+                     <td class="border-b border-gray-200 uppercase text-center px-2 py-1 w-auto" data-title-material="${descripcion}">
+                           <h1 class="truncate w-auto">${descripcion}</h1>
+                     </td>
+
+                     <td class="border-b border-gray-200 uppercase text-center px-2 py-1 w-auto" data-title-material="${sstt}">
+                           <h1 class="truncate w-auto">${sstt}</h1>
+                     </td>
+
+                     <td class="border-b border-gray-200 uppercase text-center px-2 py-1 w-auto" data-title-material="${caracteristicas}">
+                           <h1 class="truncate w-auto">${caracteristicas}</h1>
+                     </td>
+
+                     <td class="border-b border-gray-200 uppercase text-center px-2 py-1 w-auto" data-title-material="${marca}">
+                           <h1 class="truncate w-auto">${marca}</h1>
+                     </td>
+
+                     <td class="border-b border-gray-200 uppercase text-center px-2 py-1 w-auto" data-title-material="${modelo}">
+                           <h1 class="truncate w-auto">${modelo}</h1>
+                     </td>
+
+                     <td class="border-b border-gray-200 uppercase text-center px-2 py-1 w-12">
+                        <div class="w-12">
+                           <input id="item_material_incidencia_${idItem}" class="border border-gray-200 bg-indigo-200 text-indigo-600 font-semibold text-center h-8 w-12 rounded-md text-sm focus:outline-none" type="text" placeholder="Cantidad" min="0" value="${cantidad}" autocomplete="off" onchange="asignarMaterialIncidencia(${idItem}, ${idIncidencia}, '${tipoIncidencia}')">
+                        </div>
+                     </td>
+                  </tr>               
+               `;
+               dataOpcionesMaterialesEquipo.insertAdjacentHTML('beforeend', codigo);
+            }
+         }
+      })
+      .catch(function (err) {
+         dataOpcionesMaterialesEquipo.innerHTML = '';
+         fetch(APIERROR + err);
+      })
+}
+
+// ASIGNA CANTIDADES A UNA INCIDENCIA
+const asignarMaterialIncidencia = (idItem, idIncidencia, tipoIncidencia) => {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+
+   if (cantidad = document.querySelector("#item_material_incidencia_" + idItem)) {
+      if (cantidad.value >= 0) {
+         const action = "asignarMaterialIncidencia";
+         const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idItem=${idItem}&idIncidencia=${idIncidencia}&tipoIncidencia=${tipoIncidencia}&cantidad=${cantidad.value}`;
+
+         fetch(URL)
+            .then(array => array.json())
+            .then(array => {
+               // CANTIDAD AGREGADA
+               if (array == 1) {
+                  alertaImg('Material Agregado', '', 'success', 1500);
+                  return
+               }
+
+               // CANTIDAD ACTUALIZADA
+               if (array == 2) {
+                  alertaImg('Material Agregado', '', 'success', 1500);
+                  return
+               }
+
+               // RESPUESTA INESPERADA
+               if (array == 0) {
+                  alertaImg('Intente de Nuevo', '', 'info', 1500);
+                  return
+               }
+            })
+            .catch(function (err) {
+               fetch(APIERROR + err);
+            })
+      } else {
+         alertaImg('Cantidad No Valida', '', 'info', 1500);
+      }
+   } else {
+      alertaImg('Cantidad No Valida', '', 'info', 1500);
    }
 }

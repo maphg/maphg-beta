@@ -290,6 +290,17 @@ if (isset($_GET['action'])) {
                     }
                 }
 
+                #OBTIENE EL TOTAL DE MATERIALES ASIGNADOS EN LA INCIDENCIA GENERAL
+                $materialesAsignados = 0;
+                $query = "SELECT count(id) 'total' 
+                FROM t_mp_np_materiales
+                WHERE id_mp_np = $idTarea and activo = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $materialesAsignados = $x['total'];
+                    }
+                }
+
                 $array[] = array(
                     "id" => $idTarea,
                     "ot" => "T$idTarea",
@@ -309,7 +320,8 @@ if (isset($_GET['action'])) {
                     "trabajando" => $trabajando,
                     "tipo" => "TAREA",
                     "sEP" => intval($sEP),
-                    "empresa" => $empresa
+                    "empresa" => $empresa,
+                    "materialesAsignados" => intval($materialesAsignados)
                 );
             }
         }
@@ -460,6 +472,17 @@ if (isset($_GET['action'])) {
                     }
                 }
 
+                #OBTIENE EL TOTAL DE MATERIALES ASIGNADOS EN LA INCIDENCIA
+                $materialesAsignados = 0;
+                $query = "SELECT count(id) 'total' 
+                FROM t_mc_materiales
+                WHERE id_mc = $idFalla and activo = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $materialesAsignados = $x['total'];
+                    }
+                }
+
                 $arrayTemp = array(
                     "id" => $idFalla,
                     "ot" => "F$idFalla",
@@ -479,7 +502,8 @@ if (isset($_GET['action'])) {
                     "trabajando" => $trabajando,
                     "tipo" => "FALLA",
                     "sEP" => intval($sEP),
-                    "empresa" => $empresa
+                    "empresa" => $empresa,
+                    "materialesAsignados" => intval($materialesAsignados)
                 );
 
                 $array[] = $arrayTemp;
@@ -5404,6 +5428,119 @@ if (isset($_GET['action'])) {
         }
 
         echo json_encode($array);
+    }
+
+    // OBTIENE LOS MATERIALES POSIBLES Y CANTIDADES ASIGNADAS A LAS INCIDENCIAS (EQUIPO, GENERAL)
+    if ($action == "obtenerMaterialesIncidencias") {
+        $idIncidencia = $_GET['idIncidencia'];
+        $tipoIncidencia = $_GET['tipoIncidencia'];
+
+        // MATERIALES DE INCIDENCIA GENERAL
+        $query = "SELECT id, cod2bend, descripcion_cod2bend, descripcion_servicio_tecnico, 
+        caracteristicas, marca,  modelo 
+        FROM t_subalmacenes_items_globales
+        WHERE activo = 1 and id_destino = $idDestino";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idItem = $x['id'];
+                $cod2bend = $x['cod2bend'];
+                $descripcion = $x['descripcion_cod2bend'];
+                $sstt = $x['descripcion_servicio_tecnico'];
+                $caracteristicas = $x['caracteristicas'];
+                $marca = $x['marca'];
+                $modelo = $x['modelo'];
+
+                $cantidad = 0;
+
+                if ($tipoIncidencia == "INCIDENCIAGENERAL") {
+                    $query = "SELECT cantidad_material
+                    FROM t_mp_np_materiales
+                    WHERE id_item_global = $idItem and id_mp_np = $idIncidencia and 
+                    cantidad_material > 0 and activo = 1";
+                    if ($result = mysqli_query($conn_2020, $query)) {
+                        foreach ($result as $x) {
+                            $cantidad = $x['cantidad_material'];
+                        }
+                    }
+                } elseif ($tipoIncidencia == "INCIDENCIA") {
+                    $query = "SELECT cantidad_material
+                    FROM t_mc_materiales
+                    WHERE id_item_global = $idItem and id_mc = $idIncidencia and 
+                    cantidad_material > 0 and activo = 1";
+                    if ($result = mysqli_query($conn_2020, $query)) {
+                        foreach ($result as $x) {
+                            $cantidad = $x['cantidad_material'];
+                        }
+                    }
+                }
+
+                $array[] = array(
+                    "idItem" => $idItem,
+                    "cod2bend" => $cod2bend,
+                    "descripcion" => $descripcion,
+                    "sstt" => $sstt,
+                    "caracteristicas" => $caracteristicas,
+                    "marca" => $marca,
+                    "modelo" => $modelo,
+                    "cantidad" => $cantidad
+                );
+            }
+        }
+        echo json_encode($array);
+    }
+
+
+    if ($action == "asignarMaterialIncidencia") {
+        $idItem = $_GET['idItem'];
+        $idIncidencia = $_GET['idIncidencia'];
+        $tipoIncidencia = $_GET['tipoIncidencia'];
+        $cantidad = $_GET['cantidad'];
+        $idRegistro = 0;
+        $resp = 0;
+
+        if ($tipoIncidencia == "INCIDENCIA") {
+            $query = "SELECT id FROM t_mc_materiales 
+            WHERE id_mc = $idIncidencia and id_item_global = $idItem and activo = 1";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $x) {
+                    $idRegistro = $x['id'];
+                }
+            }
+            if ($idRegistro > 0) {
+                $query = "UPDATE t_mc_materiales SET cantidad_material = $cantidad, creado_por = $idUsuario, fecha_creado = '$fechaActual'
+                WHERE id = $idRegistro and activo = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    $resp = 1;
+                }
+            } else {
+                $query = "INSERT INTO t_mc_materiales(id_mc, id_item_global, cantidad_material, creado_por, fecha_creado, activo) VALUES($idIncidencia, $idItem, $cantidad, $idUsuario, '$fechaActual', 1)";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    $resp = 2;
+                }
+            }
+        } elseif ($tipoIncidencia == "INCIDENCIAGENERAL") {
+            $query = "SELECT id FROM t_mp_np_materiales 
+            WHERE id_mc = $idIncidencia and id_item_global = $idItem and activo = 1";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $x) {
+                    $idRegistro = $x['id'];
+                }
+            }
+
+            if ($idRegistro > 0) {
+                $query = "UPDATE t_mp_np_materiales SET cantidad_material = $cantidad, creado_por = $idUsuario, fecha_creado = '$fechaActual'
+                WHERE id = $idRegistro and activo = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    $resp = 1;
+                }
+            } else {
+                $query = "INSERT INTO t_mp_np_materiales(id_mp_np, id_item_global, cantidad_material, creado_por, fecha_creado, activo) VALUES($idIncidencia, $idItem, $cantidad, $idUsuario, '$fechaActual', 1)";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    $resp = 2;
+                }
+            }
+        }
+        echo json_encode($resp);
     }
 
     // CIERRE FINAL
