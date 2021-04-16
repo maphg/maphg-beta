@@ -294,7 +294,7 @@ if (isset($_GET['action'])) {
                 $materialesAsignados = 0;
                 $query = "SELECT count(id) 'total' 
                 FROM t_mp_np_materiales
-                WHERE id_mp_np = $idTarea and activo = 1";
+                WHERE id_mp_np = $idTarea and cantidad_material > 0 and activo = 1";
                 if ($result = mysqli_query($conn_2020, $query)) {
                     foreach ($result as $x) {
                         $materialesAsignados = $x['total'];
@@ -476,7 +476,7 @@ if (isset($_GET['action'])) {
                 $materialesAsignados = 0;
                 $query = "SELECT count(id) 'total' 
                 FROM t_mc_materiales
-                WHERE id_mc = $idFalla and activo = 1";
+                WHERE id_mc = $idFalla and cantidad_material > 0 and activo = 1";
                 if ($result = mysqli_query($conn_2020, $query)) {
                     foreach ($result as $x) {
                         $materialesAsignados = $x['total'];
