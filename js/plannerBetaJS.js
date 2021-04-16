@@ -8633,68 +8633,67 @@ function obtenerFallas(idEquipo = 0) {
          return array;
       })
       .then(array => {
-         if (array) {
-            if (array.length) {
-               for (let x = 0; x < array.length; x++) {
-                  const id = array[x].id;
-                  const ot = array[x].ot;
-                  const actividad = array[x].actividad;
-                  const creadoPor = array[x].creadoPor;
-                  const pda = array[x].pda;
-                  const responsable = array[x].responsable;
-                  const fechaInicio = array[x].fechaInicio;
-                  const fechaFin = array[x].fechaFin;
-                  const comentarios = array[x].comentarios;
-                  const adjuntos = array[x].adjuntos;
-                  const status = array[x].status;
-                  const materiales = array[x].materiales;
-                  const energeticos = array[x].energeticos;
-                  const departamentos = array[x].departamentos;
-                  const trabajando = array[x].trabajando;
-                  const tipo = array[x].tipo;
-                  const tipoIncidencia = array[x].tipoIncidencia;
-                  const sEP = array[x].sEP;
-                  const empresa = array[x].empresa;
-                  const materialesAsignados = array[x].materialesAsignados;
+         if (array.length) {
+            for (let x = 0; x < array.length; x++) {
+               const id = array[x].id;
+               const ot = array[x].ot;
+               const actividad = array[x].actividad;
+               const creadoPor = array[x].creadoPor;
+               const pda = array[x].pda;
+               const responsable = array[x].responsable;
+               const fechaInicio = array[x].fechaInicio;
+               const fechaFin = array[x].fechaFin;
+               const comentarios = array[x].comentarios;
+               const adjuntos = array[x].adjuntos;
+               const status = array[x].status;
+               const materiales = array[x].materiales;
+               const energeticos = array[x].energeticos;
+               const departamentos = array[x].departamentos;
+               const trabajando = array[x].trabajando;
+               const tipo = array[x].tipo;
+               const tipoIncidencia = array[x].tipoIncidencia;
+               const sEP = array[x].sEP;
+               const empresa = array[x].empresa;
+               const materialesAsignados = array[x].materialesAsignados;
 
-                  const data = datosFallasTareas({
-                     id: id,
-                     ot: ot,
-                     actividad: actividad,
-                     creadoPor: creadoPor,
-                     pda: pda,
-                     responsable: responsable,
-                     fechaInicio: fechaInicio,
-                     fechaFin: fechaFin,
-                     comentarios: comentarios,
-                     adjuntos: adjuntos,
-                     status: status,
-                     materiales: materiales,
-                     trabajando: trabajando,
-                     energeticos: energeticos,
-                     departamentos: departamentos,
-                     tipo: tipo,
-                     tipoIncidencia: tipoIncidencia,
-                     sEP: sEP,
-                     empresa: empresa,
-                     materialesAsignados: materialesAsignados
-                  });
-                  document.getElementById("dataPendientesX").insertAdjacentHTML('beforeend', data);
-               }
+               const data = datosFallasTareas({
+                  id: id,
+                  ot: ot,
+                  actividad: actividad,
+                  creadoPor: creadoPor,
+                  pda: pda,
+                  responsable: responsable,
+                  fechaInicio: fechaInicio,
+                  fechaFin: fechaFin,
+                  comentarios: comentarios,
+                  adjuntos: adjuntos,
+                  status: status,
+                  materiales: materiales,
+                  trabajando: trabajando,
+                  energeticos: energeticos,
+                  departamentos: departamentos,
+                  tipo: tipo,
+                  tipoIncidencia: tipoIncidencia,
+                  sEP: sEP,
+                  empresa: empresa,
+                  materialesAsignados: materialesAsignados
+               });
+               document.getElementById("dataPendientesX").insertAdjacentHTML('beforeend', data);
             }
          } else {
-            document.getElementById("dataPendientesX").innerHTML = '';
+            alertaImg('No se Encontraron Incidencias', '', 'info', 1500);
          }
+
       })
       .then(function () {
          complementosFallasTareas();
       })
       .then(function () { obtenerFallasPendientes(idEquipo) })
       .catch(function (err) {
-         fetch(APIERROR + err + ': (obtenerFallas)');
          complementosFallasTareas();
          document.getElementById("dataPendientesX").innerHTML = '';
          document.getElementById("seccionFallaTarea").innerHTML = '';
+         fetch(APIERROR + err + ': (obtenerFallas)');
       })
 
 
@@ -8887,10 +8886,10 @@ function obtenerTareas(idEquipo = 0) {
       })
       .then(function () { obtenerTareasPendientes(idEquipo) })
       .catch(function (err) {
-         fetch(APIERROR + err + ': (obtenerTareas)');
          document.getElementById("dataPendientesX").innerHTML = '';
          document.getElementById("seccionFallaTarea").innerHTML = '';
          complementosFallasTareas();
+         fetch(APIERROR + err + ': (obtenerTareas)');
       })
 
 
