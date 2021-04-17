@@ -2046,7 +2046,7 @@ if (isset($_GET['action'])) {
                 $idSubseccion = $x['id_subseccion'];
 
                 $query = "SELECT id, equipo FROM t_equipos_america 
-                WHERE id_destino = $idDestino and id_seccion = $idSeccion and id_subseccion = $idSubseccion and status = 'OPERATIVO' and activo = 1";
+                WHERE id_destino = $idDestino and id_seccion = $idSeccion and id_subseccion = $idSubseccion and status IN('OPERATIVO', 'TALLER', 'FUERASERVICIO', 'OPERAMAL') and activo = 1";
                 if ($result = mysqli_query($conn_2020, $query)) {
                     foreach ($result as $x) {
                         $idEquipo = $x['id'];
@@ -2103,7 +2103,7 @@ if (isset($_GET['action'])) {
         }
 
         $query = "SELECT id, equipo FROM t_equipos_america 
-        WHERE id_seccion = $idSeccion and id_subseccion = $idSubseccion and status = 'OPERATIVO' and activo = 1 $filtroTipo $filtroDestino
+        WHERE id_seccion = $idSeccion and id_subseccion = $idSubseccion and IN('OPERATIVO', 'TALLER', 'FUERASERVICIO', 'OPERAMAL') and activo = 1 $filtroTipo $filtroDestino
         ORDER BY equipo ASC";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
@@ -4142,7 +4142,7 @@ if (isset($_GET['action'])) {
                 $totalIncidencias = 0;
                 $query = "SELECT t_mc.tipo_incidencia FROM t_mc 
                 INNER JOIN t_equipos_america ON t_mc.id_equipo = t_equipos_america.id
-                WHERE t_mc.id_subseccion = $idSubseccion and t_mc.status IN('PENDIENTE', 'N', 'P') and t_mc.activo = 1 and t_equipos_america.status IN('OPERATIVO', 'TALLER') $filtroDestinoInicidencias";
+                WHERE t_mc.id_subseccion = $idSubseccion and t_mc.status IN('PENDIENTE', 'N', 'P') and t_mc.activo = 1 and t_equipos_america.status IN('OPERATIVO', 'TALLER', 'FUERASERVICIO', 'OPERAMAL') $filtroDestinoInicidencias";
                 if ($result = mysqli_query($conn_2020, $query)) {
                     foreach ($result as $x) {
                         $tipoIncidencia = $x['tipo_incidencia'];
