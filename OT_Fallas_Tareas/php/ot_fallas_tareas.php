@@ -10,11 +10,11 @@ if (isset($_GET['action'])) {
     $idUsuario = $_GET['idUsuario'];
     $idDestino = $_GET['idDestino'];
     $fechaActual = date('Y-m-D H:m:s');
+    $array = array();
 
     if ($action == "generarOT") {
         $idOT = $_GET['idOT'];
         $tipo = $_GET['tipo'];
-        $array = array();
         $act = array();
 
         if ($tipo == "TAREA") {
@@ -72,6 +72,26 @@ if (isset($_GET['action'])) {
                         }
                     }
 
+                    #MATERIALES
+                    $materiales = [];
+                    $query = "SELECT t1.id, t1.cantidad_material, t2.cod2bend, t2.descripcion_cod2bend
+                    FROM t_mp_np_materiales AS t1
+                    INNER JOIN t_subalmacenes_items_globales AS t2 ON t1.id_item_global = t2.id
+                    WHERE t1.id_mp_np = $idOT and t1.cantidad_material > 0 and t1.activo = 1";
+                    if ($result = mysqli_query($conn_2020, $query)) {
+                        foreach ($result as $x) {
+                            $cod2bend = $x['cod2bend'];
+                            $cantidad = $x['cantidad_material'];
+                            $descripcion = $x['descripcion_cod2bend'];
+
+                            $materiales[] = array(
+                                "cod2bend" => $cod2bend,
+                                "cantidad" => $cantidad,
+                                "descripcion" => $descripcion
+                            );
+                        }
+                    }
+
                     $array['datos'] = array(
                         "idOT" => $idOT,
                         "actividad" => $actividad,
@@ -84,7 +104,8 @@ if (isset($_GET['action'])) {
                         "tipoIncidencia" => $tipoIncidencia,
                         "rangoFecha" => $rangoFecha,
                         "responsable" => $responsable,
-                        "adjuntos" => $adjuntos
+                        "adjuntos" => $adjuntos,
+                        "materiales" => $materiales
                     );
 
                     $query = "SELECT id, actividad, status FROM t_mp_np_actividades_ot WHERE id_tarea = $idOT and activo = 1 ORDER BY id DESC";
@@ -153,6 +174,7 @@ if (isset($_GET['action'])) {
                         }
                     }
 
+                    #RESPONSABLE
                     $responsable = "NOMBRE Y FIRMA";
                     $query = "SELECT t_colaboradores.nombre, t_colaboradores.apellido 
                     FROM t_users
@@ -161,6 +183,26 @@ if (isset($_GET['action'])) {
                     if ($result = mysqli_query($conn_2020, $query)) {
                         foreach ($result as $x) {
                             $responsable = $x['nombre'] . " " . $x['apellido'];
+                        }
+                    }
+
+                    #MATERIALES
+                    $materiales = [];
+                    $query = "SELECT t1.id, t1.cantidad_material, t2.cod2bend, t2.descripcion_cod2bend
+                    FROM t_mc_materiales AS t1
+                    INNER JOIN t_subalmacenes_items_globales AS t2 ON t1.id_item_global = t2.id
+                    WHERE t1.id_mc = $idOT and t1.cantidad_material > 0 and t1.activo = 1";
+                    if ($result = mysqli_query($conn_2020, $query)) {
+                        foreach ($result as $x) {
+                            $cod2bend = $x['cod2bend'];
+                            $cantidad = $x['cantidad_material'];
+                            $descripcion = $x['descripcion_cod2bend'];
+
+                            $materiales[] = array(
+                                "cod2bend" => $cod2bend,
+                                "cantidad" => $cantidad,
+                                "descripcion" => $descripcion
+                            );
                         }
                     }
 
@@ -176,7 +218,8 @@ if (isset($_GET['action'])) {
                         "tipoIncidencia" => $tipoIncidencia,
                         "rangoFecha" => $rangoFecha,
                         "responsable" => $responsable,
-                        "adjuntos" => $adjuntos
+                        "adjuntos" => $adjuntos,
+                        "materiales" => $materiales
                     );
 
                     $query = "SELECT id, actividad, status FROM t_mc_actividades_ot WHERE id_falla = $idOT and activo = 1 ORDER BY id DESC";

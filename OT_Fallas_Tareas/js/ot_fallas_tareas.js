@@ -3,6 +3,7 @@ const APIERROR = 'https://api.telegram.org/bot1396322757:AAF5C0bcZxR8_mEEtm3BFEJ
 
 const asignadoA = document.querySelector('#asignadoA');
 const mediaOT = document.querySelector('#mediaOT');
+const dataMaterialesOT = document.querySelector('#dataMaterialesOT');
 
 function validarOT() {
     let URL = window.location.hash;
@@ -36,9 +37,11 @@ function generarOT(idOT, tipo) {
         .then(array => {
             asignadoA.innerHTML = 'NOMBRE Y FIRMA';
             mediaOT.innerHTML = '';
+            dataMaterialesOT.innerHTML = '';
             return array;
         })
         .then(array => {
+
             if (array) {
                 let tipo = '';
                 if (array.datos.tipo == "FALLA") {
@@ -76,6 +79,7 @@ function generarOT(idOT, tipo) {
 
                 asignadoA.innerHTML = array.datos.responsable;
 
+                // ADJUNTOS
                 if (array.datos.adjuntos) {
                     for (let x = 0; x < array.datos.adjuntos.length; x++) {
                         const idAdjunto = array.datos.adjuntos[x].idAdjunto;
@@ -88,6 +92,7 @@ function generarOT(idOT, tipo) {
                     }
                 }
 
+                // ACTIVIDADES
                 if (array.actividades) {
                     for (let x = 0; x < array.actividades.length; x++) {
                         const actividad = array.actividades[x].actividad;
@@ -120,12 +125,37 @@ function generarOT(idOT, tipo) {
                             insertAdjacentHTML('beforeend', actividadHTML);
                     }
                 }
-            }
 
+                // MATERIALES
+                if (array.datos.materiales) {
+                    for (let x = 0; x < array.datos.materiales.length; x++) {
+                        const cod2bend = array.datos.materiales[x].cod2bend;
+                        const cantidad = array.datos.materiales[x].cantidad;
+                        const descripcion = array.datos.materiales[x].descripcion;
+                        const codigo = `
+                            <tr class="hover:bg-gray-200 cursor-pointer text-xs font-normal">
+                                <td class="border-b border-gray-200 uppercase text-center px-1 w-16"
+                                data-title-material="${cod2bend}">
+                                    <h1 class="truncate w-16 text-xxs">${cod2bend}</h1>
+                                </td>
+                                <td class="border-b border-gray-200 uppercase text-center px-1 w-8"
+                                 data-title-material="${cantidad}">
+                                    <h1 class="truncate w-8">${cantidad}</h1>
+                                </td>
+                                <td class="border-b border-gray-200 uppercase text-center px-1 w-48"
+                                 data-title-material="${descripcion}">
+                                    <h1 class="truncate w-48 text-xxs text-left">${descripcion}</h1>
+                                </td>
+                            </tr>`;
+                        dataMaterialesOT.insertAdjacentHTML('beforeend', codigo);
+                    }
+                }
+            }
         })
         .catch(function (err) {
             mediaOT.innerHTML = '';
             asignadoA.innerHTML = 'NOMBRE Y FIRMA';
+            dataMaterialesOT.innerHTML = '';
             alertaImg('No se Encontro OT #' + idOT, '', 'success', 1500);
             fetch(APIERROR + err + ` generarOT(${idOT}, ${tipo})`);
         })

@@ -156,13 +156,39 @@
                                     class="leading-snug text-justify font-bold text-xs text-gray-700 normal-case"></h1>
                             </div>
                         </div>
-                        <div class="flex flex-col items-center justify-start overflow-y-auto scrollbar text-bluegray-900 border-4 border-bluegray-50 rounded-md w-full py-2 px-3 relative pt-6 text-gray-700 font-semibold text-xs"
+                        <div class="flex flex-col items-center justify-start overflow-y-auto scrollbar text-bluegray-900 border-4 border-bluegray-50 rounded-md w-full py-2 px-1 relative pt-6 text-gray-700 font-semibold text-xs"
                             style="max-height: 26.4rem;">
                             <div
                                 class="font-bold text-base w-auto px-3 rounded-b-lg text-center mb-2 uppercase text-gray-600 bg-gray-200 absolute top-0">
                                 <h1>materiales</h1>
                             </div>
-                            <div id="dataMaterialesOT" class="w-full"></div>
+
+                            <!-- MATERIALES OT -->
+                            <div class="w-full overflow-hidden">
+                                <table class="min-w-full divide-y divide-gray-200 table-fixed border rounded sortable"
+                                    style="max-height: 26.4rem;">
+                                    <thead>
+                                        <tr class="cursor-pointer">
+                                            <td
+                                                class="px-1 py-1 border-b border-gray-200 bg-gray-200 text-center text-xxs leading-4 font-medium text-gray-500 uppercase sticky top-0 w-16">
+                                                <h1 class="w-16 truncate text-xxs">COD2BEND</h1>
+                                            </td>
+                                            <td
+                                                class="px-1 py-1 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase sticky top-0 w-10">
+                                                <h1 class="w-10 truncate">Cant.</h1>
+                                            </td>
+                                            <td
+                                                class="px-1 py-1 border-b border-gray-200 bg-gray-200 text-center
+                                                text-xxs leading-4 font-medium text-gray-500 uppercase sticky top-0 w-48">
+                                                <h1 class="">Desc. COD2BEND</h1>
+                                            </td>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody id="dataMaterialesOT" class="bg-white divide-y divide-gray-200">
+                                    </tbody>
+                                </table>
+                            </div>
 
                         </div>
                         <div class="flex flex-col items-center justify-start overflow-y-auto scrollbar text-bluegray-900 border-4 border-bluegray-50 rounded-md w-full py-2 px-3 mt-2 scrollbar relative pt-8"
