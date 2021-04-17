@@ -85,7 +85,7 @@ function generarOT(idOT, tipo) {
                         const idAdjunto = array.datos.adjuntos[x].idAdjunto;
                         const url = array.datos.adjuntos[x].url;
                         const tipo = array.datos.adjuntos[x].tipo;
-                        const codigo = `<img src="${url}" class="w-32 h-32 p-1">`;
+                        const codigo = `<a href="${url}" target="_blank"><img src="${url}" class="w-20 h-20 p-1"></a>`;
                         if (tipo == "png" || tipo == "jpeg" || tipo == "gif" || tipo == "jpg") {
                             mediaOT.insertAdjacentHTML('beforeend', codigo);
                         }
