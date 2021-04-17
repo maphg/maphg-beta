@@ -92,22 +92,18 @@ if (isset($_GET['action'])) {
                         }
                     }
 
-                    $array['datos'] = array(
-                        "idOT" => $idOT,
-                        "actividad" => $actividad,
-                        "status" => $status,
-                        "equipo" => $equipo,
-                        "destino" => $destino,
-                        "seccion" => $seccion,
-                        "subseccion" => $subseccion,
-                        "tipo" => $tipo,
-                        "tipoIncidencia" => $tipoIncidencia,
-                        "rangoFecha" => $rangoFecha,
-                        "responsable" => $responsable,
-                        "adjuntos" => $adjuntos,
-                        "materiales" => $materiales
-                    );
+                    #ULTIMO COMENTARIO
+                    $comentario = "";
+                    $query = "SELECT comentario
+                    FROM comentarios_mp_np
+                    WHERE id_mp_np = $idOT and activo = 1 ORDER BY id DESC LIMIT 1";
+                    if ($result = mysqli_query($conn_2020, $query)) {
+                        foreach ($result as $x) {
+                            $comentario = $x['comentario'];
+                        }
+                    }
 
+                    #CTIVIDADES
                     $query = "SELECT id, actividad, status FROM t_mp_np_actividades_ot WHERE id_tarea = $idOT and activo = 1 ORDER BY id DESC";
                     if ($result = mysqli_query($conn_2020, $query)) {
                         foreach ($result as $x) {
@@ -128,6 +124,23 @@ if (isset($_GET['action'])) {
                             );
                         }
                     }
+
+                    $array['datos'] = array(
+                        "idOT" => $idOT,
+                        "actividad" => $actividad,
+                        "status" => $status,
+                        "equipo" => $equipo,
+                        "destino" => $destino,
+                        "seccion" => $seccion,
+                        "subseccion" => $subseccion,
+                        "tipo" => $tipo,
+                        "tipoIncidencia" => $tipoIncidencia,
+                        "rangoFecha" => $rangoFecha,
+                        "responsable" => $responsable,
+                        "adjuntos" => $adjuntos,
+                        "materiales" => $materiales,
+                        "comentario" => $comentario
+                    );
                 }
             }
         } elseif ($tipo == "FALLA") {
@@ -206,21 +219,16 @@ if (isset($_GET['action'])) {
                         }
                     }
 
-                    $array['datos'] = array(
-                        "idOT" => $idOT,
-                        "actividad" => $actividad,
-                        "status" => $status,
-                        "equipo" => $equipo,
-                        "destino" => $destino,
-                        "seccion" => $seccion,
-                        "subseccion" => $subseccion,
-                        "tipo" => $tipo,
-                        "tipoIncidencia" => $tipoIncidencia,
-                        "rangoFecha" => $rangoFecha,
-                        "responsable" => $responsable,
-                        "adjuntos" => $adjuntos,
-                        "materiales" => $materiales
-                    );
+                    #ULTIMO COMENTARIO
+                    $comentario = "";
+                    $query = "SELECT comentario
+                    FROM t_mc_comentarios
+                    WHERE id_mc = $idOT and activo = 1 ORDER BY id DESC LIMIT 1";
+                    if ($result = mysqli_query($conn_2020, $query)) {
+                        foreach ($result as $x) {
+                            $comentario = $x['comentario'];
+                        }
+                    }
 
                     $query = "SELECT id, actividad, status FROM t_mc_actividades_ot WHERE id_falla = $idOT and activo = 1 ORDER BY id DESC";
                     if ($result = mysqli_query($conn_2020, $query)) {
@@ -242,6 +250,23 @@ if (isset($_GET['action'])) {
                             );
                         }
                     }
+
+                    $array['datos'] = array(
+                        "idOT" => $idOT,
+                        "actividad" => $actividad,
+                        "status" => $status,
+                        "equipo" => $equipo,
+                        "destino" => $destino,
+                        "seccion" => $seccion,
+                        "subseccion" => $subseccion,
+                        "tipo" => $tipo,
+                        "tipoIncidencia" => $tipoIncidencia,
+                        "rangoFecha" => $rangoFecha,
+                        "responsable" => $responsable,
+                        "adjuntos" => $adjuntos,
+                        "materiales" => $materiales,
+                        "comentario" => $comentario
+                    );
                 }
             }
         } elseif ($tipo == "ENERGETICO") {

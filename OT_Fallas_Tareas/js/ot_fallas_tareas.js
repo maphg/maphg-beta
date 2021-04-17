@@ -4,6 +4,7 @@ const APIERROR = 'https://api.telegram.org/bot1396322757:AAF5C0bcZxR8_mEEtm3BFEJ
 const asignadoA = document.querySelector('#asignadoA');
 const mediaOT = document.querySelector('#mediaOT');
 const dataMaterialesOT = document.querySelector('#dataMaterialesOT');
+const comentarioOT = document.querySelector('#comentarioOT');
 
 function validarOT() {
     let URL = window.location.hash;
@@ -38,6 +39,7 @@ function generarOT(idOT, tipo) {
             asignadoA.innerHTML = 'NOMBRE Y FIRMA';
             mediaOT.innerHTML = '';
             dataMaterialesOT.innerHTML = '';
+            comentarioOT.innerHTML = '';
             return array;
         })
         .then(array => {
@@ -85,7 +87,8 @@ function generarOT(idOT, tipo) {
                         const idAdjunto = array.datos.adjuntos[x].idAdjunto;
                         const url = array.datos.adjuntos[x].url;
                         const tipo = array.datos.adjuntos[x].tipo;
-                        const codigo = `<a href="${url}" target="_blank"><img src="${url}" class="w-20 h-20 p-1"></a>`;
+                        const codigo = `<a href="${url}" target="_blank" class="pb-1">
+                        <img src="${url}" class="w-20 h-20 rounded"></a>`;
                         if (tipo == "png" || tipo == "jpeg" || tipo == "gif" || tipo == "jpg") {
                             mediaOT.insertAdjacentHTML('beforeend', codigo);
                         }
@@ -149,6 +152,11 @@ function generarOT(idOT, tipo) {
                             </tr>`;
                         dataMaterialesOT.insertAdjacentHTML('beforeend', codigo);
                     }
+                }
+
+                // COMENTARIO 
+                if (array.datos.comentario) {
+                    comentarioOT.innerHTML = array.datos.comentario;
                 }
             }
         })
