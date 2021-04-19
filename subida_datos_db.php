@@ -899,7 +899,7 @@
                 document.getElementById("columna28").value = '';
                 document.getElementById("columna29").value = '';
                 document.getElementById("columna30").value = '';
-            } else if (tabla == "t_stock_items") {
+            } else if (tabla == "t_equipos_america") {
                 document.getElementById("columna1").value = 'id_equipo_principal';
                 document.getElementById("columna2").value = 'equipo';
                 document.getElementById("columna3").value = 'id_destino';
