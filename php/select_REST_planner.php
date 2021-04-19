@@ -2103,7 +2103,7 @@ if (isset($_GET['action'])) {
         }
 
         $query = "SELECT id, equipo FROM t_equipos_america 
-        WHERE id_seccion = $idSeccion and id_subseccion = $idSubseccion and IN('OPERATIVO', 'TALLER', 'FUERASERVICIO', 'OPERAMAL') and activo = 1 $filtroTipo $filtroDestino
+        WHERE id_seccion = $idSeccion and id_subseccion = $idSubseccion and status IN('OPERATIVO', 'TALLER', 'FUERASERVICIO', 'OPERAMAL') and activo = 1 $filtroTipo $filtroDestino
         ORDER BY equipo ASC";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
