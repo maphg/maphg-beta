@@ -899,6 +899,37 @@
                 document.getElementById("columna28").value = '';
                 document.getElementById("columna29").value = '';
                 document.getElementById("columna30").value = '';
+            } else if (tabla == "t_stock_items") {
+                document.getElementById("columna1").value = 'id_equipo_principal';
+                document.getElementById("columna2").value = 'equipo';
+                document.getElementById("columna3").value = 'id_destino';
+                document.getElementById("columna4").value = 'id_seccion';
+                document.getElementById("columna5").value = 'id_subseccion';
+                document.getElementById("columna6").value = 'id_tipo';
+                document.getElementById("columna7").value = 'local_equipo';
+                document.getElementById("columna8").value = 'jerarquia';
+                document.getElementById("columna9").value = 'id_fases';
+                document.getElementById("columna10").value = 'status';
+                document.getElementById("columna11").value = '';
+                document.getElementById("columna12").value = '';
+                document.getElementById("columna13").value = '';
+                document.getElementById("columna14").value = '';
+                document.getElementById("columna15").value = '';
+                document.getElementById("columna16").value = '';
+                document.getElementById("columna17").value = '';
+                document.getElementById("columna18").value = '';
+                document.getElementById("columna19").value = '';
+                document.getElementById("columna20").value = '';
+                document.getElementById("columna21").value = '';
+                document.getElementById("columna22").value = '';
+                document.getElementById("columna23").value = '';
+                document.getElementById("columna24").value = '';
+                document.getElementById("columna25").value = '';
+                document.getElementById("columna26").value = '';
+                document.getElementById("columna27").value = '';
+                document.getElementById("columna28").value = '';
+                document.getElementById("columna29").value = '';
+                document.getElementById("columna30").value = '';
             } else {
                 document.getElementById("columna1").value = '';
                 document.getElementById("columna2").value = '';
