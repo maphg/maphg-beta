@@ -5103,10 +5103,15 @@ if (isset($_GET['action'])) {
 
     // OBTENER ARRAY DE ORGANIGRAMA
     if ($action == "obtenerOrganigrama") {
+        if ($idDestino == 10) {
+            $filtroDestino = "";
+        } else {
+            $filtroDestino = "and id_destino IN($idDestino, 10)";
+        }
 
         $query = "SELECT id, id_padre, nivel, nombre, cargo, avatar_url 
         FROM t_organigrama 
-        WHERE id_destino = $idDestino and activo = 1 ORDER BY nivel ASC";
+        WHERE activo = 1 $filtroDestino ORDER BY nivel ASC";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $idItem = $x["id"];
