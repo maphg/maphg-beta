@@ -502,10 +502,6 @@ if (isset($_GET['action'])) {
                                     $fechaFinalizado = $x['fecha_finalizado'];
                                     $status = $x['status'];
 
-                                    // CONTADORES TOTAL
-                                    $enProceso++;
-                                    $enProceso_dia++;
-                                    $enProceso_G++;
 
                                     #OBTIENE TIEMPOS EN HORAS
                                     $horasCreacion = strtotime($fechaCreacion);
@@ -516,6 +512,9 @@ if (isset($_GET['action'])) {
                                         $creadas++;
                                         $creadas_dia++;
                                         $creadas_G++;
+
+                                        // CONTADORES TOTAL
+                                        $enProceso_dia++;
 
                                         #OBTIENE TIEMPO EN HORAS DE PENDIENTE
                                         if ($horasCreacion > 0 && $horasActual > 0) {
@@ -568,6 +567,9 @@ if (isset($_GET['action'])) {
                             $tiempoInicio += 86400;
                         }
 
+                        $enProceso += $enProceso_dia;
+
+
                         #MEDIA EN PROCESO
                         if ($mediaEnProceso > 0 && $enProceso > 0) {
                             $mediaEnProceso_G += $mediaEnProceso;
@@ -602,6 +604,9 @@ if (isset($_GET['action'])) {
                         );
                     }
                 }
+
+                $enProceso_G += $enProceso;
+
 
                 #MEDIA EN PROCESO
                 if ($mediaEnProceso_G > 0 && $enProceso_G > 0) {
