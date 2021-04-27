@@ -235,6 +235,8 @@ if (isset($_GET['action'])) {
 
 
                 #Rango Fecha
+                $fechaInicio = "";
+                $fechaFin = "";
                 if ($rangoFecha != "") {
                     $rangoFecha = explode(" - ", $rangoFecha);
                     if (isset($rangoFecha[0])) {
@@ -248,9 +250,6 @@ if (isset($_GET['action'])) {
                     } else {
                         $fechaFin = $fechaCreacion;
                     }
-                } else {
-                    $fechaInicio = $fechaCreacion;
-                    $fechaFin = $fechaCreacion;
                 }
 
                 #STATUS 
@@ -417,6 +416,8 @@ if (isset($_GET['action'])) {
 
 
                 #Rango Fecha
+                $fechaInicio = "";
+                $fechaFin = "";
                 if ($rangoFecha != "") {
                     $rangoFecha = explode(" - ", $rangoFecha);
                     if (isset($rangoFecha[0])) {
@@ -430,9 +431,6 @@ if (isset($_GET['action'])) {
                     } else {
                         $fechaFin = $fechaCreacion;
                     }
-                } else {
-                    $fechaInicio = $fechaCreacion;
-                    $fechaFin = $fechaCreacion;
                 }
 
                 #STATUS 
@@ -4287,7 +4285,7 @@ if (isset($_GET['action'])) {
 
     // OPCION PARA BUSCAR OT
     if ($action == "buscarOT") {
-        $idOTX = intval($_GET['idOT']);
+        $idOTX = $_GET['idOT'];
         $array = array();
 
         if ($idDestino == 10) {

@@ -96,7 +96,7 @@ const subalmacenSeleccionado = idSubalmacen => {
       }
     })
     .catch(function (err) {
-      fetch(APIERROR + err);
+      fetch(APIERROR + err + ` subalmacenSeleccionado(${idSubalmacen})`);
     })
 }
 
@@ -253,7 +253,8 @@ function generarXLSItems(tipoXLS) {
 const entradasSubalmacen = idSubalmacen => {
   let idDestino = localStorage.getItem('idDestino');
   let idUsuario = localStorage.getItem('usuario');
-
+  localStorage.setItem('idSubalmacen', idSubalmacen)
+  
   abrirmodal('modalSubalmacenEntradas');
 
   const action = "obtenerItems";
@@ -1173,3 +1174,65 @@ window.addEventListener('load', () => {
   iniciarFomularioItem();
   document.getElementById("destinosSelecciona").addEventListener("click", consultaSubalmacen);
 })
+
+
+const leerExcel = () => {
+  fetch('php/excel.json')
+    .then(array => array.json())
+    .then(array => {
+
+      if (array.length) {
+        const procesoExcel = array => {
+          let idDestino = localStorage.getItem('idDestino');
+          let idUsuario = localStorage.getItem('usuario');
+          let idSubalmacen = localStorage.getItem('idSubalmacen');
+
+          const action = "procesoExcel";
+          const URL = `php/subalmacen.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idSubalmacen=${idSubalmacen}`;
+
+          fetch(URL, {
+            method: "POST",
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(array)
+          })
+            .then(array2 => array2.json())
+            .then(array2 => {
+              console.log(array2)
+
+              if (array.length == array2.length) {
+                alertify.confirm('MAPHG', `¿Cargar Existencias? <br>
+                                - Registrados: ${array2.length} <br>
+                                - Faltantes: ${array.length - array2.length} <br>
+                                - Total: ${array.length}`,
+                  () => { cargarExistencias(array) }
+                  , () => { alertaImg('Proceso Cancelado', '', 'error') });
+              } else {
+                alertify.confirm('MAPHG', `¿Desea Agregar Registros Faltantes? <br>
+                                - Registrados: ${array2.length} <br>
+                                - Faltantes: ${array.length - array2.length} <br>
+                                - Total: ${array.length}`,
+                  () => { leerExcel() }
+                  , () => { alertaImg('Proceso Cancelado', '', 'error') });
+
+              }
+            })
+            .catch(function (err) {
+              // fetch(APIERROR + err);
+              console.log(err);
+            })
+        }
+        procesoExcel(array)
+      }
+    })
+    .catch(function (err) {
+      fetch(APIERROR + err);
+    })
+}
+
+
+const cargarExistencias = array => {
+  console.log(array);
+}

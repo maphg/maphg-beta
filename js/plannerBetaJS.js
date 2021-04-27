@@ -3,14 +3,17 @@ let idUsuario = localStorage.getItem("usuario");
 let idDestino = localStorage.getItem("idDestino");
 // VARIABLES GLOBALES, (VALOR ESTATICO AL CARGAR LA PAGINA)
 
+
 // API PARA REPORTE DE ERRORES
 const APIERROR = 'https://api.telegram.org/bot1396322757:AAF5C0bcZxR8_mEEtm3BFEJGhgHvLcE3X_E/sendMessage?chat_id=989320528&text=Error: ';
+
 
 // ICONOS 
 const iconoLoader = '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
 const iconoDefault = '<i class="fad fa-minus text-xl text-red-400"></i>';
 const loaderMAPHG75 = '<div class="w-full p-12 flex items-center justify-center"><img src="svg/lineal_animated_loop.svg" width="75px" height="75px"></div>';
 const loaderMAPHG40 = '<div class="w-full p-1 flex items-center justify-center"><img src="svg/lineal_animated_loop.svg" width="30px" height="30px"></div>';
+
 
 // ELEMENTOS BUTTOM ID
 const btnEmergenciaEntregas = document.getElementById("btnEmergenciaEntregas");
@@ -87,6 +90,7 @@ const btnAñadirMaterialEquipo = document.getElementById("btnAñadirMaterialEqui
 const btnMover = document.getElementById("btnMover");
 // ELEMENTOS BUTTOM ID
 
+
 // ELEMENTOS <INPUTS> ID
 const inputAdjuntosEntregas = document.getElementById("inputAdjuntosEntregas");
 const descripcionEntregas = document.getElementById("descripcionEntregas");
@@ -129,9 +133,8 @@ const fechaProgramadaOT = document.getElementById("fechaProgramadaOT");
 const seccionEntregas = document.getElementById("seccionEntregas");
 const responsablesEntregas = document.getElementById("responsablesEntregas");
 const responsablesEjecucionEntregas = document.getElementById("responsablesEjecucionEntregas");
-
-
 // ELEMENTOS <INPUTS> ID
+
 
 // CONTENEDORES DIV ID
 const contenedorEquipoLocalEntregas = document.getElementById("contenedorEquipoLocalEntregas");
@@ -160,7 +163,6 @@ const tooltipOpcionesActividadPlanaccion =
    document.getElementById("tooltipOpcionesActividadPlanaccion");
 const tooltipOpcionesActividadIncidencias =
    document.getElementById("tooltipOpcionesActividadIncidencias");
-
 const tipoIncidenciaVerEnPlanner = document.getElementById("tipoIncidenciaVerEnPlanner");
 const tituloVerEnPlanner = document.getElementById("tituloVerEnPlanner");
 const fechaVerEnPlanner = document.getElementById("fechaVerEnPlanner");
@@ -1784,7 +1786,7 @@ btnPendientesPreventivos.addEventListener('click', () => {
                   </div>               
                `;
 
-               if (status == "PROCESO")
+               if (status == "PROCESO") {
                   if (document.getElementById(`row_subseccion_${idSubseccion}_MP`)) {
                      document.getElementById(`row_subseccion_${idSubseccion}_MP`).
                         insertAdjacentHTML('beforeend', codigo);
@@ -1792,21 +1794,22 @@ btnPendientesPreventivos.addEventListener('click', () => {
                      tablaPendientesPendientes.innerText = `PENDIENTES (${pendientesI})`;
                   }
 
-               if (sCalidad > 0 || sCompras > 0 || sDireccion > 0 || sFinanzas > 0 || sRRHH > 0 || sMaterial > 0) {
-                  if (document.getElementById(`row_subseccion_${idSubseccion}_DEP`)) {
-                     document.getElementById(`row_subseccion_${idSubseccion}_DEP`).
-                        insertAdjacentHTML('beforeend', codigoDEP);
-                     pendientesDEP++;
-                     tablaPendientesPendientesDEP.innerText = `PENDIENTES DEP (${pendientesDEP})`;
+                  if (sCalidad > 0 || sCompras > 0 || sDireccion > 0 || sFinanzas > 0 || sRRHH > 0 || sMaterial > 0) {
+                     if (document.getElementById(`row_subseccion_${idSubseccion}_DEP`)) {
+                        document.getElementById(`row_subseccion_${idSubseccion}_DEP`).
+                           insertAdjacentHTML('beforeend', codigoDEP);
+                        pendientesDEP++;
+                        tablaPendientesPendientesDEP.innerText = `PENDIENTES DEP (${pendientesDEP})`;
+                     }
                   }
-               }
 
-               if (sTrabajando == 1) {
-                  if (document.getElementById(`row_subseccion_${idSubseccion}_T`)) {
-                     document.getElementById(`row_subseccion_${idSubseccion}_T`).
-                        insertAdjacentHTML('beforeend', codigoT);
-                     pendientesT++;
-                     tablaPendientesTrabajando.innerText = `TRABAJANDO (${pendientesT})`;
+                  if (sTrabajando == 1) {
+                     if (document.getElementById(`row_subseccion_${idSubseccion}_T`)) {
+                        document.getElementById(`row_subseccion_${idSubseccion}_T`).
+                           insertAdjacentHTML('beforeend', codigoT);
+                        pendientesT++;
+                        tablaPendientesTrabajando.innerText = `TRABAJANDO (${pendientesT})`;
+                     }
                   }
                }
 
@@ -2961,6 +2964,7 @@ function actualizarTareas(idTarea, columna, valor) {
             obtenerTareas(idEquipo);
             alertaImg("Rango de Fecha, Actualizada", "", "success", 2000);
             cerrarmodal("modalStatus");
+            cerrarmodal("modalFechaTareas");
          } else if (data == 7) {
             obtenerTareas(idEquipo);
             alertaImg("Status Actualizado", "", "success", 2000);
@@ -8312,6 +8316,11 @@ const datosFallasTareas = params => {
    const materialesAsignados = params.materialesAsignados > 0 ? `${params.materialesAsignados}`
       : '<i class="fad fa-minus text-xl text-red-400"></i>';
 
+   const fechaX = params.fechaInicio == "" || params.fechaFin == "" ?
+      '<i class="fad fa-minus text-xl text-red-400"></i>'
+      : `<div class="leading-4">${params.fechaInicio}</div>
+         <div class="leading-3">${params.fechaFin}</div>`;
+
    return `
       <tr class="hover:bg-gray-200 cursor-pointer text-xs font-normal 
         ${statusX}">
@@ -8338,8 +8347,7 @@ const datosFallasTareas = params => {
 
          <td class="whitespace-no-wrap border-b border-gray-200 text-center py-3" 
          ${fRangoFecha}>
-            <div class="leading-4">${params.fechaInicio}</div>
-            <div class="leading-3">${params.fechaFin}</div>
+            ${fechaX}
          </td>
 
          <td class="px-2 whitespace-no-wrap border-b border-gray-200 text-center py-3"

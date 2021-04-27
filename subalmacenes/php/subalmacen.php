@@ -1069,4 +1069,63 @@ if (isset($_GET['action'])) {
         }
         echo json_encode($resp);
     }
+
+
+    if ($action == "procesoExcel") {
+        $idSubalmacen = $_GET['idSubalmacen'];
+
+        $data = json_decode(file_get_contents('php://input'), true);
+
+        foreach ($data as $x) {
+            $cod2bend = $x['cod2bend'];
+            $descripcionCod2bend = $x['descripcionCod2bend'];
+            $descripcionServiciosTecnicos = $x['descripcionServiciosTecnicos'];
+            $idSeccion = $x['idSeccion'];
+            $area = $x['area'];
+            $categoria = strtoupper($x['categoria']);
+            $stockTeorico = floatval($x['stockTeorico']);
+            $marca = $x['marca'];
+            $modelo = $x['modelo'];
+            $caracteristicas = $x['caracteristicas'];
+            $subfamilia = strtoupper($x['subfamilia']);
+            $idItem_Registrado = 0;
+
+            $palabraBuscar = strstr($descripcionCod2bend, ' ', true);
+
+            if (($descripcionCod2bend == "" || $descripcionCod2bend == " ")) {
+                $palabraBuscar = "xxxxxxxxxxxxxxxxxxxxxxxxx";
+            }
+
+            #BUSCA ITEM
+            $query = "SELECT id, cod2bend, descripcion_cod2bend
+            FROM t_subalmacenes_items_globales
+            WHERE cod2bend = '$cod2bend' and descripcion_cod2bend LIKE '%$palabraBuscar%' and id_destino = $idDestino
+            and activo = 1";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $x) {
+                    $idItem_Registrado = $x['id'];
+                    $cod2bend_Registrado = $x['cod2bend'];
+                    $descripcionCod2bend_Registrado = $x['descripcion_cod2bend'];
+
+                    $array[] = array(
+                        "idItem_Registrado" => $idItem_Registrado,
+                        "cod2bend_Registrado" => $cod2bend_Registrado,
+                        "cod2bend_Nuevo" => $cod2bend,
+                        "Descripcion_Registrado" => $descripcionCod2bend_Registrado,
+                        "Descripcion_Nuevo" => $descripcionCod2bend,
+                    );
+                }
+            }
+
+            #AGREGA EL ITEM
+            if ($idItem_Registrado <= 0) {
+                $query = "INSERT INTO t_subalmacenes_items_globales(id_destino, id_seccion, cod2bend, descripcion_cod2bend, descripcion_servicio_tecnico, area, categoria, stock_teorico, marca, modelo, caracteristicas, subfamilia, tipo_material, unidad, precio, activo) VALUES($idDestino, $idSeccion, '$cod2bend', '$descripcionCod2bend', '$descripcionServiciosTecnicos', '$area', '$categoria', 
+                $stockTeorico, '$marca', '$modelo', '$caracteristicas', '$subfamilia', '', 'ND', '0.0', 1)";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    $resp = 1;
+                }
+            }
+        }
+        echo json_encode($array);
+    }
 }

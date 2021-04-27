@@ -495,14 +495,6 @@ if (isset($_GET['action'])) {
                                 (mp.fecha_finalizado BETWEEN '$fechaA' and '$fechaB')
                             )";
 
-                            #INCIDENCIAS EQUIPOS
-                            // $query = "SELECT id, fecha_creacion, fecha_realizado, status
-                            // FROM t_mc
-                            // WHERE id_seccion = $idSeccion and id_destino = $idDestinoX and status IN('PENDIENTE', 'N', 'SOLUCIONADO', 'F') and activo = 1 and id_equipo > 0 and
-                            // (
-                            //     (fecha_creacion BETWEEN '$fechaA' and '$fechaB') OR 
-                            //     (fecha_realizado BETWEEN '$fechaA' and '$fechaB')
-                            // )";
                             if ($result = mysqli_query($conn_2020, $query)) {
                                 foreach ($result as $x) {
                                     $totalIncidencia = $x['id'];
@@ -676,13 +668,6 @@ if (isset($_GET['action'])) {
                     $fechaX = date('Y-m-d', $tiempoInicio);
                     $fechaA = date("Y-m-d H:i:s", ($tiempoInicio + 0));
                     $fechaB = date("Y-m-d H:i:s", ($tiempoInicio + 86400));
-
-                    #INCIDENCIA EQUIPOS
-                    // $query = "SELECT id, fecha_creacion, fecha_realizado, status
-                    // FROM t_mc
-                    // WHERE id_destino = $idDestinoX and status IN('PENDIENTE', 'N', 'SOLUCIONADO', 'F') and activo = 1 and id_equipo > 0 and
-                    // ((fecha_creacion BETWEEN '$fechaA' and '$fechaB') OR 
-                    // (fecha_realizado BETWEEN '$fechaA' and '$fechaB'))";
 
                     $query = "SELECT mp.id, mp.fecha_creacion, mp.fecha_finalizado, 
                     mp.status
