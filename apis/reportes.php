@@ -58,14 +58,14 @@ if (isset($_GET['action'])) {
                             $fechaFinalizado = $x['fecha_realizado'];
                             $status = $x['status'];
 
-                            
+                            $enProceso++;
+
                             #OBTIENE TIEMPOS EN HORAS
                             $horasCreacion = strtotime($fechaCreacion);
                             $horasSolucionado = strtotime($fechaFinalizado);
                             $horasActual = strtotime($fechaActual);
-                            
+
                             if ($status == "PENDIENTE" || $status == "N") {
-                                $enProceso++;
                                 $creados++;
                             } else {
                                 $solucionados++;
@@ -90,15 +90,15 @@ if (isset($_GET['action'])) {
                             $fechaFinalizado = $x['fecha_finalizado'];
                             $status = $x['status'];
                             $tiempoSolucionado = 0;
+                            $enProceso++;
                             $idDestinoX;
-                            
+
                             #OBTIENE TIEMPOS EN HORAS
                             $horasCreacion = strtotime($fechaCreacion);
                             $horasSolucionado = strtotime($fechaFinalizado);
                             $horasActual = strtotime($fechaActual);
-                            
+
                             if ($status == "PENDIENTE" || $status == "N") {
-                                $enProceso++;
                                 $creados++;
                             } else {
                                 $solucionados++;
@@ -236,17 +236,17 @@ if (isset($_GET['action'])) {
                                     $fechaFinalizado = $x['fecha_realizado'];
                                     $status = $x['status'];
 
-                                    
+                                    // CONTADORES TOTAL
+                                    $enProceso++;
+                                    $enProceso_dia++;
+                                    $enProceso_G++;
+
                                     #OBTIENE TIEMPOS EN HORAS
                                     $horasCreacion = strtotime($fechaCreacion);
                                     $horasSolucionado = strtotime($fechaFinalizado);
                                     $horasActual = strtotime($fechaActual);
-                                    
+
                                     if ($status == "PENDIENTE" || $status == "N") {
-                                        // CONTADORES TOTAL
-                                        $enProceso_dia++;
-                                        $enProceso_G++;
-                                        $enProceso++;
                                         $creadas++;
                                         $creadas_dia++;
                                         $creadas_G++;
@@ -284,18 +284,17 @@ if (isset($_GET['action'])) {
                                     $fechaFinalizado = $x['fecha_finalizado'];
                                     $status = $x['status'];
 
-                                    
+                                    # CONTADORES TOTAL
+                                    $enProceso++;
+                                    $enProceso_dia++;
+                                    $enProceso_G++;
+
                                     #OBTIENE TIEMPOS EN HORAS
                                     $horasCreacion = strtotime($fechaCreacion);
                                     $horasSolucionado = strtotime($fechaFinalizado);
                                     $horasActual = strtotime($fechaActual);
-                                    
-                                    if ($status == "PENDIENTE" || $status == "N") {
-                                        # CONTADORES TOTAL
-                                        $enProceso++;
-                                        $enProceso_dia++;
-                                        $enProceso_G++;
 
+                                    if ($status == "PENDIENTE" || $status == "N") {
                                         $creadas++;
                                         $creadas_dia++;
                                         $creadas_G++;
@@ -503,18 +502,17 @@ if (isset($_GET['action'])) {
                                     $fechaFinalizado = $x['fecha_finalizado'];
                                     $status = $x['status'];
 
-                                    
+                                    // CONTADORES TOTAL
+                                    $enProceso++;
+                                    $enProceso_dia++;
+                                    $enProceso_G++;
+
                                     #OBTIENE TIEMPOS EN HORAS
                                     $horasCreacion = strtotime($fechaCreacion);
                                     $horasSolucionado = strtotime($fechaFinalizado);
                                     $horasActual = strtotime($fechaActual);
-                                    
-                                    if ($status == "PROCESO") {
-                                        // CONTADORES TOTAL
-                                        $enProceso++;
-                                        $enProceso_dia++;
-                                        $enProceso_G++;
 
+                                    if ($status == "PROCESO") {
                                         $creadas++;
                                         $creadas_dia++;
                                         $creadas_G++;
@@ -686,14 +684,14 @@ if (isset($_GET['action'])) {
                             $fechaFinalizado = $x['fecha_finalizado'];
                             $status = $x['status'];
 
-                            
+                            $enProceso++;
+
                             #OBTIENE TIEMPOS EN HORAS
                             $horasCreacion = strtotime($fechaCreacion);
                             $horasSolucionado = strtotime($fechaFinalizado);
                             $horasActual = strtotime($fechaActual);
-                            
+
                             if ($status == "PROCESO") {
-                                $enProceso++;
                                 $creados++;
                             } else {
                                 $solucionados++;
