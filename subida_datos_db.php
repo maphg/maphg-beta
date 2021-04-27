@@ -37,6 +37,7 @@
                 <option value="t_subcontratas_america_materiales">Subcontratas AME (t_subcontratas_america_materiales)</option>
                 <option value="t_compras_america_materiales">Compras AME (t_compras_america_materiales)</option>
                 <option value="t_stock_items">stock (t_stock_items)</option>
+                <option value="t_mc">Incidenicas Equipos(t_mc)</option>
             </select>
             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
