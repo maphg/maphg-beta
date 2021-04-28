@@ -254,7 +254,7 @@ const entradasSubalmacen = idSubalmacen => {
   let idDestino = localStorage.getItem('idDestino');
   let idUsuario = localStorage.getItem('usuario');
   localStorage.setItem('idSubalmacen', idSubalmacen)
-  
+
   abrirmodal('modalSubalmacenEntradas');
 
   const action = "obtenerItems";
@@ -1180,7 +1180,7 @@ const leerExcel = () => {
   fetch('php/excel.json')
     .then(array => array.json())
     .then(array => {
-
+      console.log(array);
       if (array.length) {
         const procesoExcel = array => {
           let idDestino = localStorage.getItem('idDestino');
@@ -1202,21 +1202,20 @@ const leerExcel = () => {
             .then(array2 => {
               console.log(array2)
 
-              if (array.length == array2.length) {
+              if (array2.REGISTRADOS.length == array.length) {
                 alertify.confirm('MAPHG', `¿Cargar Existencias? <br>
-                                - Registrados: ${array2.length} <br>
-                                - Faltantes: ${array.length - array2.length} <br>
-                                - Total: ${array.length}`,
+                - Registrados: ${array2.REGISTRADOS.length} <br>
+                - Faltantes: ${array.length - array2.REGISTRADOS.length} <br>
+                - Total: ${array.length}`,
                   () => { cargarExistencias(array) }
                   , () => { alertaImg('Proceso Cancelado', '', 'error') });
               } else {
                 alertify.confirm('MAPHG', `¿Desea Agregar Registros Faltantes? <br>
-                                - Registrados: ${array2.length} <br>
-                                - Faltantes: ${array.length - array2.length} <br>
+                                - Registrados: ${array2.REGISTRADOS.length} <br>
+                                - Faltantes: ${array.length - array2.REGISTRADOS.length} <br>
                                 - Total: ${array.length}`,
                   () => { leerExcel() }
                   , () => { alertaImg('Proceso Cancelado', '', 'error') });
-
               }
             })
             .catch(function (err) {
@@ -1235,4 +1234,27 @@ const leerExcel = () => {
 
 const cargarExistencias = array => {
   console.log(array);
+  let idDestino = localStorage.getItem('idDestino');
+  let idUsuario = localStorage.getItem('usuario');
+  let idSubalmacen = localStorage.getItem('idSubalmacen');
+
+  const action = "cargarExistencias";
+  const URL = `php/subalmacen.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idSubalmacen=${idSubalmacen}`;
+
+  fetch(URL, {
+    method: "POST",
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(array)
+  })
+    .then(array => array.json())
+    .then(array => {
+      console.log(array)
+    })
+    .catch(function (err) {
+      fetch(APIERROR + err);
+    })
+
 }

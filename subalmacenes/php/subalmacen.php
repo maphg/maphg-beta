@@ -11,6 +11,7 @@ if (isset($_GET['action'])) {
     $action = $_GET['action'];
     $array = array();
 
+
     // OBTIENE EL SUBALMACEN SELECCIONADO
     if ($action == "subalmacenSeleccionado") {
         $idSubalmacen = $_GET['idSubalmacen'];
@@ -29,6 +30,7 @@ if (isset($_GET['action'])) {
         }
         echo json_encode($array);
     }
+
 
     // OBTIENE TODOS LOS STOCK POR DESTINO
     if ($action == "consultaTodosItems") {
@@ -791,6 +793,7 @@ if (isset($_GET['action'])) {
         echo json_encode($array);
     }
 
+
     // AGREGA ENTRADAS AL CARRITO
     if ($action == "agregarSalida") {
         $idSubalmacen = $_GET['idSubalmacen'];
@@ -1071,8 +1074,11 @@ if (isset($_GET['action'])) {
     }
 
 
+    // PROCESO PARA EXPORTAR EXCEL
     if ($action == "procesoExcel") {
         $idSubalmacen = $_GET['idSubalmacen'];
+        $array['AGREGADOS'] = array();
+        $array['REGISTRADOS'] = array();
 
         $data = json_decode(file_get_contents('php://input'), true);
 
@@ -1090,29 +1096,21 @@ if (isset($_GET['action'])) {
             $subfamilia = strtoupper($x['subfamilia']);
             $idItem_Registrado = 0;
 
-            $palabraBuscar = strstr($descripcionCod2bend, ' ', true);
-
-            if (($descripcionCod2bend == "" || $descripcionCod2bend == " ")) {
-                $palabraBuscar = "xxxxxxxxxxxxxxxxxxxxxxxxx";
-            }
-
             #BUSCA ITEM
             $query = "SELECT id, cod2bend, descripcion_cod2bend
             FROM t_subalmacenes_items_globales
-            WHERE cod2bend = '$cod2bend' and descripcion_cod2bend LIKE '%$palabraBuscar%' and id_destino = $idDestino
+            WHERE cod2bend = '$cod2bend' and descripcion_cod2bend = '$descripcionCod2bend' and categoria = '$categoria' and id_destino = $idDestino
             and activo = 1";
             if ($result = mysqli_query($conn_2020, $query)) {
                 foreach ($result as $x) {
                     $idItem_Registrado = $x['id'];
-                    $cod2bend_Registrado = $x['cod2bend'];
-                    $descripcionCod2bend_Registrado = $x['descripcion_cod2bend'];
+                    $cod2bend = $x['cod2bend'];
+                    $descripcionCod2bend = $x['descripcion_cod2bend'];
 
-                    $array[] = array(
+                    $array['REGISTRADOS'][] = array(
                         "idItem_Registrado" => $idItem_Registrado,
-                        "cod2bend_Registrado" => $cod2bend_Registrado,
                         "cod2bend_Nuevo" => $cod2bend,
-                        "Descripcion_Registrado" => $descripcionCod2bend_Registrado,
-                        "Descripcion_Nuevo" => $descripcionCod2bend,
+                        "Descripcion_Registrado" => $descripcionCod2bend,
                     );
                 }
             }
@@ -1122,7 +1120,72 @@ if (isset($_GET['action'])) {
                 $query = "INSERT INTO t_subalmacenes_items_globales(id_destino, id_seccion, cod2bend, descripcion_cod2bend, descripcion_servicio_tecnico, area, categoria, stock_teorico, marca, modelo, caracteristicas, subfamilia, tipo_material, unidad, precio, activo) VALUES($idDestino, $idSeccion, '$cod2bend', '$descripcionCod2bend', '$descripcionServiciosTecnicos', '$area', '$categoria', 
                 $stockTeorico, '$marca', '$modelo', '$caracteristicas', '$subfamilia', '', 'ND', '0.0', 1)";
                 if ($result = mysqli_query($conn_2020, $query)) {
-                    $resp = 1;
+                    $array['AGREGADOS'][] = array(
+                        "idItem_Registrado" => $idItem_Registrado,
+                        "cod2bend_Registrado" => $cod2bend_Registrado,
+                        "cod2bend_Nuevo" => $cod2bend,
+                        "Descripcion_Registrado" => $descripcionCod2bend_Registrado,
+                    );
+                }
+            }
+        }
+        echo json_encode($array);
+    }
+
+    // CARGA EXISTENCIAS SEGÚN EL SUBALMACEN
+    // PROCESO PARA EXPORTAR EXCEL
+    if ($action == "cargarExistencias") {
+        $idSubalmacen = $_GET['idSubalmacen'];
+
+        $data = json_decode(file_get_contents('php://input'), true);
+
+        foreach ($data as $x) {
+            $cod2bend = $x['cod2bend'];
+            $descripcionCod2bend = $x['descripcionCod2bend'];
+            $categoria = strtoupper($x['categoria']);
+            $stockTeorico = floatval($x['stockTeorico']);
+            $stockActual = floatval($x['stockReal']);
+            $idItem_Registrado = 0;
+
+            #BUSCA ITEM
+            $query = "SELECT id
+            FROM t_subalmacenes_items_globales
+            WHERE cod2bend = '$cod2bend' and descripcion_cod2bend = '$descripcionCod2bend' 
+            and categoria = '$categoria' and id_destino = $idDestino
+            and activo = 1";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $x) {
+                    $idItem_Registrado = $x['id'];
+
+                    $query = "SELECT stock_actual FROM t_subalmacenes_items_stock 
+                    WHERE id_subalmacen = $idSubalmacen and id_destino = $idDestino and id_item_global = $idItem_Registrado and activo = 1";
+                    if ($result = mysqli_query($conn_2020, $query)) {
+                        foreach ($result as $x) {
+                            $stockActualX = $x['stock_actual'];
+
+                            if ($stockActualX > 0) {
+                                $stockActual += $stockActualX;
+                            }
+
+                            $query = "UPDATE t_subalmacenes_items_stock SET 
+                            stock_actual = $stockActual,
+                            stock_teorico = $stockTeorico,
+                            fecha_movimiento = '$fechaActual',
+                            fecha_creacion = '$fechaActual',
+                            activo = 1
+                            WHERE id_subalmacen = $idSubalmacen and id_destino = $idDestino and id_item_global = $idItem_Registrado and activo = 1";
+                            if ($result = mysqli_query($conn_2020, $query)) {
+
+                                $array[] = array(
+                                    "idItem_Registrado" => $idItem_Registrado,
+                                    "cod2bend_Registrado" => $cod2bend,
+                                    "Descripcion_Registrado" => $descripcionCod2bend,
+                                    "stockTeorico" => $stockTeorico,
+                                    "stockActual" => $stockActual
+                                );
+                            }
+                        }
+                    }
                 }
             }
         }
