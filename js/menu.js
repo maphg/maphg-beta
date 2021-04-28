@@ -20,9 +20,9 @@ class menuSidebar extends HTMLElement {
                     <div class="w-full max-w-md sm:-ml-2 flex">
                         <button id="btnAbrirMenu"
                             class="w-10 h-10 text-gray-400 hover:bg-gray-100 hover:text-gray-600 focus:bg-gray-100 focus:text-gray-600 rounded-full flex justify-center items-center">
-                            <img src="svg/menu.svg" class="w-5" alt="">
+                            <i class="fas fa-bars text-black fa-lg"></i>
                         </button>
-                        <img src="svg/log.svg" class="w-20 ml-6" alt="">
+                        <img id="btnLogoAbrirMenu" src="svg/log.svg" class="w-20 ml-6 cursor-pointer" alt="">
                     </div>
                     <div class="flex flex-shrink-0 items-center ml-auto">
                         <div id="btnConfiguracionesUsuario">
@@ -411,6 +411,7 @@ window.customElements.define("menu-agenda", agenda);
 
 
 const btnAbrirMenu = document.querySelector('#btnAbrirMenu');
+const btnLogoAbrirMenu = document.querySelector('#btnLogoAbrirMenu');
 const btnCerrarMenu = document.querySelector('#btnCerrarMenu');
 const contenedorMenu = document.querySelector('#contenedorMenu');
 const configuracionesUsuario = document.querySelector('#configuracionesUsuario');
@@ -460,6 +461,15 @@ btnCerrarMenu.addEventListener('click', () => {
 
 // ABRIR MENU
 btnAbrirMenu.addEventListener('click', () => {
+    contenedorMenu.classList.remove('hidden');
+    contenedorMenu.classList.remove('fadeOut');
+    contenedorMenu.children[0].classList.remove('fadeOutLeft');
+    contenedorMenu.classList.add('fadeIn');
+    contenedorMenu.children[0].classList.add('fadeInLeft');
+})
+
+// ABRIR MENU
+btnLogoAbrirMenu.addEventListener('click', () => {
     contenedorMenu.classList.remove('hidden');
     contenedorMenu.classList.remove('fadeOut');
     contenedorMenu.children[0].classList.remove('fadeOutLeft');
