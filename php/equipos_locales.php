@@ -469,7 +469,7 @@ if (isset($_GET['action'])) {
                 $query = "SELECT count(t_mp_planificacion_iniciada.id) 'id' FROM t_mp_planificacion_iniciada 
                 INNER JOIN t_mp_planes_mantenimiento ON t_mp_planificacion_iniciada.id_plan = t_mp_planes_mantenimiento.id
                 WHERE t_mp_planificacion_iniciada.id_equipo = $idEquipo and t_mp_planificacion_iniciada.status = 'SOLUCIONADO' and 
-                t_mp_planificacion_iniciada.activo = 1 and año = '$añoActual' and t_mp_planes_mantenimiento.tipo_plan = 'PREVENTIVO' ";
+                t_mp_planificacion_iniciada.activo = 1 and t_mp_planificacion_iniciada.año = '$añoActual' and t_mp_planes_mantenimiento.tipo_plan IN('PREVENTIVO', 'CHECKLIST')";
                 if ($result = mysqli_query($conn_2020, $query)) {
                     foreach ($result as $a) {
                         $mpS = $a['id'];
@@ -482,7 +482,7 @@ if (isset($_GET['action'])) {
                 FROM t_mp_planificacion_iniciada 
                 INNER JOIN t_mp_planes_mantenimiento ON t_mp_planificacion_iniciada.id_plan = t_mp_planes_mantenimiento.id
                 WHERE t_mp_planificacion_iniciada.id_equipo = $idEquipo and t_mp_planificacion_iniciada.status = 'PROCESO' and 
-                t_mp_planificacion_iniciada.activo = 1 and año = '$añoActual' and t_mp_planes_mantenimiento.tipo_plan = 'PREVENTIVO'";
+                t_mp_planificacion_iniciada.activo = 1 and t_mp_planificacion_iniciada.año = '$añoActual' and t_mp_planes_mantenimiento.tipo_plan IN('PREVENTIVO', 'CHECKLIST')";
                 if ($result = mysqli_query($conn_2020, $query)) {
                     foreach ($result as $a) {
                         $mpP = $a['id'];
