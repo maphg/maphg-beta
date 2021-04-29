@@ -725,12 +725,12 @@ if (isset($_GET['action'])) {
 
         #PREVENTIVOS SOLUCIONADO POR EQUIPO
         $array['mpS'] = 0;
-        $query = "SELECT count(.t_mp_planificacion_iniciada.id) 'id' 
+        $query = "SELECT count(t_mp_planificacion_iniciada.id) 'id' 
         FROM t_mp_planificacion_iniciada
         INNER JOIN t_equipos_america ON t_mp_planificacion_iniciada.id_equipo = t_equipos_america.id
         INNER JOIN t_mp_planes_mantenimiento ON t_mp_planificacion_iniciada.id_plan = t_mp_planes_mantenimiento.id 
         WHERE t_equipos_america.id_subseccion = $idSubseccion and t_mp_planificacion_iniciada.status = 'SOLUCIONADO' and t_mp_planificacion_iniciada.activo = 1 and 
-        t_mp_planes_mantenimiento.tipo_plan = 'PREVENTIVO' $filtroDestinoMP";
+        t_mp_planes_mantenimiento.tipo_plan IN('PREVENTIVO', 'CHECKLIST') $filtroDestinoMP";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $totalMPS = $x['id'];
@@ -741,12 +741,12 @@ if (isset($_GET['action'])) {
 
         #PREVENTIVOS PENDIENTE POR EQUIPO
         $array['mpP'] = 0;
-        $query = "SELECT count(.t_mp_planificacion_iniciada.id) 'id' 
+        $query = "SELECT count(t_mp_planificacion_iniciada.id) 'id' 
         FROM t_mp_planificacion_iniciada
         INNER JOIN t_equipos_america ON t_mp_planificacion_iniciada.id_equipo = t_equipos_america.id
         INNER JOIN t_mp_planes_mantenimiento ON t_mp_planificacion_iniciada.id_plan = t_mp_planes_mantenimiento.id 
         WHERE t_equipos_america.id_subseccion = $idSubseccion and t_mp_planificacion_iniciada.status = 'PROCESO' and t_mp_planificacion_iniciada.activo = 1 and 
-        t_mp_planes_mantenimiento.tipo_plan = 'PREVENTIVO' $filtroDestinoMP";
+        t_mp_planes_mantenimiento.tipo_plan IN('PREVENTIVO', 'CHECKLIST') $filtroDestinoMP";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $totalMPP = $x['id'];
