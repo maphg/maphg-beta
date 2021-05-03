@@ -19,6 +19,7 @@ const btnFiltroPalabra = document.getElementById("btnFiltroPalabra");
 const btnColumnaPendientesSolucionados = document.getElementById("btnColumnaPendientesSolucionados");
 const btnColumnaSecciones = document.getElementById("btnColumnaSecciones");
 const btnColumnaSubsecciones = document.getElementById("btnColumnaSubsecciones");
+const btnColumnaTabla = document.getElementById("btnColumnaTabla");
 // BTNS
 
 // CONTENEDORES DIV
@@ -33,6 +34,8 @@ const dataPendientes = document.getElementById("dataPendientes");
 const dataSolucionados = document.getElementById("dataSolucionados");
 const contenedorSeccion = document.getElementById("contenedorSeccion");
 const contenedorSubsecciones = document.getElementById("contenedorSubsecciones");
+const contenedorTabla = document.getElementById("contenedorTabla");
+const contenedorItems = document.getElementById("contenedorItems");
 // CONTENEDORES DATA
 
 // GRAFICA
@@ -73,7 +76,6 @@ const obtenerReporte = columna => {
     const action = "obtenerReporte";
     const URL = `php/reporte_incidencias.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}`;
 
-    loader.innerHTML = iconoLoader;
 
     fetch(URL, {
         method: 'POST',
@@ -82,9 +84,10 @@ const obtenerReporte = columna => {
         .then(array => array.json())
         .then(array => {
             // LIMPIA CONTENEDORES
+            loader.innerHTML = iconoLoader;
             dataPendientes.innerHTML = '';
             dataSolucionados.innerHTML = '';
-
+            contenedorItems.innerHTML = '';
             return array;
         })
         .then(array => {
@@ -118,7 +121,30 @@ const obtenerReporte = columna => {
                     const ComentarioDe = array[x].ComentarioDe;
                     const totalAdjuntos = array[x].totalAdjuntos;
                     const idSeccion = array[x].idSeccion;
+                    const seccion = array[x].seccion;
                     const idSubseccion = array[x].idSubseccion;
+                    const subseccion = array[x].subseccion;
+                    const equipoPrincipal = array[x].equipoPrincipal;
+                    const equipoSecundario = array[x].equipoSecundario;
+                    const proyecto = array[x].proyecto;
+                    const pda = array[x].pda;
+                    const responsable = array[x].responsable;
+                    const cod2bend = array[x].cod2bend;
+                    const fechaLlegada = '';
+                    const fechaCreacion = array[x].fechaCreacion;
+
+                    // COLORES POR SECCION
+                    const colorSeccion = idSeccion == 9 ? 'red'
+                        : idSeccion == 8 ? 'blue'
+                            : idSeccion == 10 ? 'yellow'
+                                : idSeccion == 11 ? 'green'
+                                    : idSeccion == 24 ? 'cyan'
+                                        : idSeccion == 1 ? 'purple'
+                                            : idSeccion == 6 ? 'orange'
+                                                : idSeccion == 12 ? 'blue'
+                                                    : idSeccion == 5 ? 'indigo'
+                                                        : idSeccion == 7 ? 'red'
+                                                            : 'gray';
 
                     // ICONO PARA COMENTARIOS
                     const iconoComentario = comentario.length > 0 ?
@@ -205,6 +231,8 @@ const obtenerReporte = columna => {
                         </div>                    
                     ` : ``;
 
+                    const diseñoStatus = status == "PENDIENTE" || status == "PROCESO" ? 'yellow' : 'green';
+
                     // CONTADOR DE PENDIENTES
                     if (columna == "COLUMNA") {
                         if (status == "SOLUCIONADO") {
@@ -286,10 +314,70 @@ const obtenerReporte = columna => {
                             document.getElementById("dataPendientesSubseccion_" + idSubseccion).
                                 insertAdjacentHTML('beforeend', codigo)
                         }
+                    } else if (columna == "TABLA") {
+                        const codigoTabla = `
+                        <tr class="cursor-pointer hover:bg-gray-50">
+                            <td class="px-6 py-4 text-left">
+                                <p class="">
+                                    ${seccion}
+                                </p>
+                                <p class="text-gray-500 font-semibold tracking-wide">
+                                    ${subseccion}
+                                </p>
+                            </td>
+                            <td>
+                                <h1>${responsable}</h1>
+                            </td>
+                            <td class="px-6 py-4 text-left">
+                                <p>${equipoSecundario}</p>
+                            </td>
+                            <td>
+                                <p>${titulo}</p>
+                            </td>
+                            <td class="px-6 py-4">
+                                <p class="">
+                                    ${tipo}
+                                </p>
+                                <p class="text-${color}-500 font-semibold tracking-wide">
+                                    ${tipoIncidencia}
+                                </p>
+                            </td>
+                            <td class="px-6 py-4 bg-${diseñoStatus}-200">
+                                <span class="text-${diseñoStatus}-800  font-semibold px-2 rounded-full">
+                                    ${status}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4">
+                                <p class="">
+                                   ${creadoPor}
+                                </p>
+                                <p class="text-gray-500 font-semibold tracking-wide">
+                                    ${fechaCreacion}
+                                </p>
+                            </td>
+                            <td class="">
+                                <div class="flex flex-wrap justify-around items-center">
+                                        ${sMaterialX}
+                                        ${sTrabajandoX}
+                                        ${sEnergeticoX}
+                                        ${sDepartamentoX}
+                                        ${sEPX}
+                                </div>
+                            </td>
+                            <td>
+                                <p>${cod2bend}</p>
+                            </td>
+                            <td>
+                                <p>${fechaLlegada}</p>
+                            </td>
+                        </tr>
+                    `;
+                        contenedorItems.insertAdjacentHTML('beforeend', codigoTabla);
                     }
+
                 }
             } else {
-                alertaImg('No nay Datos', '', 'info', 1500);
+                alertaImg('Sin Registros', '', 'info', 1500);
             }
         })
         .then(() => {
@@ -298,6 +386,7 @@ const obtenerReporte = columna => {
         .catch(function (err) {
             // fetch(APIERROR + err);
             // LIMPIA CONTENEDORES
+            console.error(err);
             dataPendientes.innerHTML = '';
             dataSolucionados.innerHTML = '';
             contenedorSeccion.innerHTML = '';
@@ -324,7 +413,7 @@ const contadorArray = array => {
             }
         }
     } else {
-        alertaImg('No nay Datos', '', 'info', 1500);
+        alertaImg('Sin Registros', '', 'info', 1500);
     }
 }
 
@@ -527,33 +616,44 @@ filtroSeccion.addEventListener('change', () => {
 
 // EVENTO PARA OPCION DE COLUMNAS
 btnColumnaPendientesSolucionados.addEventListener('click', () => {
+    totalPendientes.innerHTML = 0;
+    totalSolucionados.innerHTML = 0;
     btnColumnaPendientesSolucionados.classList.add('bg-white', 'shadow');
     btnColumnaSecciones.classList.remove('bg-white', 'shadow');
     btnColumnaSubsecciones.classList.remove('bg-white', 'shadow');
+    btnColumnaTabla.classList.remove('bg-white', 'shadow');
     btnColumnaPendientesSolucionados.classList.remove('bg-gray-100', 'text-gray-300');
     btnColumnaSecciones.classList.add('bg-gray-100', 'text-gray-300');
     btnColumnaSubsecciones.classList.add('bg-gray-100', 'text-gray-300');
+    btnColumnaTabla.classList.add('bg-gray-100', 'text-gray-300');
     contenedorPendientesSolucionados.classList.remove('hidden');
     contenedorSeccion.classList.add('hidden');
     contenedorSubsecciones.classList.add('hidden');
+    contenedorTabla.classList.add('hidden');
     btnFiltroPalabra.setAttribute('onclick', `obtenerReporte('COLUMNA')`);
+
     obtenerReporte('COLUMNA');
+    btnFiltroPalabra.setAttribute('onclick', `obtenerReporte('COLUMNA');`);
 })
 
 btnColumnaSecciones.addEventListener('click', async () => {
     btnColumnaPendientesSolucionados.classList.remove('bg-white', 'shadow');
     btnColumnaSecciones.classList.add('bg-white', 'shadow');
     btnColumnaSubsecciones.classList.remove('bg-white', 'shadow');
+    btnColumnaTabla.classList.remove('bg-white', 'shadow');
     btnColumnaPendientesSolucionados.classList.add('bg-gray-100', 'text-gray-300');
     btnColumnaSecciones.classList.remove('bg-gray-100', 'text-gray-300');
     btnColumnaSubsecciones.classList.add('bg-gray-100', 'text-gray-300');
+    btnColumnaTabla.classList.add('bg-gray-100', 'text-gray-300');
     contenedorPendientesSolucionados.classList.add('hidden');
     contenedorSeccion.classList.remove('hidden');
     contenedorSubsecciones.classList.add('hidden');
+    contenedorTabla.classList.add('hidden');
     btnFiltroPalabra.setAttribute('onclick', `obtenerReporte('SECCION')`);
 
     await crearContenedoresSecciones()
     await obtenerReporte('SECCION')
+    btnFiltroPalabra.setAttribute('onclick', `obtenerReporte('SECCION');`);
 })
 
 btnColumnaSubsecciones.addEventListener('click', async () => {
@@ -565,20 +665,34 @@ btnColumnaSubsecciones.addEventListener('click', async () => {
     btnColumnaSubsecciones.classList.remove('bg-gray-100', 'text-gray-300');
     contenedorPendientesSolucionados.classList.add('hidden');
     contenedorSeccion.classList.add('hidden');
-    contenedorSubsecciones.classList.remove('hidden');
+    contenedorSubsecciones.classList.add('hidden');
+    contenedorTabla.classList.add('hidden');
     btnFiltroPalabra.setAttribute('onclick', `obtenerReporte('SUBSECCION')`);
 
     await obtenerReporte('SUBSECCION');
     await crearContenedoresSubsecciones(filtroSeccion.value);
+    btnFiltroPalabra.setAttribute('onclick', `obtenerReporte('SUBSECCION');`);
 })
 
+btnColumnaTabla.addEventListener('click', () => {
+    btnColumnaPendientesSolucionados.classList.remove('bg-white', 'shadow');
+    btnColumnaSecciones.classList.remove('bg-white', 'shadow');
+    btnColumnaSubsecciones.classList.remove('bg-white', 'shadow');
+    btnColumnaTabla.classList.add('bg-white', 'shadow');
+    btnColumnaPendientesSolucionados.classList.add('bg-gray-100', 'text-gray-300');
+    btnColumnaSecciones.classList.add('bg-gray-100', 'text-gray-300');
+    btnColumnaSubsecciones.classList.add('bg-gray-100', 'text-gray-300');
+    btnColumnaTabla.classList.remove('bg-gray-100', 'text-gray-300');
+    contenedorPendientesSolucionados.classList.add('hidden');
+    contenedorSeccion.classList.add('hidden');
+    contenedorSubsecciones.classList.add('hidden');
+    contenedorTabla.classList.remove('hidden');
+    btnFiltroPalabra.setAttribute('onclick', `obtenerReporte('SUBSECCION')`);
 
-const limpiarDataContenedores = () => {
-    dataPendientes.innerHTML = '';
-    dataSolucionados.innerHTML = '';
-    contenedorSeccion.innerHTML = '';
-    contenedorSubsecciones.innerHTML = '';
-}
+    obtenerReporte('TABLA');
+    btnFiltroPalabra.setAttribute('onclick', `obtenerReporte('TABLA');`);
+})
+
 
 // CREA CONTENEDORES SECCIONES
 const crearContenedoresSecciones = () => {

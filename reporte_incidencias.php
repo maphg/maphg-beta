@@ -16,8 +16,8 @@
 
 <body style="background-color: #EEF0FC;" class="scrollbar">
     <!-- MENÚ -->
-    <menu-sidebar clases="z-20 mb-6"></menu-sidebar>
     <menu-menu></menu-menu>
+    <menu-sidebar clases="z-20 mb-6"></menu-sidebar>
 
     <!-- CONFIGURACIONES SIDEBAR -->
     <configuracion-telegram></configuracion-telegram>
@@ -191,6 +191,8 @@
 
                     <button id="btnColumnaSubsecciones" class="bg-gray-100 text-gray-300 text-xs hover:bg-white hover:text-gray-700 hover:shadow uppercase font-bold rounded py-2 px-3 mr-4">Subsecciones</button>
 
+                    <button id="btnColumnaTabla" class="bg-gray-100 text-gray-300 text-xs hover:bg-white hover:text-gray-700 hover:shadow uppercase font-bold rounded py-2 px-3 mr-4">Tabla</button>
+
                     <div id="loader" class=""></div>
                 </div>
 
@@ -223,6 +225,50 @@
 
                 <div id="contenedorSubsecciones" class="hidden w-full h-full flex sm:flex-col md:flex-row md:justify-start sm:justify-start" style="max-height: 80vh"></div>
 
+                <div id="contenedorTabla" class="w-full h-full flex sm:flex-col md:flex-row md:justify-start sm:justify-start overflow-hidden px-3 hidden">
+                    <div class="w-full flex items-center px-4">
+                        <div class="overflow-auto scrollbar" style="max-height: 70vh;">
+                            <!-- Table -->
+                            <table class="mx-auto max-w-4xl w-full whitespace-nowrap rounded-lg bg-white divide-y divide-gray-300 overflow-hidden cursor-pointer sortable">
+                                <thead class="bg-gray-50">
+                                    <tr class="text-gray-600 text-center">
+                                        <th class="font-semibold text-sm uppercase px-6 py-4">
+                                            Seccion
+                                        </th>
+                                        <th class="font-semibold text-sm uppercase px-6 py-4">
+                                            Responsable
+                                        </th>
+                                        <th class="font-semibold text-sm uppercase px-6 py-4">
+                                            Equipo
+                                        </th>
+                                        <th class="font-semibold text-sm uppercase px-6 py-4">
+                                            Incidencia
+                                        </th>
+                                        <th class="font-semibold text-sm uppercase px-6 py-4">
+                                            Tipo
+                                        </th>
+                                        <th class="font-semibold text-sm uppercase px-6 py-4">
+                                            Estado
+                                        </th>
+                                        <th class="font-semibold text-sm uppercase px-6 py-4">
+                                            Creado por
+                                        </th>
+                                        <th class="font-semibold text-sm uppercase px-6 py-4">
+                                            Status
+                                        </th>
+                                        <th class="font-semibold text-sm uppercase px-6 py-4">
+                                            #Solicitud
+                                        </th>
+                                        <th class="font-semibold text-sm uppercase px-6 py-4">
+                                            Fecha Llegada
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="contenedorItems" class="w-full divide-y divide-gray-200 text-xs text-center uppercase"> </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -249,6 +295,8 @@
     <!-- MENU JS -->
     <script src="js/menu.js"></script>
     <!-- MENU JS -->
+
+    <script src="js/sorttable.js"></script>
 
 </body>
 

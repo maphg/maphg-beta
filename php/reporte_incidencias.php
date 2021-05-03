@@ -328,8 +328,16 @@ if (isset($_GET['action'])) {
         t_mc.departamento_rrhh,
         t_mc.status_ep,
         t_mc.id_seccion,
-        t_mc.id_subseccion
+        t_mc.id_subseccion,
+        t_mc.responsable,
+        t_mc.cod2bend,
+        t_mc.fecha_creacion,
+        t_equipos_america.id 'idEquipo',
+        t_equipos_america.equipo,
+        t_equipos_america.jerarquia,
+        t_equipos_america.id_equipo_principal
         FROM t_mc
+        INNER JOIN t_equipos_america ON t_mc.id_equipo
         WHERE t_mc.activo = 1 and t_mc.id_equipo > 0 $filtroDestino $filtroPalabraIncidencias $filtroResponsableIncidencias $filtroSeccionIncidencias $filtroSubseccionIncidencias $filtroTipoIncidenciaIncidencias $filtroTipoIncidencias $filtroStatusIncidencias $filtroFechaIncidencias $filtroStatusIncidenciaIncidencias
         ORDER BY t_mc.id DESC";
         if ($result = mysqli_query($conn_2020, $query)) {
@@ -347,6 +355,15 @@ if (isset($_GET['action'])) {
                 $sEP = $x['status_ep'];
                 $idSeccion = $x['id_seccion'];
                 $idSubseccion = $x['id_subseccion'];
+                $idResponsable = $x['responsable'];
+                $cod2bend = $x['cod2bend'];
+                $fecha_creacion = $x['fecha_creacion'];
+
+                #datos Equipo
+                $idEquipo = $x['idEquipo'];
+                $equipo = $x['equipo'];
+                $idEquipoPrincipal = $x['id_equipo_principal'];
+                $jerarquia = $x['jerarquia'];
 
                 #STATUS
                 if ($status == "SOLUCIONADO" || $status == "F" || $status == "FINALIZADO") {
@@ -395,9 +412,54 @@ if (isset($_GET['action'])) {
                     }
                 }
 
+                #SECCION
+                $seccion = "";
+                $query = "SELECT seccion FROM c_secciones WHERE id = $idSeccion";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $seccion = $x['seccion'];
+                    }
+                }
+
+                #SUBSECCION
+                $subseccion = "";
+                $query = "SELECT  grupo FROM c_subsecciones WHERE id = $idSubseccion";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $subseccion = $x['grupo'];
+                    }
+                }
+
+                #EQUIPO PRINCIPAL
+                $equipoPrincipal = "";
+                if ($jerarquia == "SECUNDARIO") {
+                    $query = "SELECT equipo FROM t_equipos_america WHERE id = $idEquipoPrincipal";
+                    if ($result = mysqli_query($conn_2020, $query)) {
+                        foreach ($result as $x) {
+                            $equipoPrincipal = $x['equipo'];
+                        }
+                    }
+                }
+
+                #RESPONSABLE
+                $responsable = "";
+                $query = "SELECT t_colaboradores.nombre, t_colaboradores.apellido 
+                FROM t_users
+                INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                WHERE t_users.id = $idResponsable";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $responsable = $x['nombre'] . ' ' . $x['apellido'];
+                    }
+                }
+
                 $array[] = array(
                     "idItem" => intval($idItem),
                     "titulo" => $titulo,
+                    "equipoPrincipal" => "",
+                    "equipoSecundario" => "",
+                    "proyecto" => $proyecto,
+                    "pda" => $pda,
                     "creadoPor" => $creadoPor,
                     "status" => $status,
                     "tipo" => "INCIDENCIA",
@@ -411,8 +473,13 @@ if (isset($_GET['action'])) {
                     "comentarioFecha" => $fecha,
                     "ComentarioDe" => $ComentarioDe,
                     "idSeccion" => intval($idSeccion),
+                    "seccion" => $seccion,
                     "idSubseccion" => intval($idSubseccion),
-                    "totalAdjuntos" => intval($totalAdjuntos)
+                    "subseccion" => $subseccion,
+                    "totalAdjuntos" => intval($totalAdjuntos),
+                    "responsable" => $responsable,
+                    "cod2bend" => $cod2bend,
+                    "fechaCreacion" => (new DateTime($fechaCreacion))->format('Y-m-d')
                 );
             }
         }
@@ -433,7 +500,10 @@ if (isset($_GET['action'])) {
         t_mp_np.departamento_rrhh,
         t_mp_np.status_ep,
         t_mp_np.id_seccion,
-        t_mp_np.id_subseccion
+        t_mp_np.id_subseccion,
+        t_mp_np.responsable, 
+        t_mp_np.cod2bend, 
+        t_mp_np.fecha
         FROM t_mp_np
         WHERE activo = 1 and id_equipo = 0
         $filtroDestino_General $filtroPalabra_General $filtroResponsable_General $filtroSeccion_General $filtroSubseccion_General $filtroTipoIncidencia_General $filtroTipo_General $filtroStatus_General $filtroFecha_General $filtroStatusIncidencia_General ORDER BY t_mp_np.id ASC";
@@ -452,6 +522,9 @@ if (isset($_GET['action'])) {
                 $sEP = $x['status_ep'];
                 $idSeccion = $x['id_seccion'];
                 $idSubseccion = $x['id_subseccion'];
+                $idResponsable = $x['responsable'];
+                $cod2bend = $x['cod2bend'];
+                $fechaCreacion = $x['fecha'];
 
                 #STATUS
                 if ($status == "SOLUCIONADO" || $status == "F" || $status == "FINALIZADO") {
@@ -500,9 +573,43 @@ if (isset($_GET['action'])) {
                     }
                 }
 
+                #SECCION
+                $seccion = "";
+                $query = "SELECT seccion FROM c_secciones WHERE id = $idSeccion";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $seccion = $x['seccion'];
+                    }
+                }
+
+                #SUBSECCION
+                $subseccion = "";
+                $query = "SELECT  grupo FROM c_subsecciones WHERE id = $idSubseccion";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $subseccion = $x['grupo'];
+                    }
+                }
+
+                #RESPONSABLE
+                $responsable = "";
+                $query = "SELECT t_colaboradores.nombre, t_colaboradores.apellido 
+                FROM t_users
+                INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                WHERE t_users.id = $idResponsable";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $responsable = $x['nombre'] . ' ' . $x['apellido'];
+                    }
+                }
+
                 $array[] = array(
                     "idItem" => intval($idItem),
                     "titulo" => $titulo,
+                    "equipoPrincipal" => "",
+                    "equipoSecundario" => "",
+                    "proyecto" => "",
+                    "pda" => "",
                     "creadoPor" => $creadoPor,
                     "status" => $status,
                     "tipo" => "GENERAL",
@@ -516,15 +623,26 @@ if (isset($_GET['action'])) {
                     "comentarioFecha" => $fecha,
                     "ComentarioDe" => $ComentarioDe,
                     "idSeccion" => intval($idSeccion),
+                    "seccion" => $seccion,
                     "idSubseccion" => intval($idSubseccion),
-                    "totalAdjuntos" => intval($totalAdjuntos)
+                    "subseccion" => $subseccion,
+                    "totalAdjuntos" => intval($totalAdjuntos),
+                    "responsable" => $responsable,
+                    "cod2bend" => $cod2bend,
+                    "fechaCreacion" => (new DateTime($fechaCreacion))->format('Y-m-d')
                 );
             }
         }
 
 
         #PREVENTIVOS
-        $query = "SELECT t_mp_planificacion_iniciada.id, t_mp_planificacion_iniciada.status, t_mp_planificacion_iniciada.fecha_finalizado, t_mp_planificacion_iniciada.comentario, t_mp_planificacion_iniciada.rango_fecha, t_mp_planificacion_iniciada.creado_por, t_equipos_america.id_seccion, t_equipos_america.id_subseccion,
+        $query = "SELECT t_mp_planificacion_iniciada.id, t_mp_planificacion_iniciada.status, t_mp_planificacion_iniciada.fecha_finalizado, t_mp_planificacion_iniciada.comentario, t_mp_planificacion_iniciada.rango_fecha, t_mp_planificacion_iniciada.creado_por, 
+        t_equipos_america.id_seccion, 
+        t_equipos_america.id_subseccion,
+        t_equipos_america.id 'idEquipo',
+        t_equipos_america.id_equipo_principal,
+        t_equipos_america.jerarquia,
+        t_equipos_america.equipo,
         t_mp_planificacion_iniciada.status_material,
         t_mp_planificacion_iniciada.status_trabajando,
         t_mp_planificacion_iniciada.energetico_electricidad,
@@ -536,7 +654,10 @@ if (isset($_GET['action'])) {
         t_mp_planificacion_iniciada.departamento_direccion,
         t_mp_planificacion_iniciada.departamento_finanzas,
         t_mp_planificacion_iniciada.departamento_rrhh,
-        t_mp_planificacion_iniciada.status_ep
+        t_mp_planificacion_iniciada.status_ep,
+        t_mp_planificacion_iniciada.id_responsables, 
+        t_mp_planificacion_iniciada.cod2bend,
+        t_mp_planificacion_iniciada.fecha_creacion
         FROM t_mp_planificacion_iniciada
         INNER JOIN t_equipos_america ON t_mp_planificacion_iniciada.id_equipo = t_equipos_america.id
         WHERE t_mp_planificacion_iniciada.activo = 1
@@ -557,6 +678,15 @@ if (isset($_GET['action'])) {
                 $idSeccion = $x['id_seccion'];
                 $idSubseccion = $x['id_subseccion'];
                 $fecha = $x['fecha_finalizado'];
+                $idResponsable = $x['id_responsables'];
+                $cod2bend = $x['cod2bend'];
+                $fechaCreacion = $x['fecha_creacion'];
+
+                #datos Equipo
+                $idEquipo = $x['idEquipo'];
+                $equipo = $x['equipo'];
+                $idEquipoPrincipal = $x['id_equipo_principal'];
+                $jerarquia = $x['jerarquia'];
 
                 #STATUS
                 if ($status == "SOLUCIONADO" || $status == "F" || $status == "FINALIZADO") {
@@ -587,9 +717,54 @@ if (isset($_GET['action'])) {
                     }
                 }
 
+                #SECCION
+                $seccion = "";
+                $query = "SELECT seccion FROM c_secciones WHERE id = $idSeccion";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $seccion = $x['seccion'];
+                    }
+                }
+
+                #SUBSECCION
+                $subseccion = "";
+                $query = "SELECT  grupo FROM c_subsecciones WHERE id = $idSubseccion";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $subseccion = $x['grupo'];
+                    }
+                }
+
+                #EQUIPO PRINCIPAL
+                $equipoPrincipal = "";
+                if ($jerarquia == "SECUNDARIO") {
+                    $query = "SELECT equipo FROM t_equipos_america WHERE id = $idEquipoPrincipal";
+                    if ($result = mysqli_query($conn_2020, $query)) {
+                        foreach ($result as $x) {
+                            $equipoPrincipal = $x['equipo'];
+                        }
+                    }
+                }
+
+                #RESPONSABLE
+                $responsable = "";
+                $query = "SELECT t_colaboradores.nombre, t_colaboradores.apellido 
+                FROM t_users
+                INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                WHERE t_users.id = $idResponsable";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $responsable = $x['nombre'] . ' ' . $x['apellido'];
+                    }
+                }
+
                 $array[] = array(
                     "idItem" => intval($idItem),
                     "titulo" => $titulo,
+                    "equipoPrincipal" => $equipoPrincipal,
+                    "equipoSecundario" => $equipo,
+                    "proyecto" => "",
+                    "pda" => "",
                     "creadoPor" => $creadoPor,
                     "status" => $status,
                     "tipo" => "PREVENTIVO",
@@ -603,15 +778,26 @@ if (isset($_GET['action'])) {
                     "comentarioFecha" => $fecha,
                     "ComentarioDe" => "",
                     "idSeccion" => intval($idSeccion),
+                    "seccion" => $seccion,
                     "idSubseccion" => intval($idSubseccion),
-                    "totalAdjuntos" => intval($totalAdjuntos)
+                    "subseccion" => $subseccion,
+                    "totalAdjuntos" => intval($totalAdjuntos),
+                    "responsable" => $responsable,
+                    "cod2bend" => $cod2bend,
+                    "fechaCreacion" => (new DateTime($fechaCreacion))->format('Y-m-d')
                 );
             }
         }
 
         #PROYECTOS PLANACCIONES
-        $query = "SELECT t_proyectos_planaccion.id, t_proyectos_planaccion.actividad, t_proyectos_planaccion.status, t_proyectos_planaccion.rango_fecha, t_proyectos_planaccion.creado_por, t_proyectos.id_seccion, 
+        $query = "SELECT t_proyectos_planaccion.id, 
+        t_proyectos_planaccion.actividad, 
+        t_proyectos_planaccion.status, 
+        t_proyectos_planaccion.rango_fecha, 
+        t_proyectos_planaccion.creado_por, 
+        t_proyectos.id_seccion, 
         t_proyectos.id_subseccion,
+        t_proyectos.titulo,
         t_proyectos_planaccion.status_material,
         t_proyectos_planaccion.status_trabajando,
         t_proyectos_planaccion.energetico_electricidad,
@@ -623,7 +809,10 @@ if (isset($_GET['action'])) {
         t_proyectos_planaccion.departamento_direccion,
         t_proyectos_planaccion.departamento_finanzas,
         t_proyectos_planaccion.departamento_rrhh,
-        t_proyectos_planaccion.status_ep
+        t_proyectos_planaccion.status_ep,
+        t_proyectos_planaccion.responsable,
+        t_proyectos_planaccion.cod2bend,
+        t_proyectos_planaccion.fecha_creacion
         FROM t_proyectos_planaccion
         INNER JOIN t_proyectos ON t_proyectos_planaccion.id_proyecto = t_proyectos.id
         WHERE t_proyectos_planaccion.activo = 1
@@ -632,6 +821,8 @@ if (isset($_GET['action'])) {
             foreach ($result as $x) {
                 $idItem = $x['id'];
                 $titulo = $x['actividad'];
+                $pda = $x['actividad'];
+                $proyecto = $x['titulo'];
                 $status = $x['status'];
                 $rangoFecha = $x['rango_fecha'];
                 $idCreadoPor = $x['creado_por'];
@@ -642,6 +833,9 @@ if (isset($_GET['action'])) {
                 $sEnergetico = intval($x['energetico_electricidad']) + intval($x['energetico_agua']) + intval($x['energetico_diesel']) + intval($x['energetico_gas']);
                 $sDepartamento = intval($x['departamento_calidad']) + intval($x['departamento_compras']) + intval($x['departamento_direccion']) + intval($x['departamento_finanzas']) + intval($x['departamento_rrhh']);
                 $sEP = $x['status_ep'];
+                $idResponsable = $x['responsable'];
+                $cod2bend = $x['cod2bend'];
+                $fechaCreacion = $x['fecha_creacion'];
 
                 #STATUS
                 if ($status == "SOLUCIONADO" || $status == "F" || $status == "FINALIZADO") {
@@ -691,9 +885,42 @@ if (isset($_GET['action'])) {
                     }
                 }
 
+                #SECCION
+                $seccion = "";
+                $query = "SELECT seccion FROM c_secciones WHERE id = $idSeccion";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $seccion = $x['seccion'];
+                    }
+                }
+
+                #SUBSECCION
+                $subseccion = "";
+                $query = "SELECT  grupo FROM c_subsecciones WHERE id = $idSubseccion";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $subseccion = $x['grupo'];
+                    }
+                }
+
+                $responsable = "";
+                $query = "SELECT t_colaboradores.nombre, t_colaboradores.apellido 
+                FROM t_users
+                INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                WHERE t_users.id = $idResponsable";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $responsable = $x['nombre'] . ' ' . $x['apellido'];
+                    }
+                }
+
                 $array[] = array(
                     "idItem" => intval($idItem),
                     "titulo" => $titulo,
+                    "equipoPrincipal" => "",
+                    "equipoSecundario" => "",
+                    "proyecto" => $proyecto,
+                    "pda" => $pda,
                     "creadoPor" => $creadoPor,
                     "status" => $status,
                     "tipo" => "PROYECTO",
@@ -707,8 +934,13 @@ if (isset($_GET['action'])) {
                     "comentarioFecha" => $fecha,
                     "ComentarioDe" => $ComentarioDe,
                     "idSeccion" => intval($idSeccion),
+                    "seccion" => $seccion,
                     "idSubseccion" => intval($idSubseccion),
-                    "totalAdjuntos" => intval($totalAdjuntos)
+                    "subseccion" => $subseccion,
+                    "totalAdjuntos" => intval($totalAdjuntos),
+                    "responsable" => $responsable,
+                    "cod2bend" => $cod2bend,
+                    "fechaCreacion" => (new DateTime($fechaCreacion))->format('Y-m-d')
                 );
             }
         }
