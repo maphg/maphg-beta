@@ -5846,7 +5846,7 @@ const asignarMaterialEquipo = (idItem, idEquipo, tipoAsignacion) => {
 
 // BUSCA MATERIALES PARA EQUIPO
 inputDespieceMaterialesEquipo.addEventListener('keyup', () => {
-   buscadorTabla('dataOpcionesMaterialesEquipo', 'inputDespieceMaterialesEquipo', 4);
+   buscadorTabla('dataOpcionesMaterialesEquipo', 'inputDespieceMaterialesEquipo', 1);
 })
 
 
