@@ -317,7 +317,7 @@ const obtenerReporte = columna => {
                     } else if (columna == "TABLA") {
                         const codigoTabla = `
                         <tr class="cursor-pointer hover:bg-gray-50">
-                            <td class="px-6 py-4 text-left">
+                            <td class="p-2 text-left">
                                 <p class="">
                                     ${seccion}
                                 </p>
@@ -325,16 +325,16 @@ const obtenerReporte = columna => {
                                     ${subseccion}
                                 </p>
                             </td>
-                            <td>
+                            <td class="p-2">
                                 <h1>${responsable}</h1>
                             </td>
-                            <td class="px-6 py-4 text-left">
+                            <td class="p-2 text-left text-xxs">
                                 <p>${equipoSecundario}</p>
                             </td>
-                            <td>
+                            <td class="p-2">
                                 <p>${titulo}</p>
                             </td>
-                            <td class="px-6 py-4">
+                            <td class="p-2 truncate">
                                 <p class="">
                                     ${tipo}
                                 </p>
@@ -342,12 +342,12 @@ const obtenerReporte = columna => {
                                     ${tipoIncidencia}
                                 </p>
                             </td>
-                            <td class="px-6 py-4 bg-${diseñoStatus}-200">
+                            <td class="p-2 bg-${diseñoStatus}-200 truncate">
                                 <span class="text-${diseñoStatus}-800  font-semibold px-2 rounded-full">
                                     ${status}
                                 </span>
                             </td>
-                            <td class="px-6 py-4">
+                            <td class="p-2">
                                 <p class="">
                                    ${creadoPor}
                                 </p>
@@ -355,7 +355,7 @@ const obtenerReporte = columna => {
                                     ${fechaCreacion}
                                 </p>
                             </td>
-                            <td class="">
+                            <td class="p-2">
                                 <div class="flex flex-wrap justify-around items-center">
                                         ${sMaterialX}
                                         ${sTrabajandoX}
@@ -364,10 +364,10 @@ const obtenerReporte = columna => {
                                         ${sEPX}
                                 </div>
                             </td>
-                            <td>
+                            <td class="p-2">
                                 <p>${cod2bend}</p>
                             </td>
-                            <td>
+                            <td class="p-2">
                                 <p>${fechaLlegada}</p>
                             </td>
                         </tr>
