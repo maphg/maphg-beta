@@ -655,6 +655,13 @@ const consultaExistenciasSubalmacen = idSubalmacen => {
     })
 }
 
+// EVENTO PARA BUSCAR ITEMS
+inputPalabraExistencias.addEventListener('keypress', event => {
+  let idSubalmacen = localStorage.getItem('idSubalmacen');
+  if (event.key == "Enter") {
+    consultaExistenciasSubalmacen(idSubalmacen);
+  }
+})
 
 // OBTIENE ITEMS CON EXISTENCIAS PARA LAS SALIDAS
 const salidasSubalmacen = idSubalmacen => {
