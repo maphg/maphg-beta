@@ -226,39 +226,39 @@
 
             <div id="contenedorTabla" class="w-full h-full flex sm:flex-col md:flex-row md:justify-start sm:justify-start overflow-hidden px-3 hidden">
                 <div class="w-full flex items-center px-2">
-                    <div class="overflow-auto scrollbar" style="max-height: 70vh;">
+                    <div class="overflow-auto scrollbar relative" style="max-height: 70vh;">
                         <!-- Table -->
-                        <table class="table-fixed mx-auto w-full rounded-lg bg-white divide-y divide-gray-300 overflow-hidden cursor-pointer sortable">
+                        <table class="table-fixed mx-auto w-full rounded-lg bg-white divide-y divide-gray-300 cursor-pointer sortable">
                             <thead class="bg-gray-50">
                                 <tr class="text-gray-600 text-center">
-                                    <th class="font-semibold text-sm uppercase p-2 w-1/12">
+                                    <th class="font-semibold text-sm uppercase p-2 w-1/12 bg-gray-50 sticky top-0 z-10">
                                         Sección
                                     </th>
-                                    <th class="font-semibold text-sm uppercase p-2 w-1/12">
+                                    <th class="font-semibold text-sm uppercase p-2 w-1/12 bg-gray-50 sticky top-0 z-10">
                                         Responsable
                                     </th>
-                                    <th class="font-semibold text-sm uppercase p-2 w-1/12">
+                                    <th class="font-semibold text-sm uppercase p-2 w-1/12 bg-gray-50 sticky top-0 z-10">
                                         Equipo
                                     </th>
-                                    <th class="font-semibold text-sm uppercase p-2 w-3/12">
+                                    <th class="font-semibold text-sm uppercase p-2 w-3/12 bg-gray-50 sticky top-0 z-10">
                                         Incidencia
                                     </th>
-                                    <th class="font-semibold text-sm uppercase p-2 w-1/12">
+                                    <th class="font-semibold text-sm uppercase p-2 w-1/12 bg-gray-50 sticky top-0 z-10">
                                         Tipo
                                     </th>
-                                    <th class="font-semibold text-sm uppercase p-2 w-1/12">
+                                    <th class="font-semibold text-sm uppercase p-2 w-1/12 bg-gray-50 sticky top-0 z-10">
                                         Estado
                                     </th>
-                                    <th class="font-semibold text-sm uppercase p-2 w-1/12">
+                                    <th class="font-semibold text-sm uppercase p-2 w-1/12 bg-gray-50 sticky top-0 z-10">
                                         Creado por
                                     </th>
-                                    <th class="font-semibold text-sm uppercase p-2 w-1/12">
+                                    <th class="font-semibold text-sm uppercase p-2 w-1/12 bg-gray-50 sticky top-0 z-10">
                                         Status
                                     </th>
-                                    <th class="font-semibold text-sm uppercase p-2 w-1/12">
+                                    <th class="font-semibold text-sm uppercase p-2 w-1/12 bg-gray-50 sticky top-0 z-10">
                                         #Solicitud
                                     </th>
-                                    <th class="font-semibold text-sm uppercase p-2 w-1/12">
+                                    <th class="font-semibold text-sm uppercase p-2 w-1/12 bg-gray-50 sticky top-0 z-10">
                                         Fecha Llegada
                                     </th>
                                 </tr>
