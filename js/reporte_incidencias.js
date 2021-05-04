@@ -76,7 +76,6 @@ const obtenerReporte = columna => {
     const action = "obtenerReporte";
     const URL = `php/reporte_incidencias.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}`;
 
-
     fetch(URL, {
         method: 'POST',
         body: data
@@ -376,8 +375,6 @@ const obtenerReporte = columna => {
                     }
 
                 }
-            } else {
-                alertaImg('Sin Registros', '', 'info', 1500);
             }
         })
         .then(() => {
@@ -631,7 +628,8 @@ btnColumnaPendientesSolucionados.addEventListener('click', () => {
     contenedorSubsecciones.classList.add('hidden');
     contenedorTabla.classList.add('hidden');
     btnFiltroPalabra.setAttribute('onclick', `obtenerReporte('COLUMNA')`);
-
+    const loader = document.getElementById("loader");
+    loader.innerHTML = iconoLoader;
     obtenerReporte('COLUMNA');
     btnFiltroPalabra.setAttribute('onclick', `obtenerReporte('COLUMNA');`);
 })
@@ -650,7 +648,8 @@ btnColumnaSecciones.addEventListener('click', async () => {
     contenedorSubsecciones.classList.add('hidden');
     contenedorTabla.classList.add('hidden');
     btnFiltroPalabra.setAttribute('onclick', `obtenerReporte('SECCION')`);
-
+    const loader = document.getElementById("loader");
+    loader.innerHTML = iconoLoader;
     await crearContenedoresSecciones()
     await obtenerReporte('SECCION')
     btnFiltroPalabra.setAttribute('onclick', `obtenerReporte('SECCION');`);
@@ -668,7 +667,8 @@ btnColumnaSubsecciones.addEventListener('click', async () => {
     contenedorSubsecciones.classList.add('hidden');
     contenedorTabla.classList.add('hidden');
     btnFiltroPalabra.setAttribute('onclick', `obtenerReporte('SUBSECCION')`);
-
+    const loader = document.getElementById("loader");
+    loader.innerHTML = iconoLoader;
     await obtenerReporte('SUBSECCION');
     await crearContenedoresSubsecciones(filtroSeccion.value);
     btnFiltroPalabra.setAttribute('onclick', `obtenerReporte('SUBSECCION');`);
@@ -688,7 +688,8 @@ btnColumnaTabla.addEventListener('click', () => {
     contenedorSubsecciones.classList.add('hidden');
     contenedorTabla.classList.remove('hidden');
     btnFiltroPalabra.setAttribute('onclick', `obtenerReporte('SUBSECCION')`);
-
+    const loader = document.getElementById("loader");
+    loader.innerHTML = iconoLoader;
     obtenerReporte('TABLA');
     btnFiltroPalabra.setAttribute('onclick', `obtenerReporte('TABLA');`);
 })
