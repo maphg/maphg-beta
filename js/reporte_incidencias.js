@@ -341,7 +341,7 @@ const obtenerReporte = columna => {
                                     ${tipoIncidencia}
                                 </p>
                             </td>
-                            <td class="p-2 bg-${diseñoStatus}-200 truncate">
+                            <td class="p-2 bg-${diseñoStatus}-200 truncate text-center">
                                 <span class="text-${diseñoStatus}-800  font-semibold px-2 rounded-full">
                                     ${status}
                                 </span>
