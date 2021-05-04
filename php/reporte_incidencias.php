@@ -337,7 +337,7 @@ if (isset($_GET['action'])) {
         t_equipos_america.jerarquia,
         t_equipos_america.id_equipo_principal
         FROM t_mc
-        INNER JOIN t_equipos_america ON t_mc.id_equipo
+        INNER JOIN t_equipos_america ON t_mc.id_equipo = t_equipos_america.id
         WHERE t_mc.activo = 1 and t_mc.id_equipo > 0 $filtroDestino $filtroPalabraIncidencias $filtroResponsableIncidencias $filtroSeccionIncidencias $filtroSubseccionIncidencias $filtroTipoIncidenciaIncidencias $filtroTipoIncidencias $filtroStatusIncidencias $filtroFechaIncidencias $filtroStatusIncidenciaIncidencias
         ORDER BY t_mc.id DESC";
         if ($result = mysqli_query($conn_2020, $query)) {
