@@ -313,7 +313,11 @@ if (isset($_GET['action'])) {
         }
 
         #INCIDENCIAS
-        $query = "SELECT id, actividad, status, rango_fecha, tipo_incidencia,
+        $query = "SELECT t_mc.id, 
+        t_mc.actividad, 
+        t_mc.status, 
+        t_mc.rango_fecha, 
+        t_mc.tipo_incidencia,
         t_mc.creado_por,
         t_mc.status_material,
         t_mc.status_trabajare,
@@ -357,7 +361,7 @@ if (isset($_GET['action'])) {
                 $idSubseccion = $x['id_subseccion'];
                 $idResponsable = $x['responsable'];
                 $cod2bend = $x['cod2bend'];
-                $fecha_creacion = $x['fecha_creacion'];
+                $fechaCreacion = $x['fecha_creacion'];
 
                 #datos Equipo
                 $idEquipo = $x['idEquipo'];
@@ -457,9 +461,9 @@ if (isset($_GET['action'])) {
                     "idItem" => intval($idItem),
                     "titulo" => $titulo,
                     "equipoPrincipal" => "",
-                    "equipoSecundario" => "",
-                    "proyecto" => $proyecto,
-                    "pda" => $pda,
+                    "equipoSecundario" => $equipo,
+                    "proyecto" => "",
+                    "pda" => "",
                     "creadoPor" => $creadoPor,
                     "status" => $status,
                     "tipo" => "INCIDENCIA",
@@ -607,7 +611,7 @@ if (isset($_GET['action'])) {
                     "idItem" => intval($idItem),
                     "titulo" => $titulo,
                     "equipoPrincipal" => "",
-                    "equipoSecundario" => "",
+                    "equipoSecundario" => "INCIDENCIA GENERAL",
                     "proyecto" => "",
                     "pda" => "",
                     "creadoPor" => $creadoPor,
