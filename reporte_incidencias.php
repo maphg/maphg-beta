@@ -231,35 +231,44 @@
                         <table class="table-fixed mx-auto w-full rounded-lg bg-white divide-y divide-gray-300 cursor-pointer sortable">
                             <thead class="bg-gray-50">
                                 <tr class="text-gray-600 text-center">
-                                    <th class="font-semibold text-sm uppercase p-2 w-1/12 bg-gray-50 sticky top-0 z-10">
+                                    <th class="font-semibold text-sm uppercase p-2 w-32 bg-gray-50 sticky top-0 z-10">
                                         Sección
                                     </th>
-                                    <th class="font-semibold text-sm uppercase p-2 w-1/12 bg-gray-50 sticky top-0 z-10">
+                                    <th class="font-semibold text-sm uppercase p-2 w-24 bg-gray-50 sticky top-0 z-10">
                                         Responsable
                                     </th>
-                                    <th class="font-semibold text-sm uppercase p-2 w-1/12 bg-gray-50 sticky top-0 z-10">
+                                    <th class="font-semibold text-sm uppercase p-2 w-32 bg-gray-50 sticky top-0 z-10">
                                         Equipo
                                     </th>
-                                    <th class="font-semibold text-sm uppercase p-2 w-3/12 bg-gray-50 sticky top-0 z-10">
+                                    <th class="font-semibold text-sm uppercase p-2 w-40 bg-gray-50 sticky top-0 z-10">
                                         Incidencia
                                     </th>
-                                    <th class="font-semibold text-sm uppercase p-2 w-1/12 bg-gray-50 sticky top-0 z-10">
+                                    <th class="font-semibold text-sm uppercase p-2 w-24 bg-gray-50 sticky top-0 z-10">
                                         Tipo
                                     </th>
-                                    <th class="font-semibold text-sm uppercase p-2 w-1/12 bg-gray-50 sticky top-0 z-10">
+                                    <th class="font-semibold text-sm uppercase p-2 w-24 bg-gray-50 sticky top-0 z-10">
                                         Estado
                                     </th>
-                                    <th class="font-semibold text-sm uppercase p-2 w-1/12 bg-gray-50 sticky top-0 z-10">
+                                    <th class="font-semibold text-sm uppercase p-2 w-24 bg-gray-50 sticky top-0 z-10">
                                         Creado por
                                     </th>
-                                    <th class="font-semibold text-sm uppercase p-2 w-1/12 bg-gray-50 sticky top-0 z-10">
+                                    <th class="font-semibold text-sm uppercase p-2 w-20 bg-gray-50 sticky top-0 z-10">
                                         Status
                                     </th>
-                                    <th class="font-semibold text-sm uppercase p-2 w-1/12 bg-gray-50 sticky top-0 z-10">
+                                    <th class="font-semibold text-sm uppercase p-2 w-20 bg-gray-50 sticky top-0 z-10">
                                         #Solicitud
                                     </th>
-                                    <th class="font-semibold text-sm uppercase p-2 w-1/12 bg-gray-50 sticky top-0 z-10">
+                                    <th class="font-semibold text-sm uppercase p-2 w-28 bg-gray-50 sticky top-0 z-10">
+                                        Fecha Programada
+                                    </th>
+                                    <th class="font-semibold text-sm uppercase p-2 w-28 bg-gray-50 sticky top-0 z-10">
                                         Fecha Llegada
+                                    </th>
+                                    <th class="font-semibold text-sm uppercase p-2 w-20 bg-gray-50 sticky top-0 z-10">
+                                        Orden Compra
+                                    </th>
+                                    <th class="font-semibold text-sm uppercase p-2 w-32 bg-gray-50 sticky top-0 z-10">
+                                        Ultimo Comentario
                                     </th>
                                 </tr>
                             </thead>

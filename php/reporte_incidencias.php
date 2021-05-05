@@ -17,6 +17,7 @@ if (isset($_GET['action'])) {
     $fechaActual = date('Y-m-d H:m:s');
     $añoActual = date('Y');
 
+    // OBTIENE DATOS DE LAS INCIDENCIAS, PDA Y PREVENTIVOS
     if ($action == "obtenerReporte") {
 
         $filtroPalabra = $_POST['filtroPalabra'];
@@ -336,6 +337,8 @@ if (isset($_GET['action'])) {
         t_mc.responsable,
         t_mc.cod2bend,
         t_mc.fecha_creacion,
+        t_mc.fecha_llegada,
+        t_mc.orden_compra,
         t_equipos_america.id 'idEquipo',
         t_equipos_america.equipo,
         t_equipos_america.jerarquia,
@@ -362,6 +365,8 @@ if (isset($_GET['action'])) {
                 $idResponsable = $x['responsable'];
                 $cod2bend = $x['cod2bend'];
                 $fechaCreacion = $x['fecha_creacion'];
+                $fechaLlegada = $x['fecha_llegada'];
+                $ordenCompra = $x['orden_compra'];
 
                 #datos Equipo
                 $idEquipo = $x['idEquipo'];
@@ -483,7 +488,9 @@ if (isset($_GET['action'])) {
                     "totalAdjuntos" => intval($totalAdjuntos),
                     "responsable" => $responsable,
                     "cod2bend" => $cod2bend,
-                    "fechaCreacion" => (new DateTime($fechaCreacion))->format('Y-m-d')
+                    "fechaCreacion" => (new DateTime($fechaCreacion))->format('Y-m-d'),
+                    "fechaLlegada" => $fechaLlegada,
+                    "ordenCompra" => $ordenCompra
                 );
             }
         }
@@ -507,7 +514,9 @@ if (isset($_GET['action'])) {
         t_mp_np.id_subseccion,
         t_mp_np.responsable, 
         t_mp_np.cod2bend, 
-        t_mp_np.fecha
+        t_mp_np.fecha,
+        t_mp_np.fecha_llegada,
+        t_mp_np.orden_compra
         FROM t_mp_np
         WHERE activo = 1 and id_equipo = 0
         $filtroDestino_General $filtroPalabra_General $filtroResponsable_General $filtroSeccion_General $filtroSubseccion_General $filtroTipoIncidencia_General $filtroTipo_General $filtroStatus_General $filtroFecha_General $filtroStatusIncidencia_General ORDER BY t_mp_np.id ASC";
@@ -529,6 +538,8 @@ if (isset($_GET['action'])) {
                 $idResponsable = $x['responsable'];
                 $cod2bend = $x['cod2bend'];
                 $fechaCreacion = $x['fecha'];
+                $fechaLlegada = $x['fecha_llegada'];
+                $ordenCompra = $x['orden_compra'];
 
                 #STATUS
                 if ($status == "SOLUCIONADO" || $status == "F" || $status == "FINALIZADO") {
@@ -633,7 +644,9 @@ if (isset($_GET['action'])) {
                     "totalAdjuntos" => intval($totalAdjuntos),
                     "responsable" => $responsable,
                     "cod2bend" => $cod2bend,
-                    "fechaCreacion" => (new DateTime($fechaCreacion))->format('Y-m-d')
+                    "fechaCreacion" => (new DateTime($fechaCreacion))->format('Y-m-d'),
+                    "fechaLlegada" => $fechaLlegada,
+                    "ordenCompra" => $ordenCompra
                 );
             }
         }
@@ -661,7 +674,9 @@ if (isset($_GET['action'])) {
         t_mp_planificacion_iniciada.status_ep,
         t_mp_planificacion_iniciada.id_responsables, 
         t_mp_planificacion_iniciada.cod2bend,
-        t_mp_planificacion_iniciada.fecha_creacion
+        t_mp_planificacion_iniciada.fecha_creacion,
+        t_mp_planificacion_iniciada.fecha_llegada,
+        t_mp_planificacion_iniciada.orden_compra
         FROM t_mp_planificacion_iniciada
         INNER JOIN t_equipos_america ON t_mp_planificacion_iniciada.id_equipo = t_equipos_america.id
         WHERE t_mp_planificacion_iniciada.activo = 1
@@ -685,6 +700,8 @@ if (isset($_GET['action'])) {
                 $idResponsable = $x['id_responsables'];
                 $cod2bend = $x['cod2bend'];
                 $fechaCreacion = $x['fecha_creacion'];
+                $fechaLlegada = $x['fecha_llegada'];
+                $ordenCompra = $x['orden_compra'];
 
                 #datos Equipo
                 $idEquipo = $x['idEquipo'];
@@ -788,7 +805,9 @@ if (isset($_GET['action'])) {
                     "totalAdjuntos" => intval($totalAdjuntos),
                     "responsable" => $responsable,
                     "cod2bend" => $cod2bend,
-                    "fechaCreacion" => (new DateTime($fechaCreacion))->format('Y-m-d')
+                    "fechaCreacion" => (new DateTime($fechaCreacion))->format('Y-m-d'),
+                    "fechaLlegada" => $fechaLlegada,
+                    "ordenCompra" => $ordenCompra
                 );
             }
         }
@@ -816,7 +835,9 @@ if (isset($_GET['action'])) {
         t_proyectos_planaccion.status_ep,
         t_proyectos_planaccion.responsable,
         t_proyectos_planaccion.cod2bend,
-        t_proyectos_planaccion.fecha_creacion
+        t_proyectos_planaccion.fecha_creacion,
+        t_proyectos_planaccion.fecha_llegada,
+        t_proyectos_planaccion.orden_compra
         FROM t_proyectos_planaccion
         INNER JOIN t_proyectos ON t_proyectos_planaccion.id_proyecto = t_proyectos.id
         WHERE t_proyectos_planaccion.activo = 1
@@ -840,6 +861,8 @@ if (isset($_GET['action'])) {
                 $idResponsable = $x['responsable'];
                 $cod2bend = $x['cod2bend'];
                 $fechaCreacion = $x['fecha_creacion'];
+                $fechaLlegada = $x['fecha_llegada'];
+                $ordenCompra = $x['orden_compra'];
 
                 #STATUS
                 if ($status == "SOLUCIONADO" || $status == "F" || $status == "FINALIZADO") {
@@ -944,10 +967,88 @@ if (isset($_GET['action'])) {
                     "totalAdjuntos" => intval($totalAdjuntos),
                     "responsable" => $responsable,
                     "cod2bend" => $cod2bend,
-                    "fechaCreacion" => (new DateTime($fechaCreacion))->format('Y-m-d')
+                    "fechaCreacion" => (new DateTime($fechaCreacion))->format('Y-m-d'),
+                    "fechaLlegada" => $fechaLlegada,
+                    "ordenCompra" => $ordenCompra
                 );
             }
         }
         echo json_encode($array);
+    }
+
+    // ACTUALIZA LA FECHA DE LLEGADA
+    if ($action == "actualizarFechaLlegada") {
+        $fechaLlegada = $_GET['fechaLlegada'];
+        $tipo = $_GET['tipo'];
+        $idItem = $_GET['idItem'];
+        $resp = 0;
+
+        if ($tipo == "INCIDENCIA") {
+            $query = "UPDATE t_mc SET fecha_llegada = '$fechaLlegada', ultima_modificacion = '$fechaActual' 
+            WHERE id = $idItem";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = 1;
+            }
+        }
+
+        if ($tipo == "GENERAL") {
+            $query = "UPDATE t_mp_np SET fecha_llegada = '$fechaLlegada' WHERE id = $idItem";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = 1;
+            }
+        }
+
+        if ($tipo == "PROYECTO") {
+            $query = "UPDATE t_proyectos_planaccion SET fecha_llegada = '$fechaLlegada' WHERE id = $idItem";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = 1;
+            }
+        }
+
+        if ($tipo == "PREVENTIVO") {
+            $query = "UPDATE t_mp_planificacion_iniciada SET fecha_llegada = '$fechaLlegada' WHERE id = $idItem";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = 1;
+            }
+        }
+        echo json_encode($resp);
+    }
+
+
+    // ACTUALIZA LA ORDEN DE COMPRA
+    if ($action == "actualizarOrdenCompra") {
+        $ordenCompra = $_GET['ordenCompra'];
+        $tipo = $_GET['tipo'];
+        $idItem = $_GET['idItem'];
+        $resp = 0;
+
+        if ($tipo == "INCIDENCIA") {
+            $query = "UPDATE t_mc SET orden_compra = '$ordenCompra' WHERE id = $idItem";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = 1;
+            }
+        }
+
+        if ($tipo == "GENERAL") {
+            $query = "UPDATE t_mp_np SET orden_compra = '$ordenCompra' WHERE id = $idItem";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = 1;
+            }
+        }
+
+        if ($tipo == "PROYECTO") {
+            $query = "UPDATE t_proyectos_planaccion SET orden_compra = '$ordenCompra' WHERE id = $idItem";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = 1;
+            }
+        }
+
+        if ($tipo == "PREVENTIVO") {
+            $query = "UPDATE t_mp_planificacion_iniciada SET orden_compra = '$ordenCompra' WHERE id = $idItem";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = 1;
+            }
+        }
+        echo json_encode($resp);
     }
 }

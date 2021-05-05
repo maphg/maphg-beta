@@ -49,7 +49,7 @@ if (isset($_POST['action'])) {
         INNER JOIN c_destinos ON t_equipos_america.id_destino = c_destinos.id
         INNER JOIN t_mp_planes_mantenimiento ON t_mp_planificacion_iniciada.id_plan =t_mp_planes_mantenimiento.id 
         INNER JOIN c_frecuencias_mp ON t_mp_planes_mantenimiento.id_periodicidad = c_frecuencias_mp.id
-        WHERE t_mp_planificacion_iniciada.id_equipo = $idEquipo and t_mp_planificacion_iniciada.id_plan = $idPlan and t_mp_planificacion_iniciada.semana = $semanaX and t_mp_planificacion_iniciada.año = '$año' and t_mp_planificacion_iniciada.activo = 1";
+        WHERE t_mp_planificacion_iniciada.id_equipo = $idEquipo and t_mp_planificacion_iniciada.id_plan = $idPlan and t_mp_planificacion_iniciada.semana = $semanaX and t_mp_planificacion_iniciada.año = '$año' and t_mp_planificacion_iniciada.activo = 1 and t_mp_planificacion_iniciada.status IN('PROCESO', 'SOLUCIONADO')";
 
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $i) {

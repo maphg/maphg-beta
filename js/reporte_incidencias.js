@@ -129,8 +129,9 @@ const obtenerReporte = columna => {
                     const pda = array[x].pda;
                     const responsable = array[x].responsable;
                     const cod2bend = array[x].cod2bend;
-                    const fechaLlegada = '';
                     const fechaCreacion = array[x].fechaCreacion;
+                    const fechaLlegada = array[x].fechaLlegada;
+                    const ordenCompra = array[x].ordenCompra;
 
                     // COLORES POR SECCION
                     const colorSeccion = idSeccion == 9 ? 'red'
@@ -342,7 +343,7 @@ const obtenerReporte = columna => {
                                 </p>
                             </td>
                             <td class="p-2 bg-${diseñoStatus}-200 truncate text-center">
-                                <span class="text-${diseñoStatus}-800  font-semibold px-2 rounded-full">
+                                <span class="text-${diseñoStatus}-800  font-semibold text-xxs rounded-full">
                                     ${status}
                                 </span>
                             </td>
@@ -367,7 +368,16 @@ const obtenerReporte = columna => {
                                 <p>${cod2bend}</p>
                             </td>
                             <td class="p-2">
-                                <p>${fechaLlegada}</p>
+                                <p>${'31/12/2020 - 31/12/2020'}</p>
+                            </td>
+                            <td class="p-2">
+                                <input id="${'fechaLlegada_' + x}" type="date" value="${fechaLlegada}" onChange="actualizarFechaLlegada('${tipo}', ${idItem}, ${x})" class="w-full text-xxs ring ring-gray-100 py-1 text-center">
+                            </td>
+                            <td class="p-2">
+                                <input id="${'ordenCompra_' + x}" type="text" value="${ordenCompra}" onChange="actualizarOrdenCompra('${tipo}', ${idItem}, ${x})" class="w-full ring ring-gray-100 p-1 text-center">
+                            </td>
+                            <td class="p-2">
+                                <p class="w-full text-xxs">${comentario}</p>
                             </td>
                         </tr>
                     `;
@@ -390,6 +400,58 @@ const obtenerReporte = columna => {
             contenedorSubsecciones.innerHTML = '';
             loader.innerHTML = '';
         })
+}
+
+
+// ACTUALIZA LA FECHA DE LLEGADA
+const actualizarFechaLlegada = (tipo, idItem, posicion) => {
+    if (fechaLlegada = document.querySelector("#fechaLlegada_" + posicion).value) {
+        let idDestino = localStorage.getItem('idDestino');
+        let idUsuario = localStorage.getItem('usuario');
+
+        const action = "actualizarFechaLlegada";
+        const URL = `php/reporte_incidencias.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&tipo=${tipo}&idItem=${idItem}&fechaLlegada=${fechaLlegada}`;
+
+        fetch(URL)
+            .then(array => array.json())
+            .then(array => {
+                console.log(array)
+                if (array == 1) {
+                    alertaImg('Fecha Llegada, Actualizada', '', 'success', 1500);
+                } else {
+                    alertaImg('Intente de Nuevo', '', 'info', 1500);
+                }
+            })
+            .catch(function (err) {
+                fetch(APIERROR + err);
+            })
+    }
+}
+
+
+// ACTUALIZA LA ORDEN DE COMPRA
+const actualizarOrdenCompra = (tipo, idItem, posicion) => {
+    if (ordenCompra = document.querySelector("#ordenCompra_" + posicion).value) {
+        let idDestino = localStorage.getItem('idDestino');
+        let idUsuario = localStorage.getItem('usuario');
+
+        const action = "actualizarOrdenCompra";
+        const URL = `php/reporte_incidencias.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&tipo=${tipo}&idItem=${idItem}&ordenCompra=${ordenCompra}`;
+
+        fetch(URL)
+            .then(array => array.json())
+            .then(array => {
+                console.log(array)
+                if (array == 1) {
+                    alertaImg('Orden de Compra, Actualizada', '', 'success', 1500);
+                } else {
+                    alertaImg('Intente de Nuevo', '', 'info', 1500);
+                }
+            })
+            .catch(function (err) {
+                console.log(err);
+            })
+    }
 }
 
 
@@ -818,6 +880,7 @@ filtroFecha.addEventListener('change', () => {
 })
 
 
+// EXPORTA EL EXCEL
 btnExportarExcel.addEventListener('click', () => {
     let idDestino = localStorage.getItem('idDestino');
     let idUsuario = localStorage.getItem('usuario');
