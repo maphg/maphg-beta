@@ -264,12 +264,12 @@ if (isset($_GET['action'])) {
         } elseif ($filtroFecha == "SINPLANIFICAR") {
             $filtroFechaIncidencias = "and t_mc.rango_fecha = ''";
             $filtroFecha_General = "and t_mp_np.rango_fecha = ''";
-            $filtroFecha_Preventivo = "and t_mp_planificacion_iniciada.rango_fecha = ''";
+            $filtroFecha_Preventivo = "and t_mp_planificacion_iniciada.fecha_programada = ''";
             $filtroFecha_Proyecto = "and t_proyectos_planaccion.rango_fecha = ''";
         } elseif ($filtroFecha == "PLANIFICADO") {
             $filtroFechaIncidencias = "and t_mc.rango_fecha != ''";
             $filtroFecha_General = "and t_mp_np.rango_fecha != ''";
-            $filtroFecha_Preventivo = "and t_mp_planificacion_iniciada.rango_fecha != ''";
+            $filtroFecha_Preventivo = "and t_mp_planificacion_iniciada.fecha_programada != ''";
             $filtroFecha_Proyecto = "and t_proyectos_planaccion.rango_fecha != ''";
         } elseif ($filtroFecha == "RANGO") {
             $fechaInicio = strtotime($_POST['filtroFechaInicio']);
@@ -309,7 +309,7 @@ if (isset($_GET['action'])) {
         } else {
             $filtroFechaIncidencias = "and t_mc.rango_fecha != ''";
             $filtroFecha_General = "and t_mp_np.rango_fecha != ''";
-            $filtroFecha_Preventivo = "and t_mp_planificacion_iniciada.rango_fecha != ''";
+            $filtroFecha_Preventivo = "and t_mp_planificacion_iniciada.fecha_programada != ''";
             $filtroFecha_Proyecto = "and t_proyectos_planaccion.rango_fecha != ''";
         }
 
