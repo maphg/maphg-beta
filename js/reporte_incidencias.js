@@ -721,7 +721,7 @@ btnColumnaSubsecciones.addEventListener('click', async () => {
     btnColumnaSubsecciones.classList.remove('bg-gray-100', 'text-gray-300');
     contenedorPendientesSolucionados.classList.add('hidden');
     contenedorSeccion.classList.add('hidden');
-    contenedorSubsecciones.classList.add('hidden');
+    contenedorSubsecciones.classList.remove('hidden');
     contenedorTabla.classList.add('hidden');
     btnFiltroPalabra.setAttribute('onclick', `obtenerReporte('SUBSECCION')`);
     const loader = document.getElementById("loader");
