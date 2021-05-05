@@ -2287,8 +2287,8 @@ if (isset($_GET['action'])) {
         } else {
             $filtroTipoIncidencias = "and t_mc.id = 0";
             $filtroTipo_General = "and t_mp_np.id = 0";
-            $filtroTipo_Preventivo = "and id = 0";
-            $filtroTipo_Proyecto = "and id = 0";
+            $filtroTipo_Preventivo = "and t_mp_planificacion_iniciada.id = 0";
+            $filtroTipo_Proyecto = "and t_proyectos_planaccion.id = 0";
         }
 
         #FILTRO STATUS
@@ -2497,7 +2497,9 @@ if (isset($_GET['action'])) {
         t_equipos_america.equipo, 
         t_mc.fecha_creacion, 
         t_mc.fecha_realizado, 
-        t_mc.responsable_empresa
+        t_mc.responsable_empresa,
+        t_mc.fecha_llegada,
+        t_mc.orden_compra,
         FROM t_mc
         INNER JOIN c_destinos ON t_mc.id_destino = c_destinos.id
         INNER JOIN c_secciones ON t_mc.id_seccion = c_secciones.id
@@ -2530,8 +2532,8 @@ if (isset($_GET['action'])) {
                 $sEP = $x['status_ep'];
                 $cod2bend = $x['cod2bend'];
                 $fechaProgramada = $x['rango_fecha'];
-                $fechaLlegada = "";
-                $ordenCompra = "";
+                $fechaLlegada = $x['fecha_llegada'];
+                $ordenCompra = $x['orden_compra'];
                 $fila++;
 
                 #COMPROBACIÓN DE STATUS
@@ -2653,6 +2655,8 @@ if (isset($_GET['action'])) {
         t_mp_np.departamento_rrhh,
         t_mp_np.status_ep,
         t_mp_np.fecha,
+        t_mp_np.fecha_llegada,
+        t_mp_np.orden_compra,
         t_mp_np.fecha_finalizado,
         t_mp_np.responsable,
         t_mp_np.cod2bend,
@@ -2686,8 +2690,8 @@ if (isset($_GET['action'])) {
                 $subseccion = $x['grupo'];
                 $cod2bend = $x['cod2bend'];
                 $fechaProgramada = $x['rango_fecha'];
-                $fechaLlegada = "";
-                $ordenCompra = "";
+                $fechaLlegada = $x['fecha_llegada'];
+                $ordenCompra = $x['orden_compra'];
                 $fila++;
 
                 #COMPROBACIÓN DE STATUS
@@ -2813,6 +2817,9 @@ if (isset($_GET['action'])) {
         t_mp_planificacion_iniciada.id_responsables, 
         t_mp_planificacion_iniciada.cod2bend,
         t_mp_planificacion_iniciada.fecha_creacion,
+        t_mp_planificacion_iniciada.fecha_llegada,
+        t_mp_planificacion_iniciada.orden_compra,
+        t_mp_planificacion_iniciada.fecha_programada,
         t_equipos_america.equipo,
         c_destinos.destino,
         c_secciones.seccion, 
@@ -2846,7 +2853,9 @@ if (isset($_GET['action'])) {
                 $fechaCreacion = $x['fecha_creacion'];
                 $equipo = $x['equipo'];
                 $ultimoComentario = $x['comentario'];
-                $fechaProgramada = $x['rango_fecha'];
+                $fechaProgramada = $x['fecha_programada'];
+                $fechaLlegada = $x['fecha_llegada'];
+                $ordenCompra = $x['orden_compra'];
                 $fila++;
 
                 #COMPROBACIÓN DE STATUS
@@ -2953,6 +2962,8 @@ if (isset($_GET['action'])) {
         t_proyectos_planaccion.responsable,
         t_proyectos_planaccion.cod2bend,
         t_proyectos_planaccion.fecha_creacion,
+        t_proyectos_planaccion.fecha_llegada,
+        t_proyectos_planaccion.orden_compra,
         c_destinos.destino,
         c_secciones.seccion,
         c_subsecciones.grupo
@@ -2982,8 +2993,9 @@ if (isset($_GET['action'])) {
                 $idResponsable = $x['responsable'];
                 $cod2bend = $x['cod2bend'];
                 $fechaCreacion = $x['fecha_creacion'];
-                $fechaLlegada = "";
-                $ordenCompra = "";
+                $fechaLlegada = $x['fecha_llegada'];
+                $ordenCompra = $x['orden_compra'];
+                $fechaProgramada = $x['rango_fecha'];
                 $fila++;
 
                 #COMPROBACIÓN DE STATUS

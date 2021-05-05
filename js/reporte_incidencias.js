@@ -123,12 +123,10 @@ const obtenerReporte = columna => {
                     const seccion = array[x].seccion;
                     const idSubseccion = array[x].idSubseccion;
                     const subseccion = array[x].subseccion;
-                    const equipoPrincipal = array[x].equipoPrincipal;
                     const equipoSecundario = array[x].equipoSecundario;
-                    const proyecto = array[x].proyecto;
-                    const pda = array[x].pda;
                     const responsable = array[x].responsable;
                     const cod2bend = array[x].cod2bend;
+                    const fechaProgramada = array[x].fechaProgramada;
                     const fechaCreacion = array[x].fechaCreacion;
                     const fechaLlegada = array[x].fechaLlegada;
                     const ordenCompra = array[x].ordenCompra;
@@ -368,7 +366,7 @@ const obtenerReporte = columna => {
                                 <p>${cod2bend}</p>
                             </td>
                             <td class="p-2">
-                                <p>${'31/12/2020 - 31/12/2020'}</p>
+                                <p>${fechaProgramada}</p>
                             </td>
                             <td class="p-2">
                                 <input id="${'fechaLlegada_' + x}" type="date" value="${fechaLlegada}" onChange="actualizarFechaLlegada('${tipo}', ${idItem}, ${x})" class="w-full text-xxs ring ring-gray-100 py-1 text-center">

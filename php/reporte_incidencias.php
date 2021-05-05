@@ -339,6 +339,7 @@ if (isset($_GET['action'])) {
         t_mc.fecha_creacion,
         t_mc.fecha_llegada,
         t_mc.orden_compra,
+        t_mc.rango_fecha,
         t_equipos_america.id 'idEquipo',
         t_equipos_america.equipo,
         t_equipos_america.jerarquia,
@@ -367,6 +368,7 @@ if (isset($_GET['action'])) {
                 $fechaCreacion = $x['fecha_creacion'];
                 $fechaLlegada = $x['fecha_llegada'];
                 $ordenCompra = $x['orden_compra'];
+                $fechaProgramada = $x['rango_fecha'];
 
                 #datos Equipo
                 $idEquipo = $x['idEquipo'];
@@ -490,7 +492,8 @@ if (isset($_GET['action'])) {
                     "cod2bend" => $cod2bend,
                     "fechaCreacion" => (new DateTime($fechaCreacion))->format('Y-m-d'),
                     "fechaLlegada" => $fechaLlegada,
-                    "ordenCompra" => $ordenCompra
+                    "ordenCompra" => $ordenCompra,
+                    "fechaProgramada" => $fechaProgramada
                 );
             }
         }
@@ -516,7 +519,8 @@ if (isset($_GET['action'])) {
         t_mp_np.cod2bend, 
         t_mp_np.fecha,
         t_mp_np.fecha_llegada,
-        t_mp_np.orden_compra
+        t_mp_np.orden_compra,
+        t_mp_np.rango_fecha
         FROM t_mp_np
         WHERE activo = 1 and id_equipo = 0
         $filtroDestino_General $filtroPalabra_General $filtroResponsable_General $filtroSeccion_General $filtroSubseccion_General $filtroTipoIncidencia_General $filtroTipo_General $filtroStatus_General $filtroFecha_General $filtroStatusIncidencia_General ORDER BY t_mp_np.id ASC";
@@ -540,6 +544,7 @@ if (isset($_GET['action'])) {
                 $fechaCreacion = $x['fecha'];
                 $fechaLlegada = $x['fecha_llegada'];
                 $ordenCompra = $x['orden_compra'];
+                $fechaProgramada = $x['rango_fecha'];
 
                 #STATUS
                 if ($status == "SOLUCIONADO" || $status == "F" || $status == "FINALIZADO") {
@@ -646,7 +651,8 @@ if (isset($_GET['action'])) {
                     "cod2bend" => $cod2bend,
                     "fechaCreacion" => (new DateTime($fechaCreacion))->format('Y-m-d'),
                     "fechaLlegada" => $fechaLlegada,
-                    "ordenCompra" => $ordenCompra
+                    "ordenCompra" => $ordenCompra,
+                    "fechaProgramada" => $fechaProgramada
                 );
             }
         }
@@ -676,7 +682,8 @@ if (isset($_GET['action'])) {
         t_mp_planificacion_iniciada.cod2bend,
         t_mp_planificacion_iniciada.fecha_creacion,
         t_mp_planificacion_iniciada.fecha_llegada,
-        t_mp_planificacion_iniciada.orden_compra
+        t_mp_planificacion_iniciada.orden_compra,
+        t_mp_planificacion_iniciada.fecha_programada
         FROM t_mp_planificacion_iniciada
         INNER JOIN t_equipos_america ON t_mp_planificacion_iniciada.id_equipo = t_equipos_america.id
         WHERE t_mp_planificacion_iniciada.activo = 1
@@ -702,6 +709,7 @@ if (isset($_GET['action'])) {
                 $fechaCreacion = $x['fecha_creacion'];
                 $fechaLlegada = $x['fecha_llegada'];
                 $ordenCompra = $x['orden_compra'];
+                $fechaProgramada = $x['fecha_programada'];
 
                 #datos Equipo
                 $idEquipo = $x['idEquipo'];
@@ -807,7 +815,8 @@ if (isset($_GET['action'])) {
                     "cod2bend" => $cod2bend,
                     "fechaCreacion" => (new DateTime($fechaCreacion))->format('Y-m-d'),
                     "fechaLlegada" => $fechaLlegada,
-                    "ordenCompra" => $ordenCompra
+                    "ordenCompra" => $ordenCompra,
+                    "fechaProgramada" => $fechaProgramada
                 );
             }
         }
@@ -837,7 +846,8 @@ if (isset($_GET['action'])) {
         t_proyectos_planaccion.cod2bend,
         t_proyectos_planaccion.fecha_creacion,
         t_proyectos_planaccion.fecha_llegada,
-        t_proyectos_planaccion.orden_compra
+        t_proyectos_planaccion.orden_compra,
+        t_proyectos_planaccion.rango_fecha
         FROM t_proyectos_planaccion
         INNER JOIN t_proyectos ON t_proyectos_planaccion.id_proyecto = t_proyectos.id
         WHERE t_proyectos_planaccion.activo = 1
@@ -863,6 +873,7 @@ if (isset($_GET['action'])) {
                 $fechaCreacion = $x['fecha_creacion'];
                 $fechaLlegada = $x['fecha_llegada'];
                 $ordenCompra = $x['orden_compra'];
+                $fechaProgramada = $x['rango_fecha'];
 
                 #STATUS
                 if ($status == "SOLUCIONADO" || $status == "F" || $status == "FINALIZADO") {
@@ -969,7 +980,8 @@ if (isset($_GET['action'])) {
                     "cod2bend" => $cod2bend,
                     "fechaCreacion" => (new DateTime($fechaCreacion))->format('Y-m-d'),
                     "fechaLlegada" => $fechaLlegada,
-                    "ordenCompra" => $ordenCompra
+                    "ordenCompra" => $ordenCompra,
+                    "fechaProgramada" => $fechaProgramada
                 );
             }
         }
