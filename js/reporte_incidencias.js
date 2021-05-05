@@ -413,7 +413,6 @@ const actualizarFechaLlegada = (tipo, idItem, posicion) => {
         fetch(URL)
             .then(array => array.json())
             .then(array => {
-                console.log(array)
                 if (array == 1) {
                     alertaImg('Fecha Llegada, Actualizada', '', 'success', 1500);
                 } else {
@@ -439,7 +438,6 @@ const actualizarOrdenCompra = (tipo, idItem, posicion) => {
         fetch(URL)
             .then(array => array.json())
             .then(array => {
-                console.log(array)
                 if (array == 1) {
                     alertaImg('Orden de Compra, Actualizada', '', 'success', 1500);
                 } else {
@@ -447,7 +445,6 @@ const actualizarOrdenCompra = (tipo, idItem, posicion) => {
                 }
             })
             .catch(function (err) {
-                console.log(err);
             })
     }
 }
