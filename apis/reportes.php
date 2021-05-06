@@ -489,7 +489,7 @@ if (isset($_GET['action'])) {
                             FROM t_mp_planificacion_iniciada AS mp
                             INNER JOIN t_equipos_america AS e ON mp.id_equipo = e.id
                             WHERE e.id_destino = $idDestinoX and e.id_seccion = $idSeccion and 
-                            mp.status IN('PROCESO', 'SOLUCIONADO') and mp.activo = 1 and 
+                            mp.status IN('PROCESO', 'SOLUCIONADO') and mp.activo = 1 and mp.año = '$añoActual' and
                             (
                                 (mp.fecha_creacion BETWEEN '$fechaA' and '$fechaB') OR 
                                 (mp.fecha_finalizado BETWEEN '$fechaA' and '$fechaB')
@@ -673,7 +673,7 @@ if (isset($_GET['action'])) {
                     mp.status
                     FROM t_mp_planificacion_iniciada AS mp
                     INNER JOIN t_equipos_america AS e ON mp.id_equipo = e.id
-                    WHERE e.id_destino = $idDestinoX and mp.status IN('PROCESO', 'SOLUCIONADO') and mp.activo = 1 and 
+                    WHERE e.id_destino = $idDestinoX and mp.status IN('PROCESO', 'SOLUCIONADO') and mp.activo = 1 and mp.año = '$añoActual' and 
                     (
                         (mp.fecha_creacion BETWEEN '$fechaA' and '$fechaB') OR 
                         (mp.fecha_finalizado BETWEEN '$fechaA' and '$fechaB')
