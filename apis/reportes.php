@@ -226,8 +226,8 @@ if (isset($_GET['action'])) {
                             FROM t_mc
                             WHERE id_seccion = $idSeccion and id_destino = $idDestinoX and status IN('PENDIENTE', 'N', 'SOLUCIONADO', 'F') and activo = 1 and id_equipo > 0 and
                             (
-                                (fecha_creacion BETWEEN '$fechaA' and '$fechaB') OR 
-                                (fecha_realizado BETWEEN '$fechaA' and '$fechaB')
+                                (fecha_creacion BETWEEN '$fechaA' and '$fechaB') 
+                                -- OR (fecha_realizado BETWEEN '$fechaA' and '$fechaB')
                             )";
                             if ($result = mysqli_query($conn_2020, $query)) {
                                 foreach ($result as $x) {
@@ -274,8 +274,8 @@ if (isset($_GET['action'])) {
                             FROM t_mp_np
                             WHERE id_seccion = $idSeccion and id_destino = $idDestinoX and status IN('PENDIENTE', 'N', 'SOLUCIONADO', 'F') and activo = 1 and id_equipo = 0 and
                             (
-                                (fecha BETWEEN '$fechaA' and '$fechaB') OR 
-                                (fecha_finalizado BETWEEN '$fechaA' and '$fechaB')
+                                (fecha BETWEEN '$fechaA' and '$fechaB') 
+                                -- OR (fecha_finalizado BETWEEN '$fechaA' and '$fechaB')
                             )";
                             if ($result = mysqli_query($conn_2020, $query)) {
                                 foreach ($result as $x) {
