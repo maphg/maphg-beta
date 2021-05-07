@@ -515,6 +515,8 @@ if (isset($_GET['action'])) {
                         $mediaEnProceso = 0;
                         $mediaSolucionados = 0;
 
+                        #IDS PARA EVITAR REPETIDOS
+                        $idA = array();
 
                         while ($tiempoInicio <= $tiempoFin) {
 
@@ -527,6 +529,12 @@ if (isset($_GET['action'])) {
                             $enProceso_dia = 0;
                             $solucionadas_dia = 0;
 
+                            if (count($idA) > 0) {
+                                $idx = implode(',', $idA);
+                            } else {
+                                $idx = 0;
+                            }
+
                             $query = "SELECT mp.id, mp.fecha_creacion, mp.fecha_finalizado, 
                             mp.status
                             FROM t_mp_planificacion_iniciada AS mp
@@ -536,7 +544,7 @@ if (isset($_GET['action'])) {
                             (
                                 (mp.fecha_creacion BETWEEN '$fechaA' and '$fechaB') OR 
                                 (mp.fecha_finalizado BETWEEN '$fechaA' and '$fechaB')
-                            )";
+                            ) and mp.id NOT IN($idx)";
 
                             if ($result = mysqli_query($conn_2020, $query)) {
                                 foreach ($result as $x) {
@@ -565,6 +573,7 @@ if (isset($_GET['action'])) {
                                             $mediaEnProceso += ($horasActual - $horasCreacion) / 3600;
                                         }
                                     } else {
+                                        $idA[] = $idIncidencia;
 
                                         #OBTIENE TIEMPO EN HORAS DE SOLUCIONADO
                                         if ($horasCreacion > 0 && $horasSolucionado > 0) {
@@ -706,11 +715,20 @@ if (isset($_GET['action'])) {
                 $tiempoFin = strtotime($fechaFin);
                 $fechaX = "";
 
+                #IDS PARA EVITAR REPETIDOS
+                $idA = array();
+
                 while ($tiempoInicio <= $tiempoFin) {
 
                     $fechaX = date('Y-m-d', $tiempoInicio);
                     $fechaA = date("Y-m-d H:i:s", ($tiempoInicio + 0));
                     $fechaB = date("Y-m-d H:i:s", ($tiempoInicio + 86400));
+
+                    if (count($idA) > 0) {
+                        $idx = implode(',', $idA);
+                    } else {
+                        $idx = 0;
+                    }
 
                     $query = "SELECT mp.id, mp.fecha_creacion, mp.fecha_finalizado, 
                     mp.status
@@ -720,9 +738,10 @@ if (isset($_GET['action'])) {
                     (
                         (mp.fecha_creacion BETWEEN '$fechaA' and '$fechaB') OR 
                         (mp.fecha_finalizado BETWEEN '$fechaA' and '$fechaB')
-                    )";
+                    ) and mp.id NOT IN($idx)";
                     if ($result = mysqli_query($conn_2020, $query)) {
                         foreach ($result as $x) {
+                            $idIncidencia = $x['id'];
                             $fechaCreacion = $x['fecha_creacion'];
                             $fechaFinalizado = $x['fecha_finalizado'];
                             $status = $x['status'];
@@ -737,6 +756,8 @@ if (isset($_GET['action'])) {
                             if ($status == "PROCESO") {
                                 $creados++;
                             } else {
+                                $idA[] = $idIncidencia;
+
                                 $solucionados++;
 
                                 #OBTIENE TIEMPO EN HORAS DE SOLUCIONADO
