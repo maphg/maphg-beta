@@ -464,7 +464,7 @@ $fecha_final = $fecha_final->format('Y-m-d H:i:s');
                 <h1 class="text-gray-200 bg-gray-900 pl-4 pr-3 py-3 uppercase rounded-r-full font-semibold my-3">
                     <span><i class="fad fa-circle text-sm text-green-400 mr-1"></i></span>GIFT</h1>
                 <h1 class="text-red-400 bg-red-200 px-3 py-3 uppercase rounded-full font-semibold my-3 ml-4 shadow">
-                    COCINAS</h1>
+                    COBARE</h1>
             </div>
             <div class="flex flex-row flex-wrap justify-center items-center w-full px-5 rounded">
                 <iframe src="https://app.powerbi.com/view?r=eyJrIjoiNzY1NmM0ZTMtYjM1Yy00NDhhLTk3YmQtZjg0MmFmYTk5OGFjIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" width="100%" height="620px" class="rounded p-2 bg-white shadow-md"></iframe>
