@@ -40,20 +40,33 @@ if (isset($_GET['action'])) {
                 $tiempoFin = strtotime($fechaFin);
                 $fechaX = "";
 
+                #IDS PARA EVITAR REPETIDOS
+                $idA = array();
+                $idB = array();
+
                 while ($tiempoInicio <= $tiempoFin) {
 
                     $fechaX = date('Y-m-d', $tiempoInicio);
                     $fechaA = date("Y-m-d H:i:s", ($tiempoInicio + 0));
                     $fechaB = date("Y-m-d H:i:s", ($tiempoInicio + 86400));
 
+                    if (count($idA) > 0) {
+                        $idx = implode(',', $idA);
+                    } else {
+                        $idx = 0;
+                    }
+
                     #INCIDENCIA EQUIPOS
                     $query = "SELECT id, fecha_creacion, fecha_realizado, status
                     FROM t_mc
                     WHERE id_destino = $idDestinoX and status IN('PENDIENTE', 'N', 'SOLUCIONADO', 'F') and activo = 1 and id_equipo > 0 and
-                    ((fecha_creacion BETWEEN '$fechaA' and '$fechaB') OR 
-                    (fecha_realizado BETWEEN '$fechaA' and '$fechaB'))";
+                    (
+                        (fecha_creacion BETWEEN '$fechaA' and '$fechaB') OR 
+                        (fecha_realizado BETWEEN '$fechaA' and '$fechaB')
+                    ) and id NOT IN($idx)";
                     if ($result = mysqli_query($conn_2020, $query)) {
                         foreach ($result as $x) {
+                            $idIncidencia = $x['id'];
                             $fechaCreacion = $x['fecha_creacion'];
                             $fechaFinalizado = $x['fecha_realizado'];
                             $status = $x['status'];
@@ -68,6 +81,8 @@ if (isset($_GET['action'])) {
                             if ($status == "PENDIENTE" || $status == "N") {
                                 $creados++;
                             } else {
+                                $idA[] = $idIncidencia;
+
                                 $solucionados++;
 
                                 #OBTIENE TIEMPO EN HORAS DE SOLUCIONADO
@@ -78,14 +93,23 @@ if (isset($_GET['action'])) {
                         }
                     }
 
+                    if (count($idB) > 0) {
+                        $idy = implode(',', $idB);
+                    } else {
+                        $idy = 0;
+                    }
+
                     #INCIDENCIAS GENERALES
                     $query = "SELECT id, fecha, fecha_finalizado, status
                     FROM t_mp_np
                     WHERE id_destino = $idDestinoX and status IN('PENDIENTE', 'N', 'SOLUCIONADO', 'F') and activo = 1 and id_equipo = 0 and
-                    ((fecha BETWEEN '$fechaA' and '$fechaB') OR 
-                    (fecha_finalizado BETWEEN '$fechaA' and '$fechaB'))";
+                    (
+                        (fecha BETWEEN '$fechaA' and '$fechaB') OR 
+                        (fecha_finalizado BETWEEN '$fechaA' and '$fechaB')
+                    ) and id NOT IN($idy)";
                     if ($result = mysqli_query($conn_2020, $query)) {
                         foreach ($result as $x) {
+                            $idIncidencia = $x['id'];
                             $fechaCreacion = $x['fecha'];
                             $fechaFinalizado = $x['fecha_finalizado'];
                             $status = $x['status'];
@@ -101,6 +125,8 @@ if (isset($_GET['action'])) {
                             if ($status == "PENDIENTE" || $status == "N") {
                                 $creados++;
                             } else {
+                                $idB[] = $idIncidencia;
+
                                 $solucionados++;
 
                                 #OBTIENE TIEMPO EN HORAS DE SOLUCIONADO
@@ -209,6 +235,9 @@ if (isset($_GET['action'])) {
                         $mediaEnProceso = 0;
                         $mediaSolucionados = 0;
 
+                        #IDS PARA EVITAR REPETIDOS
+                        $idA = array();
+                        $idB = array();
 
                         while ($tiempoInicio <= $tiempoFin) {
 
@@ -221,6 +250,12 @@ if (isset($_GET['action'])) {
                             $enProceso_dia = 0;
                             $solucionadas_dia = 0;
 
+                            if (count($idA) > 0) {
+                                $idx = implode(',', $idA);
+                            } else {
+                                $idx = 0;
+                            }
+
                             #INCIDENCIAS EQUIPOS
                             $query = "SELECT id, fecha_creacion, fecha_realizado, status
                             FROM t_mc
@@ -228,10 +263,10 @@ if (isset($_GET['action'])) {
                             (
                                 (fecha_creacion BETWEEN '$fechaA' and '$fechaB') OR 
                                 (fecha_realizado BETWEEN '$fechaA' and '$fechaB')
-                            )";
+                            ) and id NOT IN($idx)";
                             if ($result = mysqli_query($conn_2020, $query)) {
                                 foreach ($result as $x) {
-                                    $totalIncidencia = $x['id'];
+                                    $idIncidencia = $x['id'];
                                     $fechaCreacion = $x['fecha_creacion'];
                                     $fechaFinalizado = $x['fecha_realizado'];
                                     $status = $x['status'];
@@ -256,6 +291,7 @@ if (isset($_GET['action'])) {
                                             $mediaEnProceso += ($horasActual - $horasCreacion) / 3600;
                                         }
                                     } else {
+                                        $idA[] = $idIncidencia;
 
                                         #OBTIENE TIEMPO EN HORAS DE SOLUCIONADO
                                         if ($horasCreacion > 0 && $horasSolucionado > 0) {
@@ -269,6 +305,12 @@ if (isset($_GET['action'])) {
                                 }
                             }
 
+                            if (count($idB) > 0) {
+                                $idy = implode(',', $idB);
+                            } else {
+                                $idy = 0;
+                            }
+
                             #INCIDENCIAS GENERALES
                             $query = "SELECT id, fecha, fecha_finalizado, status
                             FROM t_mp_np
@@ -276,10 +318,10 @@ if (isset($_GET['action'])) {
                             (
                                 (fecha BETWEEN '$fechaA' and '$fechaB') OR 
                                 (fecha_finalizado BETWEEN '$fechaA' and '$fechaB')
-                            )";
+                            ) and id NOT IN($idy)";
                             if ($result = mysqli_query($conn_2020, $query)) {
                                 foreach ($result as $x) {
-                                    $totalIncidencia = $x['id'];
+                                    $idIncidencia = $x['id'];
                                     $fechaCreacion = $x['fecha'];
                                     $fechaFinalizado = $x['fecha_finalizado'];
                                     $status = $x['status'];
@@ -304,6 +346,7 @@ if (isset($_GET['action'])) {
                                             $mediaEnProceso += ($horasActual - $horasCreacion) / 3600;
                                         }
                                     } else {
+                                        $idB[] = $idIncidencia;
 
                                         #OBTIENE TIEMPO EN HORAS DE SOLUCIONADO
                                         if ($horasCreacion > 0 && $horasSolucionado > 0) {
@@ -497,7 +540,7 @@ if (isset($_GET['action'])) {
 
                             if ($result = mysqli_query($conn_2020, $query)) {
                                 foreach ($result as $x) {
-                                    $totalIncidencia = $x['id'];
+                                    $idIncidencia = $x['id'];
                                     $fechaCreacion = $x['fecha_creacion'];
                                     $fechaFinalizado = $x['fecha_finalizado'];
                                     $status = $x['status'];
