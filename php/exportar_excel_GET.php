@@ -2504,7 +2504,7 @@ if (isset($_GET['action'])) {
         INNER JOIN c_destinos ON t_mc.id_destino = c_destinos.id
         INNER JOIN c_secciones ON t_mc.id_seccion = c_secciones.id
         INNER JOIN c_subsecciones ON t_mc.id_subseccion = c_subsecciones.id
-        INNER JOIN t_equipos_america ON t_mc.id_equipo = t_equipos_america.ids
+        INNER JOIN t_equipos_america ON t_mc.id_equipo = t_equipos_america.id
         WHERE t_mc.activo = 1 and t_mc.id_equipo > 0 $filtroDestino $filtroPalabraIncidencias $filtroResponsableIncidencias $filtroSeccionIncidencias $filtroSubseccionIncidencias $filtroTipoIncidenciaIncidencias $filtroTipoIncidencias $filtroStatusIncidencias $filtroFechaIncidencias $filtroStatusIncidenciaIncidencias
         ORDER BY t_mc.id DESC";
         if ($result = mysqli_query($conn_2020, $query)) {
