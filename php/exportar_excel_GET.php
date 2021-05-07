@@ -2499,7 +2499,7 @@ if (isset($_GET['action'])) {
         t_mc.fecha_realizado, 
         t_mc.responsable_empresa,
         t_mc.fecha_llegada,
-        t_mc.orden_compra,
+        t_mc.orden_compra
         FROM t_mc
         INNER JOIN c_destinos ON t_mc.id_destino = c_destinos.id
         INNER JOIN c_secciones ON t_mc.id_seccion = c_secciones.id
