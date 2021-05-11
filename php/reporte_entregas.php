@@ -563,7 +563,7 @@ if (isset($_GET['action'])) {
         }
 
         $query = "SELECT id, equipo FROM t_equipos_america
-        WHERE activo = 1 and id_seccion = $filtroSeccion and id_subseccion = $filtroSubseccion and jerarquia = 'PRINCIPAL' and status !='BAJA' $filtroDestino";
+        WHERE activo = 1 and id_seccion = $filtroSeccion and id_subseccion = $filtroSubseccion and status !='BAJA' $filtroDestino";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $idEquipo = $x['id'];
@@ -606,7 +606,6 @@ if (isset($_GET['action'])) {
         echo json_encode($array);
     }
 
-
     // OBTIENES LAS EMPRESA RESPONSABLES DE EJECUCION
     if ($action == "obtenerResponsablesEjecucion") {
 
@@ -624,7 +623,6 @@ if (isset($_GET['action'])) {
         }
         echo json_encode($array);
     }
-
 
     // CAMBIE EL STATUS DE LA INCIDENCIA
     if ($action == "cambiarStatus") {
@@ -663,7 +661,6 @@ if (isset($_GET['action'])) {
         echo json_encode($resp);
     }
 
-
     // VALIDACIÓN DE USUARIO
     if ($action == "comprobarIdentidad") {
         $idUsuarioX = 0;
@@ -682,7 +679,6 @@ if (isset($_GET['action'])) {
 
         echo json_encode($resp);
     }
-
 
     // INICIAR SESIÓN
     if ($action == "iniciarSession") {
