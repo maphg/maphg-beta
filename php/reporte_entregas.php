@@ -523,7 +523,7 @@ if (isset($_GET['action'])) {
 
         $query = "SELECT id, equipo
         FROM t_equipos_america 
-        WHERE id_seccion = $filtroSeccion and id_subseccion = $filtroSubseccion and activo = 1 $filtroDestino and status !='BAJA' and jerarquia = 'PRINCIPAL'";
+        WHERE id_seccion = $filtroSeccion and id_subseccion = $filtroSubseccion and activo = 1 $filtroDestino and status !='BAJA'";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $idEquipo = $x['id'];
@@ -591,7 +591,7 @@ if (isset($_GET['action'])) {
         }
 
         $query = "SELECT id, equipo FROM t_equipos_america
-        WHERE activo = 1 and id_seccion = $filtroSeccion and id_subseccion = $filtroSubseccion and id_equipo_principal = $filtroEquipos and jerarquia = 'SECUNDARIO' and status !='BAJA' $filtroDestino";
+        WHERE activo = 1 and id_seccion = $filtroSeccion and id_subseccion = $filtroSubseccion and id_equipo_principal = $filtroEquipos and status !='BAJA' $filtroDestino";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $idEquipo = $x['id'];
