@@ -192,13 +192,13 @@ const obtenerOrganigrama = () => {
             if (array) {
                 for (let x = 0; x < array.length; x++) {
                     const idItem = array[x].idItem;
-                    const nivel = array[x].nivel;
+                    // const nivel = array[x].nivel;
                     const idPadre = array[x].idPadre;
                     const hijos = array[x].hijos;
                     const nombre = array[x].nombre;
                     const cargo = array[x].cargo;
                     const avatar = array[x].avatar;
-                    const nivelPadre = array[x].nivelPadre;
+                    // const nivelPadre = array[x].nivelPadre;
 
                     if (idPadre == 0) {
                         const contenedorHijos = hijos >= 1 ?
@@ -207,13 +207,13 @@ const obtenerOrganigrama = () => {
                         const codigo = `
                             <li class="${contenedorHijos} relative flex-none mx-auto" style="min-width:100%; list-style: none;">
                                 <div class="flex flex-col justify-center items-center">
-                                    <div class="w-16">
+                                    <div class="w-12">
                                         <img id="item_organigrama_${idItem}" class="block rounded-full m-auto shadow-md"
                                             src="./planner/avatars/${avatar}" onclick="opciones(${idItem})">
                                     </div>
-                                    <div class="text-gray-600">
+                                    <div class="text-gray-600 text-xs">
                                         <p>${nombre}</p>
-                                        <div class="bg-gray-800 text-xs font-semibold uppercase px-2 py-1 rounded text-gray-400">
+                                        <div class="bg-gray-800 font-semibold uppercase px-2 py-1 rounded text-gray-400">
                                             <p>${cargo}</p>
                                         </div>
                                     </div>
@@ -236,19 +236,19 @@ const obtenerOrganigrama = () => {
 
                         if (item = document.querySelector('#nivel_' + idPadre)) {
                             item.insertAdjacentHTML('beforeend', `
-                                <li class="relative p-6 flex-none">
+                                <li class="relative py-6 px-1 flex-none">
                                     <div class="border-t-2 absolute h-8 border-gray-400 top-0 rediseño_${idPadre}">
                                     </div>
                                     <div class="relative flex flex-col items-center justify-center">
                                         <div class="-mt-6 border-l-2 absolute h-6 border-gray-400 top-0"></div>
-                                            <div class="w-16 h-16 border-none background-image(./planner/avatars/${avatar})">
+                                            <div class="w-12 h-12 border-none background-image(./planner/avatars/${avatar})">
                                                 <img id="item_organigrama_${idItem}" class="block rounded-full m-auto shadow-md cursor-pointer border-none h-full w-full object-cover"
                                                     src="./planner/avatars/${avatar}" onclick="opciones(${idItem})">
                                             </div>
-                                            <div class="text-gray-600">
+                                            <div class="text-gray-600 text-xxs">
                                                 <p>${nombre}</p>
                                                 <div
-                                                    class="bg-gray-800 text-xs font-semibold uppercase px-2 py-1 rounded text-gray-400">
+                                                    class="bg-gray-800 font-semibold uppercase px-2 py-1 rounded text-gray-400">
                                                     <p>${cargo}</p>
                                                 </div>
                                             </div>
