@@ -2924,7 +2924,7 @@ if (isset($_GET['action'])) {
                 $objPHPExcel->getActiveSheet()->setCellValue('B' . $fila, $seccion);
                 $objPHPExcel->getActiveSheet()->setCellValue('C' . $fila, $subseccion);
                 $objPHPExcel->getActiveSheet()->setCellValue('D' . $fila, $responsable);
-                $objPHPExcel->getActiveSheet()->setCellValue('E' . $fila, "PREVENTIVO");
+                $objPHPExcel->getActiveSheet()->setCellValue('E' . $fila, $equipo);
                 $objPHPExcel->getActiveSheet()->setCellValue('F' . $fila, $titulo);
                 $objPHPExcel->getActiveSheet()->setCellValue('G' . $fila, "PREVENTIVO");
                 $objPHPExcel->getActiveSheet()->setCellValue('H' . $fila, $status);
@@ -2972,7 +2972,7 @@ if (isset($_GET['action'])) {
         INNER JOIN c_destinos ON t_proyectos.id_destino = c_destinos.id
         INNER JOIN c_secciones ON t_proyectos.id_seccion = c_secciones.id
         INNER JOIN c_subsecciones ON t_proyectos.id_subseccion = c_subsecciones.id
-        WHERE t_proyectos_planaccion.activo = 1
+        WHERE t_proyectos_planaccion.activo = 1 and t_proyectos.activo = 1
         $filtroDestino_Proyecto $filtroPalabra_Proyecto $filtroResponsable_Proyecto $filtroSeccion_Proyecto $filtroSubseccion_Proyecto $filtroTipoIncidencia_Proyecto $filtroTipo_Proyecto $filtroStatus_Proyecto $filtroFecha_Proyecto $filtroStatusIncidencia_Proyecto ORDER BY t_proyectos_planaccion.id ASC";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
