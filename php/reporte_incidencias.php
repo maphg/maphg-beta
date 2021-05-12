@@ -850,7 +850,7 @@ if (isset($_GET['action'])) {
         t_proyectos_planaccion.rango_fecha
         FROM t_proyectos_planaccion
         INNER JOIN t_proyectos ON t_proyectos_planaccion.id_proyecto = t_proyectos.id
-        WHERE t_proyectos_planaccion.activo = 1
+        WHERE t_proyectos_planaccion.activo = 1 and t_proyectos.activo = 1
         $filtroDestino_Proyecto $filtroPalabra_Proyecto $filtroResponsable_Proyecto $filtroSeccion_Proyecto $filtroSubseccion_Proyecto $filtroTipoIncidencia_Proyecto $filtroTipo_Proyecto $filtroStatus_Proyecto $filtroFecha_Proyecto $filtroStatusIncidencia_Proyecto ORDER BY t_proyectos_planaccion.id ASC";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
