@@ -1094,8 +1094,10 @@ if (isset($_GET['action'])) {
         $idSubalmacen = $_GET['idSubalmacen'];
         $array['AGREGADOS'] = array();
         $array['REGISTRADOS'] = array();
+        $array['FILAS'] = array();
 
         $data = json_decode(file_get_contents('php://input'), true);
+        $contador = 0;
 
         foreach ($data as $x) {
             $cod2bend = $x['cod2bend'];
@@ -1110,12 +1112,15 @@ if (isset($_GET['action'])) {
             $caracteristicas = $x['caracteristicas'];
             $subfamilia = strtoupper($x['subfamilia']);
             $idItem_Registrado = 0;
+            $contador++;
 
             #BUSCA ITEM
             $query = "SELECT id, cod2bend, descripcion_cod2bend
             FROM t_subalmacenes_items_globales
-            WHERE cod2bend = '$cod2bend' and descripcion_cod2bend = '$descripcionCod2bend' and categoria = '$categoria' and id_destino = $idDestino
-            and activo = 1";
+            WHERE cod2bend = '$cod2bend' and 
+            descripcion_cod2bend = '$descripcionCod2bend' and 
+            descripcion_servicio_tecnico = '$descripcionServiciosTecnicos' and
+            id_seccion = '$idSeccion' and id_destino = $idDestino and activo = 1";
             if ($result = mysqli_query($conn_2020, $query)) {
                 foreach ($result as $x) {
                     $idItem_Registrado = $x['id'];
@@ -1132,6 +1137,11 @@ if (isset($_GET['action'])) {
 
             #AGREGA EL ITEM
             if ($idItem_Registrado <= 0) {
+
+                $array['FILAS'][] = array(
+                    "FILA" => $contador
+                );
+
                 $query = "INSERT INTO t_subalmacenes_items_globales(id_destino, id_seccion, cod2bend, descripcion_cod2bend, descripcion_servicio_tecnico, area, categoria, stock_teorico, marca, modelo, caracteristicas, subfamilia, tipo_material, unidad, precio, activo) VALUES($idDestino, $idSeccion, '$cod2bend', '$descripcionCod2bend', '$descripcionServiciosTecnicos', '$area', '$categoria', 
                 $stockTeorico, '$marca', '$modelo', '$caracteristicas', '$subfamilia', '', 'ND', '0.0', 1)";
                 if ($result = mysqli_query($conn_2020, $query)) {

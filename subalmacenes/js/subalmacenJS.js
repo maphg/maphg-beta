@@ -1261,9 +1261,9 @@ const cargarExistencias = array => {
     .then(array => array.json())
     .then(array => {
       console.log(array)
+      alertaImg('Stock Cargado', '', 'success', 1500);
     })
     .catch(function (err) {
       fetch(APIERROR + err);
     })
-
 }
