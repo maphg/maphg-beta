@@ -1,5 +1,6 @@
 const dataCompras = document.querySelector('#dataCompras');
 const tableCompras = document.querySelector('#tableCompras');
+const dataSolicitudes = document.querySelector('#dataSolicitudes');
 
 // OPTIONS
 const cecoCompras = document.querySelector('#cecoCompras');
@@ -29,33 +30,128 @@ const porEntregarEntregas = document.querySelector('#porEntregarEntregas');
 const tipoEntregas = document.querySelector('#tipoEntregas');
 const valorEntregas = document.querySelector('#valorEntregas');
 const seccionEntregas = document.querySelector('#seccionEntregas');
+
+const destinoSolicitudes = document.querySelector('#destinoSolicitudes');
+const numero2bendSolicitudes = document.querySelector('#numero2bendSolicitudes');
+const nombreSolicitudes = document.querySelector('#nombreSolicitudes');
+const costeSolicitudes = document.querySelector('#costeSolicitudes');
+const estadoSolicitudes = document.querySelector('#estadoSolicitudes');
+const fechaSolicitudes = document.querySelector('#fechaSolicitudes');
+const pedriodoDESolicitudes = document.querySelector('#pedriodoDESolicitudes');
+const periodoASolicitudes = document.querySelector('#periodoASolicitudes');
+const hotelSolicitudes = document.querySelector('#hotelSolicitudes');
+const centroCosteSolicitudes = document.querySelector('#centroCosteSolicitudes');
+const solicitudSapSolicitudes = document.querySelector('#solicitudSapSolicitudes');
+
+const palabraSolicitudes = document.querySelector('#palabraSolicitudes');
+const destinoDetalle = document.querySelector('#destinoDetalle');
+const nombreCecoDetalle = document.querySelector('#nombreCecoDetalle');
+const solicitud2bendDetalle = document.querySelector('#solicitud2bendDetalle');
+const fechaDetalle = document.querySelector('#fechaDetalle');
 // OPTIONS
 
 // CONTENEDORES
+const contenedorSolicitudes = document.querySelector('#contenedorSolicitudes');
 const contenedorCompras = document.querySelector('#contenedorCompras');
 const contenedorEntregas = document.querySelector('#contenedorEntregas');
+const dataSolicitudes2bend = document.querySelector('#dataSolicitudes2bend');
 // CONTENEDORES
 
 // BTN
+const btnSolicitudes = document.querySelector('#btnSolicitudes');
 const btnCompras = document.querySelector('#btnCompras');
 const btnEntregasNo = document.querySelector('#btnEntregasNo');
 const btnEntragasSi = document.querySelector('#btnEntragasSi');
+const btnExportarSolicitudes = document.querySelector('#btnExportarSolicitudes');
 const btnExportarCompras = document.querySelector('#btnExportarCompras');
 const btnExportarEntregas = document.querySelector('#btnExportarEntregas');
 // BTN
 
 // LODAD
 const loaderMAPHG40 = '<div class="w-full p-1 flex items-center justify-center"><img src="svg/lineal_animated_loop.svg" width="30px" height="30px"></div>';
+const loadSolicitudes = document.querySelector('#loadSolicitudes');
 const loadCompras = document.querySelector('#loadCompras');
 const loadEntregas = document.querySelector('#loadEntregas');
 // LODAD
 
 
+// Buscador Tabla LIKE '%palabra%'
+const buscadorX = (idTabla, idInput, columna) => {
+    var input, filter, table, tr, td, i;
+    input = document.getElementById(idInput);
+    filter = input.value.toUpperCase();
+    table = document.getElementById(idTabla);
+    tr = table.getElementsByTagName("tr");
+
+    for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[columna];
+
+        const txtValue = td.childNodes[1] ? td.childNodes[1].innerText || td.childNodes[1].textContent
+            : td.childNodes[0] ? td.childNodes[0].innerText || td.childNodes[0].textContent
+                : td ? td.innerText
+                    : '';
+
+        if (filter == "TODOS" || filter == "" || filter == undefined) {
+            tr[i].style.display = "";
+        } else {
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+}
+
+
+// Buscador Tabla EXACTO
+const buscador = (idTabla, idInput, columna) => {
+    var input, filter, table, tr, td, i;
+    input = document.getElementById(idInput);
+    filter = input.value.toUpperCase();
+    table = document.getElementById(idTabla);
+    tr = table.getElementsByTagName("tr");
+    for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[columna];
+
+        const txtValue = td.childNodes[1] ? td.childNodes[1].innerText || td.childNodes[1].textContent
+            : td.childNodes[0] ? td.childNodes[0].innerText || td.childNodes[0].textContent
+                : td ? td.innerText
+                    : '';
+
+        if (filter == "TODOS" || filter == "" || filter == undefined) {
+            tr[i].style.display = "";
+        } else {
+            if (txtValue.toUpperCase() == filter) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+}
+
+
 // EVENTOS DE OPCION SELECIONADA
+btnSolicitudes.addEventListener('click', () => {
+    contenedorSolicitudes.classList.remove('hidden');
+    contenedorCompras.classList.add('hidden');
+    contenedorEntregas.classList.add('hidden');
+
+    obtenerSolicitudes2bend();
+    btnSolicitudes.classList.add('text-gray-700', 'border-gray-900');
+    btnCompras.classList.remove('text-gray-700', 'border-gray-900');
+    btnEntregasNo.classList.remove('text-gray-700', 'border-gray-900');
+    btnEntragasSi.classList.remove('text-gray-700', 'border-gray-900');
+})
+
 btnCompras.addEventListener('click', () => {
     contenedorCompras.classList.remove('hidden');
     contenedorEntregas.classList.add('hidden');
+    contenedorSolicitudes.classList.add('hidden');
+
     obtenerPedidosSinOrden();
+    btnSolicitudes.classList.remove('text-gray-700', 'border-gray-900');
     btnCompras.classList.add('text-gray-700', 'border-gray-900');
     btnEntregasNo.classList.remove('text-gray-700', 'border-gray-900');
     btnEntragasSi.classList.remove('text-gray-700', 'border-gray-900');
@@ -64,7 +160,10 @@ btnCompras.addEventListener('click', () => {
 btnEntregasNo.addEventListener('click', () => {
     contenedorCompras.classList.add('hidden');
     contenedorEntregas.classList.remove('hidden');
+    contenedorSolicitudes.classList.add('hidden');
+
     obtenerPedidosEntregar('PENDIENTE');
+    btnSolicitudes.classList.remove('text-gray-700', 'border-gray-900');
     btnCompras.classList.remove('text-gray-700', 'border-gray-900');
     btnEntregasNo.classList.add('text-gray-700', 'border-gray-900');
     btnEntragasSi.classList.remove('text-gray-700', 'border-gray-900');
@@ -74,11 +173,24 @@ btnEntregasNo.addEventListener('click', () => {
 btnEntragasSi.addEventListener('click', () => {
     contenedorCompras.classList.add('hidden');
     contenedorEntregas.classList.remove('hidden');
+    contenedorSolicitudes.classList.add('hidden');
+
     obtenerPedidosEntregar('ENTREGADO');
+    btnSolicitudes.classList.remove('text-gray-700', 'border-gray-900');
     btnCompras.classList.remove('text-gray-700', 'border-gray-900');
     btnEntregasNo.classList.remove('text-gray-700', 'border-gray-900');
     btnEntragasSi.classList.add('text-gray-700', 'border-gray-900');
     btnExportarEntregas.setAttribute('onclick', "exportarEntregas('ENTREGADO')");
+})
+
+
+// EXPORTAR
+btnExportarSolicitudes.addEventListener('click', () => {
+    let idDestino = localStorage.getItem('idDestino');
+    let idUsuario = localStorage.getItem('usuario');
+    const action = "obtenerSolicitudes";
+
+    window.open(`php/pedidosExcel.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}`);
 })
 
 
@@ -110,6 +222,7 @@ const exportarPedidos = status => {
 }
 
 
+// OBTIENE DATOS DE PEDIDOS SIN ORDEN DE COMPRA
 const obtenerPedidosSinOrden = () => {
     let idDestino = localStorage.getItem('idDestino');
     let idUsuario = localStorage.getItem('usuario');
@@ -122,7 +235,10 @@ const obtenerPedidosSinOrden = () => {
     fetch(URL)
         .then(array => array.json())
         .then(array => {
+            dataSolicitudes.innerHTML = '';
             dataCompras.innerHTML = '';
+            dataEntregas.innerHTML = '';
+
             cecoCompras.innerHTML = '<option value="">Todos</option>';
             solicitudCompras.innerHTML = '<option value="">Todos</option>';
             fechaCompras.innerHTML = '<option value="">Todos</option>';
@@ -176,8 +292,8 @@ const obtenerPedidosSinOrden = () => {
                     columna9.add(solicitudBorrada);
 
                     const codigo =
+                        /*html*/
                         `<tr class="hover:bg-gray-200 cursor-pointer text-xs font-normal text-bluegray-800">
-
                             <td class="px-2 border-b border-gray-200 text-left py-2 font-semibold w-auto">
                                 <p class="truncate whitespace-no-wrap">${ceco}</p>
                             </td>
@@ -217,7 +333,6 @@ const obtenerPedidosSinOrden = () => {
                             <td class="px-2 border-b border-gray-200 text-center py-2 font-semibold w-auto">
                                 <p class="truncate whitespace-no-wrap">${solicitudBorrada}</p>
                             </td>
-
                         </tr>`;
                     dataCompras.insertAdjacentHTML('beforeend', codigo);
                 }
@@ -289,41 +404,47 @@ const obtenerPedidosSinOrden = () => {
 }
 
 
-palabraCompras.addEventListener('keyup', () => { buscadorTabla('dataCompras', 'palabraCompras', 0) })
+palabraCompras.addEventListener('keyup', event => {
+    if (event.keyCode === 13) {
+        alertaImg('Procesando Datos...', '', 'info', 1500);
+        buscadorX('dataCompras', 'palabraCompras', 0);
+    }
+})
 
 // EVENTOS FILTROS TABLA COMPRAS
 cecoCompras.addEventListener('change', () => {
-    buscadorX('dataCompras', 'cecoCompras', 0);
+    buscador('dataCompras', 'cecoCompras', 0);
 })
 solicitudCompras.addEventListener('change', () => {
-    buscadorX('dataCompras', 'solicitudCompras', 1);
+    buscador('dataCompras', 'solicitudCompras', 1);
 })
 fechaCompras.addEventListener('change', () => {
-    buscadorX('dataCompras', 'fechaCompras', 2);
+    buscador('dataCompras', 'fechaCompras', 2);
 })
 materialCompras.addEventListener('change', () => {
-    buscadorX('dataCompras', 'materialCompras', 3);
+    buscador('dataCompras', 'materialCompras', 3);
 })
 materialDescipcionCompras.addEventListener('change', () => {
-    buscadorX('dataCompras', 'materialDescipcionCompras', 4);
+    buscador('dataCompras', 'materialDescipcionCompras', 4);
 })
 cantidadCompras.addEventListener('change', () => {
-    buscadorX('dataCompras', 'cantidadCompras', 5);
+    buscador('dataCompras', 'cantidadCompras', 5);
 })
 unidadCompras.addEventListener('change', () => {
-    buscadorX('dataCompras', 'unidadCompras', 6);
+    buscador('dataCompras', 'unidadCompras', 6);
 })
 grupoCompras.addEventListener('change', () => {
-    buscadorX('dataCompras', 'grupoCompras', 7);
+    buscador('dataCompras', 'grupoCompras', 7);
 })
 seccionCompras.addEventListener('change', () => {
-    buscadorX('dataCompras', 'seccionCompras', 8);
+    buscador('dataCompras', 'seccionCompras', 8);
 })
 borradaCompras.addEventListener('change', () => {
-    buscadorX('dataCompras', 'borradaCompras', 9);
+    buscador('dataCompras', 'borradaCompras', 9);
 })
 
 
+// OBTIENE PEDIDOS CON ORDEN DE COMPRAS (ENTREGADOS O POR ENTREGAR)
 const obtenerPedidosEntregar = status => {
     let idDestino = localStorage.getItem('idDestino');
     let idUsuario = localStorage.getItem('usuario');
@@ -334,7 +455,10 @@ const obtenerPedidosEntregar = status => {
     fetch(URL)
         .then(array => array.json())
         .then(array => {
+            dataSolicitudes.innerHTML = '';
+            dataCompras.innerHTML = '';
             dataEntregas.innerHTML = '';
+
             fechaActualizacion.innerHTML = '';
             cecoEntregas.innerHTML = '<option value="">Todos</option>';
             solicitudEntregas.innerHTML = '<option value="">Todos</option>';
@@ -368,7 +492,7 @@ const obtenerPedidosEntregar = status => {
             const columna12 = new Set();
             const columna13 = new Set();
 
-            if (array) {
+            if (array.length) {
                 for (let x = 0; x < array.length; x++) {
                     const idItem = array[x].idItem;
                     const ceco = array[x].ceco;
@@ -407,6 +531,7 @@ const obtenerPedidosEntregar = status => {
                     columna13.add(seccion);
 
                     const codigo =
+                        /*html*/
                         `<tr class="hover:bg-gray-200 cursor-pointer text-xs font-normal text-bluegray-800">
 
                             <td class="px-2 border-b border-gray-200 text-left py-2 font-semibold w-auto">
@@ -552,71 +677,350 @@ const obtenerPedidosEntregar = status => {
         })
 }
 
-palabraEntregas.addEventListener('keyup', () => { buscadorTabla('dataEntregas', 'palabraEntregas', 0) })
+palabraEntregas.addEventListener('keyup', event => {
+    if (event.keyCode == 13) {
+        alertaImg('Procesando Datos...', '', 'info', 1500);
+        buscadorX('dataEntregas', 'palabraEntregas', 0)
+    }
+})
 
 // EVENTOS FILTROS TABLA COMPRAS
 cecoEntregas.addEventListener('change', () => {
-    buscadorX('dataEntregas', 'cecoEntregas', 0);
+    buscador('dataEntregas', 'cecoEntregas', 0);
 })
 solicitudEntregas.addEventListener('change', () => {
-    buscadorX('dataEntregas', 'solicitudEntregas', 1);
+    buscador('dataEntregas', 'solicitudEntregas', 1);
 })
 fechaEntregas.addEventListener('change', () => {
-    buscadorX('dataEntregas', 'fechaEntregas', 2);
+    buscador('dataEntregas', 'fechaEntregas', 2);
 })
 documentoEntregas.addEventListener('change', () => {
-    buscadorX('dataEntregas', 'documentoEntregas', 3);
+    buscador('dataEntregas', 'documentoEntregas', 3);
 })
 fechaEntregEntregas.addEventListener('change', () => {
-    buscadorX('dataEntregas', 'fechaEntregEntregas', 4);
+    buscador('dataEntregas', 'fechaEntregEntregas', 4);
 })
 fechaDocEntregas.addEventListener('change', () => {
-    buscadorX('dataEntregas', 'fechaDocEntregas', 5);
+    buscador('dataEntregas', 'fechaDocEntregas', 5);
 })
 proveedorEntregas.addEventListener('change', () => {
-    buscadorX('dataEntregas', 'proveedorEntregas', 6);
+    buscador('dataEntregas', 'proveedorEntregas', 6);
 })
 materialEntregas.addEventListener('change', () => {
-    buscadorX('dataEntregas', 'materialEntregas', 7);
+    buscador('dataEntregas', 'materialEntregas', 7);
 })
 descripcionMaterialEntregas.addEventListener('change', () => {
-    buscadorX('dataEntregas', 'descripcionMaterialEntregas', 8);
+    buscador('dataEntregas', 'descripcionMaterialEntregas', 8);
 })
 cantidadEntregas.addEventListener('change', () => {
-    buscadorX('dataEntregas', 'cantidadEntregas', 9);
+    buscador('dataEntregas', 'cantidadEntregas', 9);
 })
 porEntregarEntregas.addEventListener('change', () => {
-    buscadorX('dataEntregas', 'porEntregarEntregas', 10);
+    buscador('dataEntregas', 'porEntregarEntregas', 10);
 })
 tipoEntregas.addEventListener('change', () => {
-    buscadorX('dataEntregas', 'tipoEntregas', 11);
+    buscador('dataEntregas', 'tipoEntregas', 11);
 })
 valorEntregas.addEventListener('change', () => {
-    buscadorX('dataEntregas', 'valorEntregas', 12);
+    buscador('dataEntregas', 'valorEntregas', 12);
 })
 seccionEntregas.addEventListener('change', () => {
-    buscadorX('dataEntregas', 'seccionEntregas', 13);
+    buscador('dataEntregas', 'seccionEntregas', 13);
 })
 
-// Buscador Tabla
-function buscadorX(idTabla, idInput, columna) {
-    var input, filter, table, tr, td, i, txtValue;
-    input = document.getElementById(idInput);
-    filter = input.value.toUpperCase();
-    table = document.getElementById(idTabla);
-    tr = table.getElementsByTagName("tr");
-    for (i = 0; i < tr.length; i++) {
-        td = tr[i].getElementsByTagName("td")[columna];
-        if (td.childNodes[1].innerText) {
-            txtValue = td.textContent || td.innerText;
-            if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                tr[i].style.display = "";
-            } else {
-                tr[i].style.display = "none";
+
+// OBTIENE SOLICITUDES 2BEND
+const obtenerSolicitudes2bend = () => {
+    let idDestino = localStorage.getItem('idDestino');
+    let idUsuario = localStorage.getItem('usuario');
+
+    const action = "obtenerSolicitudes2bend";
+    const URL = `php/pedidos.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}`;
+    loadSolicitudes.innerHTML = loaderMAPHG40;
+
+    fetch(URL)
+        .then(array => array.json())
+        .then(array => {
+            dataSolicitudes.innerHTML = '';
+            dataCompras.innerHTML = '';
+            dataEntregas.innerHTML = '';
+
+            destinoSolicitudes.innerHTML = '<option value="TODOS">Todos</option>';
+            numero2bendSolicitudes.innerHTML = '<option value="TODOS">Todos</option>';
+            nombreSolicitudes.innerHTML = '<option value="TODOS">Todos</option>';
+            costeSolicitudes.innerHTML = '<option value="TODOS">Todos</option>';
+            estadoSolicitudes.innerHTML = '<option value="TODOS">Todos</option>';
+            fechaSolicitudes.innerHTML = '<option value="TODOS">Todos</option>';
+            pedriodoDESolicitudes.innerHTML = '<option value="TODOS">Todos</option>';
+            periodoASolicitudes.innerHTML = '<option value="TODOS">Todos</option>';
+            hotelSolicitudes.innerHTML = '<option value="TODOS">Todos</option>';
+            centroCosteSolicitudes.innerHTML = '<option value="TODOS">Todos</option>';
+            solicitudSapSolicitudes.innerHTML = '<option value="TODOS">Todos</option>';
+            return array;
+        })
+        .then(array => {
+            const columna0 = new Set();
+            const columna1 = new Set();
+            const columna2 = new Set();
+            const columna3 = new Set();
+            const columna4 = new Set();
+            const columna5 = new Set();
+            const columna6 = new Set();
+            const columna7 = new Set();
+            const columna8 = new Set();
+            const columna9 = new Set();
+            const columna10 = new Set();
+
+            if (array.length) {
+                for (let x = 0; x < array.length; x++) {
+                    const idItem = array[x].idItem;
+                    const destino = array[x].destino;
+                    const numero2bend = array[x].numero2bend;
+                    const nombre = array[x].nombre;
+                    const coste = array[x].coste;
+                    const estado = array[x].estado;
+                    const fecha = array[x].fecha;
+                    const periodoDe = array[x].periodoDe;
+                    const periodoA = array[x].periodoA;
+                    const hotel = array[x].hotel;
+                    const centroCoste = array[x].centroCoste;
+                    const solicitudSap = array[x].solicitudSap;
+
+                    columna0.add(destino);
+                    columna1.add(numero2bend);
+                    columna2.add(nombre);
+                    columna3.add(coste);
+                    columna4.add(estado);
+                    columna5.add(fecha);
+                    columna6.add(periodoDe);
+                    columna7.add(periodoA);
+                    columna8.add(hotel);
+                    columna9.add(centroCoste);
+                    columna10.add(solicitudSap);
+
+                    const codigo =
+                        /*html*/
+                        `<tr class="hover:bg-gray-200 cursor-pointer text-xs font-normal text-bluegray-800 font-normal" onclick="obtenerDetalles(${idItem}, ${numero2bend});">
+                            <td class="py-2 text-center font-semibold">${destino}</td>
+
+                            <td class="py-2 text-center font-semibold">${numero2bend}</td>
+
+                            <td class"py-2 text-left font-semibold text-xxs">${nombre}</td>
+
+                            <td class="py-2 text-center font-semibold">${coste}</td>
+
+                            <td class="py-2 text-left font-semibold">${estado}</td>
+
+                            <td class="py-2 text-center font-semibold">${fecha}</td>
+
+                            <td class="py-2 text-center font-semibold">${periodoDe}</td>
+
+                            <td class="py-2 text-center font-semibold">${periodoA}</td>
+
+                            <td class="py-2 text-left font-semibold">${hotel}</td>
+
+                            <td class="py-2 text-left font-semibold">${centroCoste}</td>
+
+                            <td class="py-2 text-center font-semibold">${solicitudSap}</td>
+                        </tr>
+                    `;
+                    dataSolicitudes.insertAdjacentHTML('beforeend', codigo);
+                }
             }
-        }
+
+            return data = {
+                "columna0": columna0,
+                "columna1": columna1,
+                "columna2": columna2,
+                "columna3": columna3,
+                "columna4": columna4,
+                "columna5": columna5,
+                "columna6": columna6,
+                "columna7": columna7,
+                "columna8": columna8,
+                "columna9": columna9,
+                "columna10": columna10,
+            };
+        })
+        .then(data => {
+            for (const item of data.columna0) {
+                destinoSolicitudes.insertAdjacentHTML('beforeend', `<option value="${item}">${item}</option>`);
+            }
+            for (const item of data.columna1) {
+                numero2bendSolicitudes.insertAdjacentHTML('beforeend', `<option value="${item}">${item}</option>`);
+            }
+            for (const item of data.columna2) {
+                nombreSolicitudes.insertAdjacentHTML('beforeend', `<option value="${item}">${item}</option>`);
+            }
+            for (const item of data.columna3) {
+                costeSolicitudes.insertAdjacentHTML('beforeend', `<option value="${item}">${item}</option>`);
+            }
+            for (const item of data.columna4) {
+                estadoSolicitudes.insertAdjacentHTML('beforeend', `<option value="${item}">${item}</option>`);
+            }
+            for (const item of data.columna5) {
+                fechaSolicitudes.insertAdjacentHTML('beforeend', `<option value="${item}">${item}</option>`);
+            }
+            for (const item of data.columna6) {
+                pedriodoDESolicitudes.insertAdjacentHTML('beforeend', `<option value="${item}">${item}</option>`);
+            }
+            for (const item of data.columna7) {
+                periodoASolicitudes.insertAdjacentHTML('beforeend', `<option value="${item}">${item}</option>`);
+            }
+            for (const item of data.columna8) {
+                hotelSolicitudes.insertAdjacentHTML('beforeend', `<option value="${item}">${item}</option>`);
+            }
+            for (const item of data.columna9) {
+                centroCosteSolicitudes.insertAdjacentHTML('beforeend', `<option value="${item}">${item}</option>`);
+            }
+            for (const item of data.columna10) {
+                solicitudSapSolicitudes.insertAdjacentHTML('beforeend', `<option value="${item}">${item}</option>`);
+            }
+        })
+        .then(() => {
+            loadSolicitudes.innerHTML = '';
+        })
+        .catch(function (err) {
+            console.log(err);
+            loadSolicitudes.innerHTML = '';
+        })
+}
+
+
+palabraSolicitudes.addEventListener('keyup', event => {
+    if (event.key == "Enter" || event.keyCode == 13) {
+        alertaImg('Procesando Datos...', '', 'info', 1500);
+        buscadorX('dataSolicitudes', 'palabraSolicitudes', 1)
+    }
+})
+
+// EVENTOS FILTROS TABLA COMPRAS
+destinoSolicitudes.addEventListener('change', () => {
+    buscador('dataSolicitudes', 'destinoSolicitudes', 0);
+})
+numero2bendSolicitudes.addEventListener('change', () => {
+    buscador('dataSolicitudes', 'numero2bendSolicitudes', 1);
+})
+nombreSolicitudes.addEventListener('change', () => {
+    buscador('dataSolicitudes', 'nombreSolicitudes', 2);
+})
+costeSolicitudes.addEventListener('change', () => {
+    buscador('dataSolicitudes', 'costeSolicitudes', 3);
+})
+estadoSolicitudes.addEventListener('change', () => {
+    buscador('dataSolicitudes', 'estadoSolicitudes', 4);
+})
+fechaSolicitudes.addEventListener('change', () => {
+    buscador('dataSolicitudes', 'fechaSolicitudes', 5);
+})
+pedriodoDESolicitudes.addEventListener('change', () => {
+    buscador('dataSolicitudes', 'pedriodoDESolicitudes', 6);
+})
+periodoASolicitudes.addEventListener('change', () => {
+    buscador('dataSolicitudes', 'periodoASolicitudes', 7);
+})
+hotelSolicitudes.addEventListener('change', () => {
+    buscador('dataSolicitudes', 'hotelSolicitudes', 8);
+})
+centroCosteSolicitudes.addEventListener('change', () => {
+    buscador('dataSolicitudes', 'centroCosteSolicitudes', 9);
+})
+solicitudSapSolicitudes.addEventListener('change', () => {
+    buscador('dataSolicitudes', 'solicitudSapSolicitudes', 10);
+})
+
+
+// OBTIENE LOS DETALLES CON EL NUMERO DE PEDIDO
+const obtenerDetalles = (idItem, solicitud) => {
+    let idDestino = localStorage.getItem('idDestino');
+    let idUsuario = localStorage.getItem('usuario');
+
+    const action = "obtenerDetalles";
+    const URL = `php/pedidos.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idItem=${idItem}&solicitud=${solicitud}`;
+
+    if (solicitud <= 0) {
+        alertaImg('Numero de Solicitud, NO Valida', '', 'info', 1500);
+        return;
+    }
+
+    abrirmodal('modalDetalles');
+
+    fetch(URL)
+        .then(array => array.json())
+        .then(array => {
+            dataSolicitudes2bend.innerHTML = '';
+            destinoDetalle.innerText = array.detalles.destino
+            nombreCecoDetalle.innerText = array.detalles.nombreCeco
+            solicitud2bendDetalle.innerText = array.detalles.solicitud2bend
+            fechaDetalle.innerText = array.detalles.fechaSolicitud
+            return array.resultados;
+        })
+        .then(array => {
+            console.log(array)
+            if (array.length) {
+                for (let x = 0; x < array.length; x++) {
+                    const solicitud = array[x].solicitud;
+                    const fechaSolicitud = array[x].fechaSolicitud;
+                    const documentoCompras = array[x].documentoCompras;
+                    const fechaDocumento = array[x].fechaDocumento;
+                    const fechaEntrega = array[x].fechaEntrega;
+                    const proveedor = array[x].proveedor;
+                    const material = array[x].material;
+                    const descripcionMaterial = array[x].descripcionMaterial;
+                    const cantidadSolicitada = array[x].cantidadSolicitada;
+                    const cantidadEntregar = array[x].cantidadEntregar;
+                    const valorUSD = array[x].valorUSD;
+                    const grupoCompras = array[x].grupoCompras;
+                    const seccion = array[x].seccion;
+                    const estatusLiberacion = array[x].estatusLiberacion;
+                    const solicitudBorrada = array[x].solicitudBorrada;
+                    const tipo = array[x].tipo;
+
+                    const codigo = /*html*/`
+                        <tr class="hover:bg-gray-200 cursor-pointer text-xs font-normal text-bluegray-800">
+                            <td class="py-2 px-2 text-center text-xs font-normal">${solicitud}</td>
+                            <td class="py-2 px-2 text-center text-xs font-normal">${fechaSolicitud}</td>
+                            <td class="py-2 px-2 text-center text-xs font-normal">${documentoCompras}</td>
+                            <td class="py-2 px-2 text-center text-xs font-normal">${fechaDocumento}</td>
+                            <td class="py-2 px-2 text-center text-xs font-normal">${fechaEntrega}</td>
+                            <td class="py-2 px-2 text-center text-xs font-normal">${proveedor}</td>
+                            <td class="py-2 px-2 text-center text-xs font-normal">${material}</td>
+                            <td class="py-2 px-2 text-center text-xs font-normal">${descripcionMaterial}</td>
+                            <td class="py-2 px-2 text-center text-xs font-normal">${cantidadSolicitada}</td>
+                            <td class="py-2 px-2 text-center text-xs font-normal">${cantidadEntregar}</td>
+                            <td class="py-2 px-2 text-center text-xs font-normal">${valorUSD}</td>
+                            <td class="py-2 px-2 text-center text-xs font-normal">${grupoCompras}</td>
+                            <td class="py-2 px-2 text-center text-xs font-normal">${seccion}</td>
+                            <td class="py-2 px-2 text-center text-xs font-normal">${estatusLiberacion}</td>
+                            <td class="py-2 px-2 text-center text-xs font-normal">${solicitudBorrada}</td>
+                            <td class="py-2 px-2 text-center text-xs font-normal">${tipo}</td>
+                        </tr>
+                    `
+                    dataSolicitudes2bend.insertAdjacentHTML('beforeend', codigo);
+                }
+            }
+        })
+        .catch(function (err) {
+            fetch(APIERROR + err);
+        })
+}
+
+
+// CIERRA MODALES
+const cerrarmodal = idModal => {
+    if (modal = document.querySelector("#" + idModal)) {
+        modal.classList.remove("open");
     }
 }
+
+
+// ABRIR MODALES
+const abrirmodal = idModal => {
+    if (modal = document.querySelector("#" + idModal)) {
+        modal.classList.add("open");
+    }
+}
+
 
 
 window.addEventListener('load', () => {

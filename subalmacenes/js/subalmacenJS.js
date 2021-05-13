@@ -292,9 +292,9 @@ const entradasSubalmacen = idSubalmacen => {
           const codigo = `
             <tr class="hover:bg-gray-200 cursor-pointer text-xs font-normal text-bluegray-800">
 
-                <td class="px-1 border-b border-gray-200 text-center py-1 font-bold w-24" 
+                <td class="px-1 border-b border-gray-200 text-center py-1 font-bold w-24 truncate whitespace-no-wrap"
                 data-title-items="${cod2bend}">
-                    <p class="truncate whitespace-no-wrap">${cod2bend}</p>
+                   ${cod2bend}
                 </td>
 
                 <td class="px-1 border-b border-gray-200 text-center py-1 font-bold w-24" 
@@ -322,14 +322,14 @@ const entradasSubalmacen = idSubalmacen => {
                     <p class="truncate whitespace-no-wrap">${categoria}</p>
                 </td>
 
-                <td class="px-1 border-b border-gray-200 text-center py-1 font-bold w-12"
+                <td class="px-1 border-b border-gray-200 text-center py-1 font-bold w-12 truncate whitespace-no-wrap"
                 data-title-items="${stockTeorico}">
-                    <p class="truncate whitespace-no-wrap">${stockTeorico}</p>
+                    ${stockTeorico}
                 </td>
 
-                <td class="px-1 border-b border-gray-200 text-center py-1 font-bold w-12"
+                <td class="px-1 border-b border-gray-200 text-center py-1 font-bold w-12 truncate whitespace-no-wrap"
                 data-title-items="${stockActual}">
-                    <p class="truncate whitespace-no-wrap">${stockActual}</p>
+                    ${stockActual}
                 </td>
 
                 <td class="px-1 border-b border-gray-200 text-center py-1 font-bold w-24"
@@ -1183,6 +1183,7 @@ window.addEventListener('load', () => {
 })
 
 
+// CARGA LOS ITEMS GLOBALES EN EL ARCHIVO JSON, COMPROBANDO COD2BEND Y LA DESCRIPCIO, DE NO COINCIDIR CREA UN NUEVO ITEM GLOBA POR DESTINO
 const leerExcel = () => {
   fetch('php/excel.json')
     .then(array => array.json())
@@ -1239,6 +1240,7 @@ const leerExcel = () => {
 }
 
 
+// CARGA EXISTENCIAS POR SUBALMACENES, BASADO EN LA LISTA DE JSON
 const cargarExistencias = array => {
   console.log(array);
   let idDestino = localStorage.getItem('idDestino');

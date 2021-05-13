@@ -128,7 +128,7 @@ class menu extends HTMLElement {
     }
 
     connectedCallback() {
-        this.innerHTML = `
+        this.innerHTML = /*html*/`
             <div id="contenedorMenu" class="hidden w-full h-screen bg-white z-50 bg-gray-900 bg-opacity-50 absolute animated">
                 <div class="w-64 h-full h-screen bg-white flex flex-col absolute opacity-100 z-50 shadow-md justify-start animated">
 
@@ -161,11 +161,29 @@ class menu extends HTMLElement {
                             </div>
                             <h1>Mi pendientes</h1>
                         </div>
-                        <div class="flex hover:bg-gray-100 py-1 cursor-pointer px-2 rounded">
-                            <div class="w-4 mr-1">
-                                <i class="fas fa-books"></i>
+                        <div id="btnDocumentacion"
+                        class="flex flex-col hover:bg-gray-100 py-1 cursor-pointer px-2 rounded">
+                            <div class="flex">
+                                <div class="w-4 mr-1">
+                                    <i class="fas fa-books"></i>
+                                </div>
+                                <h1>Documentación</h1>
                             </div>
-                            <h1>Documentación</h1>
+                            <div class="flex flex-col mt-2 ml-2 animated hidden">
+                                <div id="btnManualUsuario" class="flex hover:bg-gray-200 p-1">
+                                    <div class="w-4 mr-1">
+                                        <i class="fad fa-file-pdf text-red-600"></i>
+                                    </div>
+                                    <h1>Manual Usuario</h1>
+                                </div>
+                                <div id="btnManualConfiguracion" class="flex hover:bg-gray-200 p-1">
+                                    <div class="w-4 mr-1">
+                                        <i class="fad fa-file-pdf text-red-600"></i>
+                                    </div>
+                                    <h1>Manual Configuración</h1>
+                                </div>
+                            </div>
+
                         </div>
 
                     </div>
@@ -445,7 +463,9 @@ const btnCerrarTelegram = document.querySelector('#btnCerrarTelegram');
 const contenedorTelegram = document.querySelector('#contenedorTelegram');
 const btnAbrirTelegram = document.querySelector('#btnAbrirTelegram');
 const dataNotifiaciones = document.querySelector('#dataNotifiaciones');
-
+const btnDocumentacion = document.querySelector('#btnDocumentacion');
+const btnManualUsuario = document.querySelector('#btnManualUsuario');
+const btnManualConfiguracion = document.querySelector('#btnManualConfiguracion');
 
 // MENU
 btnCerrarMenu.addEventListener('click', () => {
@@ -676,6 +696,36 @@ subirAvatarUsuario.addEventListener('change', () => {
             }
         }
     }
+})
+
+
+// DESPLIEGA LAS OPCIONES DE DOCUMENTACIONES (MANUAL DE USUARIO Y MANUAL DE CONFIGURACIONES)
+btnDocumentacion.addEventListener('click', () => {
+    if (hijo = btnDocumentacion.children[1]) {
+        if (hijo.classList.contains('hidden')) {
+            hijo.classList.remove('hidden');
+            hijo.classList.remove('fadeIn', 'fadeOut');
+            hijo.classList.add('fadeIn');
+            return;
+        }
+
+        if (!hijo.classList.contains('hidden')) {
+            hijo.classList.remove('fadeIn', 'fadeOut');
+            hijo.classList.add('fadeOut');
+
+            setTimeout(() => {
+                hijo.classList.add('hidden');
+            }, 750);
+            return;
+        }
+    }
+})
+
+btnManualUsuario.addEventListener('click', () => {
+    alertify.documentacion('documentacion/MAN-A02-PG01_Manual_de_usuario_de_MAPHG_vf.pdf').set({ frameless: false });
+})
+btnManualConfiguracion.addEventListener('click', () => {
+    alertify.documentacion('documentacion/MAN-A01-PG01_Manual_de_configuracion_de_MAPHG_vf.pdf').set({ frameless: false });
 })
 
 
@@ -966,11 +1016,87 @@ const obtenerNotificaciones = () => {
 }
 
 
+// TOGGLE PARA MODALES
 const modalOpenClose = idElemento => {
     if (modal = document.getElementById(idElemento)) {
         modal.classList.toggle('open');
     }
 }
+
+
+
+alertify.documentacion || alertify.dialog('documentacion', function () {
+    var iframe;
+    return {
+        // dialog constructor function, this will be called when the user calls alertify.documentacion(videoId)
+        main: function (videoId) {
+            //set the videoId setting and return current instance for chaining.
+            return this.set({
+                'videoId': videoId
+            });
+        },
+        // we only want to override two options (padding and overflow).
+        setup: function () {
+            return {
+                options: {
+                    //disable both padding and overflow control.
+                    padding: !1,
+                    overflow: !1,
+                }
+            };
+        },
+        // This will be called once the DOM is ready and will never be invoked again.
+        // Here we create the iframe to embed the video.
+        build: function () {
+            // create the iframe element
+            iframe = document.createElement('iframe');
+            iframe.frameBorder = "no";
+            iframe.width = "100%";
+            iframe.height = "100%";
+            // add it to the dialog
+            this.elements.content.appendChild(iframe);
+
+            //give the dialog initial height (half the screen height).
+            this.elements.body.style.minHeight = screen.height * .5 + 'px';
+        },
+        // dialog custom settings
+        settings: {
+            videoId: undefined
+        },
+        // listen and respond to changes in dialog settings.
+        settingUpdated: function (key, oldValue, newValue) {
+            switch (key) {
+                case 'videoId':
+                    iframe.src = newValue;
+                    break;
+            }
+        },
+        // listen to internal dialog events.
+        hooks: {
+            // triggered when the dialog is closed, this is seperate from user defined onclose
+            onclose: function () {
+                iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+            },
+            // triggered when a dialog option gets update.
+            // warning! this will not be triggered for settings updates.
+            onupdate: function (option, oldValue, newValue) {
+                switch (option) {
+                    case 'resizable':
+                        if (newValue) {
+                            this.elements.content.removeAttribute('style');
+                            iframe && iframe.removeAttribute('style');
+                        } else {
+                            this.elements.content.style.minHeight = 'inherit';
+                            iframe && (iframe.style.minHeight = 'inherit');
+                        }
+                        break;
+                }
+            }
+        }
+    };
+});
+
+
 
 obtenerMenu();
 obtenerDestinosUsuario();

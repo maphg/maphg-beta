@@ -342,9 +342,22 @@ if (isset($_GET['action'])) {
             $filtroPalabraBuscar = "";
         }
 
-        $query = "SELECT id, cod2bend, descripcion_cod2bend, descripcion_servicio_tecnico, id_seccion, area, categoria, stock_teorico, marca, modelo, caracteristicas, subfamilia  
-        FROM t_subalmacenes_items_globales 
-        WHERE id_destino = $idDestino and activo = 1 $filtroPalabraBuscar";
+        $query = "SELECT 
+        s.id, 
+        s.cod2bend, 
+        s.descripcion_cod2bend, 
+        s.descripcion_servicio_tecnico, 
+        s.id_seccion, 
+        s.area, 
+        s.categoria, 
+        s.stock_teorico, 
+        s.marca, 
+        s.modelo, 
+        s.caracteristicas, 
+        s.subfamilia
+        FROM t_subalmacenes_items_globales AS s
+        INNER JOIN t_subalmacenes_items_stock AS st ON s.id = st.id_item_global and st.id_subalmacen = $idSubalmacen
+        WHERE s.id_destino = $idDestino and s.activo = 1 $filtroPalabraBuscar";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $idItemGlobal = $x['id'];
@@ -384,12 +397,13 @@ if (isset($_GET['action'])) {
                     }
                 }
 
-                if ($idItemStock == 0) {
-                    $query = "INSERT INTO t_subalmacenes_items_stock(id_subalmacen, id_destino, id_item_global, stock_actual, stock_anterior, stock_teorico, fecha_movimiento, fecha_creacion, activo) VALUES($idSubalmacen, $idDestino, $idItemGlobal, 0, 0, $stockTeoricoX, '$fechaActual', '$fechaActual', 1)";
-                    if ($result = mysqli_query($conn_2020, $query)) {
-                        $resp = 1;
-                    }
-                }
+                #SE BLOQUEO LA FUNCION PARA AGREGAR ITEM
+                // if ($idItemStock == 0) {
+                //     $query = "INSERT INTO t_subalmacenes_items_stock(id_subalmacen, id_destino, id_item_global, stock_actual, stock_anterior, stock_teorico, fecha_movimiento, fecha_creacion, activo) VALUES($idSubalmacen, $idDestino, $idItemGlobal, 0, 0, $stockTeoricoX, '$fechaActual', '$fechaActual', 1)";
+                //     if ($result = mysqli_query($conn_2020, $query)) {
+                //         $resp = 1;
+                //     }
+                // }
 
                 #SUBALMACEN
                 $subalmacen = "";
@@ -704,12 +718,13 @@ if (isset($_GET['action'])) {
                     }
                 }
 
-                if ($idItemStock == 0) {
-                    $query = "INSERT INTO t_subalmacenes_items_stock(id_subalmacen, id_destino, id_item_global, stock_actual, stock_anterior, stock_teorico, fecha_movimiento, fecha_creacion, activo) VALUES($idSubalmacen, $idDestino, $idItemGlobal, 0, 0, $stockTeoricoX, '$fechaActual', '$fechaActual', 1)";
-                    if ($result = mysqli_query($conn_2020, $query)) {
-                        $resp = 1;
-                    }
-                }
+                #SE BLOQUE PARA AGREGAR ITEMS
+                // if ($idItemStock == 0) {
+                //     $query = "INSERT INTO t_subalmacenes_items_stock(id_subalmacen, id_destino, id_item_global, stock_actual, stock_anterior, stock_teorico, fecha_movimiento, fecha_creacion, activo) VALUES($idSubalmacen, $idDestino, $idItemGlobal, 0, 0, $stockTeoricoX, '$fechaActual', '$fechaActual', 1)";
+                //     if ($result = mysqli_query($conn_2020, $query)) {
+                //         $resp = 1;
+                //     }
+                // }
 
                 #SUBALMACEN
                 $subalmacen = "";
@@ -1157,26 +1172,26 @@ if (isset($_GET['action'])) {
                 foreach ($result as $x) {
                     $idItem_Registrado = $x['id'];
 
-                    $query = "SELECT stock_actual FROM t_subalmacenes_items_stock 
+                    $idRegistroX = 0;
+                    $stockActualX = 0;
+                    $query = "SELECT id, stock_actual
+                    FROM t_subalmacenes_items_stock
                     WHERE id_subalmacen = $idSubalmacen and id_destino = $idDestino and id_item_global = $idItem_Registrado and activo = 1";
                     if ($result = mysqli_query($conn_2020, $query)) {
                         foreach ($result as $x) {
+                            $idRegistroX = $x['id'];
                             $stockActualX = $x['stock_actual'];
 
                             if ($stockActualX > 0) {
                                 $stockActual += $stockActualX;
                             }
+                        }
 
-                            $query = "UPDATE t_subalmacenes_items_stock SET 
-                            stock_actual = $stockActual,
-                            stock_teorico = $stockTeorico,
-                            fecha_movimiento = '$fechaActual',
-                            fecha_creacion = '$fechaActual',
-                            activo = 1
-                            WHERE id_subalmacen = $idSubalmacen and id_destino = $idDestino and id_item_global = $idItem_Registrado and activo = 1";
+                        if ($idRegistroX == 0) {
+                            $query = "INSERT INTO t_subalmacenes_items_stock(id_subalmacen, id_destino, id_item_global, stock_actual, stock_anterior, stock_teorico, fecha_movimiento, fecha_creacion, activo) VALUES($idSubalmacen, $idDestino, $idItem_Registrado, $stockActual, 0, $stockTeorico, '$fechaActual', '$fechaActual', 1)";
                             if ($result = mysqli_query($conn_2020, $query)) {
-
                                 $array[] = array(
+                                    "status" => "AGREGADO",
                                     "idItem_Registrado" => $idItem_Registrado,
                                     "cod2bend_Registrado" => $cod2bend,
                                     "Descripcion_Registrado" => $descripcionCod2bend,
@@ -1184,6 +1199,34 @@ if (isset($_GET['action'])) {
                                     "stockActual" => $stockActual
                                 );
                             }
+                        } else {
+                            $array[] = array(
+                                "status" => "ERROR",
+                                "idItem_Registrado" => $idItem_Registrado,
+                                "cod2bend_Registrado" => $cod2bend,
+                                "Descripcion_Registrado" => $descripcionCod2bend,
+                                "stockTeorico" => $stockTeorico,
+                                "stockActual" => $stockActual
+                            );
+
+                            // ESTA FUNCIONALIDAD PUEDE ACTUALIZAR EL STOCK DEL REGISTRO.
+                            // $query = "UPDATE t_subalmacenes_items_stock SET 
+                            // stock_actual = $stockActual,
+                            // stock_teorico = $stockTeorico,
+                            // fecha_movimiento = '$fechaActual',
+                            // fecha_creacion = '$fechaActual',
+                            // activo = 1
+                            // WHERE id_subalmacen = $idSubalmacen and id_destino = $idDestino and id_item_global = $idItem_Registrado and activo = 1";
+                            // if ($result = mysqli_query($conn_2020, $query)) {
+                            //     $array[] = array(
+                            //         "status" => "ACTUALIZADO",
+                            //         "idItem_Registrado" => $idItem_Registrado,
+                            //         "cod2bend_Registrado" => $cod2bend,
+                            //         "Descripcion_Registrado" => $descripcionCod2bend,
+                            //         "stockTeorico" => $stockTeorico,
+                            //         "stockActual" => $stockActual
+                            //     );
+                            // }
                         }
                     }
                 }

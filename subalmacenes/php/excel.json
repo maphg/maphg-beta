@@ -1,1 +1,57 @@
-[{"cod2bend":42079,"descripcionCod2bend":"DIFLUORETANO ","descripcionServiciosTecnicos":"AIRE COMPRIMIDO","idSeccion":1,"area":"CONSUMIBLE","categoria":"ALTA","stockTeorico":12,"stockReal":4,"marca":"STEREN","modelo":"","caracteristicas":"","subfamilia":"HERRAMIENTA","subalmacen":"DEC"},{"cod2bend":6322,"descripcionCod2bend":"ALCOHOL ISOPROPILICO","descripcionServiciosTecnicos":"ALCOHOL ISOPROPILICO","idSeccion":1,"area":"CONSUMIBLE","categoria":"ALTA","stockTeorico":12,"stockReal":22,"marca":"STEREN","modelo":"","caracteristicas":"","subfamilia":"HERRAMIENTA","subalmacen":"DEC"},{"cod2bend":"","descripcionCod2bend":"ESPUMA LIMPIADORA","descripcionServiciosTecnicos":"ESPUMA LIMPIADORA","idSeccion":1,"area":"CONSUMIBLE","categoria":"BAJA","stockTeorico":12,"stockReal":40,"marca":"STEREN","modelo":"","caracteristicas":"","subfamilia":"HERRAMIENTA","subalmacen":"DEC"},{"cod2bend":46483,"descripcionCod2bend":"GRASA DIELECTRICA","descripcionServiciosTecnicos":"GRASA DIELECTRICA","idSeccion":1,"area":"CONSUMIBLE","categoria":"BAJA","stockTeorico":4,"stockReal":40,"marca":"WÜRTH","modelo":893844100,"caracteristicas":"","subfamilia":"HERRAMIENTA","subalmacen":"DEC"},{"cod2bend":70153,"descripcionCod2bend":"FERRULE 14 AWG","descripcionServiciosTecnicos":"FERRULE 14 AWG","idSeccion":1,"area":"CONSUMIBLE","categoria":"ALTA","stockTeorico":500,"stockReal":200,"marca":"STEREN","modelo":"","caracteristicas":"","subfamilia":"HERRAMIENTA","subalmacen":"DEC"},{"cod2bend":70152,"descripcionCod2bend":"FERRULE 16 AWG","descripcionServiciosTecnicos":"FERRULE 16 AWG","idSeccion":1,"area":"CONSUMIBLE","categoria":"ALTA","stockTeorico":500,"stockReal":100,"marca":"STEREN","modelo":3200043,"caracteristicas":"","subfamilia":"HERRAMIENTA","subalmacen":"DEC"},{"cod2bend":70151,"descripcionCod2bend":"FERRULE 18 AWG","descripcionServiciosTecnicos":"FERRULE 18 AWG","idSeccion":1,"area":"CONSUMIBLE","categoria":"ALTA","stockTeorico":500,"stockReal":100,"marca":"STEREN","modelo":32000182,"caracteristicas":"","subfamilia":"HERRAMIENTA","subalmacen":"DEC"},{"cod2bend":70149,"descripcionCod2bend":"FERRULE 2- 14 AWG","descripcionServiciosTecnicos":"FERRULE 2- 14 AWG","idSeccion":1,"area":"CONSUMIBLE","categoria":"ALTA","stockTeorico":100,"stockReal":300,"marca":"STEREN","modelo":"","caracteristicas":"","subfamilia":"HERRAMIENTA","subalmacen":"DEC"},{"cod2bend":70148,"descripcionCod2bend":"FERRULE 2 -16AWG","descripcionServiciosTecnicos":"FERRULE 2 -16AWG","idSeccion":1,"area":"CONSUMIBLE","categoria":"ALTA","stockTeorico":100,"stockReal":150,"marca":"STEREN","modelo":"","caracteristicas":"","subfamilia":"HERRAMIENTA","subalmacen":"DEC"},{"cod2bend":70150,"descripcionCod2bend":"FERRULE 2 -18AWG","descripcionServiciosTecnicos":"FERRULE 2 -18AWG","idSeccion":1,"area":"CONSUMIBLE","categoria":"ALTA","stockTeorico":100,"stockReal":0,"marca":"STEREN","modelo":"","caracteristicas":"","subfamilia":"HERRAMIENTA","subalmacen":"DEC"},{"cod2bend":4342,"descripcionCod2bend":"CINCHO PLASTICO 20 CMS X 3.6MM","descripcionServiciosTecnicos":"CINCHO PLASTICO","idSeccion":1,"area":"CONSUMIBLE","categoria":"MEDIANA","stockTeorico":200,"stockReal":200,"marca":"STEREN","modelo":"","caracteristicas":"","subfamilia":"HERRAMIENTA","subalmacen":"DEC"},{"cod2bend":33795,"descripcionCod2bend":"TERMOCONTRACTIL DE 3/8","descripcionServiciosTecnicos":"THERMOFIL","idSeccion":1,"area":"CONSUMIBLE","categoria":"BAJA","stockTeorico":1,"stockReal":1,"marca":"ARGOS","modelo":"","caracteristicas":"","subfamilia":"HERRAMIENTA","subalmacen":"DEC"},{"cod2bend":27620,"descripcionCod2bend":"TUBO TERMOCONTRACTIL","descripcionServiciosTecnicos":"THERMOFIL GRUESO","idSeccion":1,"area":"CONSUMIBLE","categoria":"BAJA","stockTeorico":2,"stockReal":0,"marca":"","modelo":"","caracteristicas":"","subfamilia":"HERRAMIENTA","subalmacen":"DEC"},{"cod2bend":"","descripcionCod2bend":"KIT DE DESARMADORES DE PRESICION","descripcionServiciosTecnicos":"DESARMADORES DE PRESICION","idSeccion":1,"area":"CONSUMIBLE","categoria":"BAJA","stockTeorico":1,"stockReal":1,"marca":"TRUPPER","modelo":"","caracteristicas":"","subfamilia":"HERRAMIENTA","subalmacen":"DEC"},{"cod2bend":"","descripcionCod2bend":"SET DE PUNTAS Y BROCAS","descripcionServiciosTecnicos":"SET DE PUNTAS Y BROCAS","idSeccion":1,"area":"CONSUMIBLE","categoria":"BAJA","stockTeorico":1,"stockReal":1,"marca":"CRAFTSMAN","modelo":"","caracteristicas":"","subfamilia":"HERRAMIENTA","subalmacen":"DEC"},{"cod2bend":"","descripcionCod2bend":"SOPLETE RECARGABLE","descripcionServiciosTecnicos":"SOPLETE DREMEL","idSeccion":1,"area":"CONSUMIBLE","categoria":"BAJA","stockTeorico":1,"stockReal":1,"marca":"DREMELL","modelo":"","caracteristicas":"","subfamilia":"HERRAMIENTA","subalmacen":"DEC"},{"cod2bend":70044,"descripcionCod2bend":"CABLE WEST PENN WIRE 452 BUS COM. DOMOTICOS","descripcionServiciosTecnicos":"CABLE BUS DE COMUNICACIÓN","idSeccion":1,"area":"CONSUMIBLE","categoria":"BAJA","stockTeorico":1,"stockReal":1,"marca":"WESTPENN","modelo":452,"caracteristicas":"CABLE 2 HILOS CAL. 22AWG","subfamilia":"HERRAMIENTA","subalmacen":"DEC"},{"cod2bend":"","descripcionCod2bend":"CABLE BELDEN    ","descripcionServiciosTecnicos":"CABLE BELDEN  4 HILOS CAL 18","idSeccion":"","area":"CONSUMIBLE","categoria":"","stockTeorico":"","stockReal":"","marca":"BELDEN","modelo":"","caracteristicas":"CABLE 4 HILOS CAL. 18 AWG","subfamilia":"HERRAMIENTA","subalmacen":"DEC"},{"cod2bend":50275,"descripcionCod2bend":"CABLE BELDEN  MOD 5300FE","descripcionServiciosTecnicos":"CABLE BELDEN 2 HILOS CAL 18","idSeccion":1,"area":"CONSUMIBLE","categoria":"MEDIANA","stockTeorico":1,"stockReal":0,"marca":"","modelo":"5300FE","caracteristicas":"CABLE 2 HILOS CAL. 18 AWG","subfamilia":"HERRAMIENTA","subalmacen":"DEC"},{"cod2bend":65372,"descripcionCod2bend":"CINTA AISLANTE","descripcionServiciosTecnicos":"CINTA DE AISLAR","idSeccion":1,"area":"CONSUMIBLE","categoria":"MEDIANA","stockTeorico":5,"stockReal":2,"marca":"SCOTCH","modelo":33,"caracteristicas":"CINTA DE AISLAR","subfamilia":"HERRAMIENTA","subalmacen":"DEC"},{"cod2bend":60822,"descripcionCod2bend":"GUANTE P/MECANICO","descripcionServiciosTecnicos":"GUANTES EPI","idSeccion":1,"area":"CONSUMIBLE","categoria":"MEDIANA","stockTeorico":1,"stockReal":1,"marca":"URREA","modelo":"","caracteristicas":"GUANTE DE SEGURIDAD","subfamilia":"HERRAMIENTA","subalmacen":"DEC"}]
+[{
+   "cod2bend": 42079,
+   "descripcionCod2bend": "DIFLUORETANO ",
+   "descripcionServiciosTecnicos": "AIRE COMPRIMIDO",
+   "idSeccion": 1,
+   "area": "CONSUMIBLE",
+   "categoria": "ALTA",
+   "stockTeorico": 12,
+   "stockReal": 4,
+   "marca": "STEREN",
+   "modelo": "",
+   "caracteristicas": "",
+   "subfamilia": "HERRAMIENTA",
+   "subalmacen": "DEC"
+}, {
+   "cod2bend": 6322,
+   "descripcionCod2bend": "ALCOHOL ISOPROPILICO",
+   "descripcionServiciosTecnicos": "ALCOHOL ISOPROPILICO",
+   "idSeccion": 1,
+   "area": "CONSUMIBLE",
+   "categoria": "ALTA",
+   "stockTeorico": 12,
+   "stockReal": 22,
+   "marca": "STEREN",
+   "modelo": "",
+   "caracteristicas": "",
+   "subfamilia": "HERRAMIENTA",
+   "subalmacen": "DEC"
+}, {
+   "cod2bend": "",
+   "descripcionCod2bend": "ESPUMA LIMPIADORA",
+   "descripcionServiciosTecnicos": "ESPUMA LIMPIADORA",
+   "idSeccion": 1,
+   "area": "CONSUMIBLE",
+   "categoria": "BAJA",
+   "stockTeorico": 12,
+   "stockReal": 40,
+   "marca": "STEREN",
+   "modelo": "",
+   "caracteristicas": "",
+   "subfamilia": "HERRAMIENTA",
+   "subalmacen": "DEC"
+}, {
+   "cod2bend": 46483,
+   "descripcionCod2bend": "GRASA DIELECTRICA",
+   "descripcionServiciosTecnicos": "GRASA DIELECTRICA",
+   "idSeccion": 1,
+   "area": "CONSUMIBLE",
+   "categoria": "BAJA",
+   "stockTeorico": 4,
+   "stockReal": 40,
+   "marca": "WÜRTH",
+   "modelo": 893844100,
+   "caracteristicas": "",
+   "subfamilia": "HERRAMIENTA",
+   "subalmacen": "DEC"
+}]

@@ -130,4 +130,201 @@ if (isset($_GET['action'])) {
         }
         echo json_encode($array);
     }
+
+    // OBTIENE SOLICITUDES 2BEND
+    if ($action == "obtenerSolicitudes2bend") {
+        $query = "SELECT 
+        s.id,
+        d.destino, 
+        s.numero_2bend,
+        s.nombre,
+        s.estado,
+        s.coste,
+        s.fecha,
+        s.periodo_de,
+        s.periodo_a,
+        s.hotel,
+        s.centro_coste,
+        s.solicitud_sap
+        FROM t_solicitudes_cod2bend AS s
+        INNER JOIN c_destinos AS d ON s.id_destino = d.id
+        WHERE s.id_destino = $idDestino and s.activo = 1";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $id = $x['id'];
+                $destino = $x['destino'];
+                $numero_2bend = $x['numero_2bend'];
+                $nombre = $x['nombre'];
+                $estado = $x['estado'];
+                $coste = $x['coste'];
+                $fecha = $x['fecha'];
+                $periodo_de = $x['periodo_de'];
+                $periodo_a = $x['periodo_a'];
+                $hotel = $x['hotel'];
+                $centro_coste = $x['centro_coste'];
+                $solicitud_sap = $x['solicitud_sap'];
+
+                $array[] = array(
+                    "idItem" => $id,
+                    "destino" => $destino,
+                    "numero2bend" => $numero_2bend,
+                    "nombre" => $nombre,
+                    "estado" => $estado,
+                    "coste" => $coste,
+                    "fecha" => $fecha,
+                    "periodoDe" => $periodo_de,
+                    "periodoA" => $periodo_a,
+                    "hotel" => $hotel,
+                    "centroCoste" => $centro_coste,
+                    "solicitudSap" => $solicitud_sap
+                );
+            }
+        }
+        echo json_encode($array);
+    }
+
+
+    // OBTENER SOLICITUDES
+    if ($action == "obtenerDetalles") {
+        $idItem = $_GET['idItem'];
+        $solicitud = $_GET['solicitud'];
+
+        $array['detalles'] = array();
+        $array['resultados'] = array();
+
+        $query = "SELECT d.destino, s.nombre, s.numero_2bend, s.fecha
+        FROM t_solicitudes_cod2bend AS s
+        INNER JOIN c_destinos AS d ON s.id_destino = d.id
+        WHERE s.id = $idItem and activo = 1";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $destino = $x['destino'];
+                $nombreCeco = $x['nombre'];
+                $solicitud2bend = $x['numero_2bend'];
+                $fechaSolicitud = $x['fecha'];
+
+                $array['detalles'] = array(
+                    "destino" => $destino,
+                    "nombreCeco" => $nombreCeco,
+                    "solicitud2bend" => $solicitud2bend,
+                    "fechaSolicitud" => $fechaSolicitud
+                );
+            }
+        }
+
+        $query = "SELECT 
+        p.id, 
+        p.denominacion_ceco, 
+        p.solicitud_pedido, 
+        p.fecha_solicitud, 
+        p.material, 
+        p.descripcion_material, 
+        p.cantidad_solicitada, 
+        p.unidad_medida, 
+        p.grupo_compras, 
+        p.seccion, 
+        p.solicitud_borrada, 
+        p.fecha_modificado
+        FROM t_pedidos_sin_orden_compra AS p
+        WHERE p.activo = 1 and p.solicitud_pedido = '$solicitud'";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $solicitud = $x['solicitud_pedido'];
+                $fechaSolicitud = $x['fecha_solicitud'];
+                $documentoCompras = "SIN DOCUMENTO";
+                $fechaDocumento = "-";
+                $fechaEntrega = "";
+                $proveedor = "";
+                $material = $x['material'];
+                $descripcionMaterial = $x['descripcion_material'];
+                $cantidadSolicitada = $x['cantidad_solicitada'];
+                $cantidadEntregar = "";
+                $valorUSD = "";
+                $grupoCompras = $x['grupo_compras'];
+                $seccion = $x['seccion'];
+                $estatusLiberacion = "";
+                $solicitudBorrada = $x['solicitud_borrada'];
+                $tipo = "";
+
+                $array['resultados'][] = array(
+                    "solicitud" => "1 $solicitud",
+                    "fechaSolicitud" => $fechaSolicitud,
+                    "documentoCompras" => $documentoCompras,
+                    "fechaDocumento" => $fechaDocumento,
+                    "fechaEntrega" => $fechaEntrega,
+                    "proveedor" => $proveedor,
+                    "material" => $material,
+                    "descripcionMaterial" => $descripcionMaterial,
+                    "cantidadSolicitada" => $cantidadSolicitada,
+                    "cantidadEntregar" => $cantidadEntregar,
+                    "valorUSD" => $valorUSD,
+                    "grupoCompras" => $grupoCompras,
+                    "seccion" => $seccion,
+                    "estatusLiberacion" => $estatusLiberacion,
+                    "solicitudBorrada" => $solicitudBorrada,
+                    "tipo" => $tipo
+                );
+            }
+        }
+
+        $query = "SELECT 
+        e.id, 
+        e.nombre_ceco, 
+        e.solicitud_pedido, 
+        e.fecha_solicitud, 
+        e.documento_compras, 
+        e.fecha_entrega, 
+        e.fecha_documento, 
+        e.proveedor, 
+        e.material, 
+        e.descripcion_material, 
+        e.cantidad_solicitud, 
+        e.cantidad_por_entregar, 
+        e.tipo, 
+        e.valor_usd, 
+        e.seccion
+        FROM t_pedidos_por_entregar AS e
+        WHERE e.activo = 1 and e.solicitud_pedido = '$solicitud'";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $solicitud = $x['solicitud_pedido'];
+                $fechaSolicitud = $x['fecha_solicitud'];
+                $documentoCompras = $x['documento_compras'];
+                $fechaDocumento = $x['fecha_documento'];
+                $fechaEntrega = $x['fecha_entrega'];
+                $proveedor = $x['proveedor'];
+                $material = $x['material'];
+                $descripcionMaterial = $x['descripcion_material'];
+                $cantidadSolicitada = $x['cantidad_solicitud'];
+                $cantidadEntregar = $x['cantidad_por_entregar'];
+                $valorUSD = $x['valor_usd'];
+                $grupoCompras = "";
+                $seccion = $x['seccion'];
+                $estatusLiberacion = "";
+                $solicitudBorrada = "";
+                $tipo = "";
+
+                $array['resultados'][] = array(
+                    "solicitud" => "2 $solicitud",
+                    "fechaSolicitud" => $fechaSolicitud,
+                    "documentoCompras" => $documentoCompras,
+                    "fechaDocumento" => $fechaDocumento,
+                    "fechaEntrega" => $fechaEntrega,
+                    "proveedor" => $proveedor,
+                    "material" => $material,
+                    "descripcionMaterial" => $descripcionMaterial,
+                    "cantidadSolicitada" => $cantidadSolicitada,
+                    "cantidadEntregar" => $cantidadEntregar,
+                    "valorUSD" => $valorUSD,
+                    "grupoCompras" => $grupoCompras,
+                    "seccion" => $seccion,
+                    "estatusLiberacion" => $estatusLiberacion,
+                    "solicitudBorrada" => $solicitudBorrada,
+                    "tipo" => $tipo
+                );
+            }
+        }
+
+        echo json_encode($array);
+    }
 }

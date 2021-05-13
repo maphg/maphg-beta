@@ -129,7 +129,7 @@
                         <div class="flex flex-col container mx-auto scrollbar">
                             <div class="py-2 overflow-x-auto relative scrollbar">
                                 <div class="align-middle inline-block w-full shadow-md overflow-auto sm:rounded-lg border-b border-gray-200 relative scrollbar" style="height: 70vh;">
-                                    <table class="w-full boder border-gray-200 divide-y divide-gray-200 table table-fixed sortable">
+                                    <table class="w-full border border-gray-200 divide-y divide-gray-200 table table-fixed sortable">
                                         <thead>
                                             <tr class="cursor-pointer bg-bluegray-50">
                                                 <th class="px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-24">
@@ -252,7 +252,7 @@
                         <div class="flex flex-col container mx-auto scrollbar">
                             <div class="py-2 overflow-x-auto relative scrollbar">
                                 <div class="align-middle inline-block w-full shadow-md overflow-auto sm:rounded-lg border-b border-gray-200 relative scrollbar" style="height: 70vh;">
-                                    <table class="w-full boder border-gray-200 divide-y divide-gray-200 table table-fixed sortable">
+                                    <table class="w-full border border-gray-200 divide-y divide-gray-200 table table-fixed sortable">
                                         <thead>
                                             <tr class="cursor-pointer bg-bluegray-50">
                                                 <th class="px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-24">
@@ -462,7 +462,7 @@
                         <div class="flex flex-col container mx-auto scrollbar">
                             <div class="py-2 overflow-x-auto relative scrollbar">
                                 <div class="align-middle inline-block w-full shadow-md overflow-auto sm:rounded-lg border-b border-gray-200 relative scrollbar" style="height: 70vh;">
-                                    <table class="w-full boder border-gray-200 divide-y divide-gray-200 table table-fixed sortable">
+                                    <table class="w-full border border-gray-200 divide-y divide-gray-200 table table-fixed sortable">
                                         <thead>
                                             <tr class="cursor-pointer bg-bluegray-50">
                                                 <th class="px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-24">
@@ -809,7 +809,7 @@
                         <div class="flex flex-col container mx-auto scrollbar">
                             <div class="py-2 overflow-x-auto relative scrollbar">
                                 <div class="align-middle inline-block w-full shadow-md overflow-auto sm:rounded-lg border-b border-gray-200 relative scrollbar" style="height: 70vh;">
-                                    <table class="w-full boder border-gray-200 divide-y divide-gray-200 table table-fixed sortable">
+                                    <table class="w-full border border-gray-200 divide-y divide-gray-200 table table-fixed sortable">
                                         <thead>
                                             <tr class="cursor-pointer bg-bluegray-50">
                                                 <th class="px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-24">

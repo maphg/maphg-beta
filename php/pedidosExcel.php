@@ -15,6 +15,76 @@ if (isset($_GET['action'])) {
     $semanaActual = date('W');
     $fila = 1;
 
+    if ($action == "obtenerSolicitudes") {
+        $objPHPExcel = new PHPExcel();
+        $objPHPExcel->getProperties()->setCreator("Reporte")->setDescription("Reporte");
+        $objPHPExcel->setActiveSheetIndex(0);
+        $objPHPExcel->getActiveSheet()->setTitle("Reporte Pedidos Sin Orden");
+        $objPHPExcel->getActiveSheet()->setCellValue('A1', 'CECO');
+        $objPHPExcel->getActiveSheet()->setCellValue('B1', 'Solicitud');
+        $objPHPExcel->getActiveSheet()->setCellValue('C1', 'Fecha Solicitud');
+        $objPHPExcel->getActiveSheet()->setCellValue('D1', 'Material');
+        $objPHPExcel->getActiveSheet()->setCellValue('E1', 'Descripcion Material');
+        $objPHPExcel->getActiveSheet()->setCellValue('F1', 'Cantida Solicitada');
+        $objPHPExcel->getActiveSheet()->setCellValue('G1', 'Grupo Compras');
+        $objPHPExcel->getActiveSheet()->setCellValue('H1', 'Unidad Medida');
+        $objPHPExcel->getActiveSheet()->setCellValue('I1', 'Sección');
+        $objPHPExcel->getActiveSheet()->setCellValue('J1', 'Solicitud Borrada');
+        $objPHPExcel->getActiveSheet()->setCellValue('K1', 'Fecha Modificacion');
+
+
+        if ($idDestino == 10) {
+            $filtroDestino = "";
+        } else {
+            $filtroDestino = "and pedidos.id_destino = $idDestino";
+        }
+
+        $query = "SELECT pedidos.id, pedidos.denominacion_ceco, pedidos.solicitud_pedido, pedidos.fecha_solicitud, pedidos.material, pedidos.descripcion_material, pedidos.cantidad_solicitada, pedidos.unidad_medida, pedidos.grupo_compras, pedidos.solicitud_borrada, pedidos.fecha_modificado, pedidos.seccion
+        FROM t_pedidos_sin_orden_compra AS pedidos
+        WHERE pedidos.activo = 1 $filtroDestino 
+        ORDER BY pedidos.fecha_modificado ASC";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idItem = $x['id'];
+                $ceco = $x['denominacion_ceco'];
+                $solicitud = $x['solicitud_pedido'];
+                $fechaSolicitud = $x['fecha_solicitud'];
+                $material = $x['material'];
+                $descripcionMaterial = $x['descripcion_material'];
+                $cantidaSolicitada = $x['cantidad_solicitada'];
+                $unidadMedida = $x['unidad_medida'];
+                $grupoCompras = $x['grupo_compras'];
+                $seccion = $x['seccion'];
+                $solicitudBorrada = $x['solicitud_borrada'];
+                $fechaModificacion = $x['fecha_modificado'];
+                $fila++;
+
+
+                if ($seccion == "") {
+                    $seccion = "-";
+                }
+
+                $objPHPExcel->getActiveSheet()->setCellValue('A' . $fila, $ceco);
+                $objPHPExcel->getActiveSheet()->setCellValue('B' . $fila, $solicitud);
+                $objPHPExcel->getActiveSheet()->setCellValue('C' . $fila, $fechaSolicitud);
+                $objPHPExcel->getActiveSheet()->setCellValue('D' . $fila, $material);
+                $objPHPExcel->getActiveSheet()->setCellValue('E' . $fila, $descripcionMaterial);
+                $objPHPExcel->getActiveSheet()->setCellValue('F' . $fila, $cantidaSolicitada);
+                $objPHPExcel->getActiveSheet()->setCellValue('G' . $fila, $grupoCompras);
+                $objPHPExcel->getActiveSheet()->setCellValue('H' . $fila, $unidadMedida);
+                $objPHPExcel->getActiveSheet()->setCellValue('I' . $fila, $seccion);
+                $objPHPExcel->getActiveSheet()->setCellValue('J' . $fila, $solicitudBorrada);
+                $objPHPExcel->getActiveSheet()->setCellValue('K' . $fila, $fechaModificacion);
+            }
+        }
+
+        header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        header('Content-Disposition: attachment;filename="Reporte_PEDIDOS_SIN_ORDEN' . $fechaActual . '.xlsx"');
+        header('Cache-Control: max-age=0');
+        $objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
+        $objWriter->save('PHP://output');
+    }
+
     if ($action == "obtenerPedidosSinOrden") {
         $objPHPExcel = new PHPExcel();
         $objPHPExcel->getProperties()->setCreator("Reporte")->setDescription("Reporte");

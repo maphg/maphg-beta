@@ -692,7 +692,7 @@ if (isset($_GET['action'])) {
     }
 
 
-    #RANKIN DE TIEMPOS
+    #RANKIN DE TIEMPOS PREVENTIVOS
     if ($action == "rankingPreventivos") {
         $fechaInicio = $_GET['fechaInicio'];
         $fechaFin = $_GET['fechaFin'];
