@@ -554,9 +554,9 @@ if (isset($_GET['action'])) {
                                     $status = $x['status'];
 
                                     // CONTADORES TOTAL
-                                    $enProceso++;
-                                    $enProceso_dia++;
-                                    $enProceso_G++;
+                                    $creadas++;
+                                    $creadas_dia++;
+                                    $creadas_G++;
 
                                     #OBTIENE TIEMPOS EN HORAS
                                     $horasCreacion = strtotime($fechaCreacion);
@@ -564,9 +564,11 @@ if (isset($_GET['action'])) {
                                     $horasActual = strtotime($fechaActual);
 
                                     if ($status == "PROCESO") {
-                                        $creadas++;
-                                        $creadas_dia++;
-                                        $creadas_G++;
+
+                                        // ACUMULADO
+                                        $enProceso++;
+                                        $enProceso_dia++;
+                                        $enProceso_G++;
 
                                         #OBTIENE TIEMPO EN HORAS DE PENDIENTE
                                         if ($horasCreacion > 0 && $horasActual > 0) {
@@ -745,8 +747,7 @@ if (isset($_GET['action'])) {
                             $fechaCreacion = $x['fecha_creacion'];
                             $fechaFinalizado = $x['fecha_finalizado'];
                             $status = $x['status'];
-
-                            $enProceso++;
+                            $creados++;
 
                             #OBTIENE TIEMPOS EN HORAS
                             $horasCreacion = strtotime($fechaCreacion);
@@ -754,7 +755,7 @@ if (isset($_GET['action'])) {
                             $horasActual = strtotime($fechaActual);
 
                             if ($status == "PROCESO") {
-                                $creados++;
+                                $enProceso++;
                             } else {
                                 $idA[] = $idIncidencia;
 
