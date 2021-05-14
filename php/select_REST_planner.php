@@ -2340,8 +2340,10 @@ if (isset($_GET['action'])) {
         $idEquipo = $_GET['idEquipo'];
         $resp = 0;
         $idMax = 0;
+        $tipoIncidencia = "";
 
         if ($idEquipo > 0) {
+            $tipoIncidencia = "INCIDENCIA";
 
             #ACTUALIZA EL STATUS DEL EQUIPO
             // Emergecia es Fuera de servicio
@@ -2385,6 +2387,7 @@ if (isset($_GET['action'])) {
                 }
             }
         } else {
+            $tipoIncidencia = "INCIDENCIAGENERAL";
 
             $query = "SELECT max(id) 'id' FROM t_mp_np";
             if ($result = mysqli_query($conn_2020, $query)) {
@@ -2409,7 +2412,12 @@ if (isset($_GET['action'])) {
                 }
             }
         }
-        echo json_encode($resp);
+
+        $array['tipoIncidencia'] = $tipoIncidencia;
+        $array['resp'] = $resp;
+        $array['idOT'] = $idMax;
+
+        echo json_encode($array);
     }
 
 

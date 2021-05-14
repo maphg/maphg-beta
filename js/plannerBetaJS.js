@@ -133,6 +133,8 @@ const fechaProgramadaOT = document.getElementById("fechaProgramadaOT");
 const seccionEntregas = document.getElementById("seccionEntregas");
 const responsablesEntregas = document.getElementById("responsablesEntregas");
 const responsablesEjecucionEntregas = document.getElementById("responsablesEjecucionEntregas");
+const cantidadAdjuntosIncidenciaOperacion = document.querySelector("#cantidadAdjuntosIncidenciaOperacion");
+const inputAdjuntosIncidenciaOperacion = document.querySelector("#inputAdjuntosIncidenciaOperacion");
 // ELEMENTOS <INPUTS> ID
 
 
@@ -11618,6 +11620,9 @@ btnModalAgregarIncidencias.addEventListener('click', () => {
    btnLocalIncidencias.removeAttribute('disabled', true);
    equipoLocalIncidencias.removeAttribute('disabled', true);
 
+   inputAdjuntosIncidenciaOperacion.value = '';
+   cantidadAdjuntosIncidenciaOperacion.innerText = inputAdjuntosIncidenciaOperacion.files.length + ' Adjuntos';
+
    // OBTIENES SECCIONES INICIALES
    const action = "obtenerSeccionesPorDestino";
    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}`;
@@ -11664,6 +11669,12 @@ btnModalAgregarIncidencias.addEventListener('click', () => {
 });
 
 
+// CARGA EL NUMERO DE ADJUNTOS SELECCIONADOS
+inputAdjuntosIncidenciaOperacion.addEventListener('change', () => {
+   cantidadAdjuntosIncidenciaOperacion.innerText = inputAdjuntosIncidenciaOperacion.files.length + ' Adjuntos';
+})
+
+
 async function iniciarFormularioInicidencias() {
    await abrirmodal("modalAgregarIncidencias");
    await rangoFechaX('rangoFechaIncidencia');
@@ -11676,6 +11687,11 @@ async function iniciarFormularioInicidencias() {
    //LIMPIAR CONTENIDO 
    descripcionIncidencia.value = '';
    comentarioIncidencia.value = '';
+
+   // LIMPIA INPUT DE ADJUNTOS
+   inputAdjuntosIncidenciaOperacion.value = '';
+   cantidadAdjuntosIncidenciaOperacion.innerText = inputAdjuntosIncidenciaOperacion.files.length + ' Adjuntos'
+
 
    let idDestino = localStorage.getItem('idDestino');
    let idUsuario = localStorage.getItem('usuario');
@@ -12046,14 +12062,22 @@ btnAgregarIncidencia.addEventListener('click', () => {
       fetch(URL)
          .then(array => array.json())
          .then(array => {
-            if (array == 1) {
+            if (array.resp == 1) {
                alertaImg('Incidencia de Equipo, Agregada', '', 'success', 1600);
                cerrarmodal('modalAgregarIncidencias');
                obtenerFallas(idEquipo);
-            } else if (array == 2) {
+               if (array.idOT > 0 && array.tipoIncidencia == "INCIDENCIA" &&
+                  inputAdjuntosIncidenciaOperacion.files.length > 0) {
+                  cargarAdjuntosIncidencia(array.idOT, array.tipoIncidencia);
+               }
+            } else if (array.resp == 2) {
                alertaImg('Incidencia General, Agregada', '', 'success', 1600);
                cerrarmodal('modalAgregarIncidencias');
                obtenerTareas(0);
+               if (array.idOT > 0 && array.tipoIncidencia == "INCIDENCIAGENERAL" &&
+                  inputAdjuntosIncidenciaOperacion.files.length > 0) {
+                  cargarAdjuntosIncidencia(array.idOT, array.tipoIncidencia);
+               }
             } else {
                alertaImg('Intente de Nuevo', '', 'info', 1600);
             }
@@ -12065,6 +12089,62 @@ btnAgregarIncidencia.addEventListener('click', () => {
       alertaImg('Acomplete la Información Requerida', '', 'info', 1600);
    }
 })
+
+
+// SUBE ADJUNTOS DE INCIDENCIAS
+const cargarAdjuntosIncidencia = (idOT, tipoIncidencia) => {
+
+   const tabla = tipoIncidencia == "INCIDENCIA" ? 't_mc_adjuntos'
+      : tipoIncidencia == "INCIDENCIAGENERAL" ? 'adjuntos_mp_np'
+         : '';
+
+   const idDestino = localStorage.getItem('idDestino');
+   const idUsuario = localStorage.getItem('usuario');
+   const action = "subirImagenGeneral";
+   const URL = `php/plannerCrudPHP.php`;
+
+   if (inputAdjuntosIncidenciaOperacion.files) {
+      for (let x = 0; x < inputAdjuntosIncidenciaOperacion.files.length; x++) {
+         // VARIABLES DEL ADJUNTO
+         const imgData = new FormData()
+         imgData.append("adjuntoUrl", inputAdjuntosIncidenciaOperacion.files[x]);
+         imgData.append("action", action);
+         imgData.append("idUsuario", idUsuario);
+         imgData.append("idDestino", idDestino);
+         imgData.append("tabla", tabla);
+         imgData.append("idTabla", idOT);
+
+         fetch(URL, {
+            method: "POST",
+            body: imgData
+         })
+            .then(array => array.json())
+            .then(array => {
+               if (array == -1) {
+                  alertaImg("Archivo NO Permitido", "", "warning", 2500);
+               } else if (array == 1) {
+                  alertaImg("Proceso Cancelado", "", "info", 3000);
+               } else if (array == 2) {
+                  alertaImg("Archivo Pesado (MAX:99MB)", "", "info", 3000);
+               } else if (array == 7) {
+                  alertaImg('Adjunto Agregado', '', 'success', 1500);
+               } else if (array == 8) {
+                  alertaImg('Adjunto Agregado', '', 'success', 1500);
+               } else {
+                  alertaImg('Intente de Nuevo', '', 'info', 1500);
+               }
+            })
+            .then(() => {
+               inputAdjuntosIncidenciaOperacion.value = '';
+            })
+            .catch(function (err) {
+               fetch(APIERROR + err + ` cargarAdjuntosIncidencia(${idOT})`)
+               alertaImg('Intente de Nuevo', '', 'info', 1500);
+               inputAdjuntosIncidenciaOperacion.value = '';
+            })
+      }
+   }
+}
 
 
 btnFlotante.addEventListener('click', () => {
@@ -12260,7 +12340,7 @@ palabraEnergeticos.addEventListener('keyup', () => {
 
 // LIMPIA EL CONTENEDOR DE EQUIPOS EN MODALEQUIPO
 btnCerrarModalEquiposAmerica.addEventListener('click', () => {
-   dataEquiposAmerica
+   // dataEquiposAmerica
 })
 
 

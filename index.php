@@ -3965,7 +3965,7 @@
                     <div class="w-1/2 flex flex-col mr-4">
                         <h1 class="self-start mb-2">Responsable Seguimiento:</h1>
                         <div class="relative">
-                            <select id="responsablesEntregas" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4">
+                            <select id="responsablesEntregas" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4 scrollbar">
                             </select>
                             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 mb-3 text-gray-700">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -3979,7 +3979,7 @@
                     <div class="w-1/2 flex flex-col ml-4">
                         <h1 class="self-start mb-2">Responsable Ejecución:</h1>
                         <div class="relative">
-                            <select id="responsablesEjecucionEntregas" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4">
+                            <select id="responsablesEjecucionEntregas" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4 scrollbar">
                             </select>
                             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 mb-3 text-gray-700">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -4130,16 +4130,30 @@
                         <h1 class="self-start mb-2">Fecha inicio y Fecha tentativa de finalización:</h1>
                         <input id="rangoFechaIncidencia" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" type="text" value="" name="datefilter">
                     </div>
-                    <div class="w-1/2 flex flex-col">
-                        <h1 class="self-start mb-2">Responsable:</h1>
-                        <div class="relative">
-                            <select id="responsablesIncidencias" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4">
-                            </select>
-                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 mb-3 text-gray-700">
-                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z">
-                                    </path>
-                                </svg>
+                    <div class="w-full flex flex-row">
+                        <div class="flex flex-col w-1/3">
+                            <h1 class="self-start mb-2">Responsable:</h1>
+                            <div class="relative">
+                                <select id="responsablesIncidencias" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4 scrollbar">
+                                </select>
+                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 mb-3 text-gray-700">
+                                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                        <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z">
+                                        </path>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex flex-col w-1/3">
+                            <div class="flex flex-col ml-4">
+                                <h1 class="self-start mb-2">Adjuntar: </h1>
+                                <div class="relative">
+                                    <button class="w-36 relative py-3 px-4 bg-teal-200 text-teal-500 font-bold text-sm rounded-md hover:shadow-md cursor-pointer">
+                                        <i class="fad fa-cloud-upload fa-lg mx-1"></i>
+                                        <span id="cantidadAdjuntosIncidenciaOperacion" class="text-blue-600 font-bold"></span>
+                                        <input id="inputAdjuntosIncidenciaOperacion" type="file" class="absolute opacity-0 item-center mx-0 my-0 justify-center w-full" style="top:1px; left:5px;" multiple="">
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
