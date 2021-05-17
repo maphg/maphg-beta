@@ -166,7 +166,8 @@ if (isset($_GET['action'])) {
         t_mp_np.departamento_finanzas,
         t_mp_np.departamento_rrhh,
         t_mp_np.status_ep,
-        t_mp_np.responsable_empresa
+        t_mp_np.responsable_empresa,
+        t_mp_np.coste
         FROM t_mp_np
         LEFT JOIN t_users ON t_mp_np.id_usuario = t_users.id
         LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
@@ -189,6 +190,7 @@ if (isset($_GET['action'])) {
                 $sDepartamento = intval($x['departamento_calidad']) + intval($x['departamento_compras']) + intval($x['departamento_direccion']) + intval($x['departamento_finanzas']) + intval($x['departamento_rrhh']);
                 $sEP = $x['status_ep'];
                 $idEmpresa = $x['responsable_empresa'];
+                $coste = $x['coste'];
 
                 #RESPONSABLE
                 $query = "SELECT t_colaboradores.nombre, t_colaboradores.apellido 
@@ -320,7 +322,8 @@ if (isset($_GET['action'])) {
                     "tipo" => "TAREA",
                     "sEP" => intval($sEP),
                     "empresa" => $empresa,
-                    "materialesAsignados" => intval($materialesAsignados)
+                    "materialesAsignados" => intval($materialesAsignados),
+                    "coste" => $coste
                 );
             }
         }
@@ -348,7 +351,8 @@ if (isset($_GET['action'])) {
         t_mc.departamento_finanzas,
         t_mc.departamento_rrhh,
         t_mc.status_ep,
-        t_mc.responsable_empresa
+        t_mc.responsable_empresa, 
+        t_mc.coste
         FROM t_mc 
         LEFT JOIN t_users ON t_mc.creado_por = t_users.id
         LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
@@ -370,6 +374,7 @@ if (isset($_GET['action'])) {
                 $sDepartamento = intval($x['departamento_calidad']) + intval($x['departamento_compras']) + intval($x['departamento_direccion']) + intval($x['departamento_finanzas']) + intval($x['departamento_rrhh']);
                 $sEP = $x['status_ep'];
                 $idEmpresa = $x['responsable_empresa'];
+                $coste = $x['coste'];
 
                 #RESPONSABLE
                 $query = "SELECT t_colaboradores.nombre, t_colaboradores.apellido 
@@ -501,7 +506,8 @@ if (isset($_GET['action'])) {
                     "tipo" => "FALLA",
                     "sEP" => intval($sEP),
                     "empresa" => $empresa,
-                    "materialesAsignados" => intval($materialesAsignados)
+                    "materialesAsignados" => intval($materialesAsignados),
+                    "coste" => $coste
                 );
 
                 $array[] = $arrayTemp;
@@ -5550,6 +5556,28 @@ if (isset($_GET['action'])) {
                 if ($result = mysqli_query($conn_2020, $query)) {
                     $resp = 2;
                 }
+            }
+        }
+        echo json_encode($resp);
+    }
+
+
+    // ACTUALIZA COSTE EN LAS INCIDENCIAS
+    if ($action == "costeIncidencia") {
+        $tipo = $_GET["tipo"];
+        $idIncidencia = $_GET["idIncidencia"];
+        $coste = $_GET["coste"];
+        $resp = 0;
+
+        if ($tipo == "TAREA") {
+            $query = "UPDATE t_mp_np SET coste = '$coste' WHERE id = $idIncidencia and activo = 1";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = 1;
+            }
+        } else if ($tipo == "FALLA") {
+            $query = "UPDATE t_mc SET coste = '$coste', ultima_modificacion = '$fechaActual' WHERE id = $idIncidencia and activo = 1";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = 1;
             }
         }
         echo json_encode($resp);

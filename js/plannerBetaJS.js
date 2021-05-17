@@ -8323,6 +8323,15 @@ const datosFallasTareas = params => {
       : `<div class="leading-4">${params.fechaInicio}</div>
          <div class="leading-3">${params.fechaFin}</div>`;
 
+
+   const fCoste = params.tipo == "FALLA" ? `onchange="costeIncidencia('${params.tipo}', ${idRegistro});"`
+      : params.tipo == "TAREA" ? `onchange="costeIncidencia('${params.tipo}', ${idRegistro});"`
+         : '';
+
+   const fDisabled = params.status == "SOLUCIONADO" ? 'disabled' : '';
+
+   const coste = params.coste > 0 ? params.coste : '';
+
    return `
       <tr class="hover:bg-gray-200 cursor-pointer text-xs font-normal 
         ${statusX}">
@@ -8391,6 +8400,11 @@ const datosFallasTareas = params => {
 
          <td class="px-2 whitespace-no-wrap border-b border-gray-200 text-center py-3" ${fMateriales}>
             <h1>${materialesAsignados}</h1>
+         </td>
+
+         <td class="px-2 whitespace-no-wrap border-b border-gray-200 text-center py-3" ${fCoste}>
+            <input id="coste_${params.tipo + '_' + idRegistro}" ${fDisabled} class="appearance-none block w-20 bg-gray-200 text-gray-700 border border-gray-200 rounded py-1 px-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" type="text" placeholder="Coste USD" autocomplete="off" 
+            value="${coste}">
          </td>
       </tr>
    `;
@@ -8666,6 +8680,7 @@ function obtenerFallas(idEquipo = 0) {
                const sEP = array[x].sEP;
                const empresa = array[x].empresa;
                const materialesAsignados = array[x].materialesAsignados;
+               const coste = array[x].coste;
 
                const data = datosFallasTareas({
                   id: id,
@@ -8687,7 +8702,8 @@ function obtenerFallas(idEquipo = 0) {
                   tipoIncidencia: tipoIncidencia,
                   sEP: sEP,
                   empresa: empresa,
-                  materialesAsignados: materialesAsignados
+                  materialesAsignados: materialesAsignados,
+                  coste: coste
                });
                document.getElementById("dataPendientesX").insertAdjacentHTML('beforeend', data);
             }
@@ -8862,6 +8878,7 @@ function obtenerTareas(idEquipo = 0) {
                const sEP = array[x].sEP;
                const empresa = array[x].empresa;
                const materialesAsignados = array[x].materialesAsignados;
+               const coste = array[x].coste;
 
                const data = datosFallasTareas({
                   id: id,
@@ -8883,7 +8900,8 @@ function obtenerTareas(idEquipo = 0) {
                   tipoIncidencia: tipoIncidencia,
                   sEP: sEP,
                   empresa: empresa,
-                  materialesAsignados: materialesAsignados
+                  materialesAsignados: materialesAsignados,
+                  coste: coste
                });
 
                document.getElementById("dataPendientesX").insertAdjacentHTML('beforeend', data);
@@ -9974,6 +9992,36 @@ function obtenerTodosPendientes() {
 palabraFallaTarea.addEventListener('keyup', function () {
    buscadorTabla('dataPendientesX', 'palabraFallaTarea', 0);
 });
+
+
+const costeIncidencia = (tipo, idIncidencia) => {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+
+   if (coste = document.querySelector('#coste_' + tipo + '_' + idIncidencia).value) {
+      if (coste >= 0) {
+
+         const action = "costeIncidencia";
+         const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&tipo=${tipo}&idIncidencia=${idIncidencia}&coste=${coste}`;
+
+         fetch(URL)
+            .then(array => array.json())
+            .then(array => {
+               if (array == 1) {
+                  alertaImg('COSTO Actualizado', '', 'success', 1500);
+               } else {
+                  alertaImg('Intente de Nuevo', '', 'info', 1500);
+               }
+            })
+            .catch(function (err) {
+               fetch(APIERROR + err);
+            })
+
+      } else {
+         alertaImg('Coste NO Valido', '', 'info', 1500);
+      }
+   }
+}
 
 
 // FUNCIONES PARA GENERAR REPORTES

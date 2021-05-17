@@ -122,6 +122,7 @@ class menuSidebar extends HTMLElement {
     }
 }
 
+
 class menu extends HTMLElement {
     constructor() {
         super();
@@ -242,6 +243,7 @@ class nofiticaciones extends HTMLElement {
     }
 }
 
+
 class telegram extends HTMLElement {
     constructor() {
         super();
@@ -282,6 +284,7 @@ class telegram extends HTMLElement {
     }
 }
 
+
 class agenda extends HTMLElement {
     constructor() {
         super();
@@ -318,6 +321,7 @@ class agenda extends HTMLElement {
         `;
     }
 }
+
 
 class favoritos extends HTMLElement {
     constructor() {
@@ -419,7 +423,6 @@ class favoritos extends HTMLElement {
 }
 
 
-
 window.customElements.define("menu-sidebar", menuSidebar);
 window.customElements.define("menu-menu", menu);
 window.customElements.define("configuracion-telegram", telegram);
@@ -467,6 +470,7 @@ const btnDocumentacion = document.querySelector('#btnDocumentacion');
 const btnManualUsuario = document.querySelector('#btnManualUsuario');
 const btnManualConfiguracion = document.querySelector('#btnManualConfiguracion');
 
+
 // MENU
 btnCerrarMenu.addEventListener('click', () => {
     contenedorMenu.classList.remove('fadeIn');
@@ -479,6 +483,7 @@ btnCerrarMenu.addEventListener('click', () => {
     }, 1200);
 })
 
+
 // ABRIR MENU
 btnAbrirMenu.addEventListener('click', () => {
     contenedorMenu.classList.remove('hidden');
@@ -487,6 +492,7 @@ btnAbrirMenu.addEventListener('click', () => {
     contenedorMenu.classList.add('fadeIn');
     contenedorMenu.children[0].classList.add('fadeInLeft');
 })
+
 
 // ABRIR MENU
 btnLogoAbrirMenu.addEventListener('click', () => {
@@ -497,6 +503,8 @@ btnLogoAbrirMenu.addEventListener('click', () => {
     contenedorMenu.children[0].classList.add('fadeInLeft');
 })
 
+
+// BACKGROUND DE MENU
 menuBG.addEventListener('click', () => {
     btnCerrarMenu.click();
 })
@@ -514,6 +522,7 @@ btnCerrarNotificaciones.addEventListener('click', () => {
     }, 1000);
 })
 
+
 // ABRIR NOTIFICACIONES
 btnAbrirNotificaciones.addEventListener('click', () => {
     contenedorNotifiaciones.classList.remove('hidden');
@@ -523,6 +532,7 @@ btnAbrirNotificaciones.addEventListener('click', () => {
     contenedorNotifiaciones.children[0].classList.add('fadeInRight');
     obtenerNotificaciones();
 })
+
 
 notificacionesBG.addEventListener('click', () => {
     btnCerrarNotificaciones.click();
@@ -541,6 +551,7 @@ btnCerrarFavoritos.addEventListener('click', () => {
     }, 1000);
 })
 
+
 // ABRIR FAVORITOS
 btnAbrirFavoritos.addEventListener('click', () => {
     contenedorFavoritos.classList.remove('hidden');
@@ -549,6 +560,7 @@ btnAbrirFavoritos.addEventListener('click', () => {
     contenedorFavoritos.classList.add('fadeIn');
     contenedorFavoritos.children[0].classList.add('fadeInRight');
 })
+
 
 favoritosBG.addEventListener('click', () => {
     btnCerrarFavoritos.click();
@@ -567,6 +579,7 @@ btnCerrarTelegram.addEventListener('click', () => {
     }, 1000);
 })
 
+
 // ABRIR TELEGRAM
 btnAbrirTelegram.addEventListener('click', () => {
     contenedorTelegram.classList.remove('hidden');
@@ -576,6 +589,8 @@ btnAbrirTelegram.addEventListener('click', () => {
     contenedorTelegram.children[0].classList.add('fadeInRight');
 })
 
+
+//BACKGROUND TELEGRAM
 telegramBG.addEventListener('click', () => {
     btnCerrarTelegram.click();
 })
@@ -593,6 +608,7 @@ btnCerrarAgenda.addEventListener('click', () => {
     }, 1000);
 })
 
+
 // ABRIR AGENDA
 btnAbrirAgenda.addEventListener('click', () => {
     contenedorAgenda.classList.remove('hidden');
@@ -602,6 +618,8 @@ btnAbrirAgenda.addEventListener('click', () => {
     contenedorAgenda.children[0].classList.add('fadeInRight');
 })
 
+
+//BACKGROUND AGENDA
 agendaBG.addEventListener('click', () => {
     btnCerrarAgenda.click();
 })
@@ -721,9 +739,14 @@ btnDocumentacion.addEventListener('click', () => {
     }
 })
 
+
+// BOTON PARA MANUAL DE USUARIO
 btnManualUsuario.addEventListener('click', () => {
     alertify.documentacion('documentacion/MAN-A02-PG01_Manual_de_usuario_de_MAPHG_vf.pdf').set({ frameless: false });
 })
+
+
+// BOTON PARA MANUAL CONFIGURCIONES DE USUARIO
 btnManualConfiguracion.addEventListener('click', () => {
     alertify.documentacion('documentacion/MAN-A01-PG01_Manual_de_configuracion_de_MAPHG_vf.pdf').set({ frameless: false });
 })
@@ -1024,7 +1047,7 @@ const modalOpenClose = idElemento => {
 }
 
 
-
+// JFRAME PARA MOSTRAR PAGINAS
 alertify.documentacion || alertify.dialog('documentacion', function () {
     var iframe;
     return {
@@ -1095,7 +1118,6 @@ alertify.documentacion || alertify.dialog('documentacion', function () {
         }
     };
 });
-
 
 
 obtenerMenu();
