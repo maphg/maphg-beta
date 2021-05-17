@@ -470,7 +470,7 @@
 
     <!-- MODAL SALIDAS Subalmacenes-->
     <div id="modalSalidasSubalmacen" class="modal">
-        <div class="modal-window rounded-md pt-10" style="width: 950px;">
+        <div class="modal-window rounded-md pt-10" style="width: 1200px;">
             <!-- BOTON CERRARL -->
             <div class="absolute top-0 right-0">
                 <button onclick="toggleModalTailwind('modalSalidasSubalmacen');" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
