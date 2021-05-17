@@ -587,15 +587,12 @@ function eliminarResponsbleOT(idOT, idResponsable) {
 }
 
 
-// Obtienes Opciones para asignar Responsables OT
-function obtenerUsuarios(tipoAsginacion, idItem) {
+function obtenerUsuarios(tipoAsignacion, idItem) {
     let idUsuario = localStorage.getItem("usuario");
     let idDestino = localStorage.getItem("idDestino");
-    let palabraUsuario = document.getElementById("palabraUsuario").value;
 
     document.getElementById("modalUsuarios").classList.add("open");
-    document.getElementById("dataUsuarios").innerHTML =
-        '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
+    dataUsuarios.innerHTML = '';
 
     const action = "obtenerUsuarios";
     $.ajax({
@@ -605,19 +602,21 @@ function obtenerUsuarios(tipoAsginacion, idItem) {
             action: action,
             idUsuario: idUsuario,
             idDestino: idDestino,
-            palabraUsuario: palabraUsuario,
-            tipoAsginacion: tipoAsginacion,
+            palabraUsuario: palabraUsuario.value,
+            tipoAsignacion: tipoAsignacion,
             idItem: idItem,
         },
         dataType: "JSON",
         success: function (data) {
-            alertaImg("Usuarios Obtenidos: " + data.totalUsuarios, "", "info", 2000);
-            document.getElementById("dataUsuarios").innerHTML = data.dataUsuarios;
-            document.getElementById("palabraUsuario").setAttribute("onkeydown", 'obtenerUsuarios("' + tipoAsginacion + '",' + idItem + ")"
-            );
+            // alertaImg("Usuarios Obtenidos: " + data.totalUsuarios, "", "info", 2000);
+            dataUsuarios.innerHTML = data.dataUsuarios;
+            palabraUsuario.
+                setAttribute("onkeydown", 'obtenerUsuarios("' + tipoAsignacion + '",' + idItem + ")"
+                );
         },
     });
 }
+
 
 
 function consultaActividadesOT(idOT) {
