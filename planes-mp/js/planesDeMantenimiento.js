@@ -563,9 +563,9 @@ function consultarMaterialesSubalmacen() {
                                 <p class="truncate whitespace-no-wrap">${modelo}</p>
                             </td>
 
-                            <td class="px-1 border-b border-gray-200 text-center py-1 w-auto" data-title-items="Ingrese Cantidad">
+                            <td class="px-1 border-b border-gray-200 text-center py-1 w-16" data-title-items="Ingrese Cantidad">
                                 <p class="whitespace-no-wrap">
-                                    <input id="item_global_${idItem}" class="border border-gray-200 bg-indigo-200 text-indigo-600 font-semibold text-center h-8 rounded-md text-sm focus:outline-none w-full" type="number" placeholder="#" min="0" value="${cantidad}"
+                                    <input id="item_global_${idItem}" class="border border-gray-200 bg-indigo-200 text-indigo-600 font-semibold text-center h-8 rounded-md text-sm focus:outline-none w-16" type="number" placeholder="#" min="0" value="${cantidad}"
                                     ${fAgregarMaterial}>
                                 </p>
                             </td>

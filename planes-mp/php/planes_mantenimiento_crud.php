@@ -533,12 +533,11 @@ if (isset($_POST['action'])) {
         $data = array();
         $idPlanMP = $_POST['idPlanMP'];
         $dataMateriales = "";
-        $query = "SELECT t_mp_planes_materiales.cantidad_material, t_subalmacenes_items_globales.descripcion_cod2bend,
-        t_subalmacenes_items_globales.cod2bend
-        FROM t_mp_planes_materiales 
-        INNER JOIN t_subalmacenes_items_globales ON t_mp_planes_materiales.id_item_global = t_subalmacenes_items_globales.id
-        WHERE id_plan = $idPlanMP AND status = 'ACTIVO'
-        ";
+        $query = "SELECT m.cantidad_material, i.descripcion_cod2bend,
+        i.cod2bend
+        FROM t_mp_planes_materiales AS m
+        INNER JOIN t_subalmacenes_items_globales AS i ON m.id_item_global = i.id
+        WHERE m.id_plan = $idPlanMP AND m.status = 'ACTIVO' AND m.activo = 1";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $value) {
                 $cantidadMaterial = $value['cantidad_material'];
