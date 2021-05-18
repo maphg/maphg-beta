@@ -4,6 +4,7 @@ date_default_timezone_set('America/Cancun');
 setlocale(LC_MONETARY, 'es_ES');
 // Modulo para importar la Conxión a la DB.
 include 'conexion.php';
+header("Access-Control-Allow-Origin: *");
 
 if (isset($_GET['action'])) {
 
