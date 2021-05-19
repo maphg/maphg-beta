@@ -26,6 +26,7 @@ if (isset($_GET['action'])) {
          $filtroDestinoEquipos = "and e.id_destino = $idDestino";
       }
 
+      #MATERIALES
       $query = "SELECT 
       m.id,
       m.cod2bend, 
@@ -119,7 +120,7 @@ if (isset($_GET['action'])) {
          }
       }
 
-
+      #EQUIPOS
       $query = "SELECT
       e.id,
       e.cod2bend,
@@ -220,6 +221,8 @@ if (isset($_GET['action'])) {
             );
          }
       }
+
+      #REGRESA LOS VALORES ENCONTRADOS
       echo json_encode($array);
    }
 }
