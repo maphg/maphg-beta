@@ -451,6 +451,16 @@ if (isset($_GET['action'])) {
                     $mediaSolucionados_G = 0;
                 }
 
+                #RATIOS
+                $ratioCreadas = 0;
+                $ratioSolucionados = 0;
+
+                if ($creadas_G > 0 && $habitaciones > 0)
+                    $ratioCreadas = $creadas_G / $habitaciones;
+
+                if ($solucionadas_G > 0 && $habitaciones > 0)
+                    $ratioSolucionados = $solucionadas_G / $habitaciones;
+
                 #ARRAY PRINCIPAL
                 $array[$idDestinoX] = array(
                     "idDestino" => $idDestinoX,
@@ -462,6 +472,8 @@ if (isset($_GET['action'])) {
                     "solucionadas" => $solucionadas_G,
                     "mediaEnProceso" => intval($mediaEnProceso_G),
                     "mediaSolucionados" => intval($mediaSolucionados_G),
+                    "ratioSolucionados" => floatval($ratioSolucionados),
+                    "ratioCreadas" => floatval($ratioCreadas),
                     "grafica" =>  [
                         ["name" => "creadas", "data" => $grafica['creadas']],
                         ["name" => "enProceso", "data" => $grafica['enProceso']],
