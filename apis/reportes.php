@@ -671,7 +671,7 @@ if (isset($_GET['action'])) {
         $fechaFin = $_GET['fechaFin'];
         $idSeccion = $_GET['idSeccion'];
 
-        $query = "SELECT d.id 'idDestino', d.destino, d.ubicacion, s.id 'idSeccion', s.seccion 
+        $query = "SELECT d.id 'idDestino', d.destino, d.ubicacion, d.habitaciones, s.id 'idSeccion', s.seccion 
         FROM c_destinos AS d
         INNER JOIN c_rel_destino_seccion AS rel ON d.id = rel.id_destino
         INNER JOIN c_secciones AS s ON rel.id_seccion = s.id
@@ -683,6 +683,7 @@ if (isset($_GET['action'])) {
                 $ubicacion = $x['ubicacion'];
                 $idSeccion = $x['idSeccion'];
                 $seccion = $x['seccion'];
+                $habitaciones = $x['habitaciones'];
 
                 $creadas_G = 0;
                 $enProceso_G = 0;
@@ -893,6 +894,18 @@ if (isset($_GET['action'])) {
                             $mediaSolucionados = 0;
                         }
 
+                        #RATIOS
+                        $ratioSolucionados = 0;
+                        $ratioCreadas = 0;
+
+                        if ($solucionadas > 0 && $habitaciones > 0) {
+                            $ratioSolucionados = $solucionadas / $habitaciones;
+                        }
+
+                        if ($creadas > 0 && $habitaciones > 0) {
+                            $ratioCreadas = $creadas / $habitaciones;
+                        }
+
                         $arraySubsecciones[$idSubseccion] = array(
                             "idSeccion" => $idSeccion,
                             "seccion" => $seccion,
@@ -903,6 +916,8 @@ if (isset($_GET['action'])) {
                             "solucionadas" => intval($solucionadas),
                             "mediaEnProceso" => intval($mediaEnProceso),
                             "mediaSolucionados" => intval($mediaSolucionados),
+                            "ratioSolucionados" => $ratioSolucionados,
+                            "ratioCreadas" => $ratioCreadas,
                             "grafica" =>
                             [
                                 ["name" => "creadas", "data" => $graficaSecciones['creadas']],
@@ -928,6 +943,18 @@ if (isset($_GET['action'])) {
                     $mediaSolucionados_G = 0;
                 }
 
+                #RATIOS
+                $ratioSolucionados = 0;
+                $ratioCreadas = 0;
+
+                if ($solucionadas_G > 0 && $habitaciones > 0) {
+                    $ratioSolucionados = $solucionadas_G / $habitaciones;
+                }
+
+                if ($creadas_G > 0 && $habitaciones > 0) {
+                    $ratioCreadas = $creadas_G / $habitaciones;
+                }
+
                 #ARRAY PRINCIPAL
                 $array[$idDestinoX] = array(
                     "idDestino" => $idDestinoX,
@@ -940,6 +967,8 @@ if (isset($_GET['action'])) {
                     "solucionadas" => $solucionadas_G,
                     "mediaEnProceso" => intval($mediaEnProceso_G),
                     "mediaSolucionados" => intval($mediaSolucionados_G),
+                    "ratioSolucionados" => $ratioSolucionados,
+                    "ratioCreadas" => $ratioCreadas,
                     "grafica" =>  [
                         ["name" => "creadas", "data" => $grafica['creadas']],
                         ["name" => "enProceso", "data" => $grafica['enProceso']],
