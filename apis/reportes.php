@@ -424,8 +424,8 @@ if (isset($_GET['action'])) {
                             "solucionadas" => intval($solucionadas),
                             "mediaEnProceso" => intval($mediaEnProceso),
                             "mediaSolucionados" => intval($mediaSolucionados),
-                            "ratioSolucionados" => number_format($ratioSolucionados, 4, '.', ' '),
-                            "ratioCreadas" => number_format($ratioCreadas, 4, '.', ' '),
+                            "ratioSolucionados" => bcdiv($ratioSolucionados, '1', 4),
+                            "ratioCreadas" => bcdiv($ratioCreadas, '1', 4),
                             "grafica" =>
                             [
                                 ["name" => "creadas", "data" => $graficaSecciones['creadas']],
@@ -647,8 +647,8 @@ if (isset($_GET['action'])) {
                     "solucionadas" => $solucionadas_destino,
                     "mediaEnProceso" => intval($mediaEnProceso_destino),
                     "mediaSolucionados" => intval($mediaSolucionados_destino),
-                    "ratioCreadas" => number_format($ratioCreadas, 4, '.', ' '),
-                    "ratioSolucionados" => number_format($ratioSolucionados, 4, '.', ' '),
+                    "ratioCreadas" => bcdiv($ratioCreadas, '1', 4),
+                    "ratioSolucionados" => bcdiv($ratioSolucionados, '1', 4),
                 );
             }
         }
@@ -959,8 +959,6 @@ if (isset($_GET['action'])) {
         $fechaFin = $_GET['fechaFin'];
         $idSeccion = $_GET['idSeccion'];
 
-        $query = "SELECT id, destino, habitaciones FROM c_destinos WHERE status = 'A' and id NOT IN(10)";
-
         $query = "SELECT d.id 'idDestino', d.habitaciones, d.destino, d.ubicacion, s.id 'idSeccion', s.seccion 
         FROM c_destinos AS d
         INNER JOIN c_rel_destino_seccion AS rel ON d.id = rel.id_destino
@@ -1018,7 +1016,6 @@ if (isset($_GET['action'])) {
                             $status = $x['status'];
 
                             $creados++;
-
 
                             #OBTIENE TIEMPOS EN HORAS
                             $horasCreacion = strtotime($fechaCreacion);
