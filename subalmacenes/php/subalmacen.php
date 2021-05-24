@@ -39,7 +39,8 @@ if (isset($_GET['action'])) {
         if ($palabraBuscar == "") {
             $filtroPalabraBuscar = "";
         } else {
-            $filtroPalabraBuscar = "and (t_subalmacenes_items_globales.categoria LIKE '%$palabraBuscar%' OR t_subalmacenes_items_globales.cod2bend LIKE '%$palabraBuscar%' OR t_subalmacenes_items_globales.descripcion_cod2bend LIKE '%$palabraBuscar%' OR t_subalmacenes_items_globales.caracteristicas LIKE '%$palabraBuscar%' OR t_subalmacenes_items_globales.marca LIKE '%$palabraBuscar%')";
+            $filtroPalabraBuscar = "and (t_subalmacenes_items_globales.categoria LIKE '%$palabraBuscar%' OR t_subalmacenes_items_globales.cod2bend LIKE '%$palabraBuscar%' OR 
+            t_subalmacenes_items_globales.descripcion_servicio_tecnico  LIKE '%$palabraBuscar%' OR t_subalmacenes_items_globales.descripcion_cod2bend LIKE '%$palabraBuscar%' OR t_subalmacenes_items_globales.caracteristicas LIKE '%$palabraBuscar%' OR t_subalmacenes_items_globales.marca LIKE '%$palabraBuscar%')";
         }
 
         $query = "SELECT t_subalmacenes_items_stock.id, t_subalmacenes_items_stock.id_subalmacen, t_subalmacenes_items_stock.stock_actual, t_subalmacenes_items_stock.stock_teorico, t_subalmacenes_items_stock.id_item_global,
