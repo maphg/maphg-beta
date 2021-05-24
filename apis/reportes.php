@@ -916,8 +916,8 @@ if (isset($_GET['action'])) {
                             "solucionadas" => intval($solucionadas),
                             "mediaEnProceso" => intval($mediaEnProceso),
                             "mediaSolucionados" => intval($mediaSolucionados),
-                            "ratioSolucionados" => $ratioSolucionados,
-                            "ratioCreadas" => $ratioCreadas,
+                            "ratioSolucionados" => bcdiv($ratioSolucionados, '1', 4),
+                            "ratioCreadas" => bcdiv($ratioCreadas, '1', 4),
                             "grafica" =>
                             [
                                 ["name" => "creadas", "data" => $graficaSecciones['creadas']],
@@ -967,8 +967,8 @@ if (isset($_GET['action'])) {
                     "solucionadas" => $solucionadas_G,
                     "mediaEnProceso" => intval($mediaEnProceso_G),
                     "mediaSolucionados" => intval($mediaSolucionados_G),
-                    "ratioSolucionados" => $ratioSolucionados,
-                    "ratioCreadas" => $ratioCreadas,
+                    "ratioSolucionados" => bcdiv($ratioSolucionados, '1', 4),
+                    "ratioCreadas" => bcdiv($ratioCreadas, '1', 4),
                     "grafica" =>  [
                         ["name" => "creadas", "data" => $grafica['creadas']],
                         ["name" => "enProceso", "data" => $grafica['enProceso']],
