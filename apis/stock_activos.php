@@ -115,7 +115,7 @@ if (isset($_GET['action'])) {
                "tiempoVidaUtil" => $tiempoVidaUtil,
                "fechaInstalacion" => $fechaInstalacion,
                "fechaEstimadaRemplazo" => $fechaEstimadaRemplazo,
-               "tipoActivo" => "MATERIAL"
+               "tipoActivo" => "/materiales/" . intval($idItem)
             );
          }
       }
@@ -134,7 +134,7 @@ if (isset($_GET['action'])) {
       INNER JOIN c_secciones AS seccion ON e.id_seccion = seccion.id
       INNER JOIN c_subsecciones AS subseccion ON e.id_subseccion = subseccion.id
       LEFT JOIN c_marcas AS marca ON e.id_marca = marca.id
-      WHERE e.activo = 1 and e.status NOT IN('BAJA') $filtroDestinoEquipos";
+      WHERE e.activo = 1 and e.status NOT IN('BAJA') $filtroDestinoEquipos  LIMIT 100";
       if ($result = mysqli_query($conn_2020, $query)) {
          foreach ($result as $x) {
             $idItem = $x['id'];
@@ -217,7 +217,7 @@ if (isset($_GET['action'])) {
                "tiempoVidaUtil" => $tiempoVidaUtil,
                "fechaInstalacion" => $fechaInstalacion,
                "fechaEstimadaRemplazo" => $fechaEstimadaRemplazo,
-               "tipoActivo" => "EQUIPO"
+               "tipoActivo" => "/activos/" . intval($idItem)
             );
          }
       }
