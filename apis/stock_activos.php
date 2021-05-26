@@ -43,7 +43,8 @@ if (isset($_GET['action'])) {
       m.subfamilia, 
       m.tiempo_vida_util,
       m.fecha_instalacion,
-      m.fecha_estimada_remplazo
+      m.fecha_estimada_remplazo,
+      m.clasificacion
       FROM t_subalmacenes_items_globales AS m 
       LEFT JOIN c_secciones AS seccion ON m.id_seccion = seccion.id
       LEFT JOIN c_subsecciones AS subseccion ON m.id_subseccion = subseccion.id
@@ -57,7 +58,7 @@ if (isset($_GET['action'])) {
             $seccion = $x['seccion'];
             $subseccion = $x['grupo'];
             $grupo = "";
-            $clasificacion = "";
+            $clasificacion = $x['clasificacion'];
             $marca = $x['marca'];
             $modelo = $x['modelo'];
             $caracteristicas = $x['caracteristicas'];
@@ -135,7 +136,7 @@ if (isset($_GET['action'])) {
       INNER JOIN c_secciones AS seccion ON e.id_seccion = seccion.id
       INNER JOIN c_subsecciones AS subseccion ON e.id_subseccion = subseccion.id
       LEFT JOIN c_marcas AS marca ON e.id_marca = marca.id
-      WHERE e.activo = 1 and e.status NOT IN('BAJA') $filtroDestinoEquipos  LIMIT 100";
+      WHERE e.activo = 1 and e.status NOT IN('BAJA') $filtroDestinoEquipos LIMIT 300";
       if ($result = mysqli_query($conn_2020, $query)) {
          foreach ($result as $x) {
             $idItem = $x['id'];
