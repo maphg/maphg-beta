@@ -129,7 +129,8 @@ if (isset($_GET['action'])) {
       subseccion.grupo,
       marca.marca,
       e.modelo,
-      e.coste
+      e.coste,
+      e.clasificacion
       FROM t_equipos_america AS e
       INNER JOIN c_secciones AS seccion ON e.id_seccion = seccion.id
       INNER JOIN c_subsecciones AS subseccion ON e.id_subseccion = subseccion.id
@@ -144,7 +145,7 @@ if (isset($_GET['action'])) {
             $seccion = $x['seccion'];
             $subseccion = $x['grupo'];
             $grupo = "";
-            $clasificacion = "";
+            $clasificacion = $x['clasificacion'];
             $marca = $x['marca'];
             $modelo = $x['modelo'];
             $caracteristicas = "";
