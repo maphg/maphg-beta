@@ -15,6 +15,7 @@ const SSTItem = document.getElementById("SSTItem");
 const areaItem = document.getElementById("areaItem");
 const categoriaItem = document.getElementById("categoriaItem");
 const stockTeoricoItem = document.getElementById("stockTeoricoItem");
+const stockActualItem = document.getElementById("stockActualItem");
 const marcaItem = document.getElementById("marcaItem");
 const subfamiliaItem = document.getElementById("subfamiliaItem");
 const modeloItem = document.getElementById("modeloItem");
@@ -50,6 +51,7 @@ const btnConsultaSalidaCarrito = document.getElementById("btnConsultaSalidaCarri
 const btnConfirmarSalidaCarrito = document.getElementById("btnConfirmarSalidaCarrito");
 const btnAgregarItems = document.getElementById("btnAgregarItems");
 const btnBusquedaGeneral = document.getElementById("btnBusquedaGeneral");
+const contenedorStockActualItem = document.getElementById("contenedorStockActualItem");
 // BTN
 
 
@@ -99,7 +101,6 @@ const subalmacenSeleccionado = idSubalmacen => {
       fetch(APIERROR + err + ` subalmacenSeleccionado(${idSubalmacen})`);
     })
 }
-
 
 
 btnBusquedaGeneral.addEventListener('click', () => {
@@ -222,7 +223,6 @@ const obtenerTodosItemsGlobales = () => {
 
 
 }
-
 
 
 function generarXLSItems(tipoXLS) {
@@ -470,7 +470,6 @@ btnConsultaEntradaCarrito.addEventListener('click', () => {
       fetch(APIERROR + err);
     })
 })
-
 
 
 // FINALIZA LAS ENTRADAS PENDIENTES DEL CARRITO
@@ -1002,6 +1001,7 @@ const iniciarFomularioItem = () => {
 
 //INICIA FORMULARIO PARA AGREGAR ITEMS 
 btnModalAgregarItem.addEventListener('click', () => {
+  contenedorStockActualItem.classList.remove('hidden');
   abrirmodal('modalAgregarItem');
   btnAgregarItems.setAttribute('onclick', 'agregarItem()');
   btnAgregarItems.innerText = 'Agregar Item';
@@ -1012,6 +1012,7 @@ btnModalAgregarItem.addEventListener('click', () => {
   areaItem.value = '';
   categoriaItem.value = '';
   stockTeoricoItem.value = '';
+  stockActualItem.value = '';
   marcaItem.value = '';
   subfamiliaItem.value = 0;
   modeloItem.value = '';
@@ -1026,6 +1027,7 @@ const agregarItem = () => {
   let idSubalmacen = localStorage.getItem('idSubalmacen');
 
   const data = new FormData();
+  data.append("idSubalmacen", idSubalmacen)
   data.append("cod2bendItem", cod2bendItem.value)
   data.append("seccionItem", seccionItem.value)
   data.append("descripcionCod2bendItem", descripcionCod2bendItem.value)
@@ -1033,6 +1035,7 @@ const agregarItem = () => {
   data.append("areaItem", areaItem.value)
   data.append("categoriaItem", categoriaItem.value)
   data.append("stockTeoricoItem", stockTeoricoItem.value)
+  data.append("stockActualItem", stockActualItem.value)
   data.append("marcaItem", marcaItem.value)
   data.append("subfamiliaItem", subfamiliaItem.value)
   data.append("modeloItem", modeloItem.value)
@@ -1041,46 +1044,70 @@ const agregarItem = () => {
   const action = "agregarItem";
   const URL = `php/subalmacen.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}`;
 
-  fetch(URL, {
-    method: "POST",
-    body: data
-  })
-    .then(array => array.json())
-    .then(array => {
-      if (array == 1) {
-        alertaImg('Item Agregado', '', 'success', 1500);
-        consultaExistenciasSubalmacen(idSubalmacen);
-        cod2bendItem.value = '';
-        seccionItem.value = '';
-        descripcionCod2bendItem.value = '';
-        SSTItem.value = '';
-        areaItem.value = '';
-        categoriaItem.value = '';
-        stockTeoricoItem.value = '';
-        marcaItem.value = '';
-        subfamiliaItem.value = '';
-        modeloItem.value = '';
-        caracteristicasItem.value = '';
-        cerrarmodal('modalAgregarItem');
-      } else {
-        alertaImg('Intente de Nuevo', '', 'info', 1500);
-      }
-    })
-    .catch(function (err) {
-      cod2bendItem.value = '';
-      seccionItem.value = '';
-      descripcionCod2bendItem.value = '';
-      SSTItem.value = '';
-      areaItem.value = '';
-      categoriaItem.value = '';
-      stockTeoricoItem.value = '';
-      marcaItem.value = '';
-      subfamiliaItem.value = '';
-      modeloItem.value = '';
-      caracteristicasItem.value = '';
-      cerrarmodal('modalAgregarItem');
-      fetch(APIERROR + err);
-    })
+  if (stockTeoricoItem.value >= 0 && stockActualItem.value >= 0 &&
+    cod2bendItem.value.length > 0 &&
+    seccionItem.value.length > 0 &&
+    descripcionCod2bendItem.value.length > 0 &&
+    SSTItem.value.length > 0 &&
+    areaItem.value.length > 0 &&
+    categoriaItem.value.length > 0 &&
+    stockTeoricoItem.value.length > 0 &&
+    stockActualItem.value.length > 0 &&
+    marcaItem.value.length > 0 &&
+    subfamiliaItem.value.length > 0 &&
+    modeloItem.value.length > 0 &&
+    caracteristicasItem.value.length > 0
+  ) {
+    alertify.confirm('¿Desea Agregar Material?', 'Confirme para Agregar', () => {
+      fetch(URL, {
+        method: "POST",
+        body: data
+      })
+        .then(array => array.json())
+        .then(array => {
+          if (array == 1) {
+            console.log(array);
+            alertaImg('Item Agregado', '', 'success', 1500);
+            consultaExistenciasSubalmacen(idSubalmacen);
+            cod2bendItem.value = '';
+            seccionItem.value = '';
+            descripcionCod2bendItem.value = '';
+            SSTItem.value = '';
+            areaItem.value = '';
+            categoriaItem.value = '';
+            stockTeoricoItem.value = '';
+            stockActualItem.value = '';
+            marcaItem.value = '';
+            subfamiliaItem.value = '';
+            modeloItem.value = '';
+            caracteristicasItem.value = '';
+            cerrarmodal('modalAgregarItem');
+          } else {
+            alertaImg('Intente de Nuevo', '', 'info', 1500);
+          }
+        })
+        .catch(function (err) {
+          console.log(err);
+          cod2bendItem.value = '';
+          seccionItem.value = '';
+          descripcionCod2bendItem.value = '';
+          SSTItem.value = '';
+          areaItem.value = '';
+          categoriaItem.value = '';
+          stockTeoricoItem.value = '';
+          stockActualItem.value = '';
+          marcaItem.value = '';
+          subfamiliaItem.value = '';
+          modeloItem.value = '';
+          caracteristicasItem.value = '';
+          cerrarmodal('modalAgregarItem');
+          fetch(APIERROR + err);
+        })
+    }, () => { alertaImg('Proceso Cancelado', '', 'error', 1500); })
+  } else {
+    alertaImg('Datos NO Validos', '', 'info', 1500);
+    return;
+  }
 }
 
 
@@ -1090,6 +1117,7 @@ const obtenerItem = idItem => {
   let idUsuario = localStorage.getItem('usuario');
 
   abrirmodal('modalAgregarItem');
+  contenedorStockActualItem.classList.add('hidden');
   btnAgregarItems.setAttribute('onclick', `actualizarItem(${idItem})`);
   btnAgregarItems.innerText = 'Actualizar Item';
 
@@ -1107,6 +1135,7 @@ const obtenerItem = idItem => {
         areaItem.value = array.area;
         categoriaItem.value = array.categoria;
         stockTeoricoItem.value = array.stockTeorico;
+        stockActualItem.value = 0;
         marcaItem.value = array.marca;
         subfamiliaItem.value = array.subfamilia;
         modeloItem.value = array.modelo;
@@ -1135,6 +1164,7 @@ const actualizarItem = idItem => {
   data.append("areaItem", areaItem.value)
   data.append("categoriaItem", categoriaItem.value)
   data.append("stockTeoricoItem", stockTeoricoItem.value)
+  data.append("stockActualItem", stockActualItem.value)
   data.append("marcaItem", marcaItem.value)
   data.append("subfamiliaItem", subfamiliaItem.value)
   data.append("modeloItem", modeloItem.value)

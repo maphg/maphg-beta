@@ -996,6 +996,7 @@ if (isset($_GET['action'])) {
 
     // AGREGA ITEM GLOBAL POR DESTINO
     if ($action == "agregarItem") {
+        $idSubalmacen = $_POST['idSubalmacen'];
         $cod2bend = $_POST['cod2bendItem'];
         $idSeccion = $_POST['seccionItem'];
         $descripcionCod2bend = $_POST['descripcionCod2bendItem'];
@@ -1003,15 +1004,29 @@ if (isset($_GET['action'])) {
         $area = $_POST['areaItem'];
         $categoria = $_POST['categoriaItem'];
         $stockTeorico = $_POST['stockTeoricoItem'];
+        $stockActual = $_POST['stockActualItem'];
         $marca = $_POST['marcaItem'];
         $subfamilia = $_POST['subfamiliaItem'];
         $modelo = $_POST['modeloItem'];
         $caracteristicas = $_POST['caracteristicasItem'];
         $resp = 0;
+        $idMax = 0;
 
-        $query = "INSERT INTO t_subalmacenes_items_globales(id_destino, id_seccion, cod2bend, descripcion_cod2bend, descripcion_servicio_tecnico, area, categoria, stock_teorico, marca, subfamilia, modelo, caracteristicas, fecha_registro, activo) VALUES($idDestino, $idSeccion, '$cod2bend', '$descripcionCod2bend', '$SST', '$area', '$categoria', '$stockTeorico', '$marca', '$subfamilia', '$modelo', '$caracteristicas', '$fechaActual', 1)";
+        $query = "SELECT max(id) 'idMax' FROM t_subalmacenes_items_globales";
         if ($result = mysqli_query($conn_2020, $query)) {
-            $resp = 1;
+            foreach ($result as $x) {
+                $idMax = intval($x['idMax'] + 1);
+            }
+        }
+
+        if ($idMax > 0) {
+            $query = "INSERT INTO t_subalmacenes_items_globales(id, id_destino, id_seccion, cod2bend, descripcion_cod2bend, descripcion_servicio_tecnico, area, categoria, stock_teorico, marca, subfamilia, modelo, caracteristicas, fecha_registro, activo) VALUES($idMax, $idDestino, $idSeccion, '$cod2bend', '$descripcionCod2bend', '$SST', '$area', '$categoria', '$stockTeorico', '$marca', '$subfamilia', '$modelo', '$caracteristicas', '$fechaActual', 1)";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $query = "INSERT INTO t_subalmacenes_items_stock(id_subalmacen, id_destino, id_item_global, stock_actual, stock_anterior, stock_teorico, fecha_movimiento, fecha_creacion, activo) VALUES($idSubalmacen, $idDestino, $idMax, $stockActual, 0, $stockTeorico, '$fechaActual', '$fechaActual', 1)";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    $resp = 1;
+                }
+            }
         }
         echo json_encode($resp);
     }

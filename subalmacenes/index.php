@@ -934,9 +934,14 @@
                                 <input id="categoriaItem" type="text" autocomplete="off" class="focus:ring-indigo-500 focus:border-indigo-500 w-full shadow-sm sm:text-xs border border-blue-300 rounded-md py-1">
                             </div>
 
-                            <div class="col-span-6 sm:col-span-2">
+                            <div class="col-span-6 sm:col-span-3">
                                 <label class="text-xs font-semibold text-gray-700">STOCK TEÓRICO</label>
                                 <input id="stockTeoricoItem" type="text" autocomplete="off" class="focus:ring-indigo-500 focus:border-indigo-500 w-full shadow-sm sm:text-xs border border-blue-300 rounded-md py-1">
+                            </div>
+
+                            <div id="contenedorStockActualItem" class="col-span-6 sm:col-span-3 hidden">
+                                <label class="text-xs font-semibold text-gray-700">STOCK REAL</label>
+                                <input id="stockActualItem" type="text" autocomplete="off" class="focus:ring-indigo-500 focus:border-indigo-500 w-full shadow-sm sm:text-xs border border-blue-300 rounded-md py-1">
                             </div>
 
                             <div class="col-span-6 sm:col-span-4">
