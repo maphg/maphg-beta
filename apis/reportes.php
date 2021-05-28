@@ -626,6 +626,7 @@ if (isset($_GET['action'])) {
                                 }
                             } else {
                                 $solucionadas_destino++;
+                                $solucionadas_global++;
 
                                 #OBTIENE TIEMPO EN HORAS DE SOLUCIONADO
                                 if ($horasCreacion > 0 && $horasSolucionado > 0) {
