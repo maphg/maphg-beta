@@ -1916,7 +1916,7 @@ if (isset($_GET['action'])) {
     }
 
 
-    #REPORTE PARA PREVENTIVOS Y CONTEO DE EQUIPOS
+    #REPORTE PARA PREVENTIVOS Y CONTEO DE EQUIPOS POR SUBSECIÓN
     if ($action == "reportePreventivosEquipos") {
         $idSeccion = $_GET['idSeccion'];
 
@@ -2096,6 +2096,419 @@ if (isset($_GET['action'])) {
 
         $array['porcentaje'] = $porcentaje;
 
+        echo json_encode($array);
+    }
+
+
+
+    #REPORTE PARA PREVENTIVOS Y CONTEO DE EQUIPOS POR SECCIÓN
+    if ($action == "reportePreventivosEquiposSeccion") {
+        #TOTALES
+        $porcentaje = 0;
+        $totalActivos_g = 0;
+        $totalActivosConPlanificacion_g = 0;
+        $totalActivosPlanificacionCompleta_g = 0;
+        $totalActivosSinPlanificar_g = 0;
+        $totalActivosSinPlan_g = 0;
+
+        $query = "SELECT sec.id 'idSeccion', sec.seccion FROM c_rel_destino_seccion AS relSec
+        INNER JOIN c_secciones AS sec ON relSec.id_seccion = sec.id
+        WHERE relSec.id_destino = $idDestino and sec.id NOT IN(23, 1001)";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idSeccion = $x['idSeccion'];
+                $seccion = $x['seccion'];
+
+                #DATOS
+                $totalActivos = 0;
+                $totalActivosSinPlanificar = 0;
+                $totalActivosConPlanificacion = 0;
+                $totalActivosSinPlan = 0;
+                $totalActivosPlanificacionCompleta = 0;
+                $totalActivosConPlan = 0;
+
+                $query = "SELECT e.id, e.id_tipo
+                FROM t_equipos_america AS e
+                WHERE e.id_destino = $idDestino and e.id_seccion = $idSeccion and 
+                e.activo = 1 and e.status NOT IN('BAJA')";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $idEquipo = $x['id'];
+                        $idTipo = $x['id_tipo'];
+                        $totalActivos++;
+
+                        #ACTIVOS CON PLANIFICACIÓN
+                        $conPlanificacion = 0;
+                        $query = "SELECT id FROM t_mp_planeacion_semana 
+                        WHERE id_equipo = $idEquipo and activo = 1 LIMIT 1";
+                        if ($result = mysqli_query($conn_2020, $query)) {
+                            foreach ($result as $x) {
+                                $totalActivosConPlanificacion++;
+                                $conPlanificacion++;
+                            }
+                        }
+
+                        #ACTIVOS SIN PLANIFICAR
+                        if ($conPlanificacion <= 0)
+                            $totalActivosSinPlanificar++;
+
+                        #ACTIVOS SIN PLAN CREADO
+                        $query = "SELECT id FROM  t_mp_planes_mantenimiento 
+                        WHERE tipo_local_equipo = $idTipo and tipo_local_equipo NOT IN(0) LIMIT 1";
+                        if ($result = mysqli_query($conn_2020, $query)) {
+                            foreach ($result as $x) {
+                                $totalActivosConPlan++;
+                            }
+                        }
+
+                        #ACTIVOS CON PLANIFICACIÓN COMPLETADA
+                        $totalSaltos = 0;
+                        $planificado = 0;
+                        $query = "SELECT *
+                        FROM t_mp_planeacion_semana AS planeacion 
+                        INNER JOIN t_mp_planes_mantenimiento AS plan ON planeacion.id_plan = plan.id
+                        INNER JOIN c_frecuencias_mp AS frec ON plan.id_periodicidad = frec.id
+                        WHERE planeacion.id_equipo = $idEquipo and planeacion.activo = 1";
+                        if ($result = mysqli_query($conn_2020, $query)) {
+                            foreach ($result as $x) {
+
+                                $totalSaltos += intval($x['saltos']);
+                                $x['semana_1'] === "PLANIFICADO" ? $planificado++ : 0;
+                                $x['semana_2'] === "PLANIFICADO" ? $planificado++ : 0;
+                                $x['semana_3'] === "PLANIFICADO" ? $planificado++ : 0;
+                                $x['semana_4'] === "PLANIFICADO" ? $planificado++ : 0;
+                                $x['semana_5'] === "PLANIFICADO" ? $planificado++ : 0;
+                                $x['semana_6'] === "PLANIFICADO" ? $planificado++ : 0;
+                                $x['semana_7'] === "PLANIFICADO" ? $planificado++ : 0;
+                                $x['semana_8'] === "PLANIFICADO" ? $planificado++ : 0;
+                                $x['semana_9'] === "PLANIFICADO" ? $planificado++ : 0;
+                                $x['semana_10'] === "PLANIFICADO" ? $planificado++ : 0;
+                                $x['semana_11'] === "PLANIFICADO" ? $planificado++ : 0;
+                                $x['semana_12'] === "PLANIFICADO" ? $planificado++ : 0;
+                                $x['semana_13'] === "PLANIFICADO" ? $planificado++ : 0;
+                                $x['semana_14'] === "PLANIFICADO" ? $planificado++ : 0;
+                                $x['semana_15'] === "PLANIFICADO" ? $planificado++ : 0;
+                                $x['semana_16'] === "PLANIFICADO" ? $planificado++ : 0;
+                                $x['semana_17'] === "PLANIFICADO" ? $planificado++ : 0;
+                                $x['semana_18'] === "PLANIFICADO" ? $planificado++ : 0;
+                                $x['semana_19'] === "PLANIFICADO" ? $planificado++ : 0;
+                                $x['semana_20'] === "PLANIFICADO" ? $planificado++ : 0;
+                                $x['semana_21'] === "PLANIFICADO" ? $planificado++ : 0;
+                                $x['semana_22'] === "PLANIFICADO" ? $planificado++ : 0;
+                                $x['semana_23'] === "PLANIFICADO" ? $planificado++ : 0;
+                                $x['semana_24'] === "PLANIFICADO" ? $planificado++ : 0;
+                                $x['semana_25'] === "PLANIFICADO" ? $planificado++ : 0;
+                                $x['semana_26'] === "PLANIFICADO" ? $planificado++ : 0;
+                                $x['semana_27'] === "PLANIFICADO" ? $planificado++ : 0;
+                                $x['semana_28'] === "PLANIFICADO" ? $planificado++ : 0;
+                                $x['semana_29'] === "PLANIFICADO" ? $planificado++ : 0;
+                                $x['semana_30'] === "PLANIFICADO" ? $planificado++ : 0;
+                                $x['semana_31'] === "PLANIFICADO" ? $planificado++ : 0;
+                                $x['semana_32'] === "PLANIFICADO" ? $planificado++ : 0;
+                                $x['semana_33'] === "PLANIFICADO" ? $planificado++ : 0;
+                                $x['semana_34'] === "PLANIFICADO" ? $planificado++ : 0;
+                                $x['semana_35'] === "PLANIFICADO" ? $planificado++ : 0;
+                                $x['semana_36'] === "PLANIFICADO" ? $planificado++ : 0;
+                                $x['semana_37'] === "PLANIFICADO" ? $planificado++ : 0;
+                                $x['semana_38'] === "PLANIFICADO" ? $planificado++ : 0;
+                                $x['semana_39'] === "PLANIFICADO" ? $planificado++ : 0;
+                                $x['semana_40'] === "PLANIFICADO" ? $planificado++ : 0;
+                                $x['semana_41'] === "PLANIFICADO" ? $planificado++ : 0;
+                                $x['semana_42'] === "PLANIFICADO" ? $planificado++ : 0;
+                                $x['semana_43'] === "PLANIFICADO" ? $planificado++ : 0;
+                                $x['semana_44'] === "PLANIFICADO" ? $planificado++ : 0;
+                                $x['semana_45'] === "PLANIFICADO" ? $planificado++ : 0;
+                                $x['semana_46'] === "PLANIFICADO" ? $planificado++ : 0;
+                                $x['semana_47'] === "PLANIFICADO" ? $planificado++ : 0;
+                                $x['semana_48'] === "PLANIFICADO" ? $planificado++ : 0;
+                                $x['semana_49'] === "PLANIFICADO" ? $planificado++ : 0;
+                                $x['semana_50'] === "PLANIFICADO" ? $planificado++ : 0;
+                                $x['semana_51'] === "PLANIFICADO" ? $planificado++ : 0;
+                                $x['semana_52'] === "PLANIFICADO" ? $planificado++ : 0;
+                            }
+                        }
+
+                        #ACTIVOS PLANIFICACION COMPLETA
+                        if ($totalSaltos > 0 && $planificado > 0 && $planificado >= $totalSaltos)
+                            $totalActivosPlanificacionCompleta++;
+                    }
+                }
+
+                #TOTAL DE ACTIVOS SIN PLANES
+                $totalActivosSinPlan = $totalActivos - $totalActivosConPlan;
+
+                $totalActivos_g += $totalActivos;
+                $totalActivosConPlanificacion_g += $totalActivosConPlanificacion;
+                $totalActivosPlanificacionCompleta_g += $totalActivosPlanificacionCompleta;
+                $totalActivosSinPlanificar_g += $totalActivosSinPlanificar;
+                $totalActivosSinPlan_g += $totalActivosSinPlan;
+
+
+                $array['secciones'][] = array(
+                    "idSeccion" => intval($idSeccion),
+                    "seccion" => $seccion,
+                    "totalActivos" => $totalActivos,
+                    "totalActivosConPlanificacion" => $totalActivosConPlanificacion,
+                    "totalActivosPlanificacionCompleta" => $totalActivosPlanificacionCompleta,
+                    "totalActivosSinPlanificar" => $totalActivosSinPlanificar,
+                    "totalActivosSinPlan" => $totalActivosSinPlan,
+                );
+            }
+        }
+
+        #TOTALES
+        $array['totales'] = array(
+            "totalActivos" => $totalActivos_g,
+            "totalActivosConPlanificacion" => $totalActivosConPlanificacion_g,
+            "totalActivosPlanificacionCompleta" => $totalActivosPlanificacionCompleta_g,
+            "totalActivosSinPlanificar" => $totalActivosSinPlanificar_g,
+            "totalActivosSinPlan" => $totalActivosSinPlan_g,
+        );
+
+        $array['totalActivos'] = $totalActivos_g;
+        $array['totalActivosConPlanificacion'] = $totalActivosConPlanificacion_g;
+        $array['totalActivosPlanificacionCompleta'] = $totalActivosPlanificacionCompleta_g;
+        $array['totalActivosSinPlanificar'] = $totalActivosSinPlanificar_g;
+        $array['totalActivosSinPlan'] = $totalActivosSinPlan_g;
+
+
+        #PORCENTAJE DE PLANIFICADOS
+        if ($totalActivos_g > 0)
+            $porcentaje = (100 / $totalActivos_g) * $totalActivosConPlanificacion_g;
+
+        $array['porcentaje'] = $porcentaje;
+
+        echo json_encode($array);
+    }
+
+
+    #REPORTE DE INCIDENCIAS POR SECCIONES
+    if ($action == "reportePreventivosGlobal") {
+        $fechaInicio = $_GET['fechaInicio'];
+        $fechaFin = $_GET['fechaFin'];
+
+        $array['dataDestinos'] = array();
+        $array['data'] = array();
+        $arrayCreadas = array();
+        $arraySolucionadas = array();
+        $arrayenProceso = array();
+
+        #DATOS GLOBALES
+        $creados_global = 0;
+        $enProceso_global = 0;
+        $solucionadas_global = 0;
+        $mediaEnProceso_global = 0;
+        $mediaSolucionados_global = 0;
+
+        $query = "SELECT id, destino, habitaciones, ubicacion FROM c_destinos WHERE status = 'A' and id NOT IN(10)";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idDestinoX = $x['id'];
+                $destino = $x['destino'];
+                $ubicacion = $x['ubicacion'];
+                $habitaciones = $x['habitaciones'];
+
+                #DATOS POR DESTINO
+                $creados_destino = 0;
+                $enProceso_destino = 0;
+                $solucionadas_destino = 0;
+                $mediaEnProceso_destino = 0;
+                $mediaSolucionados_destino = 0;
+
+                # Fecha como segundos
+                $tiempoInicio = strtotime($fechaInicio);
+                $tiempoFin = strtotime($fechaFin);
+                $fechaX = "";
+
+                #IDS PARA EVITAR REPETIDOS
+                $idA = array();
+                while ($tiempoInicio <= $tiempoFin) {
+
+                    $fechaX = date('Y-m-d', $tiempoInicio);
+                    $fechaA = date("Y-m-d H:i:s", ($tiempoInicio + 0));
+                    $fechaB = date("Y-m-d H:i:s", ($tiempoInicio + 86400));
+
+                    if (count($idA) > 0) {
+                        $idx = implode(',', $idA);
+                    } else {
+                        $idx = 0;
+                    }
+
+                    #
+                    $query = "SELECT mp.id, mp.fecha_creacion, mp.fecha_finalizado, 
+                    mp.status
+                    FROM t_mp_planificacion_iniciada AS mp
+                    INNER JOIN t_equipos_america AS e ON mp.id_equipo = e.id
+                    WHERE e.id_destino = $idDestinoX and mp.status IN('PROCESO', 'SOLUCIONADO') and mp.activo = 1 
+                    and mp.año = '$añoActual' and
+                    (
+                        (mp.fecha_creacion BETWEEN '$fechaA' and '$fechaB') OR 
+                        (mp.fecha_finalizado BETWEEN '$fechaA' and '$fechaB')
+                    ) and mp.id NOT IN($idx) and e.id_destino NOT IN(10)";
+                    if ($result = mysqli_query($conn_2020, $query)) {
+                        foreach ($result as $x) {
+                            $idIncidencia = $x['id'];
+                            $status = $x['status'];
+                            $fechaCreacion = $x['fecha_creacion'];
+                            $fechaFinalizado = $x['fecha_finalizado'];
+
+                            // CONTADORES TOTAL
+                            $creados_destino++;
+                            $creados_global++;
+                            $idA[] = $idIncidencia;
+
+                            #OBTIENE TIEMPOS EN HORAS
+                            $horasCreacion = strtotime($fechaCreacion);
+                            $horasSolucionado = strtotime($fechaFinalizado);
+                            $horasActual = strtotime($fechaActual);
+
+                            if ($status == "PROCESO") {
+                                $enProceso_destino++;
+                                $enProceso_global++;
+
+                                #OBTIENE TIEMPO EN HORAS DE PENDIENTE
+                                if ($horasCreacion > 0 && $horasActual > 0) {
+                                    $mediaEnProceso_destino += ($horasActual - $horasCreacion) / 3600;
+                                    $mediaEnProceso_global += ($horasActual - $horasCreacion) / 3600;
+                                }
+                            } else {
+                                $solucionadas_destino++;
+                                $solucionadas_global++;
+
+                                #OBTIENE TIEMPO EN HORAS DE SOLUCIONADO
+                                if ($horasCreacion > 0 && $horasSolucionado > 0) {
+                                    $mediaSolucionados_destino += ($horasSolucionado - $horasCreacion) / 3600;
+                                    $mediaSolucionados_global += ($horasSolucionado - $horasCreacion) / 3600;
+                                }
+                            }
+                        }
+                    }
+
+                    #AUMENTA UN DÍA
+                    $tiempoInicio += 86400;
+                }
+
+                #RATIOS
+                $ratioCreadas = 0;
+                $ratioSolucionados = 0;
+
+                if ($creados_destino > 0 && $habitaciones > 0)
+                    $ratioCreadas = $creados_destino / $habitaciones;
+
+                if ($solucionadas_destino > 0 && $habitaciones > 0)
+                    $ratioSolucionados = $solucionadas_destino / $habitaciones;
+
+                #ARRAY DE RESULTADOS POR DESTINO
+                $array['dataDestinos'][] = array(
+                    "idDestino" => intval($idDestinoX),
+                    "destino" => $destino,
+                    "creadas" => $creados_destino,
+                    "enProceso" => $enProceso_destino,
+                    "solucionadas" => $solucionadas_destino,
+                    "mediaEnProceso" => intval($mediaEnProceso_destino),
+                    "mediaSolucionados" => intval($mediaSolucionados_destino),
+                    "ratioCreadas" => floatval($ratioCreadas),
+                    "ratioSolucionados" => floatval($ratioSolucionados),
+                );
+            }
+        }
+
+        #DATOS POR DESTINO
+        $creados_destino = 0;
+        $enProceso_destino = 0;
+        $solucionadas_destino = 0;
+        $mediaEnProceso_destino = 0;
+        $mediaSolucionados_destino = 0;
+
+        # Fecha como segundos
+        $tiempoInicio = strtotime($fechaInicio);
+        $tiempoFin = strtotime($fechaFin);
+        $fechaX = "";
+
+        #IDS PARA EVITAR REPETIDOS
+        $idA = array();
+        while ($tiempoInicio <= $tiempoFin) {
+            $creados_dia = 0;
+            $solucionados_dia = 0;
+            $enProceso_dia = 0;
+
+            $fechaX = date('Y-m-d', $tiempoInicio);
+            $fechaA = date("Y-m-d H:i:s", ($tiempoInicio + 0));
+            $fechaB = date("Y-m-d H:i:s", ($tiempoInicio + 86400));
+
+            if (count($idA) > 0) {
+                $idx = implode(',', $idA);
+            } else {
+                $idx = 0;
+            }
+
+            #
+            $query = "SELECT mp.id, mp.fecha_creacion, mp.fecha_finalizado, 
+            mp.status
+            FROM t_mp_planificacion_iniciada AS mp
+            INNER JOIN t_equipos_america AS e ON mp.id_equipo = e.id
+            WHERE mp.status IN('PROCESO', 'SOLUCIONADO') and mp.activo = 1 
+            and mp.año = '$añoActual' and
+            (
+                (mp.fecha_creacion BETWEEN '$fechaA' and '$fechaB') OR 
+                (mp.fecha_finalizado BETWEEN '$fechaA' and '$fechaB')
+            ) and mp.id NOT IN($idx) and e.id_destino NOT IN(10)";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $x) {
+                    $idIncidencia = $x['id'];
+                    $status = $x['status'];
+                    $fechaCreacion = $x['fecha_creacion'];
+                    $fechaFinalizado = $x['fecha_finalizado'];
+
+                    // CONTADORES TOTAL
+                    $creados_dia++;
+                    $idA[] = $idIncidencia;
+
+                    if ($status == "PROCESO") {
+                        $enProceso_dia++;
+                    } else {
+                        $solucionados_dia++;
+                    }
+                }
+            }
+
+            $arrayCreadas[$fechaX] = $creados_dia;
+            $arraySolucionadas[$fechaX] = $solucionados_dia;
+            $arrayenProceso[$fechaX] = $enProceso_dia;
+
+            #AUMENTA UN DÍA
+            $tiempoInicio += 86400;
+        }
+
+        #RATIOS
+        $ratioCreadas = 0;
+        $ratioSolucionados = 0;
+
+        if ($creados_destino > 0 && $habitaciones > 0)
+            $ratioCreadas = $creados_destino / $habitaciones;
+
+        if ($solucionadas_destino > 0 && $habitaciones > 0)
+            $ratioSolucionados = $solucionadas_destino / $habitaciones;
+
+        #ARRAY GLOBAL
+        // $array['data'] = array(
+        //     "creadas" => $creados_global,
+        //     "enProceso" => $enProceso_global,
+        //     "solucionadas" => $solucionadas_global,
+        //     "mediaEnProceso" => intval($mediaEnProceso_global),
+        //     "mediaSolucionados" => intval($mediaSolucionados_global),
+        // );
+
+        $array["creadas"] = $creados_global;
+        $array["enProceso"] = $enProceso_global;
+        $array["solucionadas"] = $solucionadas_global;
+        $array["mediaEnProceso"] = intval($mediaEnProceso_global);
+        $array["mediaSolucionados"] = intval($mediaSolucionados_global);
+
+        $array['grafica'] = array(
+            ["name" => "Creadas", "data" => $arrayCreadas],
+            ["name" => "Solucionadas", "data" => $arraySolucionadas]
+        );
         echo json_encode($array);
     }
 }
