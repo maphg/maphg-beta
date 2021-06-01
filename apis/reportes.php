@@ -2511,4 +2511,329 @@ if (isset($_GET['action'])) {
         );
         echo json_encode($array);
     }
+
+
+
+    #REPORTE DE INCIDENCIAS POR SECCIONES
+    if ($action == "reporteIncidencasGlobal") {
+        $fechaInicio = $_GET['fechaInicio'];
+        $fechaFin = $_GET['fechaFin'];
+
+        $array['dataDestinos'] = array();
+        $array['data'] = array();
+        $arrayCreadas = array();
+        $arraySolucionadas = array();
+        $arrayenProceso = array();
+
+        #DATOS GLOBALES
+        $creados_global = 0;
+        $enProceso_global = 0;
+        $solucionadas_global = 0;
+        $mediaEnProceso_global = 0;
+        $mediaSolucionados_global = 0;
+
+        $query = "SELECT id, destino, habitaciones, ubicacion FROM c_destinos WHERE status = 'A' and id NOT IN(10)";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idDestinoX = $x['id'];
+                $destino = $x['destino'];
+                $ubicacion = $x['ubicacion'];
+                $habitaciones = $x['habitaciones'];
+
+                #DATOS POR DESTINO
+                $creados_destino = 0;
+                $enProceso_destino = 0;
+                $solucionadas_destino = 0;
+                $mediaEnProceso_destino = 0;
+                $mediaSolucionados_destino = 0;
+
+                # Fecha como segundos
+                $tiempoInicio = strtotime($fechaInicio);
+                $tiempoFin = strtotime($fechaFin);
+                $fechaX = "";
+
+                #IDS PARA EVITAR REPETIDOS
+                $idA = array();
+                $idB = array();
+                while ($tiempoInicio <= $tiempoFin) {
+
+                    $fechaX = date('Y-m-d', $tiempoInicio);
+                    $fechaA = date("Y-m-d H:i:s", ($tiempoInicio + 0));
+                    $fechaB = date("Y-m-d H:i:s", ($tiempoInicio + 86400));
+
+                    if (count($idA) > 0) {
+                        $idx = implode(',', $idA);
+                    } else {
+                        $idx = 0;
+                    }
+
+                    #INCIDENCIAS EQUIPO
+                    $query = "SELECT id, fecha_creacion, fecha_realizado, status
+                    FROM t_mc
+                    WHERE id_destino = $idDestinoX and status IN('PENDIENTE', 'N', 'SOLUCIONADO', 'F') and activo = 1 and id_equipo > 0 and
+                    (
+                        (fecha_creacion BETWEEN '$fechaA' and '$fechaB') OR 
+                        (fecha_realizado BETWEEN '$fechaA' and '$fechaB')
+                    ) and id NOT IN($idx)";
+                    if ($result = mysqli_query($conn_2020, $query)) {
+                        foreach ($result as $x) {
+                            $idIncidencia = $x['id'];
+                            $status = $x['status'];
+                            $fechaCreacion = $x['fecha_creacion'];
+                            $fechaFinalizado = $x['fecha_realizado'];
+
+                            // CONTADORES TOTAL
+                            $creados_destino++;
+                            $creados_global++;
+                            $idA[] = $idIncidencia;
+
+                            #OBTIENE TIEMPOS EN HORAS
+                            $horasCreacion = strtotime($fechaCreacion);
+                            $horasSolucionado = strtotime($fechaFinalizado);
+                            $horasActual = strtotime($fechaActual);
+
+                            if ($status == "PROCESO") {
+                                $enProceso_destino++;
+                                $enProceso_global++;
+
+                                #OBTIENE TIEMPO EN HORAS DE PENDIENTE
+                                if ($horasCreacion > 0 && $horasActual > 0) {
+                                    $mediaEnProceso_destino += ($horasActual - $horasCreacion) / 3600;
+                                    $mediaEnProceso_global += ($horasActual - $horasCreacion) / 3600;
+                                }
+                            } else {
+                                $solucionadas_destino++;
+                                $solucionadas_global++;
+
+                                #OBTIENE TIEMPO EN HORAS DE SOLUCIONADO
+                                if ($horasCreacion > 0 && $horasSolucionado > 0) {
+                                    $mediaSolucionados_destino += ($horasSolucionado - $horasCreacion) / 3600;
+                                    $mediaSolucionados_global += ($horasSolucionado - $horasCreacion) / 3600;
+                                }
+                            }
+                        }
+                    }
+
+                    if (count($idB) > 0) {
+                        $idy = implode(',', $idB);
+                    } else {
+                        $idy = 0;
+                    }
+
+                    #INCIDENCIAS GENERALES
+                    $query = "SELECT id, fecha, fecha_finalizado, status
+                    FROM t_mp_np
+                    WHERE id_destino = $idDestinoX and status IN('PENDIENTE', 'N', 'SOLUCIONADO', 'F') and activo = 1 and id_equipo = 0 and
+                    (
+                        (fecha BETWEEN '$fechaA' and '$fechaB') OR 
+                        (fecha_finalizado BETWEEN '$fechaA' and '$fechaB')
+                    ) and id NOT IN($idy)";
+                    if ($result = mysqli_query($conn_2020, $query)) {
+                        foreach ($result as $x) {
+                            $idIncidencia = $x['id'];
+                            $status = $x['status'];
+                            $fechaCreacion = $x['fecha'];
+                            $fechaFinalizado = $x['fecha_finalizado'];
+
+                            // CONTADORES TOTAL
+                            $creados_destino++;
+                            $creados_global++;
+                            $idB[] = $idIncidencia;
+
+                            #OBTIENE TIEMPOS EN HORAS
+                            $horasCreacion = strtotime($fechaCreacion);
+                            $horasSolucionado = strtotime($fechaFinalizado);
+                            $horasActual = strtotime($fechaActual);
+
+                            if ($status == "PROCESO") {
+                                $enProceso_destino++;
+                                $enProceso_global++;
+
+                                #OBTIENE TIEMPO EN HORAS DE PENDIENTE
+                                if ($horasCreacion > 0 && $horasActual > 0) {
+                                    $mediaEnProceso_destino += ($horasActual - $horasCreacion) / 3600;
+                                    $mediaEnProceso_global += ($horasActual - $horasCreacion) / 3600;
+                                }
+                            } else {
+                                $solucionadas_destino++;
+                                $solucionadas_global++;
+
+                                #OBTIENE TIEMPO EN HORAS DE SOLUCIONADO
+                                if ($horasCreacion > 0 && $horasSolucionado > 0) {
+                                    $mediaSolucionados_destino += ($horasSolucionado - $horasCreacion) / 3600;
+                                    $mediaSolucionados_global += ($horasSolucionado - $horasCreacion) / 3600;
+                                }
+                            }
+                        }
+                    }
+
+                    #AUMENTA UN DÍA
+                    $tiempoInicio += 86400;
+                }
+
+                #RATIOS
+                $ratioCreadas = 0;
+                $ratioSolucionados = 0;
+
+                if ($creados_destino > 0 && $habitaciones > 0)
+                    $ratioCreadas = $creados_destino / $habitaciones;
+
+                if ($solucionadas_destino > 0 && $habitaciones > 0)
+                    $ratioSolucionados = $solucionadas_destino / $habitaciones;
+
+                #ARRAY DE RESULTADOS POR DESTINO
+                $array['dataDestinos'][] = array(
+                    "idDestino" => intval($idDestinoX),
+                    "destino" => $destino,
+                    "creadas" => $creados_destino,
+                    "enProceso" => $enProceso_destino,
+                    "solucionadas" => $solucionadas_destino,
+                    "mediaEnProceso" => intval($mediaEnProceso_destino),
+                    "mediaSolucionados" => intval($mediaSolucionados_destino),
+                    "ratioCreadas" => floatval($ratioCreadas),
+                    "ratioSolucionados" => floatval($ratioSolucionados),
+                );
+            }
+        }
+
+        #DATOS POR DESTINO
+        $creados_destino = 0;
+        $enProceso_destino = 0;
+        $solucionadas_destino = 0;
+        $mediaEnProceso_destino = 0;
+        $mediaSolucionados_destino = 0;
+
+        # Fecha como segundos
+        $tiempoInicio = strtotime($fechaInicio);
+        $tiempoFin = strtotime($fechaFin);
+        $fechaX = "";
+
+        #IDS PARA EVITAR REPETIDOS
+        $idA = array();
+        $idB = array();
+        while ($tiempoInicio <= $tiempoFin) {
+            $creados_dia = 0;
+            $solucionados_dia = 0;
+            $enProceso_dia = 0;
+
+            $fechaX = date('Y-m-d', $tiempoInicio);
+            $fechaA = date("Y-m-d H:i:s", ($tiempoInicio + 0));
+            $fechaB = date("Y-m-d H:i:s", ($tiempoInicio + 86400));
+
+            if (count($idA) > 0) {
+                $idx = implode(',', $idA);
+            } else {
+                $idx = 0;
+            }
+
+            #
+            #INCIDENCIA EQUIPOS
+            $query = "SELECT id, fecha_creacion, fecha_realizado, status
+            FROM t_mc
+            WHERE id_destino = $idDestinoX and status IN('PENDIENTE', 'N', 'SOLUCIONADO', 'F') and activo = 1 and id_equipo > 0 and
+            (
+                (fecha_creacion BETWEEN '$fechaA' and '$fechaB') OR 
+                (fecha_realizado BETWEEN '$fechaA' and '$fechaB')
+            ) and id NOT IN($idx)";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $x) {
+                    $idIncidencia = $x['id'];
+                    $status = $x['status'];
+                    $fechaCreacion = $x['fecha_creacion'];
+                    $fechaFinalizado = $x['fecha_realizado'];
+
+                    // CONTADORES TOTAL
+                    $creados_dia++;
+                    $idA[] = $idIncidencia;
+
+                    if (
+                        $status == "PENDIENTE" || $status == "N"
+                    ) {
+                        $enProceso_dia++;
+                    } else {
+                        $solucionados_dia++;
+                    }
+                }
+            }
+
+
+            if (count($idB) > 0) {
+                $idy = implode(',', $idB);
+            } else {
+                $idy = 0;
+            }
+            #INCIDENCIAS GENERALES
+            $query = "SELECT id, fecha, fecha_finalizado, status
+            FROM t_mp_np
+            WHERE status IN('PENDIENTE', 'N', 'SOLUCIONADO', 'F') and activo = 1 and id_equipo = 0 and
+            (
+                (fecha BETWEEN '$fechaA' and '$fechaB') OR 
+                (fecha_finalizado BETWEEN '$fechaA' and '$fechaB')
+            ) and id NOT IN($idy)";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $x) {
+                    $idIncidencia = $x['id'];
+                    $status = $x['status'];
+                    $fechaCreacion = $x['fecha'];
+                    $fechaFinalizado = $x['fecha_finalizado'];
+
+                    // CONTADORES TOTAL
+                    $creados_dia++;
+                    $idB[] = $idIncidencia;
+
+                    if (
+                        $status == "PENDIENTE" || $status == "N"
+                    ) {
+                        $enProceso_dia++;
+                    } else {
+                        $solucionados_dia++;
+                    }
+                }
+            }
+
+            $arrayCreadas[$fechaX] = $creados_dia;
+            $arraySolucionadas[$fechaX] = $solucionados_dia;
+            $arrayenProceso[$fechaX] = $enProceso_dia;
+
+            #AUMENTA UN DÍA
+            $tiempoInicio += 86400;
+        }
+
+        #RATIOS
+        $ratioCreadas = 0;
+        $ratioSolucionados = 0;
+
+        if (
+            $creados_destino > 0 && $habitaciones > 0
+        )
+            $ratioCreadas = $creados_destino / $habitaciones;
+
+        if (
+            $solucionadas_destino > 0 && $habitaciones > 0
+        )
+            $ratioSolucionados = $solucionadas_destino / $habitaciones;
+
+        #ARRAY GLOBAL
+        // $array['data'] = array(
+        //     "creadas" => $creados_global,
+        //     "enProceso" => $enProceso_global,
+        //     "solucionadas" => $solucionadas_global,
+        //     "mediaEnProceso" => intval($mediaEnProceso_global),
+        //     "mediaSolucionados" => intval($mediaSolucionados_global),
+        // );
+
+        $array["creadas"] = $creados_global;
+        $array["enProceso"] = $enProceso_global;
+        $array["solucionadas"] = $solucionadas_global;
+        $array["mediaEnProceso"] = intval($mediaEnProceso_global);
+        $array["mediaSolucionados"] = intval($mediaSolucionados_global);
+
+        $array['grafica'] = array(
+            [
+                "name" => "Creadas", "data" => $arrayCreadas
+            ],
+            ["name" => "Solucionadas", "data" => $arraySolucionadas]
+        );
+        echo json_encode($array);
+    }
 }
