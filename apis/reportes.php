@@ -2592,7 +2592,7 @@ if (isset($_GET['action'])) {
                             $horasSolucionado = strtotime($fechaFinalizado);
                             $horasActual = strtotime($fechaActual);
 
-                            if ($status == "PROCESO") {
+                            if ($status == "PENDIENTE" || $status == "N") {
                                 $enProceso_destino++;
                                 $enProceso_global++;
 
@@ -2645,7 +2645,7 @@ if (isset($_GET['action'])) {
                             $horasSolucionado = strtotime($fechaFinalizado);
                             $horasActual = strtotime($fechaActual);
 
-                            if ($status == "PROCESO") {
+                            if ($status == "PENDIENTE" || $status == "N") {
                                 $enProceso_destino++;
                                 $enProceso_global++;
 
