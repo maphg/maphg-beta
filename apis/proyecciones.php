@@ -399,6 +399,7 @@ if (isset($_GET['action'])) {
       echo json_encode($resp);
    }
 
+
    #PROYECCIONES POR AÑOS
    if ($action == "obtenerProyecciones") {
 
@@ -537,8 +538,8 @@ if (isset($_GET['action'])) {
                         $año2030_3 = 0;
                         $año2031_3 = 0;
 
-                        $año = 2019;
-                        if ($vidaUtil_3 > 0) {
+                        $año = intval($añoInstalacion_3);
+                        if ($vidaUtil_3 > 0 && $año > 0) {
                            while ($año <= 2031) {
 
                               if ($año == 2021) {
