@@ -257,11 +257,27 @@ if (isset($_GET['action'])) {
 
    #AGREGA ITEM NIVEL 2 
    if ($action == "agregarNivel3") {
+      $data = json_decode(file_get_contents('php://input'), true);
+      $titulo = $data['titulo'];
+      $vidaUtil = intval($data['vidaUtil']);
+      $añoInstalacion = intval($data['añoInstalacion']);
+      $inversion = $data['inversion'];
+      $coste = floatval($data['coste']);
+      $unidades = intval($data['unidades']);
       $idDepartamento = $_GET['idDepartamento'];
       $idNivel = $_GET['idNivel'];
+      $total = 0;
+
+      if ($inversion != "FF&E" || $inversion != "OS&E")
+         $inversion = "";
+
+      if ($coste > 0 && $unidades > 0)
+         $total = $coste * $unidades;
+
+
 
       $resp = 0;
-      $query = "INSERT INTO t_proyecciones_anuales(id_destino, creado_por, id_departamento, id_nivel, nivel, activo) VALUES($idDestino, $idUsuario, $idDepartamento, $idNivel, 3, 1)";
+      $query = "INSERT INTO t_proyecciones_anuales(id_destino, creado_por, id_departamento, id_nivel, nivel, titulo, vida_util, año_instalacion, inversion, coste, unidades, total, activo) VALUES($idDestino, $idUsuario, $idDepartamento, $idNivel, 3, '$titulo', $vidaUtil, '$añoInstalacion', '$inversion', $coste, $unidades, $total, 1)";
       if ($result = mysqli_query($conn_2020, $query)) {
          $resp = 1;
       }
