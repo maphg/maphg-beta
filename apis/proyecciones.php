@@ -691,4 +691,25 @@ if (isset($_GET['action'])) {
       }
       echo json_encode($array);
    }
+
+
+   #ACTUALIZA DATOS DEL DESTINO
+   if ($action == "editarDestino") {
+      $data = json_decode(file_get_contents('php://input'), true);
+      $habitaciones = $data['habitaciones'];
+      $edadHotel = $data['edadHotel'];
+      $propietario = $data['propietario'];
+      $region = $data['region'];
+      $fechaApertura = $data['fechaApertura'];
+      $fechaExpansion = $data['fechaExpansion'];
+      $expansionHabitaciones = $data['expansionHabitaciones'];
+      $resp = 0;
+
+      $query = "UPDATE c_destinos SET habitaciones = $habitaciones, edad_hotel = '$edadHotel', propietario = '$propietario', region = '$region', fecha_apertura = '$fechaApertura', fecha_expansion = '$fechaExpansion', expansion_habitaciones = '$expansionHabitaciones'
+      WHERE id = $idDestino and status = 'A'";
+      if ($result = mysqli_query($conn_2020, $query)) {
+         $resp = 1;
+      }
+      echo json_encode($resp);
+   }
 }

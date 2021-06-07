@@ -3724,4 +3724,145 @@ if (isset($_GET['action'])) {
         $objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
         $objWriter->save('PHP://output');
     }
+
+
+    // EXPORTA TABLA DE PROYECCIONES POR DESTINO
+    if ($action == "reporteProyecciones") {
+        $fila = 1;
+        $objPHPExcel = new PHPExcel();
+        $objPHPExcel->getProperties()->setCreator("Reporte")->setDescription("Reporte");
+        $objPHPExcel->setActiveSheetIndex(0);
+        $objPHPExcel->getActiveSheet()->setTitle("Reporte Proyecciones");
+        $objPHPExcel->getActiveSheet()->setCellValue('A1', 'DEPARTAMENTO');
+        $objPHPExcel->getActiveSheet()->setCellValue('B1', 'CECO/SECCIÓN');
+        $objPHPExcel->getActiveSheet()->setCellValue('C1', 'TITULO');
+        $objPHPExcel->getActiveSheet()->setCellValue('D1', 'VIDA ÚTIL');
+        $objPHPExcel->getActiveSheet()->setCellValue('E1', 'AÑO INSTALACIÓN');
+        $objPHPExcel->getActiveSheet()->setCellValue('F1', 'ACTIVIDAD');
+        $objPHPExcel->getActiveSheet()->setCellValue('G1', 'INVERSIÓN');
+        $objPHPExcel->getActiveSheet()->setCellValue('H1', 'COSTE');
+        $objPHPExcel->getActiveSheet()->setCellValue('I1', 'UNIDADES');
+        $objPHPExcel->getActiveSheet()->setCellValue('J1', 'TOTAL');
+
+
+        $palabra = $_GET['palabra'];
+        $ceco = $_GET['ceco'];
+        $departamento = $_GET['departamento'];
+        $vidaUtil = $_GET['vidaUtil'];
+        $añoInstalacion = $_GET['añoInstalacion'];
+        $inversion = $_GET['inversion'];
+
+        if ($palabra == "") {
+            $filtroPalabraNivel2y3 = "";
+        } else {
+            $filtroPalabraNivel2y3 = "and (titulo LIKE '%$palabra%' OR vida_util LIKE '%$palabra%' OR inversion LIKE '%$palabra%' OR coste LIKE '%$palabra%' OR unidades LIKE '%$palabra%' OR total LIKE '%$palabra%')";
+        }
+
+        if ($departamento == "TODOS") {
+            $filtroDepartamento = "";
+        } else {
+            $filtroDepartamento = "and departamento = '$departamento'";
+        }
+
+        if ($ceco == "TODOS") {
+            $filtroCeco = "";
+        } else {
+            $filtroCeco = "and seccion = '$ceco'";
+        }
+
+        if ($vidaUtil == "TODOS") {
+            $filtroVidaUtil = "";
+        } else {
+            $filtroVidaUtil = "and vida_util = '$vidaUtil'";
+        }
+
+        if ($añoInstalacion == "TODOS") {
+            $filtroAñoInstalacion = "";
+        } else {
+            $filtroAñoInstalacion = " and año_instalacion = '$añoInstalacion'";
+        }
+
+        if ($inversion == "TODOS") {
+            $filtroInversion = "";
+        } else {
+            $filtroInversion = "inversion = '$inversion'";
+        }
+
+        #OBTENER DEPARTAMENTOS POR DESTINO
+        $query = "SELECT id, departamento, seccion, coste
+        FROM t_proyecciones_departamentos
+        WHERE id_destino = $idDestino and activo = 1 $filtroCeco $filtroDepartamento";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idDepartamento = $x['id'];
+                $departamento = $x['departamento'];
+                $seccion = $x['seccion'];
+                $coste = 0;
+                $fila++;
+
+
+                $objPHPExcel->getActiveSheet()->setCellValue('A' . $fila, $departamento);
+                $objPHPExcel->getActiveSheet()->setCellValue('B' . $fila, $seccion);
+
+                #OBTIENE ITEMS POR DESTINO
+                $query = "SELECT* FROM t_proyecciones_anuales
+                WHERE activo = 1 and id_departamento = $idDepartamento and
+                ((nivel = 2 and id_nivel = 0) or (nivel = 3 and id_nivel = 0))";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $idItem_2 = $x['id'];
+                        $idDepartamento_2 = $x['id_departamento'];
+                        $idNivel_2 = $x['id_nivel'];
+                        $nivel_2 = $x['nivel'];
+                        $titulo_2 = $x['titulo'];
+                        $vidaUtil_2 = $x['vida_util'];
+                        $añoInstalacion_2 = $x['año_instalacion'];
+                        $inversion_2 = $x['inversion'];
+                        $coste_2 = $x['coste'];
+                        $unidades_2 = $x['unidades'];
+                        $total_2 = $x['total'];
+                        $totalNivel2_2 = 0;
+                        $fila++;
+
+                        $objPHPExcel->getActiveSheet()->setCellValue('C' . $fila, $titulo_2);
+
+                        $query = "SELECT* FROM t_proyecciones_anuales
+                        WHERE nivel = 3 and id_nivel = $idItem_2 and activo = 1 $filtroPalabraNivel2y3 $filtroVidaUtil $filtroAñoInstalacion $filtroInversion";
+                        if ($result = mysqli_query($conn_2020, $query)) {
+                            foreach ($result as $x) {
+                                $idItem_3 = $x['id'];
+                                $idDepartamento_3 = $x['id_departamento'];
+                                $idNivel_3 = $x['id_nivel'];
+                                $nivel_3 = $x['nivel'];
+                                $titulo_3 = $x['titulo'];
+                                $vidaUtil_3 = $x['vida_util'];
+                                $añoInstalacion_3 = $x['año_instalacion'];
+                                $inversion_3 = $x['inversion'];
+                                $coste_3 = $x['coste'];
+                                $unidades_3 = $x['unidades'];
+                                $total_3 = $x['total'];
+                                $totalNivel2_2 += $total_3;
+                                $coste += $total_3;
+                                $fila++;
+
+                                $objPHPExcel->getActiveSheet()->setCellValue('D' . $fila, $titulo_3);
+                                $objPHPExcel->getActiveSheet()->setCellValue('E' . $fila, $vidaUtil_3);
+                                $objPHPExcel->getActiveSheet()->setCellValue('F' . $fila, $añoInstalacion_3);
+                                $objPHPExcel->getActiveSheet()->setCellValue('G' . $fila, $inversion_3);
+                                $objPHPExcel->getActiveSheet()->setCellValue('H' . $fila, $coste_3);
+                                $objPHPExcel->getActiveSheet()->setCellValue('I' . $fila, $unidades_3);
+                                $objPHPExcel->getActiveSheet()->setCellValue('J' . $fila, $total_3);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        header('Content-Disposition: attachment;filename="Reporte_Proyecciones_' . $fechaActual . '.xlsx"');
+        header('Cache-Control: max-age=0');
+        $objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
+        $objWriter->save('PHP://output');
+    }
 }
