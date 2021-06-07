@@ -268,8 +268,8 @@ if (isset($_GET['action'])) {
       $idNivel = $_GET['idNivel'];
       $total = 0;
 
-      if ($inversion != "FF&E" || $inversion != "OS&E")
-         $inversion = "";
+      // if ($inversion != "FF&E" || $inversion != "OS&E")
+      //    $inversion = "";
 
       if ($coste > 0 && $unidades > 0)
          $total = $coste * $unidades;
