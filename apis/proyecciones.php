@@ -75,6 +75,7 @@ if (isset($_GET['action'])) {
       echo json_encode($array);
    }
 
+
    // OBTIENE
    if ($action == "obtenerItems") {
       $data = json_decode(file_get_contents('php://input'), true);
@@ -222,27 +223,37 @@ if (isset($_GET['action'])) {
       echo json_encode($array);
    }
 
+
    #CREA UN NUEVO DEPARTAMENTO
    if ($action == "agregarDepartamento") {
+      $data = json_decode(file_get_contents('php://input'), true);
+
+      $departamento = $data['departamento'];
+      $seccion = $data['seccion'];
+
       $resp = 0;
-      $query = "INSERT INTO t_proyecciones_departamentos(id_destino, creado_por, departamento, seccion, activo) VALUES($idDestino, $idUsuario, '', '', 1)";
+      $query = "INSERT INTO t_proyecciones_departamentos(id_destino, creado_por, departamento, seccion, activo) VALUES($idDestino, $idUsuario, '$departamento', '$seccion', 1)";
       if ($result = mysqli_query($conn_2020, $query)) {
          $resp = 1;
       }
       echo json_encode($resp);
    }
+
 
    #AGREGA ITEM NIVEL 2 
    if ($action == "agregarNivel2") {
+      $data = json_decode(file_get_contents('php://input'), true);
+      $titulo = $data['titulo'];
       $idDepartamento = $_GET['idDepartamento'];
 
       $resp = 0;
-      $query = "INSERT INTO t_proyecciones_anuales(id_destino, creado_por, id_departamento, id_nivel, nivel, activo) VALUES($idDestino, $idUsuario, $idDepartamento, 0, 2, 1)";
+      $query = "INSERT INTO t_proyecciones_anuales(id_destino, creado_por, id_departamento, id_nivel, nivel, titulo, activo) VALUES($idDestino, $idUsuario, $idDepartamento, 0, 2, '$titulo', 1)";
       if ($result = mysqli_query($conn_2020, $query)) {
          $resp = 1;
       }
       echo json_encode($resp);
    }
+
 
    #AGREGA ITEM NIVEL 2 
    if ($action == "agregarNivel3") {
@@ -257,6 +268,7 @@ if (isset($_GET['action'])) {
       echo json_encode($resp);
    }
 
+
    #ELIMINAR ITEM NIVEL 2 
    if ($action == "eliminarNivel2") {
       $idNivel = $_GET['idNivel'];
@@ -268,6 +280,7 @@ if (isset($_GET['action'])) {
       }
       echo json_encode($resp);
    }
+
 
    #ELIMINAR ITEM NIVEL 3 
    if ($action == "eliminarNivel3") {
@@ -283,6 +296,7 @@ if (isset($_GET['action'])) {
       echo json_encode($resp);
    }
 
+
    #ELIMINAR ITEM NIVEL 3 
    if ($action == "eliminarDepartamento") {
       $idDepartamento = $_GET['idDepartamento'];
@@ -296,6 +310,7 @@ if (isset($_GET['action'])) {
       }
       echo json_encode($resp);
    }
+
 
    #ACTUALIZAR DEPARTAMENTO
    if ($action == "editarDepartamento") {
@@ -314,6 +329,7 @@ if (isset($_GET['action'])) {
       echo json_encode($resp);
    }
 
+
    #ACTUALIZAR NIVEL 2
    if ($action == "editarNivel2") {
       $resp = 0;
@@ -330,6 +346,7 @@ if (isset($_GET['action'])) {
       }
       echo json_encode($resp);
    }
+
 
    #ACTUALIZAR NIVEL 2
    if ($action == "editarNivel3") {
@@ -425,6 +442,18 @@ if (isset($_GET['action'])) {
             $seccion = $x['seccion'];
             $coste = 0;
 
+            $año2021_1 = 0;
+            $año2022_1 = 0;
+            $año2023_1 = 0;
+            $año2024_1 = 0;
+            $año2025_1 = 0;
+            $año2026_1 = 0;
+            $año2027_1 = 0;
+            $año2028_1 = 0;
+            $año2029_1 = 0;
+            $año2030_1 = 0;
+            $año2031_1 = 0;
+
             $arrayItems = array();
 
             #OBTIENE ITEMS POR DESTINO
@@ -492,61 +521,72 @@ if (isset($_GET['action'])) {
                         $año2030_3 = 0;
                         $año2031_3 = 0;
 
-                        $año = 2020;
+                        $año = 2019;
                         if ($vidaUtil_3 > 0) {
                            while ($año <= 2031) {
 
                               if ($año == 2021) {
+                                 $año2021_1 += $total_3;
                                  $año2021_2 += $total_3;
                                  $año2021_3 = $total_3;
                               }
 
                               if ($año == 2022) {
+                                 $año2022_1 += $total_3;
                                  $año2022_2 += $total_3;
                                  $año2022_3 = $total_3;
                               }
 
                               if ($año == 2023) {
+                                 $año2023_1 += $total_3;
                                  $año2023_2 += $total_3;
                                  $año2023_3 = $total_3;
                               }
 
                               if ($año == 2024) {
+                                 $año2024_1 += $total_3;
                                  $año2024_2 += $total_3;
                                  $año2024_3 = $total_3;
                               }
 
                               if ($año == 2025) {
+                                 $año2025_1 += $total_3;
                                  $año2025_2 += $total_3;
                                  $año2025_3 = $total_3;
                               }
 
                               if ($año == 2026) {
+                                 $año2026_1 += $total_3;
                                  $año2026_2 += $total_3;
                                  $año2026_3 = $total_3;
                               }
 
                               if ($año == 2027) {
+                                 $año2027_1 += $total_3;
                                  $año2027_2 += $total_3;
                                  $año2027_3 = $total_3;
                               }
 
                               if ($año == 2028) {
+                                 $año2028_1 += $total_3;
                                  $año2028_2 += $total_3;
                                  $año2028_3 = $total_3;
                               }
 
                               if ($año == 2029) {
+                                 $año2029_1 += $total_3;
                                  $año2029_2 += $total_3;
                                  $año2029_3 = $total_3;
                               }
 
                               if ($año == 2030) {
+                                 $año2030_1 += $total_3;
                                  $año2030_2 += $total_3;
                                  $año2030_3 = $total_3;
                               }
 
                               if ($año == 2031) {
+                                 $año2031_1 += $total_3;
                                  $año2031_2 += $total_3;
                                  $año2031_3 = $total_3;
                               }
@@ -608,7 +648,6 @@ if (isset($_GET['action'])) {
                      "año2029" => $año2029_2,
                      "año2030" => $año2030_2,
                      "año2031" => $año2031_2,
-                     "año2021" => $año2021_2,
                   );
                }
             }
@@ -619,7 +658,18 @@ if (isset($_GET['action'])) {
                "departamento" => $departamento,
                "seccion" => $seccion,
                "coste" => $coste,
-               "items" => $arrayItems
+               "items" => $arrayItems,
+               "año2021" => $año2021_1,
+               "año2022" => $año2022_1,
+               "año2023" => $año2023_1,
+               "año2024" => $año2024_1,
+               "año2025" => $año2025_1,
+               "año2026" => $año2026_1,
+               "año2027" => $año2027_1,
+               "año2028" => $año2028_1,
+               "año2029" => $año2029_1,
+               "año2030" => $año2030_1,
+               "año2031" => $año2031_1,
             );
          }
       }
