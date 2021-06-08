@@ -596,7 +596,7 @@ if (isset($_GET['action'])) {
 
                               if ($año == 2022) {
                                  $año2022_1 += $total_3;
-                                 $año2022_2 = $total_3;
+                                 $año2022_2 += $total_3;
                                  $año2022_3 = $total_3;
                               }
 
