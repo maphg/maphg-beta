@@ -133,6 +133,7 @@ if (isset($_GET['action'])) {
             $departamento = $x['departamento'];
             $seccion = $x['seccion'];
             $coste = 0;
+            $total = 0;
 
             $arrayItems = array();
 
@@ -154,6 +155,7 @@ if (isset($_GET['action'])) {
                   $unidades_2 = $x['unidades'];
                   $total_2 = $x['total'];
                   $totalNivel2_2 = 0;
+                  $totalHisjo_2 = 0;
 
                   $arrayNivel3 = array();
 
@@ -173,7 +175,7 @@ if (isset($_GET['action'])) {
                         $unidades_3 = $x['unidades'];
                         $total_3 = $x['total'];
                         $totalNivel2_2 += $total_3;
-                        $coste += $total_3;
+                        $totalHisjo_2++;
 
                         $arrayNivel3[] = array(
                            "idItem" => $idItem_3,
@@ -191,22 +193,46 @@ if (isset($_GET['action'])) {
                      }
                   }
 
-                  #ARRAY
-                  $arrayItems[] = array(
-                     "idItem" => $idItem_2,
-                     "idDepartamento" => $idDepartamento_2,
-                     "idNivel" => $idNivel_2,
-                     "nivel" => $nivel_2,
-                     "titulo" => $titulo_2,
-                     "vidaUtil" => $vidaUtil_2,
-                     "añoInstalacion" => $añoInstalacion_2,
-                     "inversion" => $inversion_2,
-                     "coste" => $coste_2,
-                     "unidades" => $unidades_2,
-                     "total" => $total_2,
-                     "totalNivel2" => $totalNivel2_2,
-                     "itemsNivel3" => $arrayNivel3
-                  );
+                  if ($totalHisjo_2 == 0) {
+                     #TOTAL GLOBAL POR DEPARTAMENTO
+                     $total += $total_2;
+                     #ARRAY
+                     $arrayItems[] = array(
+                        "idItem" => $idItem_2,
+                        "idDepartamento" => $idDepartamento_2,
+                        "idNivel" => $idNivel_2,
+                        "nivel" => $nivel_2,
+                        "titulo" => $titulo_2,
+                        "vidaUtil" => $vidaUtil_2,
+                        "añoInstalacion" => $añoInstalacion_2,
+                        "inversion" => $inversion_2,
+                        "coste" => $coste_2,
+                        "unidades" => $unidades_2,
+                        "total" => $total_2,
+                        "totalNivel2" => $total_2,
+                        "itemsNivel3" => $arrayNivel3
+                     );
+                  } else {
+                     #TOTAL GLOBAL POR DEPARTAMENTO
+                     $total += $totalNivel2_2;
+
+                     #ARRAY
+                     $arrayItems[] = array(
+                        "idItem" => $idItem_2,
+                        "idDepartamento" => $idDepartamento_2,
+                        "idNivel" => $idNivel_2,
+                        "nivel" => $nivel_2,
+                        "titulo" => $titulo_2,
+                        "vidaUtil" => '',
+                        "añoInstalacion" => '',
+                        "inversion" => '',
+                        "coste" => '',
+                        "unidades" => '',
+                        "total" => $totalNivel2_2,
+                        "totalNivel2" => $total_2,
+                        "itemsNivel3" => $arrayNivel3
+                     );
+                  }
                }
             }
 
@@ -216,6 +242,7 @@ if (isset($_GET['action'])) {
                "departamento" => $departamento,
                "seccion" => $seccion,
                "coste" => $coste,
+               "total" => $total,
                "items" => $arrayItems
             );
          }
@@ -352,10 +379,28 @@ if (isset($_GET['action'])) {
       $data = json_decode(file_get_contents('php://input'), true);
 
       $idItem = $_GET['idItem'];
-      $titulo = $data['titulo'];
+      $titulo = $data['titulo2'];
+      $vidaUtil = $data['vidaUtil'];
+      $añoInstalacion = $data['añoInstalacion'];
+      $inversion = $data['inversion'];
+      $coste = $data['coste'];
+      $unidades = $data['unidades'];
+      $total = 0;
+
+      if ($vidaUtil <= 0)
+         $vidaUtil = 0;
+
+      if ($coste <= 0)
+         $coste = 0;
+
+      if ($unidades <= 0)
+         $unidades = 0;
+
+      if ($coste > 0 && $unidades > 0)
+         $total = $coste * $unidades;
 
       $query = "UPDATE t_proyecciones_anuales
-      SET titulo = '$titulo', ultima_modificacion = '$fechaActual', modificado_por = $idUsuario 
+      SET titulo = '$titulo', vida_util = $vidaUtil, año_instalacion = '$añoInstalacion', inversion = '$inversion', coste = $coste, unidades = $unidades, total = $total, ultima_modificacion = '$fechaActual', modificado_por = $idUsuario
       WHERE id = $idItem";
       if ($result = mysqli_query($conn_2020, $query)) {
          $resp = 1;
@@ -476,7 +521,7 @@ if (isset($_GET['action'])) {
             #OBTIENE ITEMS POR DESTINO
             $query = "SELECT* FROM t_proyecciones_anuales
             WHERE activo = 1 and id_departamento = $idDepartamento and
-            ((nivel = 2 and id_nivel = 0) or (nivel = 3 and id_nivel = 0))";
+            ((nivel = 2 and id_nivel = 0))";
             if ($result = mysqli_query($conn_2020, $query)) {
                foreach ($result as $x) {
                   $idItem_2 = $x['id'];
@@ -491,6 +536,7 @@ if (isset($_GET['action'])) {
                   $unidades_2 = $x['unidades'];
                   $total_2 = $x['total'];
                   $totalNivel2_2 = 0;
+                  $totalHisjo_2 = 0;
 
                   $año2021_2 = 0;
                   $año2022_2 = 0;
@@ -503,12 +549,11 @@ if (isset($_GET['action'])) {
                   $año2029_2 = 0;
                   $año2030_2 = 0;
                   $año2031_2 = 0;
-                  $año2021_2 = 0;
 
                   $arrayNivel3 = array();
 
                   $query = "SELECT* FROM t_proyecciones_anuales
-                  WHERE nivel = 3 and id_nivel = $idItem_2 and activo = 1 
+                  WHERE nivel = 3 and id_nivel = $idItem_2 and activo = 1 and inversion = 'FF&E'
                   $filtroPalabraNivel2y3 $filtroVidaUtil $filtroAñoInstalacion $filtroInversion";
                   if ($result = mysqli_query($conn_2020, $query)) {
                      foreach ($result as $x) {
@@ -525,6 +570,7 @@ if (isset($_GET['action'])) {
                         $total_3 = $x['total'];
                         $totalNivel2_2 += $total_3;
                         $coste += $total_3;
+                        $totalHisjo_2++;
 
                         $año2021_3 = 0;
                         $año2022_3 = 0;
@@ -550,7 +596,7 @@ if (isset($_GET['action'])) {
 
                               if ($año == 2022) {
                                  $año2022_1 += $total_3;
-                                 $año2022_2 += $total_3;
+                                 $año2022_2 = $total_3;
                                  $año2022_3 = $total_3;
                               }
 
@@ -639,33 +685,127 @@ if (isset($_GET['action'])) {
                      }
                   }
 
-                  #ARRAY
-                  $arrayItems[] = array(
-                     "idItem" => $idItem_2,
-                     "idDepartamento" => $idDepartamento_2,
-                     "idNivel" => $idNivel_2,
-                     "nivel" => $nivel_2,
-                     "titulo" => $titulo_2,
-                     "vidaUtil" => $vidaUtil_2,
-                     "añoInstalacion" => $añoInstalacion_2,
-                     "inversion" => $inversion_2,
-                     "coste" => $coste_2,
-                     "unidades" => $unidades_2,
-                     "total" => $total_2,
-                     "totalNivel2" => $totalNivel2_2,
-                     "itemsNivel3" => $arrayNivel3,
-                     "año2021" => $año2021_2,
-                     "año2022" => $año2022_2,
-                     "año2023" => $año2023_2,
-                     "año2024" => $año2024_2,
-                     "año2025" => $año2025_2,
-                     "año2026" => $año2026_2,
-                     "año2027" => $año2027_2,
-                     "año2028" => $año2028_2,
-                     "año2029" => $año2029_2,
-                     "año2030" => $año2030_2,
-                     "año2031" => $año2031_2,
-                  );
+                  if ($totalHisjo_2 === 0) {
+
+                     $año = intval($añoInstalacion_2);
+                     if ($vidaUtil_2 > 0 && $año > 0) {
+                        while ($año <= 2031) {
+
+                           if ($año == 2021) {
+                              $año2021_1 += $total_2;
+                              $año2021_2 += $total_2;
+                           }
+
+                           if ($año == 2022) {
+                              $año2022_1 += $total_2;
+                              $año2022_2 += $total_2;
+                           }
+
+                           if ($año == 2023) {
+                              $año2023_1 += $total_2;
+                              $año2023_2 += $total_2;
+                           }
+
+                           if ($año == 2024) {
+                              $año2024_1 += $total_2;
+                              $año2024_2 += $total_2;
+                           }
+
+                           if ($año == 2025) {
+                              $año2025_1 += $total_2;
+                              $año2025_2 += $total_2;
+                           }
+
+                           if ($año == 2026) {
+                              $año2026_1 += $total_2;
+                              $año2026_2 += $total_2;
+                           }
+
+                           if ($año == 2027) {
+                              $año2027_1 += $total_2;
+                              $año2027_2 += $total_2;
+                           }
+
+                           if ($año == 2028) {
+                              $año2028_1 += $total_2;
+                              $año2028_2 += $total_2;
+                           }
+
+                           if ($año == 2029) {
+                              $año2029_1 += $total_2;
+                              $año2029_2 += $total_2;
+                           }
+
+                           if ($año == 2030) {
+                              $año2030_1 += $total_2;
+                              $año2030_2 += $total_2;
+                           }
+
+                           if ($año == 2031) {
+                              $año2031_1 += $total_2;
+                              $año2031_2 += $total_2;
+                           }
+
+                           $año += $vidaUtil_2;
+                        }
+                     }
+                     #ARRAY
+                     $arrayItems[] = array(
+                        "idItem" => $idItem_2,
+                        "idDepartamento" => $idDepartamento_2,
+                        "idNivel" => $idNivel_2,
+                        "nivel" => $nivel_2,
+                        "titulo" => $titulo_2,
+                        "vidaUtil" => $vidaUtil_2,
+                        "añoInstalacion" => $añoInstalacion_2,
+                        "inversion" => $inversion_2,
+                        "coste" => $coste_2,
+                        "unidades" => $unidades_2,
+                        "total" => $total_2,
+                        "totalNivel2" => $totalNivel2_2,
+                        "itemsNivel3" => $arrayNivel3,
+                        "año2021" => $año2021_2,
+                        "año2022" => $año2022_2,
+                        "año2023" => $año2023_2,
+                        "año2024" => $año2024_2,
+                        "año2025" => $año2025_2,
+                        "año2026" => $año2026_2,
+                        "año2027" => $año2027_2,
+                        "año2028" => $año2028_2,
+                        "año2029" => $año2029_2,
+                        "año2030" => $año2030_2,
+                        "año2031" => $año2031_2,
+                     );
+                  } else {
+
+                     #ARRAY
+                     $arrayItems[] = array(
+                        "idItem" => $idItem_2,
+                        "idDepartamento" => $idDepartamento_2,
+                        "idNivel" => $idNivel_2,
+                        "nivel" => $nivel_2,
+                        "titulo" => $titulo_2,
+                        "vidaUtil" => $vidaUtil_2,
+                        "añoInstalacion" => $añoInstalacion_2,
+                        "inversion" => $inversion_2,
+                        "coste" => $coste_2,
+                        "unidades" => $unidades_2,
+                        "total" => $total_2,
+                        "totalNivel2" => $totalNivel2_2,
+                        "itemsNivel3" => $arrayNivel3,
+                        "año2021" => $año2021_2,
+                        "año2022" => $año2022_2,
+                        "año2023" => $año2023_2,
+                        "año2024" => $año2024_2,
+                        "año2025" => $año2025_2,
+                        "año2026" => $año2026_2,
+                        "año2027" => $año2027_2,
+                        "año2028" => $año2028_2,
+                        "año2029" => $año2029_2,
+                        "año2030" => $año2030_2,
+                        "año2031" => $año2031_2,
+                     );
+                  }
                }
             }
 
