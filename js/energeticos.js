@@ -187,12 +187,13 @@ const obtenerEnlaces = () => {
     let idDestino = localStorage.getItem('idDestino');
     let idUsuario = localStorage.getItem('usuario');
 
-    const action = "obtenerEnlaces";
+    const action = "obtenerEnlacesEnergeticos";
     const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&tipoEnlace=ENERGETICO`;
 
     fetch(URL)
         .then(array => array.json())
         .then(array => {
+            console.log(array);
             dataPowerbin.innerHTML = '';
             return array;
         })
@@ -209,17 +210,22 @@ const obtenerEnlaces = () => {
                 for (let x = 0; x < array.length; x++) {
                     const idDestinoX = array[x].idDestinoX;
                     const url = array[x].url;
+                    const urlExcel = array[x].urlExcel;
 
                     const sizeW = array.length > 1 ? '400px;' : '800px;';
                     const sizeH = array.length > 1 ? '350px;' : '700px;';
+
                     const iconSize = array.length > 1 ?
                         `<i class="fas fa-arrows-alt absolute top-0 right-0 fa-lg py-2 cursor-pointer" onclick="url('${url}');"></i>` : '';
+
+                    const iconURL = `<i class="fas fa-file-excel absolute top-0 right-0 mt-1 mr-16 fa-lg py-2 cursor-pointer text-green-400" onclick="openUrl('${urlExcel}');"></i>`;
 
                     const codigo = `
                     <div class="py-1 mx-auto relative text-transparent hover:text-gray-500">
                     ${iconSize}
+                    ${iconURL}
                     <iframe id="url_${idDestinoX}" class="iframe" width="${sizeW}" height="${sizeH}" src="${url}" frameborder="0" allowFullScreen="true"></iframe>
-                    </div>            
+                    </div>       
                     `;
                     dataPowerbin.insertAdjacentHTML('beforeend', codigo);
                 }
@@ -309,6 +315,11 @@ function url(urlX) {
     alertify.powerbi(urlX).set({
         frameless: false
     });
+}
+
+
+const openUrl = url => {
+    window.open(url);
 }
 
 

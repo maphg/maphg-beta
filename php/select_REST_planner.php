@@ -4505,6 +4505,53 @@ if (isset($_GET['action'])) {
     }
 
 
+    // OBTIENE ENLACES DE ENERGETICOS
+    if ($action == "obtenerEnlacesEnergeticos") {
+        $tipoEnlace = $_GET['tipoEnlace'];
+        $array = array();
+
+        if ($idDestino == 10) {
+            $filtroDestino = "";
+        } else {
+            $filtroDestino = "and id_destino = $idDestino";
+        }
+
+        $query = "SELECT id, id_destino, tipo_enlace, url, descripcion, fecha 
+        FROM t_enlaces 
+        WHERE tipo_enlace = '$tipoEnlace' $filtroDestino";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idEnlace = $x['id'];
+                $idDestinoX = $x['id_destino'];
+                $tipoEnlace = $x['tipo_enlace'];
+                $url = $x['url'];
+                $descripcion = $x['descripcion'];
+                $fecha = $x['fecha'];
+
+                $urlExcel = '#';
+                $query = "SELECT url FROM t_enlaces 
+                WHERE tipo_enlace = 'ENERGETICOEXCEL' and id_destino = $idDestinoX";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $urlExcel = $x['url'];
+                    }
+                }
+
+                $array[] = array(
+                    "idEnlace" => intval($idEnlace),
+                    "idDestinoX" => intval($idDestinoX),
+                    "tipoEnlace" => $tipoEnlace,
+                    "url" => $url,
+                    "urlExcel" => $urlExcel,
+                    "descripcion" => $descripcion,
+                    "fecha" => $fecha
+                );
+            }
+        }
+        echo json_encode($array);
+    }
+
+
     // MUEVE REGISTRO
     if ($action == "moverA") {
         $id = $_GET['id'];
