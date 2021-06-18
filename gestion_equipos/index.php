@@ -363,6 +363,11 @@
                                 <h1 class="font-bold text-bluegray-900 uppercase">Años de Vida Util</h1>
                                 <input id="añoVidaUtilEquipo" type="number" min="0" step="1" value="0" class="font-semibold bg-white">
                             </div>
+
+                            <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                                <h1 class="font-bold text-bluegray-900 uppercase">Coste</h1>
+                                <input id="costeEquipo" type="number" min="0" step="1" value="0" class="font-semibold bg-white">
+                            </div>
                         </div>
 
                         <div class="flex-none w-2/12">
