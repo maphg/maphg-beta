@@ -256,6 +256,7 @@ const e_fechaInstalacionEquipo = document.getElementById("fechaInstalacionEquipo
 const e_fechaCompraEquipo = document.getElementById("fechaCompraEquipo");
 const e_añoGarantiaEquipo = document.getElementById("añoGarantiaEquipo");
 const e_añoVidaUtilEquipo = document.getElementById("añoVidaUtilEquipo");
+const e_costeEquipo = document.getElementById("costeEquipo");
 const e_estadoEquipo = document.getElementById("estadoEquipo");
 const e_tipoLocalEquipo = document.getElementById("tipoLocalEquipo");
 const e_idFaseEquipo = document.getElementById("idFaseEquipo");
@@ -5270,7 +5271,7 @@ function toggleDisabledEditarEquipo(estadoInputs) {
    let idEquipo = localStorage.getItem('idEquipo');
 
    const arrayBtnEquipo =
-      ['capacidadEquipo', 'fechaInstalacionEquipo', 'fechaCompraEquipo', 'añoGarantiaEquipo', 'añoVidaUtilEquipo', 'nombreEquipo', 'seccionEquipo', 'subseccionEquipo', 'tipoEquipo', 'jerarquiaEquipo', 'marcaEquipo', 'modeloEquipo', 'serieEquipo', 'codigoFabricanteEquipo', 'codigoInternoComprasEquipo', 'largoEquipo', 'anchoEquipo', 'altoEquipo', 'potenciaElectricaHPEquipo', 'potenciaElectricaKWEquipo', 'voltajeEquipo', 'frecuenciaEquipo', 'caudalAguaM3HEquipo', 'caudalAguaGPHEquipo', 'cargaMCAEquipo', 'PotenciaEnergeticaFrioKWEquipo', 'potenciaEnergeticaFrioTREquipo', 'potenciaEnergeticaCalorKCALEquipo', 'caudalAireM3HEquipo', 'caudalAireCFMEquipo', 'estadoEquipo', 'idFaseEquipo', 'tipoLocalEquipo', 'dataOpcionesEquipos']
+      ['capacidadEquipo', 'fechaInstalacionEquipo', 'fechaCompraEquipo', 'añoGarantiaEquipo', 'añoVidaUtilEquipo', 'costeEquipo', 'nombreEquipo', 'seccionEquipo', 'subseccionEquipo', 'tipoEquipo', 'jerarquiaEquipo', 'marcaEquipo', 'modeloEquipo', 'serieEquipo', 'codigoFabricanteEquipo', 'codigoInternoComprasEquipo', 'largoEquipo', 'anchoEquipo', 'altoEquipo', 'potenciaElectricaHPEquipo', 'potenciaElectricaKWEquipo', 'voltajeEquipo', 'frecuenciaEquipo', 'caudalAguaM3HEquipo', 'caudalAguaGPHEquipo', 'cargaMCAEquipo', 'PotenciaEnergeticaFrioKWEquipo', 'potenciaEnergeticaFrioTREquipo', 'potenciaEnergeticaCalorKCALEquipo', 'caudalAireM3HEquipo', 'caudalAireCFMEquipo', 'estadoEquipo', 'idFaseEquipo', 'tipoLocalEquipo', 'dataOpcionesEquipos']
 
    arrayBtnEquipo.forEach(element => {
       if (estadoInputs == 1) {
@@ -5317,6 +5318,7 @@ function cancelarInformacionEquipo(idEquipo) {
          e_fechaCompraEquipo.value = '';
          e_añoGarantiaEquipo.value = '';
          e_añoVidaUtilEquipo.value = '';
+         e_costeEquipo.value = '';
          e_nombreEquipo.value = '';
          e_estadoEquipo.value = '';
          e_tipoLocalEquipo.value = '';
@@ -5367,6 +5369,7 @@ function cancelarInformacionEquipo(idEquipo) {
             e_fechaCompraEquipo.value = array.fechaCompra;
             e_añoGarantiaEquipo.value = array.añoGarantia;
             e_añoVidaUtilEquipo.value = array.añoVidaUtil;
+            e_costeEquipo.value = array.coste;
 
             e_marcaEquipo.value = array.idMarca;
             e_modeloEquipo.value = array.modelo;
@@ -5405,6 +5408,7 @@ function cancelarInformacionEquipo(idEquipo) {
          e_fechaCompraEquipo.value = '';
          e_añoGarantiaEquipo.value = '';
          e_añoVidaUtilEquipo.value = '';
+         e_costeEquipo.value = '';
          e_capacidadEquipo.value = '';
          e_nombreEquipo.value = '';
          e_estadoEquipo.value = '';
@@ -5454,6 +5458,7 @@ function actualizarEquipo(idEquipo) {
    data.append('fechaCompra', e_fechaCompraEquipo.value);
    data.append('añoGarantia', e_añoGarantiaEquipo.value);
    data.append('añoVidaUtil', e_añoVidaUtilEquipo.value);
+   data.append('coste', e_costeEquipo.value);
    data.append('capacidad', e_capacidadEquipo.value);
    data.append('equipo', e_nombreEquipo.value);
    data.append('status', e_estadoEquipo.value);
@@ -5645,6 +5650,7 @@ function informacionEquipo(idEquipo) {
                e_fechaCompraEquipo.value = array.fechaCompra;
                e_añoGarantiaEquipo.value = array.añoGarantia;
                e_añoVidaUtilEquipo.value = array.añoVidaUtil;
+               e_costeEquipo.value = array.coste;
 
                e_marcaEquipo.value = array.idMarca;
                e_modeloEquipo.value = array.modelo;
@@ -5701,6 +5707,7 @@ function informacionEquipo(idEquipo) {
             e_fechaCompraEquipo.value = '';
             e_añoGarantiaEquipo.value = '';
             e_añoVidaUtilEquipo.value = '';
+            e_costeEquipo.value = '';
             e_estadoEquipo.value = '';
             e_tipoLocalEquipo.value = '';
             e_idFaseEquipo.value = '';

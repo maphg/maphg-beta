@@ -2277,6 +2277,7 @@ if (isset($_GET['action'])) {
         $fechaCompra = $_POST['fechaCompra'];
         $añoGarantia = $_POST['añoGarantia'];
         $añoVidaUtil = $_POST['añoVidaUtil'];
+        $coste = floatval($_POST['coste']);
 
         $resp = 0;
 
@@ -2325,6 +2326,7 @@ if (isset($_GET['action'])) {
             años_vida_util = '$añoVidaUtil',
             id_fases = '$idFases',
             status = '$status',
+            coste = $coste,
             fecha_modificado = '$fechaActual'
             WHERE id = $idEquipo";
         if ($result = mysqli_query($conn_2020, $query)) {
