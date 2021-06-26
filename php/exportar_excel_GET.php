@@ -1853,7 +1853,6 @@ if (isset($_GET['action'])) {
             $filtroPalabra = "and (t_equipos_america.equipo LIKE '%$filtroPalabra%')";
         }
 
-
         $objPHPExcel = new PHPExcel();
         $objPHPExcel->getProperties()->setCreator("Reporte")->setDescription("Reporte");
         $objPHPExcel->setActiveSheetIndex(0);
@@ -1874,9 +1873,30 @@ if (isset($_GET['action'])) {
         $objPHPExcel->getActiveSheet()->setCellValue('N1', 'EQUIPO / LOCAL');
         $objPHPExcel->getActiveSheet()->setCellValue('O1', 'UBICACIÓN');
         $objPHPExcel->getActiveSheet()->setCellValue('P1', 'PROMIXO MP');
+        $objPHPExcel->getActiveSheet()->setCellValue('Q1', 'VIDA ÚTIL');
+        $objPHPExcel->getActiveSheet()->setCellValue('R1', 'AÑO INSTALACIÓN');
+        $objPHPExcel->getActiveSheet()->setCellValue('S1', 'INVERSIÓN');
+        $objPHPExcel->getActiveSheet()->setCellValue('T1', 'COSTE');
+        $objPHPExcel->getActiveSheet()->setCellValue('U1', 'UNIDADES');
+        $objPHPExcel->getActiveSheet()->setCellValue('V1', 'TOTAL');
 
-        $query = "SELECT t_equipos_america.id, t_equipos_america.id_equipo_principal, t_equipos_america.equipo, t_equipos_america.local_equipo, t_equipos_america.modelo, t_equipos_america.status, t_equipos_america.id_fases,
-        c_secciones.seccion, c_subsecciones.grupo, c_tipos.id 'id_tipo', c_tipos.tipo, c_marcas.marca, c_ubicaciones.ubicacion, 
+        $query = "SELECT t_equipos_america.id,
+        t_equipos_america.id_equipo_principal,
+        t_equipos_america.equipo,
+        t_equipos_america.local_equipo,
+        t_equipos_america.modelo,
+        t_equipos_america.status,
+        t_equipos_america.id_fases,
+        c_secciones.seccion,
+        c_subsecciones.grupo,
+        c_tipos.id 'id_tipo',
+        c_tipos.tipo,
+        c_marcas.marca,
+        c_ubicaciones.ubicacion, 
+        t_equipos_america.años_vida_util,
+        t_equipos_america.fecha_instalacion,
+        t_equipos_america.clasificacion,
+        t_equipos_america.coste,
         c_destinos.destino
         FROM t_equipos_america
         LEFT JOIN c_secciones ON t_equipos_america.id_seccion = c_secciones.id
@@ -1904,6 +1924,10 @@ if (isset($_GET['action'])) {
                 $modelo = $i['modelo'];
                 $idFases = $i['id_fases'];
                 $destino = $i['destino'];
+                $vidaUtil = $i['años_vida_util'];
+                $fechaInstalacion = $i['fecha_instalacion'];
+                $inversion = $i['clasificacion'];
+                $coste = $i['coste'];
                 $resultx = array();
                 $fila++;
 
@@ -2032,6 +2056,12 @@ if (isset($_GET['action'])) {
                     }
                 }
 
+                #AÑO DE INSTALACION
+                if ($fechaInstalacion > "0000-00-00")
+                    $añoInstalacion = (new DateTime($fechaInstalacion))->format('Y');
+                else
+                    $añoInstalacion = "";
+
                 $objPHPExcel->getActiveSheet()->setCellValue('A' . $fila, $id);
                 $objPHPExcel->getActiveSheet()->setCellValue('B' . $fila, $idEquipoPrincipal);
                 $objPHPExcel->getActiveSheet()->setCellValue('C' . $fila, $destino);
@@ -2048,6 +2078,12 @@ if (isset($_GET['action'])) {
                 $objPHPExcel->getActiveSheet()->setCellValue('N' . $fila, $local_equipo);
                 $objPHPExcel->getActiveSheet()->setCellValue('O' . $fila, $ubicacion);
                 $objPHPExcel->getActiveSheet()->setCellValue('P' . $fila, $xc);
+                $objPHPExcel->getActiveSheet()->setCellValue('Q' . $fila, $vidaUtil);
+                $objPHPExcel->getActiveSheet()->setCellValue('R' . $fila, $añoInstalacion);
+                $objPHPExcel->getActiveSheet()->setCellValue('S' . $fila, $inversion);
+                $objPHPExcel->getActiveSheet()->setCellValue('T' . $fila, $coste);
+                $objPHPExcel->getActiveSheet()->setCellValue('U' . $fila, 1);
+                $objPHPExcel->getActiveSheet()->setCellValue('V' . $fila, $coste);
             }
         }
         header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
