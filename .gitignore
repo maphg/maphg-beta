@@ -1,6 +1,10 @@
 css/*
-*.css
-*.map
+sa/
+graficas/
+FF&E-OS&E/
+reporte_preventivos/
+reporte_incidencias/
+buid/*
 *.scss
 *ICON
 css/DataTables/
