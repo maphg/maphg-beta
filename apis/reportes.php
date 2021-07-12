@@ -2410,8 +2410,50 @@ if (isset($_GET['action'])) {
                     "ratioCreadas" => floatval($ratioCreadas),
                     "ratioSolucionados" => floatval($ratioSolucionados),
                 );
+
+                // ARRAY CREADOS
+                $array['arrayCreadas'][] = array(
+                    "idDestino" => intval($idDestino),
+                    "destino" => $destino,
+                    "creadas" => intval($creados_destino)
+                );
+
+                // ARRAY SOLUCIONADOS
+                $array['arraySolucionadas'][] = array(
+                    "idDestino" => intval($idDestino),
+                    "destino" => $destino,
+                    "solucionadas" => intval($solucionadas_destino),
+                );
+
+                // ARRAY SOLUCIONADOS
+                $array['arrayTiempo'][] = array(
+                    "idDestino" => intval($idDestino),
+                    "destino" => $destino,
+                    "tiempo" => floatval($mediaSolucionados_destino),
+                );
+
+                // ARRAY SOLUCIONADOS
+                $array['arrayRatioCreadas'][] = array(
+                    "idDestino" => intval($idDestino),
+                    "destino" => $destino,
+                    "ratioCreadas" => floatval($ratioCreadas),
+                );
+
+                // ARRAY SOLUCIONADOS
+                $array['arrayRatioSolucionadas'][] = array(
+                    "idDestino" => intval($idDestino),
+                    "destino" => $destino,
+                    "ratioSolucionadas" => floatval($ratioSolucionados),
+                );
+
+                // GRAFICA DE CREADAS
+                $array['graficaCreadas'][$destino] = intval($creados_destino);
+
+                // GRAFICA DE SOLUCIONADOS
+                $array['graficaSolucionadas'][$destino] = intval($solucionadas_destino);
             }
         }
+
 
         #DATOS POR DESTINO
         $creados_destino = 0;
@@ -2532,7 +2574,9 @@ if (isset($_GET['action'])) {
         $mediaEnProceso_global = 0;
         $mediaSolucionados_global = 0;
 
-        $query = "SELECT id, destino, habitaciones, ubicacion FROM c_destinos WHERE status = 'A' and id NOT IN(10)";
+        $query = "SELECT id, destino, habitaciones, ubicacion 
+        FROM c_destinos
+        WHERE status = 'A' and id NOT IN(10)";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $idDestinoX = $x['id'];
@@ -2682,16 +2726,46 @@ if (isset($_GET['action'])) {
                     $ratioSolucionados = $solucionadas_destino / $habitaciones;
 
                 #ARRAY DE RESULTADOS POR DESTINO
-                $array['dataDestinos'][] = array(
-                    "idDestino" => intval($idDestinoX),
+                // $array['dataDestinos'][] = array(
+                //     "idDestino" => intval($idDestinoX),
+                //     "destino" => $destino,
+                //     "creadas" => $creados_destino,
+                //     "enProceso" => $enProceso_destino,
+                //     "solucionadas" => $solucionadas_destino,
+                //     "mediaEnProceso" => intval($mediaEnProceso_destino),
+                //     "mediaSolucionados" => intval($mediaSolucionados_destino),
+                //     "ratioCreadas" => floatval($ratioCreadas),
+                //     "ratioSolucionados" => floatval($ratioSolucionados),
+                // );
+
+                // ARRAY CREADAS
+                $array['arrayCreadas'][] = array(
                     "destino" => $destino,
                     "creadas" => $creados_destino,
-                    "enProceso" => $enProceso_destino,
+                );
+
+                // ARRAY SOLUCIONADAS
+                $array['arraySolucionadas'][] = array(
+                    "destino" => $destino,
                     "solucionadas" => $solucionadas_destino,
-                    "mediaEnProceso" => intval($mediaEnProceso_destino),
-                    "mediaSolucionados" => intval($mediaSolucionados_destino),
+                );
+
+                // ARRAY TIEMPO
+                $array['arrayTiempo'][] = array(
+                    "destino" => $destino,
+                    "mediaSolucionadas" => intval($mediaSolucionados_destino),
+                );
+
+                // ARRAY RATIO CREADAS
+                $array['arrayRatioCreadas'][] = array(
+                    "destino" => $destino,
                     "ratioCreadas" => floatval($ratioCreadas),
-                    "ratioSolucionados" => floatval($ratioSolucionados),
+                );
+
+                // ARRAY RATIO SOLUCIONADAS
+                $array['arrayRatioSolucionadas'][] = array(
+                    "destino" => $destino,
+                    "ratioSolucionadas" => floatval($ratioSolucionados),
                 );
             }
         }
@@ -2812,15 +2886,6 @@ if (isset($_GET['action'])) {
             $solucionadas_destino > 0 && $habitaciones > 0
         )
             $ratioSolucionados = $solucionadas_destino / $habitaciones;
-
-        #ARRAY GLOBAL
-        // $array['data'] = array(
-        //     "creadas" => $creados_global,
-        //     "enProceso" => $enProceso_global,
-        //     "solucionadas" => $solucionadas_global,
-        //     "mediaEnProceso" => intval($mediaEnProceso_global),
-        //     "mediaSolucionados" => intval($mediaSolucionados_global),
-        // );
 
         $array["creadas"] = $creados_global;
         $array["enProceso"] = $enProceso_global;

@@ -197,8 +197,8 @@ if (isset($_GET['action'])) {
     $idRegistro = $x['idRegistro'];
     $idEquipo = $x['idEquipo'];
     $idBitacora = $x['idBitacora'];
-    $valor1 = $x['valor1'];
-    $valor2 = $x['valor2'];
+    $valor1 = floatval($x['valor1']);
+    $valor2 = floatval($x['valor2']);
     $valor = $x['valor'];
     $resp = 0;
 
@@ -219,7 +219,7 @@ if (isset($_GET['action'])) {
     }
 
     #ACTUALIZA EL VALOR(DATO_1) Y FECHA(fecha_dato_1) 
-    if ($idRegistro > 0 and $valor == "valor1") {
+    if ($idRegistro > 0 && $valor == "valor1") {
       $query = "UPDATE t_bitacora_zi_datos SET dato_1 = $valor1, fecha_dato_1 = '$fechaActual' 
       WHERE id = $idRegistro and activo = 1";
       if ($result = mysqli_query($conn_2020, $query)) {
@@ -228,7 +228,7 @@ if (isset($_GET['action'])) {
     }
 
     #ACTUALIZA EL VALOR(DATO_2) Y FECHA(fecha_dato_2) 
-    if ($idRegistro > 0 and $valor == "valor2") {
+    if ($idRegistro > 0 && $valor == "valor2") {
       $query = "UPDATE t_bitacora_zi_datos SET dato_2 = $valor2, fecha_dato_2 = '$fechaActual' 
       WHERE id = $idRegistro and activo = 1";
       if ($result = mysqli_query($conn_2020, $query)) {
