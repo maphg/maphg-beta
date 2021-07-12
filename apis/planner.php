@@ -216,6 +216,7 @@ if ($peticion === "POST") {
             $responsable = explode(", ", $x['responsable']);
 
             if (in_array($idUsuario, $responsable, true)) {
+
               if ($tipoIncidencia == "EMERGENCIA")
                 $emergencia++;
               if ($tipoIncidencia == "URGENCIA")
@@ -228,7 +229,7 @@ if ($peticion === "POST") {
                 $seguimiento++;
 
               #COMPRUEBA EL STATUS DE LA INCIDENCIA
-              if ($status == "N" || $status == "PENDIENTE")
+              if ($status == "N" || $status == "PENDIENTE" || $status == "P")
                 $status = "PENDIENTE";
               else
                 $status = "SOLUCIONADO";
@@ -243,7 +244,7 @@ if ($peticion === "POST") {
               }
 
               #INCIDENCIAS SOLUCIONADAS
-              if ($status === "SOLUCIONAD") {
+              if ($status === "SOLUCIONADO") {
                 $incidencias['solucionadas'][] = array(
                   "idRegistro" => $idIncidencia,
                   "titulo" => $incidencia,
@@ -252,7 +253,7 @@ if ($peticion === "POST") {
               }
 
               #INCIDENCIAS SIN PROGRAMAR (RANGO FECHA)
-              if ($rangoFecha === "" && $status === "PENDIENTE") {
+              if (($rangoFecha === "" || $rangoFecha === null) && $status === "PENDIENTE") {
                 $incidencias['sinprogramar'][] = array(
                   "idRegistro" => $idIncidencia,
                   "titulo" => $incidencia,
@@ -455,9 +456,11 @@ if ($peticion === "POST") {
     if ($idDestino == 10) {
       $filtroDestinoUsuario = "";
       $filtroDestinoIncidencias = "";
+      $filtroDestinoIncidenciasGeneral = "";
     } else {
       $filtroDestinoUsuario = "and u.id_destino IN($idDestino, 10)";
       $filtroDestinoIncidencias = "and i.id_destino = $idDestino";
+      $filtroDestinoIncidenciasGeneral = "and i.id_destino = $idDestino";
     }
 
     #OBTIENE SECCIONES CON RESUMEN DE DATOS
@@ -478,7 +481,7 @@ if ($peticion === "POST") {
         $idDestino = intval($x['idDestino']);
         $destino = $x['destino'];
         $ubicacion = $x['ubicacion'];
-        $idSeccion = $x['idSeccion'];
+        $idSeccion = intval($x['idSeccion']);
         $seccion = $x['seccion'];
         $tituloSeccion = $x['titulo_seccion'];
 
@@ -615,6 +618,51 @@ if ($peticion === "POST") {
               }
             }
 
+            #INCIDENCIAS GENERALES POR SUBSECCION Y TIPO DE INCIDENCIA
+            $query = "SELECT i.id, i.status, i.tipo_incidencia, i.responsable
+            FROM t_mp_np i
+            WHERE i.id_seccion = $idSeccion and i.id_subseccion = $idSubseccion and 
+            i.status IN('PENDIENTE', 'N', 'P') and i.activo = 1 and i.id_equipo = 0
+            $filtroDestinoIncidenciasGeneral";
+            if ($result = mysqli_query($conn_2020, $query)) {
+              foreach ($result as $x) {
+                $idIncidencia = intval($x['id']);
+                $status = $x['status'];
+                $tipoIncidencia = $x['tipo_incidencia'];
+                $responsables = explode(', ', $x['responsable']);
+
+                foreach ($responsables as $key => $value) {
+                  if (isset($usuariosSeccion[$value])) {
+
+                    #TOTAL DE INCIDENCIAS POR USUARIO
+                    if ($tipoIncidencia == "EMERGENCIA")
+                      $usuariosSeccion[$value]['emergencia'] += 1;
+                    if ($tipoIncidencia == "URGENCIA")
+                      $usuariosSeccion[$value]['urgencia'] += 1;
+                    if ($tipoIncidencia == "ALARMA")
+                      $usuariosSeccion[$value]['alarma'] += 1;
+                    if ($tipoIncidencia == "ALERTA")
+                      $usuariosSeccion[$value]['alerta'] += 1;
+                    if ($tipoIncidencia == "SEGUIMIENTO")
+                      $usuariosSeccion[$value]['seguimiento'] += 1;
+                  }
+                }
+
+                #TOTAL DE INCIDENCIAS POR SUBSECCIONES
+                if ($tipoIncidencia == "EMERGENCIA")
+                  $emergencia++;
+                if ($tipoIncidencia == "URGENCIA")
+                  $urgencia++;
+                if ($tipoIncidencia == "ALARMA")
+                  $alarma++;
+                if ($tipoIncidencia == "ALERTA")
+                  $alerta++;
+                if ($tipoIncidencia == "SEGUIMIENTO")
+                  $seguimiento++;
+              }
+            }
+
+            #DATOS DE LAS SUBSECCIONES
             $subsecciones[] = array(
               "idSubseccion" => $idSubseccion,
               "subseccion" => $subseccion,
