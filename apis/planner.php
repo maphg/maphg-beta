@@ -178,7 +178,6 @@ if ($peticion === "POST") {
         $nombre = $x['nombre'] . " " . $x['apellido'];
         $cargo = $x['cargo'];
         $foto = $x['foto'];
-        $fotox = $x['foto'];
         $emergencia = 0;
         $urgencia = 0;
         $alarma = 0;
