@@ -2,6 +2,7 @@
 # ZONA HORARIA
 date_default_timezone_set('America/Cancun');
 setlocale(LC_MONETARY, 'es_ES');
+$fechaActual = date('Y-m-d H:m:s');
 
 # CABECERA PARA JSON
 header("Access-Control-Allow-Origin: *");
@@ -46,6 +47,7 @@ if ($peticion === "POST") {
 
   #STATUS DE RESPUESTA DEL SERVER
   $array['status'] = 'ok';
+  $array['resp'] = "ERROR";
 
   #PERMISO DE SECCIONES POR USUARIO
   $seccionesPermitidas = [0];
@@ -83,7 +85,7 @@ if ($peticion === "POST") {
   $seccionesPermitidas = implode(", ", $seccionesPermitidas);
 
   #OBTIENE INFORMACIÓN DE USUARIO
-  if ($action == "usuario") {
+  if ($action === "usuario") {
 
     #FILTRO PARA LIMITAR DESTINOS
     if ($idDestino == 10) {
@@ -92,12 +94,14 @@ if ($peticion === "POST") {
       $filtroDestinoProyectos = "";
       $filtroFavoritos = "";
       $filtroActivos = "";
+      $filtroTodo = "";
     } else {
       $filtroDestinoIncidencias = "and id_destino = $idDestino";
       $filtroDestinoMP = "and e.id_destino = $idDestino";
       $filtroDestinoProyectos = "and p.id_destino = $idDestino";
       $filtroFavoritos = "and id_destino = $idDestino";
       $filtroActivos = "and id_destino = $idDestino";
+      $filtroTodo = "and id_destino = $idDestino";
     }
 
     #INFORMACIÓN DE DESTINO
@@ -167,15 +171,62 @@ if ($peticion === "POST") {
       }
     }
 
+
+    #TODO
+    $array['todo']['PENDIENTE'] = array();
+    $array['todo']['SOLUCIONADO'] = array();
+    $query = "SELECT id, descripcion, fecha_creacion, fecha_modificado, status
+    FROM t_to_do
+    WHERE id_usuario = $idUsuario and activo = 1 $filtroTodo";
+    if ($result = mysqli_query($conn_2020, $query)) {
+      foreach ($result as $x) {
+        $idTodo = intval($x['id']);
+        $todo = $x['descripcion'];
+        $fechaCreacion = $x['fecha_creacion'];
+        $fechaModificado = $x['fecha_modificado'];
+        $status = $x['status'];
+
+        #TO DO PENDIENTES
+        if ($status === "PENDIENTE") {
+          #ARRAY TODO
+          $array['todo']['PENDIENTE'][] = array(
+            "idTodo" => $idTodo,
+            "todo" => $todo,
+            "fechaCreacion" => $fechaCreacion,
+            "fechaModificado" => $fechaModificado,
+            "status" => $status,
+          );
+        }
+
+        #TO DO SOLUCIONADOS
+        if ($status === "SOLUCIONADO") {
+          #ARRAY TODO
+          $array['todo']['SOLUCIONADO'][] = array(
+            "idTodo" => $idTodo,
+            "todo" => $todo,
+            "fechaCreacion" => $fechaCreacion,
+            "fechaModificado" => $fechaModificado,
+            "status" => $status,
+          );
+        }
+      }
+    }
+
     #INFORMACIÓN DE USUARIO
-    $query = "SELECT c.nombre, c.apellido, c.foto, cargo.cargo
+    $query = "SELECT u.id, u.telegram_chat_id, c.nombre, c.apellido, c.foto, c.email, c.telefono, cargo.cargo
     FROM t_users u
     INNER JOIN t_colaboradores c ON u.id_colaborador = c.id
     INNER JOIN c_cargos cargo ON c.id_cargo = cargo.id
     WHERE u.id = $idUsuario";
     if ($result = mysqli_query($conn_2020, $query)) {
       foreach ($result as $x) {
-        $nombre = $x['nombre'] . " " . $x['apellido'];
+        $idUsuario = $x['id'];
+        $nombreCompleto = $x['nombre'] . " " . $x['apellido'];
+        $nombre = $x['nombre'];
+        $apellido = $x['apellido'];
+        $correo = $x['email'];
+        $telefono = $x['telefono'];
+        $telegram = $x['telegram_chat_id'];
         $cargo = $x['cargo'];
         $foto = $x['foto'];
         $emergencia = 0;
@@ -190,9 +241,15 @@ if ($peticion === "POST") {
         $totalTodos = 0;
         $totalFavoritos = 0;
 
+        #COMPROBACIÓN DE TELEGRAM.
+        if ($telegram == "")
+          $telegram = "NO";
+        else
+          $telegram = "SI";
+
         #VALIDACIÓN DE FOTO
         if ($foto == "")
-          $foto = "$rutaAbsoluta/planner/avatars/AVATAR_ID_0_0.svg";
+          $foto = "https://ui-avatars.com/api/?format=svg&rounded=false&size=300&background=2d3748&color=edf2f7&name=$nombre%$apellido";
         else
           $foto = "$rutaAbsoluta/planner/avatars/$foto";
 
@@ -417,7 +474,12 @@ if ($peticion === "POST") {
         #ARRAY DATOS USUARIO
         $array['usuario'] = array(
           "idUsuario" => $idUsuario,
+          "nombreCompleto" => $nombreCompleto,
           "nombre" => $nombre,
+          "apellido" => $apellido,
+          "telefono" => $telefono,
+          "correo" => $correo,
+          "telegram" => $telegram,
           "cargo" => $cargo,
           "foto" => $foto,
           "emergencia" => $emergencia,
@@ -449,8 +511,7 @@ if ($peticion === "POST") {
   }
 
   #OBTIENE DATOS DE LAS SECCIONES
-  if ($action == "planner") {
-
+  if ($action === "planner") {
     #FILTROS PARA DESTINO
     if ($idDestino == 10) {
       $filtroDestinoUsuario = "";
@@ -534,17 +595,20 @@ if ($peticion === "POST") {
         if ($result = mysqli_query($conn_2020, $query)) {
           foreach ($result as $x) {
             $idUsuarioX = intval($x['id']);
-            $nombre = $x['nombre'] . " " . $x['apellido'];
+            $nombreCompleto = $x['nombre'] . " " . $x['apellido'];
+            $nombre = $x['nombre'];
+            $apellido = $x['apellido'];
             $foto = $x['foto'];
 
             #VALIDACIÓN DE FOTO
             if ($foto == "")
-              $foto = "$rutaAbsoluta/planner/avatars/AVATAR_ID_0_0.svg";
+              $foto = "https://ui-avatars.com/api/?format=svg&rounded=false&size=300&background=2d3748&color=edf2f7&name=$nombre%$apellido";
             else
               $foto = "$rutaAbsoluta/planner/avatars/$foto";
+
             $usuariosSeccion[$idUsuarioX] = array(
               "idUsuario" => $idUsuarioX,
-              "usuario" => $nombre,
+              "usuario" => $nombreCompleto,
               "avatar" => $foto,
               "emergencia" => 0,
               "urgencia" => 0,
@@ -565,7 +629,7 @@ if ($peticion === "POST") {
           foreach ($result as $x) {
             $idSubseccion = intval($x['id']);
             $subseccion = $x['grupo'];
-
+            $incidenciasSubseccion = 0;
             $emergencia = 0;
             $urgencia = 0;
             $alarma = 0;
@@ -604,16 +668,26 @@ if ($peticion === "POST") {
                 }
 
                 #TOTAL DE INCIDENCIAS POR SUBSECCIONES
-                if ($tipoIncidencia == "EMERGENCIA")
+                if ($tipoIncidencia == "EMERGENCIA") {
                   $emergencia++;
-                if ($tipoIncidencia == "URGENCIA")
+                  $incidenciasSubseccion++;
+                }
+                if ($tipoIncidencia == "URGENCIA") {
                   $urgencia++;
-                if ($tipoIncidencia == "ALARMA")
+                  $incidenciasSubseccion++;
+                }
+                if ($tipoIncidencia == "ALARMA") {
                   $alarma++;
-                if ($tipoIncidencia == "ALERTA")
+                  $incidenciasSubseccion++;
+                }
+                if ($tipoIncidencia == "ALERTA") {
                   $alerta++;
-                if ($tipoIncidencia == "SEGUIMIENTO")
+                  $incidenciasSubseccion++;
+                }
+                if ($tipoIncidencia == "SEGUIMIENTO") {
                   $seguimiento++;
+                  $incidenciasSubseccion++;
+                }
               }
             }
 
@@ -648,16 +722,26 @@ if ($peticion === "POST") {
                 }
 
                 #TOTAL DE INCIDENCIAS POR SUBSECCIONES
-                if ($tipoIncidencia == "EMERGENCIA")
+                if ($tipoIncidencia == "EMERGENCIA") {
                   $emergencia++;
-                if ($tipoIncidencia == "URGENCIA")
+                  $incidenciasSubseccion++;
+                }
+                if ($tipoIncidencia == "URGENCIA") {
                   $urgencia++;
-                if ($tipoIncidencia == "ALARMA")
+                  $incidenciasSubseccion++;
+                }
+                if ($tipoIncidencia == "ALARMA") {
                   $alarma++;
-                if ($tipoIncidencia == "ALERTA")
+                  $incidenciasSubseccion++;
+                }
+                if ($tipoIncidencia == "ALERTA") {
                   $alerta++;
-                if ($tipoIncidencia == "SEGUIMIENTO")
+                  $incidenciasSubseccion++;
+                }
+                if ($tipoIncidencia == "SEGUIMIENTO") {
                   $seguimiento++;
+                  $incidenciasSubseccion++;
+                }
               }
             }
 
@@ -670,6 +754,7 @@ if ($peticion === "POST") {
               "alarma" => $alarma,
               "alerta" => $alerta,
               "seguimiento" => $seguimiento,
+              "incidenciasSubseccion" => $incidenciasSubseccion,
             );
           }
         }
@@ -689,6 +774,165 @@ if ($peticion === "POST") {
         );
       }
     }
+  }
+
+  #ACTUALIZAR TO DO
+  if ($action === "actualizarTodo") {
+    $idTodo = $_POST['idTodo'];
+    $status = $_POST['status'];
+
+    #FILTRO POR DESTINO
+    if ($idDestino == 10)
+      $filtroTodo = "";
+    else
+      $filtroTodo = "and id_destino = $idDestino";
+
+    #TOGGLE DE STATUS TO DO
+    if ($status === "PENDIENTE")
+      $status = "SOLUCIONADO";
+    else
+      $status = "PENDIENTE";
+
+
+    $query = "UPDATE t_to_do SET status = '$status', fecha_modificado = '$fechaActual'
+    WHERE id = $idTodo";
+    if ($result = mysqli_query($conn_2020, $query)) {
+      #TODO
+      $array['resp'] = "SUCCESS";
+      $array['todo']['PENDIENTE'] = array();
+      $array['todo']['SOLUCIONADO'] = array();
+      $query = "SELECT id, descripcion, fecha_creacion, fecha_modificado, status
+      FROM t_to_do
+      WHERE id_usuario = $idUsuario and activo = 1 $filtroTodo";
+      if ($result = mysqli_query($conn_2020, $query)) {
+        foreach ($result as $x) {
+          $idTodo = intval($x['id']);
+          $todo = $x['descripcion'];
+          $fechaCreacion = $x['fecha_creacion'];
+          $fechaModificado = $x['fecha_modificado'];
+          $status = $x['status'];
+
+          #TO DO PENDIENTES
+          if ($status === "PENDIENTE") {
+            #ARRAY TODO
+            $array['todo']['PENDIENTE'][] = array(
+              "idTodo" => $idTodo,
+              "todo" => $todo,
+              "fechaCreacion" => $fechaCreacion,
+              "fechaModificado" => $fechaModificado,
+              "status" => $status,
+            );
+          }
+
+          #TO DO SOLUCIONADOS
+          if ($status === "SOLUCIONADO") {
+            #ARRAY TODO
+            $array['todo']['SOLUCIONADO'][] = array(
+              "idTodo" => $idTodo,
+              "todo" => $todo,
+              "fechaCreacion" => $fechaCreacion,
+              "fechaModificado" => $fechaModificado,
+              "status" => $status,
+            );
+          }
+        }
+      }
+    }
+  }
+
+  #ACTUALIZAR TO DO
+  if ($action === "agregarTodo") {
+    $descripcion = $_POST['todo'];
+
+    #FILTRO POR DESTINO
+    if ($idDestino == 10)
+      $filtroTodo = "";
+    else
+      $filtroTodo = "and id_destino = $idDestino";
+
+    $query = "INSERT INTO t_to_do(id_destino, id_usuario, descripcion, fecha_creacion, status, activo) 
+    VALUES($idDestino, $idUsuario, '$descripcion', '$fechaActual', 'PENDIENTE', 1)";
+    if ($result = mysqli_query($conn_2020, $query)) {
+      #TODO
+      $array['resp'] = "SUCCESS";
+      $array['todo']['PENDIENTE'] = array();
+      $array['todo']['SOLUCIONADO'] = array();
+      $query = "SELECT id, descripcion, fecha_creacion, fecha_modificado, status
+      FROM t_to_do
+      WHERE id_usuario = $idUsuario and activo = 1 $filtroTodo";
+      if ($result = mysqli_query($conn_2020, $query)) {
+        foreach ($result as $x) {
+          $idTodo = intval($x['id']);
+          $todo = $x['descripcion'];
+          $fechaCreacion = $x['fecha_creacion'];
+          $fechaModificado = $x['fecha_modificado'];
+          $status = $x['status'];
+
+          #TO DO PENDIENTES
+          if ($status === "PENDIENTE") {
+            #ARRAY TODO
+            $array['todo']['PENDIENTE'][] = array(
+              "idTodo" => $idTodo,
+              "todo" => $todo,
+              "fechaCreacion" => $fechaCreacion,
+              "fechaModificado" => $fechaModificado,
+              "status" => $status,
+            );
+          }
+
+          #TO DO SOLUCIONADOS
+          if ($status === "SOLUCIONADO") {
+            #ARRAY TODO
+            $array['todo']['SOLUCIONADO'][] = array(
+              "idTodo" => $idTodo,
+              "todo" => $todo,
+              "fechaCreacion" => $fechaCreacion,
+              "fechaModificado" => $fechaModificado,
+              "status" => $status,
+            );
+          }
+        }
+      }
+    }
+  }
+
+  if ($action === "actualizarUsuario") {
+    $idUsuario = $_POST["idUsuario"];
+    $nombre = $_POST["nombre"];
+    $apellido = $_POST["apellido"];
+    $correo = $_POST["correo"];
+    $telefono = $_POST["telefono"];
+    $telegram = $_POST["telegram"];
+
+    if ($telegram == "NO" && $telefono == "SI")
+      $telegram = "";
+    else
+      $telegram = ", u.telegram_chat_id = '$telegram'";
+
+
+    $query = "UPDATE t_users u, t_colaboradores c
+    SET c.nombre = '$nombre', c.apellido = '$apellido', c.email = '$correo', c.telefono = '$telefono' $telegram
+    WHERE u.id_colaborador = c.id and u.id = $idUsuario";
+    if ($result = mysqli_query($conn_2020, $query)) {
+      $array['resp'] = "SUCCESS";
+    }
+  }
+
+  if ($action == "subirFotoUsuario") {
+    $array['resp'] = "SUCCESS";
+    $array['file'] = json_encode($_POST);
+
+    // $rutaTemporal = $_FILES["file"]["tmp_name"];
+    // $extension = pathinfo($_FILES["file"]["name"], PATHINFO_EXTENSION);
+    // $foto =  "AVATAR_ID_" . $idUsuario . "_" . rand(1, 999) . ".$extension";
+
+    // $query = "UPDATE t_users u, t_colaboradores c SET c.foto = '" . $rutaTemporal = $_FILES["file"] . "'
+    //   WHERE u.id_colaborador = c.id and u.id = $idUsuario";
+    // if ($result = mysqli_query($conn_2020, $query)) {
+    //   $array['resp'] = "SUCCESS";
+    // }
+    // if (move_uploaded_file($rutaTemporal, "../planner/avatars/" . $foto)) {
+    // }
   }
 }
 echo json_encode($array);
