@@ -601,8 +601,8 @@ if ($peticion === "POST") {
             $foto = $x['foto'];
 
             #VALIDACIÓN DE FOTO
-            if ($foto == "")
-              $foto = "https://ui-avatars.com/api/?format=svg&rounded=false&size=300&background=2d3748&color=edf2f7&name=$nombre%$apellido";
+            if ($foto === "" || $foto === " ")
+              $foto = "https://ui-avatars.com/api/?format=svg&rounded=false&size=300&background=2d3748&color=edf2f7&name=$nombre";
             else
               $foto = "$rutaAbsoluta/planner/avatars/$foto";
 
@@ -918,7 +918,7 @@ if ($peticion === "POST") {
     }
   }
 
-  if ($action == "subirFotoUsuario") {
+  if ($action === "subirFotoUsuario") {
     $array['resp'] = "SUCCESS";
     $array['file'] = json_encode($_POST);
 
