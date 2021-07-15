@@ -602,7 +602,7 @@ if ($peticion === "POST") {
 
             #VALIDACIÓN DE FOTO
             if ($foto === "" || $foto === " ")
-              $foto = "https://ui-avatars.com/api/?format=svg&rounded=false&size=300&background=2d3748&color=edf2f7&name=$nombre";
+              $foto = "https://ui-avatars.com/api/?format=svg&rounded=false&size=300&background=2d3748&color=edf2f7&name=$nombre[0]$apellido[0]";
             else
               $foto = "$rutaAbsoluta/planner/avatars/$foto";
 
