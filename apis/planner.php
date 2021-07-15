@@ -96,7 +96,7 @@ if ($peticion === "POST") {
       $filtroActivos = "";
       $filtroTodo = "";
     } else {
-      $filtroDestinoIncidencias = "and id_destino = $idDestino";
+      $filtroDestinoIncidencias = "and mc.id_destino = $idDestino";
       $filtroDestinoMP = "and e.id_destino = $idDestino";
       $filtroDestinoProyectos = "and p.id_destino = $idDestino";
       $filtroFavoritos = "and id_destino = $idDestino";
@@ -258,20 +258,62 @@ if ($peticion === "POST") {
         $incidencias['solucionadas'] = array();
         $incidencias['sinprogramar'] = array();
 
-        $query = "SELECT id, actividad, tipo_incidencia, responsable, status, rango_fecha
-        FROM t_mc
-        WHERE responsable LIKE '%$idUsuario%' and activo = 1 and
-        id_seccion IN($seccionesPermitidas) $filtroDestinoIncidencias";
+        #INCIDENCIAS DE EQUIPOS
+        $query = "SELECT mc.id, mc.actividad, mc.tipo_incidencia, mc.responsable, mc.fecha_creacion,
+        mc.status, mc.rango_fecha, c.nombre, c.apellido
+        FROM t_mc AS mc
+        INNER JOIN t_users AS u ON mc.creado_por = u.id
+        INNER JOIN t_colaboradores AS c ON u.id_colaborador = c.id
+        WHERE mc.responsable LIKE '%$idUsuario%' and mc.activo = 1 and
+        mc.id_seccion IN($seccionesPermitidas) $filtroDestinoIncidencias";
         if ($result = mysqli_query($conn_2020, $query)) {
           foreach ($result as $x) {
             $idIncidencia = intval($x['id']);
             $incidencia = $x['actividad'];
             $tipoIncidencia = $x['tipo_incidencia'];
             $status = $x['status'];
+            $creadoPor = $x['nombre'] . " " . $x['apellido'];
             $rangoFecha = $x['rango_fecha'];
-            $responsable = explode(", ", $x['responsable']);
+            $responsable = preg_split("/[\s,]+/", $x['responsable']);
+            $fechaCreado = $x['fecha_creacion'];
 
             if (in_array($idUsuario, $responsable, true)) {
+              #FECHA CREADO
+              if ($fechaCreado > '0000-00-00 00:00:00' && $fechaCreado != "")
+                $fechaCreado = (new \DateTime($x['fecha_creacion']))->format('Y-m-d');
+
+              #COMENTARIO
+              $totalComentarios = 0;
+              $comentario = "";
+              $comentarioDe = "";
+              $fechaComentario = "";
+              $query = "SELECT com.comentario, com.fecha, c.nombre, c.apellido
+              FROM t_mc_comentarios com
+              INNER JOIN t_users u ON com.id_usuario = u.id
+              INNER JOIN t_colaboradores c ON u.id_colaborador = c.id
+              WHERE com.id_mc = $idIncidencia and com.activo = 1 ORDER BY com.id";
+              if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $x) {
+                  $totalComentarios++;
+                  $comentario = $x['comentario'];
+                  $comentarioDe = $x['nombre'] . " " . $x['apellido'];
+                  $fechaComentario = $x['fecha'];
+                }
+              }
+
+              #ADJUNTOS
+              $totalAdjuntos = 0;
+              $query = "SELECT count(id) 'total'
+              FROM t_mc_adjuntos
+              WHERE id_mc = $idIncidencia and activo = 1";
+              if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $x) {
+                  $totalAdjuntos = $x['total'];
+                }
+              }
+
+              #URL INCIDENCIA
+              $url = $rutaAbsoluta . "incidencia/$idIncidencia";
 
               if ($tipoIncidencia == "EMERGENCIA")
                 $emergencia++;
@@ -296,6 +338,16 @@ if ($peticion === "POST") {
                   "idRegistro" => $idIncidencia,
                   "titulo" => $incidencia,
                   "tipo" => $tipoIncidencia,
+                  "fechaCreado" => $fechaCreado,
+                  "creadoPor" => $creadoPor,
+                  "status" => $status,
+                  "totalAdjuntos" => $totalAdjuntos,
+                  "totalComentarios" => $totalComentarios,
+                  "comentario" => $comentario,
+                  "comentarioDe" => $comentarioDe,
+                  "fechaComentario" => $fechaComentario,
+                  "url" => $url,
+                  "tipoRegistro" => "INCIDENCIA"
                 );
               }
 
@@ -305,6 +357,16 @@ if ($peticion === "POST") {
                   "idRegistro" => $idIncidencia,
                   "titulo" => $incidencia,
                   "tipo" => $tipoIncidencia,
+                  "fechaCreado" => $fechaCreado,
+                  "creadoPor" => $creadoPor,
+                  "status" => $status,
+                  "totalAdjuntos" => $totalAdjuntos,
+                  "totalComentarios" => $totalComentarios,
+                  "comentario" => $comentario,
+                  "comentarioDe" => $comentarioDe,
+                  "fechaComentario" => $fechaComentario,
+                  "url" => $url,
+                  "tipoRegistro" => "INCIDENCIA"
                 );
               }
 
@@ -314,6 +376,150 @@ if ($peticion === "POST") {
                   "idRegistro" => $idIncidencia,
                   "titulo" => $incidencia,
                   "tipo" => $tipoIncidencia,
+                  "fechaCreado" => $fechaCreado,
+                  "creadoPor" => $creadoPor,
+                  "status" => $status,
+                  "totalAdjuntos" => $totalAdjuntos,
+                  "totalComentarios" => $totalComentarios,
+                  "comentario" => $comentario,
+                  "comentarioDe" => $comentarioDe,
+                  "fechaComentario" => $fechaComentario,
+                  "url" => $url,
+                  "tipoRegistro" => "INCIDENCIA"
+                );
+              }
+            }
+          }
+        }
+
+        #INCIDENCIAS GENERALES
+        $query = "SELECT mc.id, mc.titulo, mc.tipo_incidencia, mc.responsable, mc.fecha,
+        mc.status, mc.rango_fecha, c.nombre, c.apellido
+        FROM t_mp_np AS mc
+        INNER JOIN t_users AS u ON mc.id_usuario = u.id
+        INNER JOIN t_colaboradores AS c ON u.id_colaborador = c.id
+        WHERE mc.responsable LIKE '%$idUsuario%' and mc.activo = 1 and
+        mc.id_seccion IN($seccionesPermitidas) $filtroDestinoIncidencias";
+        if ($result = mysqli_query($conn_2020, $query)) {
+          foreach ($result as $x) {
+            $idIncidencia = intval($x['id']);
+            $incidencia = $x['titulo'] . "General";
+            $tipoIncidencia = $x['tipo_incidencia'];
+            $status = $x['status'];
+            $creadoPor = $x['nombre'] . " " . $x['apellido'];
+            $rangoFecha = $x['rango_fecha'];
+            $responsable = preg_split("/[\s,]+/", $x['responsable']);
+            $fechaCreado = $x['fecha'];
+
+            if (in_array($idUsuario, $responsable, true)) {
+              #FECHA CREADO
+              if ($fechaCreado > '0000-00-00 00:00:00' && $fechaCreado != "")
+                $fechaCreado = (new \DateTime($x['fecha']))->format('Y-m-d');
+
+              #COMENTARIO
+              $totalComentarios = 0;
+              $comentario = "";
+              $comentarioDe = "";
+              $fechaComentario = "";
+              $query = "SELECT com.comentario, com.fecha, c.nombre, c.apellido
+              FROM comentarios_mp_np com
+              INNER JOIN t_users u ON com.id_usuario = u.id
+              INNER JOIN t_colaboradores c ON u.id_colaborador = c.id
+              WHERE com.id_mp_np = $idIncidencia and com.activo = 1 ORDER BY com.id";
+              if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $x) {
+                  $totalComentarios++;
+                  $comentario = $x['comentario'];
+                  $comentarioDe = $x['nombre'] . " " . $x['apellido'];
+                  $fechaComentario = $x['fecha'];
+                }
+              }
+
+              #ADJUNTOS
+              $totalAdjuntos = 0;
+              $query = "SELECT count(id) 'total'
+              FROM adjuntos_mp_np
+              WHERE id_mp_np = $idIncidencia and activo = 1";
+              if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $x) {
+                  $totalAdjuntos = $x['total'];
+                }
+              }
+
+              #URL INCIDENCIA
+              $url = $rutaAbsoluta . "incidenciaGeneral/$idIncidencia";
+
+              if ($tipoIncidencia == "EMERGENCIA")
+                $emergencia++;
+              if ($tipoIncidencia == "URGENCIA")
+                $urgencia++;
+              if ($tipoIncidencia == "ALARMA")
+                $alarma++;
+              if ($tipoIncidencia == "ALERTA")
+                $alerta++;
+              if ($tipoIncidencia == "SEGUIMIENTO")
+                $seguimiento++;
+
+              #COMPRUEBA EL STATUS DE LA INCIDENCIA
+              if ($status == "N" || $status == "PENDIENTE" || $status == "P")
+                $status = "PENDIENTE";
+              else
+                $status = "SOLUCIONADO";
+
+              #INCIDENCIAS PENDIENTES
+              if ($status === "PENDIENTE") {
+                $incidencias['pendientes'][] = array(
+                  "idRegistro" => $idIncidencia,
+                  "titulo" => $incidencia,
+                  "tipo" => $tipoIncidencia,
+                  "fechaCreado" => $fechaCreado,
+                  "creadoPor" => $creadoPor,
+                  "status" => $status,
+                  "totalAdjuntos" => $totalAdjuntos,
+                  "totalComentarios" => $totalComentarios,
+                  "comentario" => $comentario,
+                  "comentarioDe" => $comentarioDe,
+                  "fechaComentario" => $fechaComentario,
+                  "url" => $url,
+                  "tipoRegistro" => "INCIDENCIA"
+                );
+              }
+
+              #INCIDENCIAS SOLUCIONADAS
+              if ($status === "SOLUCIONADO") {
+                $incidencias['solucionadas'][] = array(
+                  "idRegistro" => $idIncidencia,
+                  "titulo" => $incidencia,
+                  "tipo" => $tipoIncidencia,
+                  "fechaCreado" => $fechaCreado,
+                  "creadoPor" => $creadoPor,
+                  "status" => $status,
+                  "totalAdjuntos" => $totalAdjuntos,
+                  "totalComentarios" => $totalComentarios,
+                  "comentario" => $comentario,
+                  "comentarioDe" => $comentarioDe,
+                  "fechaComentario" => $fechaComentario,
+                  "url" => $url,
+                  "tipoRegistro" => "INCIDENCIA"
+                );
+              }
+
+              #INCIDENCIAS SIN PROGRAMAR (RANGO FECHA)
+              if (($rangoFecha === "" || $rangoFecha === null) && $status === "PENDIENTE") {
+                $incidencias['sinprogramar'][] = array(
+                  "idRegistro" => $idIncidencia,
+                  "titulo" => $incidencia,
+                  "tipo" => $tipoIncidencia,
+                  "fechaCreado" => $fechaCreado,
+                  "creadoPor" => $creadoPor,
+                  "status" => $status,
+                  "totalAdjuntos" => $totalAdjuntos,
+                  "totalComentarios" => $totalComentarios,
+                  "comentario" => $comentario,
+                  "comentarioDe" => $comentarioDe,
+                  "fechaComentario" => $fechaComentario,
+                  "url" => $url,
+                  "tipoRegistro" => "INCIDENCIA"
                 );
               }
             }
@@ -326,7 +532,8 @@ if ($peticion === "POST") {
         $preventivos['estasemana'] = array();
         $preventivos['proximos'] = array();
 
-        $query = "SELECT mp.id, mp.id_responsables, mp.status, mp.fecha_programada, plan.tipo_plan, e.equipo
+        $query = "SELECT mp.id, mp.id_responsables, mp.status, mp.fecha_programada,
+        mp.comentario, mp.fecha_creacion, plan.tipo_plan, e.equipo
         FROM t_mp_planificacion_iniciada mp
         INNER JOIN t_mp_planes_mantenimiento plan ON mp.id_plan = plan.id
         INNER JOIN t_equipos_america e ON mp.id_equipo = e.id
@@ -338,10 +545,37 @@ if ($peticion === "POST") {
             $equipo = $x['equipo'];
             $status = $x['status'];
             $fechaProgramada = $x['fecha_programada'];
-            $responsable = explode(", ", $x['id_responsables']);
+            $responsable = preg_split("/[\s,]+/", $x['id_responsables']);
+            $fechaCreado = $x['fecha_creacion'];
+
+            #COMENTARIO
+            $totalComentarios = 1;
+            $comentario = $x['comentario'];
+            $comentarioDe = "";
+            $fechaComentario = "";
 
             if (in_array($idUsuario, $responsable, true)) {
               $totalPreventivos++;
+
+              #FECHA CREADO
+              if ($fechaCreado > '0000-00-00 00:00:00' && $fechaCreado != "")
+                $fechaCreado = (new \DateTime($x['fecha_creacion']))->format('Y-m-d');
+
+
+
+              #ADJUNTOS
+              $totalAdjuntos = 0;
+              $query = "SELECT count(id) 'total'
+              FROM t_mp_planificacion_iniciada_adjuntos
+              WHERE id_planificacion_iniciada = $idMP and activo = 1";
+              if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $x) {
+                  $totalAdjuntos = $x['total'];
+                }
+              }
+
+              #URL INCIDENCIA
+              $url = $rutaAbsoluta . "mp/$idMP";
 
               #MP EN PROCESO
               if ($status === "PROCESO") {
@@ -349,7 +583,17 @@ if ($peticion === "POST") {
                   array(
                     "idRegistro" => $idMP,
                     "titulo" => $idMP . " ☛ " . $equipo,
-                    "tipo" => "MP"
+                    "tipo" => "MP",
+                    "fechaCreado" => $fechaCreado,
+                    "creadoPor" => $creadoPor,
+                    "status" => $status,
+                    "totalAdjuntos" => $totalAdjuntos,
+                    "totalComentarios" => $totalComentarios,
+                    "comentario" => $comentario,
+                    "comentarioDe" => $comentarioDe,
+                    "fechaComentario" => $fechaComentario,
+                    "url" => $url,
+                    "tipoRegistro" => "MP"
                   );
               }
 
@@ -359,7 +603,17 @@ if ($peticion === "POST") {
                   array(
                     "idRegistro" => $idMP,
                     "titulo" => $idMP . " ☛ " . $equipo,
-                    "tipo" => "MP"
+                    "tipo" => "MP",
+                    "fechaCreado" => $fechaCreado,
+                    "creadoPor" => $creadoPor,
+                    "status" => $status,
+                    "totalAdjuntos" => $totalAdjuntos,
+                    "totalComentarios" => $totalComentarios,
+                    "comentario" => $comentario,
+                    "comentarioDe" => $comentarioDe,
+                    "fechaComentario" => $fechaComentario,
+                    "url" => $url,
+                    "tipoRegistro" => "MP"
                   );
               }
 
@@ -404,7 +658,7 @@ if ($peticion === "POST") {
             $actividad = $x['actividad'];
             $status = $x['status'];
             $rangoFecha = $x['rango_fecha'];
-            $responsable = explode(", ", $x['responsable']);
+            $responsable = preg_split("/[\s,]+/", $x['responsable']);
 
             if ($status === "N" or $status == "PENDIENTE" or $status == "P")
               $status = "PENDIENTE";
@@ -450,7 +704,7 @@ if ($peticion === "POST") {
         $todos[] = array("titulo" => "xx", "tipo" => "");
 
         #FAVORITOS
-        $favoritos['favoritos'] = array();
+        $favoritos = array();
 
         $query = "SELECT id, tipo, url, descripcion
         FROM t_favoritos
@@ -462,7 +716,7 @@ if ($peticion === "POST") {
             $url = $x['url'];
             $descripcion = $x['descripcion'];
 
-            $favoritos['favoritos'][] =
+            $favoritos[] =
               array(
                 "idRegistro" => $idRegistro,
                 "titulo" => $tipo . " 👉 " . $descripcion,
@@ -492,12 +746,14 @@ if ($peticion === "POST") {
           "totalTareasproyectos" => $totalTareasproyectos,
           "totalTodos" => $totalTodos,
           "totalFavoritos" => $totalFavoritos,
-          "preventivos" => array($preventivos),
-          "tareasproyectos" => array($tareasproyectos),
           "todos" => $todos,
-          "favoritos" => $favoritos,
-          "incidencias" => array($incidencias),
         );
+
+        #INCIDENCIAS
+        $array['incidencias'] = $incidencias;
+        $array['preventivos'] = $preventivos;
+        $array['tareasproyectos'] = $tareasproyectos;
+        $array['favoritos'] = $favoritos;
 
         #ARRAY BOTÓN SECCIÓN USUARIO
         $array['seccionUsuario']['usuario'] = array(
