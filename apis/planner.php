@@ -527,7 +527,6 @@ if ($peticion === "POST") {
             $fechaComentario = "";
 
             if (in_array($idUsuario, $responsable, true)) {
-              $totalPreventivos++;
 
               #FECHA CREADO
               if ($fechaCreado > '0000-00-00 00:00:00' && $fechaCreado != "")
@@ -549,6 +548,7 @@ if ($peticion === "POST") {
 
               #MP EN PROCESO
               if ($status == "PENDIENTE") {
+                $totalPreventivos++;
 
                 $preventivos['pendientes'][] =
                   array(
@@ -570,6 +570,7 @@ if ($peticion === "POST") {
 
               #MP SIN PROGRAMAR
               if (($fechaProgramada === "" || $fechaProgramada === null) && $status === "PENDIENTE") {
+                $totalPreventivos++;
 
                 $preventivos['sinprogramar'][] =
                   array(
