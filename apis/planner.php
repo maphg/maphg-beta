@@ -1305,5 +1305,20 @@ if ($peticion === "POST") {
     // if (move_uploaded_file($rutaTemporal, "../planner/avatars/" . $foto)) {
     // }
   }
+
+
+  #QUITA FAVORITO DE LA LISTA
+  if ($action == "elimiarFavorito") {
+    $idTipo = $_POST['idTipo'];
+    $tipo = $_POST['tipo'];
+    $array['favoritos'] = array();
+
+    $query = "UPDATE t_favoritos SET activo = 0 WHERE id_tipo = $idTipo and tipo = '$tipo' 
+    and id_usuario = $idUsuario and activo = 1";
+    if ($result = mysqli_query($conn_2020, $query)) {
+      $array['favoritos'] = obtenerFavoritos($_POST);
+      $array['resp'] = "SUCCESS";
+    }
+  }
 }
 echo json_encode($array);

@@ -128,6 +128,8 @@ function obtenerIncidencia($idIncidencia, $tipoRegistro)
         "idRegistro" => $idIncidencia,
         "titulo" => $incidencia,
         "tipo" => $tipoIncidencia,
+        "tipoRegistro" => $tipoRegistro,
+        "clasificado" => "INCIDENCIA",
         "fechaCreado" => $fechaCreado,
         "creadoPor" => $creadoPor,
         "status" => $status,
@@ -137,7 +139,6 @@ function obtenerIncidencia($idIncidencia, $tipoRegistro)
         "comentarioDe" => $comentarioDe,
         "fechaComentario" => $fechaComentario,
         "url" => "",
-        "tipoRegistro" => $tipoRegistro,
       );
     }
   }
@@ -220,6 +221,7 @@ function obtenerIncidenciaGeneral($idIncidencia, $tipoRegistro)
         "fechaComentario" => $fechaComentario,
         "url" => "",
         "tipoRegistro" => $tipoRegistro,
+        "clasificado" => "INCIDENCIAGENERAL",
       );
     }
   }
@@ -287,6 +289,7 @@ function obtenerPreventivo($idPreventivo, $tipoRegistro)
         "fechaComentario" => $fechaComentario,
         "url" => "",
         "tipoRegistro" => $tipoRegistro,
+        "clasificado" => "MP",
       );
     }
   }
@@ -366,7 +369,7 @@ function obtenerPlanaccionProyectos($idPlanaccion, $tipoRegistro)
 
       #PLANACCION EN PROCESO
       $obtenerPlanaccionProyectos = array(
-        "idRegistro" => $idProyecto,
+        "idRegistro" => $idPlanaccion,
         "titulo" => $actividad,
         "tipo" => "PDA",
         "fechaCreado" => $fechaCreado,
@@ -379,6 +382,7 @@ function obtenerPlanaccionProyectos($idPlanaccion, $tipoRegistro)
         "fechaComentario" => $fechaComentario,
         "url" => "",
         "tipoRegistro" => $tipoRegistro,
+        "clasificado" => "PDA",
       );
     }
   }
