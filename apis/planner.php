@@ -501,7 +501,7 @@ if ($peticion === "POST") {
         FROM t_mp_planificacion_iniciada mp
         INNER JOIN t_mp_planes_mantenimiento plan ON mp.id_plan = plan.id
         INNER JOIN t_equipos_america e ON mp.id_equipo = e.id
-        INNER JOIN t_users AS u ON mc.id_usuario = u.id
+        INNER JOIN t_users AS u ON mp.id_usuario = u.id
         INNER JOIN t_colaboradores AS c ON u.id_colaborador = c.id
         WHERE mp.id_responsables LIKE '%$idUsuario%' and mp.activo = 1 and e.id_seccion IN($seccionesPermitidas) $filtroDestinoMP";
         if ($result = mysqli_query($conn_2020, $query)) {
