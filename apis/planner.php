@@ -515,7 +515,7 @@ if ($peticion === "POST") {
             $fechaCreado = $x['fecha_creacion'];
             $creadoPor = $x['nombre'] . " " . $x['apellido'];
 
-            if ($status === "N" or $status == "PENDIENTE" or $status == "P")
+            if ($status === "N" || $status == "PENDIENTE" || $status == "P" || $status == "PROCESO")
               $status = "PENDIENTE";
             else
               $status = "SOLUCIONADO";
@@ -548,7 +548,8 @@ if ($peticion === "POST") {
               $url = $rutaAbsoluta . "mp/$idMP";
 
               #MP EN PROCESO
-              if ($status === "PENDIENTE") {
+              if ($status == "PENDIENTE") {
+
                 $preventivos['pendientes'][] =
                   array(
                     "idRegistro" => $idMP,
@@ -569,6 +570,7 @@ if ($peticion === "POST") {
 
               #MP SIN PROGRAMAR
               if (($fechaProgramada === "" || $fechaProgramada === null) && $status === "PENDIENTE") {
+
                 $preventivos['sinprogramar'][] =
                   array(
                     "idRegistro" => $idMP,
