@@ -515,6 +515,11 @@ if ($peticion === "POST") {
             $fechaCreado = $x['fecha_creacion'];
             $creadoPor = $x['nombre'] . " " . $x['apellido'];
 
+            if ($status === "N" or $status == "PENDIENTE" or $status == "P")
+              $status = "PENDIENTE";
+            else
+              $status = "SOLUCIONADO";
+
             #COMENTARIO
             $totalComentarios = 1;
             $comentario = $x['comentario'];
@@ -543,7 +548,7 @@ if ($peticion === "POST") {
               $url = $rutaAbsoluta . "mp/$idMP";
 
               #MP EN PROCESO
-              if ($status === "PROCESO") {
+              if ($status === "PENDIENTE") {
                 $preventivos['pendientes'][] =
                   array(
                     "idRegistro" => $idMP,
@@ -563,7 +568,7 @@ if ($peticion === "POST") {
               }
 
               #MP SIN PROGRAMAR
-              if (($fechaProgramada === "" || $fechaProgramada === null) && $status === "PROCESO") {
+              if (($fechaProgramada === "" || $fechaProgramada === null) && $status === "PENDIENTE") {
                 $preventivos['sinprogramar'][] =
                   array(
                     "idRegistro" => $idMP,
@@ -583,7 +588,7 @@ if ($peticion === "POST") {
               }
 
               #MP ESTA SEMANA
-              if (($fechaProgramada === "" || $fechaProgramada === null) && $status === "PROCESO") {
+              if (($fechaProgramada === "" || $fechaProgramada === null) && $status === "PENDIENTE") {
                 $preventivos['estasemana'][] =
                   array(
                     "idRegistro" => $idMP,
@@ -593,7 +598,7 @@ if ($peticion === "POST") {
               }
 
               #MP PROXIMOS
-              if (($fechaProgramada === "" || $fechaProgramada === null) && $status === "PROCESO") {
+              if (($fechaProgramada === "" || $fechaProgramada === null) && $status === "PENDIENTE") {
                 $preventivos['proximos'][] =
                   array(
                     "idRegistro" => $idMP,
