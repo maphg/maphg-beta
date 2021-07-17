@@ -7,9 +7,7 @@ $fechaActual = date('Y-m-d H:m:s');
 # CABECERA PARA JSON
 header("Access-Control-Allow-Origin: *");
 
-# CONEXION DB
-include '../php/conexion.php';
-
+#RUTA ABSOLUTA PARA ENLACES
 $rutaAbsoluta = "";
 if (strpos($_SERVER['REQUEST_URI'], "america") == true)
   $rutaAbsoluta = "https://www.maphg.com/america";
@@ -17,6 +15,12 @@ if (strpos($_SERVER['REQUEST_URI'], "europa") == true)
   $rutaAbsoluta = "https://www.maphg.com/europa";
 if (strpos($_SERVER['REQUEST_URI'], "maphg-beta") == true)
   $rutaAbsoluta = "https://www.maphg.com/america";
+
+# CONEXION DB
+include '../php/conexion.php';
+include '../apis/functions_planner.php';
+
+
 
 #ARRAY GLOBAL
 $array = array();
@@ -168,47 +172,6 @@ if ($peticion === "POST") {
           "taller" => intval($taller),
           "operaMal" => intval($operaMal),
         );
-      }
-    }
-
-
-    #TODO
-    $array['todo']['PENDIENTE'] = array();
-    $array['todo']['SOLUCIONADO'] = array();
-    $query = "SELECT id, descripcion, fecha_creacion, fecha_modificado, status
-    FROM t_to_do
-    WHERE id_usuario = $idUsuario and activo = 1 $filtroTodo";
-    if ($result = mysqli_query($conn_2020, $query)) {
-      foreach ($result as $x) {
-        $idTodo = intval($x['id']);
-        $todo = $x['descripcion'];
-        $fechaCreacion = $x['fecha_creacion'];
-        $fechaModificado = $x['fecha_modificado'];
-        $status = $x['status'];
-
-        #TO DO PENDIENTES
-        if ($status === "PENDIENTE") {
-          #ARRAY TODO
-          $array['todo']['PENDIENTE'][] = array(
-            "idTodo" => $idTodo,
-            "todo" => $todo,
-            "fechaCreacion" => $fechaCreacion,
-            "fechaModificado" => $fechaModificado,
-            "status" => $status,
-          );
-        }
-
-        #TO DO SOLUCIONADOS
-        if ($status === "SOLUCIONADO") {
-          #ARRAY TODO
-          $array['todo']['SOLUCIONADO'][] = array(
-            "idTodo" => $idTodo,
-            "todo" => $todo,
-            "fechaCreacion" => $fechaCreacion,
-            "fechaModificado" => $fechaModificado,
-            "status" => $status,
-          );
-        }
       }
     }
 
@@ -416,6 +379,7 @@ if ($peticion === "POST") {
               if ($fechaCreado > '0000-00-00 00:00:00' && $fechaCreado != "")
                 $fechaCreado = (new \DateTime($x['fecha']))->format('Y-m-d');
 
+
               #COMENTARIO
               $totalComentarios = 0;
               $comentario = "";
@@ -533,10 +497,12 @@ if ($peticion === "POST") {
         $preventivos['proximos'] = array();
 
         $query = "SELECT mp.id, mp.id_responsables, mp.status, mp.fecha_programada,
-        mp.comentario, mp.fecha_creacion, plan.tipo_plan, e.equipo
+        mp.comentario, mp.fecha_creacion, plan.tipo_plan, e.equipo, c.nombre, c.apellido
         FROM t_mp_planificacion_iniciada mp
         INNER JOIN t_mp_planes_mantenimiento plan ON mp.id_plan = plan.id
         INNER JOIN t_equipos_america e ON mp.id_equipo = e.id
+        INNER JOIN t_users AS u ON mc.id_usuario = u.id
+        INNER JOIN t_colaboradores AS c ON u.id_colaborador = c.id
         WHERE mp.id_responsables LIKE '%$idUsuario%' and mp.activo = 1 and e.id_seccion IN($seccionesPermitidas) $filtroDestinoMP";
         if ($result = mysqli_query($conn_2020, $query)) {
           foreach ($result as $x) {
@@ -547,6 +513,7 @@ if ($peticion === "POST") {
             $fechaProgramada = $x['fecha_programada'];
             $responsable = preg_split("/[\s,]+/", $x['id_responsables']);
             $fechaCreado = $x['fecha_creacion'];
+            $creadoPor = $x['nombre'] . " " . $x['apellido'];
 
             #COMENTARIO
             $totalComentarios = 1;
@@ -560,8 +527,6 @@ if ($peticion === "POST") {
               #FECHA CREADO
               if ($fechaCreado > '0000-00-00 00:00:00' && $fechaCreado != "")
                 $fechaCreado = (new \DateTime($x['fecha_creacion']))->format('Y-m-d');
-
-
 
               #ADJUNTOS
               $totalAdjuntos = 0;
@@ -646,9 +611,11 @@ if ($peticion === "POST") {
         $tareasproyectos['solucionadas'] = array();
 
         $query = "SELECT p.id 'idProyecto', p.titulo, a.id 'idPlanaccion', a.actividad,
-        a.status, a.responsable, a.rango_fecha
+        a.status, a.responsable, a.rango_fecha, a.fecha_creacion, c.nombre, c.apellido
         FROM t_proyectos p
         INNER JOIN t_proyectos_planaccion a ON p.id = a.id_proyecto
+        INNER JOIN t_users AS u ON p.creado_por = u.id
+        INNER JOIN t_colaboradores AS c ON u.id_colaborador = c.id
         WHERE a.responsable LIKE '%$idUsuario%' and p.activo = 1 and a.activo = 1 and 
         p.id_seccion IN($seccionesPermitidas) $filtroDestinoProyectos";
         if ($result = mysqli_query($conn_2020, $query)) {
@@ -659,6 +626,8 @@ if ($peticion === "POST") {
             $status = $x['status'];
             $rangoFecha = $x['rango_fecha'];
             $responsable = preg_split("/[\s,]+/", $x['responsable']);
+            $creadoPor = $x['nombre'] . " " . $x['apellido'];
+            $fechaCreado = $x['fecha_creacion'];
 
             if ($status === "N" or $status == "PENDIENTE" or $status == "P")
               $status = "PENDIENTE";
@@ -668,13 +637,60 @@ if ($peticion === "POST") {
             if (in_array($idUsuario, $responsable, true)) {
               $totalTareasproyectos++;
 
+              #FECHA CREADO
+              if ($fechaCreado > '0000-00-00 00:00:00' && $fechaCreado != "")
+                $fechaCreado = (new \DateTime($fechaCreado))->format('Y-m-d');
+
+              #COMENTARIO
+              $totalComentarios = 0;
+              $comentario = "";
+              $comentarioDe = "";
+              $fechaComentario = "";
+              $query = "SELECT com.comentario, com.fecha, c.nombre, c.apellido
+              FROM t_proyectos_planaccion_comentarios com
+              INNER JOIN t_users u ON com.usuario = u.id
+              INNER JOIN t_colaboradores c ON u.id_colaborador = c.id
+              WHERE com.id_actividad = $idPlanaccion and com.activo = 1 ORDER BY com.id";
+              if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $x) {
+                  $totalComentarios++;
+                  $comentario = $x['comentario'];
+                  $comentarioDe = $x['nombre'] . " " . $x['apellido'];
+                  $fechaComentario = $x['fecha'];
+                }
+              }
+
+              #ADJUNTOS
+              $totalAdjuntos = 0;
+              $query = "SELECT count(id) 'total'
+              FROM t_proyectos_planaccion_adjuntos
+              WHERE id_actividad = $idPlanaccion and status = 1";
+              if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $x) {
+                  $totalAdjuntos = $x['total'];
+                }
+              }
+
+              #URL INCIDENCIA
+              $url = $rutaAbsoluta . "proyectos/$idProyecto";
+
               #PLANACCION EN PROCESO
               if ($status == "PENDIENTE") {
                 $tareasproyectos['enproceso'][] =
                   array(
                     "idRegistro" => $idProyecto,
                     "titulo" => $actividad,
-                    "tipo" => "PDA"
+                    "tipo" => "PDA",
+                    "fechaCreado" => $fechaCreado,
+                    "creadoPor" => $creadoPor,
+                    "status" => $status,
+                    "totalAdjuntos" => $totalAdjuntos,
+                    "totalComentarios" => $totalComentarios,
+                    "comentario" => $comentario,
+                    "comentarioDe" => $comentarioDe,
+                    "fechaComentario" => $fechaComentario,
+                    "url" => $url,
+                    "tipoRegistro" => "PDA"
                   );
               }
 
@@ -684,7 +700,17 @@ if ($peticion === "POST") {
                   array(
                     "idRegistro" => $idProyecto,
                     "titulo" => $actividad,
-                    "tipo" => "PDA"
+                    "tipo" => "PDA",
+                    "fechaCreado" => $fechaCreado,
+                    "creadoPor" => $creadoPor,
+                    "status" => $status,
+                    "totalAdjuntos" => $totalAdjuntos,
+                    "totalComentarios" => $totalComentarios,
+                    "comentario" => $comentario,
+                    "comentarioDe" => $comentarioDe,
+                    "fechaComentario" => $fechaComentario,
+                    "url" => $url,
+                    "tipoRegistro" => "PDA"
                   );
               }
 
@@ -694,36 +720,70 @@ if ($peticion === "POST") {
                   array(
                     "idRegistro" => $idProyecto,
                     "titulo" => $actividad,
-                    "tipo" => "PDA"
+                    "tipo" => "PDA",
+                    "fechaCreado" => $fechaCreado,
+                    "creadoPor" => $creadoPor,
+                    "status" => $status,
+                    "totalAdjuntos" => $totalAdjuntos,
+                    "totalComentarios" => $totalComentarios,
+                    "comentario" => $comentario,
+                    "comentarioDe" => $comentarioDe,
+                    "fechaComentario" => $fechaComentario,
+                    "url" => $url,
+                    "tipoRegistro" => "PDA"
                   );
               }
             }
           }
         }
 
-        $todos[] = array("titulo" => "xx", "tipo" => "");
-
-        #FAVORITOS
-        $favoritos = array();
-
-        $query = "SELECT id, tipo, url, descripcion
-        FROM t_favoritos
-        WHERE id_usuario = $idUsuario and activo = 1 $filtroFavoritos";
+        #TODO
+        $totalTodos = 0;
+        $array['todo']['PENDIENTE'] = array();
+        $array['todo']['SOLUCIONADO'] = array();
+        $query = "SELECT id, descripcion, fecha_creacion, fecha_modificado, status
+        FROM t_to_do
+        WHERE id_usuario = $idUsuario and activo = 1 $filtroTodo";
         if ($result = mysqli_query($conn_2020, $query)) {
           foreach ($result as $x) {
-            $idRegistro = $x['id'];
-            $tipo = $x['tipo'];
-            $url = $x['url'];
-            $descripcion = $x['descripcion'];
+            $idTodo = intval($x['id']);
+            $todo = $x['descripcion'];
+            $fechaCreacion = $x['fecha_creacion'];
+            $fechaModificado = $x['fecha_modificado'];
+            $status = $x['status'];
+            $totalTodos++;
 
-            $favoritos[] =
-              array(
-                "idRegistro" => $idRegistro,
-                "titulo" => $tipo . " 👉 " . $descripcion,
-                "tipo" => "favorito"
+            #TO DO PENDIENTES
+            if ($status === "PENDIENTE") {
+              #ARRAY TODO
+              $array['todo']['PENDIENTE'][] = array(
+                "idTodo" => $idTodo,
+                "todo" => $todo,
+                "fechaCreacion" => $fechaCreacion,
+                "fechaModificado" => $fechaModificado,
+                "status" => $status,
               );
+            }
+
+            #TO DO SOLUCIONADOS
+            if ($status === "SOLUCIONADO") {
+              #ARRAY TODO
+              $array['todo']['SOLUCIONADO'][] = array(
+                "idTodo" => $idTodo,
+                "todo" => $todo,
+                "fechaCreacion" => $fechaCreacion,
+                "fechaModificado" => $fechaModificado,
+                "status" => $status,
+              );
+            }
           }
         }
+
+        #FAVORITOS
+        $totalFavoritos = 1;
+        $favoritos = array();
+        $favoritos = obtenerFavoritos($_POST);
+        $totalFavoritos = count($favoritos);
 
         #ARRAY DATOS USUARIO
         $array['usuario'] = array(
@@ -746,7 +806,6 @@ if ($peticion === "POST") {
           "totalTareasproyectos" => $totalTareasproyectos,
           "totalTodos" => $totalTodos,
           "totalFavoritos" => $totalFavoritos,
-          "todos" => $todos,
         );
 
         #INCIDENCIAS
@@ -1051,6 +1110,62 @@ if ($peticion === "POST") {
 
 
     $query = "UPDATE t_to_do SET status = '$status', fecha_modificado = '$fechaActual'
+    WHERE id = $idTodo";
+    if ($result = mysqli_query($conn_2020, $query)) {
+      #TODO
+      $array['resp'] = "SUCCESS";
+      $array['todo']['PENDIENTE'] = array();
+      $array['todo']['SOLUCIONADO'] = array();
+      $query = "SELECT id, descripcion, fecha_creacion, fecha_modificado, status
+      FROM t_to_do
+      WHERE id_usuario = $idUsuario and activo = 1 $filtroTodo";
+      if ($result = mysqli_query($conn_2020, $query)) {
+        foreach ($result as $x) {
+          $idTodo = intval($x['id']);
+          $todo = $x['descripcion'];
+          $fechaCreacion = $x['fecha_creacion'];
+          $fechaModificado = $x['fecha_modificado'];
+          $status = $x['status'];
+
+          #TO DO PENDIENTES
+          if ($status === "PENDIENTE") {
+            #ARRAY TODO
+            $array['todo']['PENDIENTE'][] = array(
+              "idTodo" => $idTodo,
+              "todo" => $todo,
+              "fechaCreacion" => $fechaCreacion,
+              "fechaModificado" => $fechaModificado,
+              "status" => $status,
+            );
+          }
+
+          #TO DO SOLUCIONADOS
+          if ($status === "SOLUCIONADO") {
+            #ARRAY TODO
+            $array['todo']['SOLUCIONADO'][] = array(
+              "idTodo" => $idTodo,
+              "todo" => $todo,
+              "fechaCreacion" => $fechaCreacion,
+              "fechaModificado" => $fechaModificado,
+              "status" => $status,
+            );
+          }
+        }
+      }
+    }
+  }
+
+  #ACTUALIZAR TO DO
+  if ($action === "eliminarTodo") {
+    $idTodo = $_POST['idTodo'];
+
+    #FILTRO POR DESTINO
+    if ($idDestino == 10)
+      $filtroTodo = "";
+    else
+      $filtroTodo = "and id_destino = $idDestino";
+
+    $query = "UPDATE t_to_do SET activo = 0, fecha_modificado = '$fechaActual'
     WHERE id = $idTodo";
     if ($result = mysqli_query($conn_2020, $query)) {
       #TODO
