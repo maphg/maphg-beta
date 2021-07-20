@@ -4,6 +4,10 @@ date_default_timezone_set('America/Cancun');
 setlocale(LC_MONETARY, 'es_ES');
 $fechaActual = date('Y-m-d H:m:s');
 
+#CALCULA DÍA ACTUAL DE LA SEMANA.
+$dias = array("domingo", "lunes", "martes", "miercoles", "jueves", "viernes", "sabado");
+$diaSemana = $dias[date("w")];
+
 # CABECERA PARA JSON
 header("Access-Control-Allow-Origin: *");
 
@@ -18,9 +22,9 @@ if (strpos($_SERVER['REQUEST_URI'], "maphg-beta") == true)
 
 # CONEXION DB
 include '../php/conexion.php';
+
+#FUNCIONES
 include '../apis/functions_planner.php';
-
-
 
 #ARRAY GLOBAL
 $array = array();
@@ -1082,6 +1086,34 @@ if ($peticion === "POST") {
           }
         }
 
+        #TOGGLE PARA LAS SECCIONES SEGÚN DÍA DE LA SEMANA
+        $toggle = false;
+
+        if ($diaSemana == "lunes") {
+          if ($idSeccion === 8 || $idSeccion === 12)
+            $toggle = true;
+        }
+
+        if ($diaSemana == "martes") {
+          if ($idSeccion === 9)
+            $toggle = true;
+        }
+
+        if ($diaSemana == "miercoles") {
+          if ($idSeccion === 1 || $idSeccion === 10)
+            $toggle = true;
+        }
+
+        if ($diaSemana == "jueves") {
+          if ($idSeccion === 6 || $idSeccion === 5)
+            $toggle = true;
+        }
+
+        if ($diaSemana == "viernes") {
+          if ($idSeccion === 11 || $idSeccion === 24)
+            $toggle = true;
+        }
+
         #ARRAY CON RESULTADOS
         $array['secciones'][$seccion] = array(
           "idDestino" => $idDestino,
@@ -1089,7 +1121,7 @@ if ($peticion === "POST") {
           "ubicacion" => $ubicacion,
           "idSeccion" => intval($idSeccion),
           "seccion" => $seccion,
-          "toggle" => false,
+          "toggle" => $toggle,
           "tituloSeccion" => $tituloSeccion,
           "proyectos" => $totalProyectos,
           "subsecciones" => $subsecciones,
@@ -1299,7 +1331,6 @@ if ($peticion === "POST") {
 
   if ($action === "subirFotoUsuario") {
     $array['resp'] = "SUCCESS";
-    $array['file'] = json_encode($_POST);
 
     // $rutaTemporal = $_FILES["file"]["tmp_name"];
     // $extension = pathinfo($_FILES["file"]["name"], PATHINFO_EXTENSION);
@@ -1312,6 +1343,7 @@ if ($peticion === "POST") {
     // }
     // if (move_uploaded_file($rutaTemporal, "../planner/avatars/" . $foto)) {
     // }
+
   }
 
 
@@ -1329,4 +1361,5 @@ if ($peticion === "POST") {
     }
   }
 }
+
 echo json_encode($array);
