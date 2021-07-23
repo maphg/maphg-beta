@@ -942,6 +942,7 @@ if ($peticion === "POST") {
               "alarma" => 0,
               "alerta" => 0,
               "seguimiento" => 0,
+              "totalIncidencias" => 0,
             );
           }
         }
@@ -991,6 +992,9 @@ if ($peticion === "POST") {
                       $usuariosSeccion[$value]['alerta'] += 1;
                     if ($tipoIncidencia == "SEGUIMIENTO")
                       $usuariosSeccion[$value]['seguimiento'] += 1;
+
+                    #TOTAL DE INCIDENCIAS POR USUARIO
+                    $usuariosSeccion[$value]['totalIncidencias'] += 1;
                   }
                 }
 
@@ -1034,7 +1038,7 @@ if ($peticion === "POST") {
                 foreach ($responsables as $key => $value) {
                   if (isset($usuariosSeccion[$value])) {
 
-                    #TOTAL DE INCIDENCIAS POR USUARIO
+                    #TOTAL POR TIPO DE INCIDENCIAS POR USUARIO
                     if ($tipoIncidencia == "EMERGENCIA")
                       $usuariosSeccion[$value]['emergencia'] += 1;
                     if ($tipoIncidencia == "URGENCIA")
@@ -1045,6 +1049,9 @@ if ($peticion === "POST") {
                       $usuariosSeccion[$value]['alerta'] += 1;
                     if ($tipoIncidencia == "SEGUIMIENTO")
                       $usuariosSeccion[$value]['seguimiento'] += 1;
+
+                    #TOTAL DE INCIDENCIAS POR USUARIO
+                    $usuariosSeccion[$value]['totalIncidencias'] += 1;
                   }
                 }
 
@@ -1114,6 +1121,21 @@ if ($peticion === "POST") {
             $toggle = true;
         }
 
+        $arrayUsuariosSeccion = array();
+        foreach ($usuariosSeccion as $x) {
+          $arrayUsuariosSeccion[] = array(
+            "idUsuario" => $x['idUsuario'],
+            "usuario" => $x['usuario'],
+            "avatar" => $x['avatar'],
+            "emergencia" => $x['emergencia'],
+            "urgencia" => $x['urgencia'],
+            "alarma" => $x['alarma'],
+            "alerta" => $x['alerta'],
+            "seguimiento" => $x['seguimiento'],
+            "totalIncidencias" => $x['totalIncidencias'],
+          );
+        }
+
         #ARRAY CON RESULTADOS
         $array['secciones'][$seccion] = array(
           "idDestino" => $idDestino,
@@ -1125,7 +1147,7 @@ if ($peticion === "POST") {
           "tituloSeccion" => $tituloSeccion,
           "proyectos" => $totalProyectos,
           "subsecciones" => $subsecciones,
-          "usuariosSeccion" => $usuariosSeccion,
+          "usuariosSeccion" => $arrayUsuariosSeccion,
         );
       }
     }
