@@ -150,13 +150,13 @@ if ($peticion === "POST") {
       }
     }
 
-    $query = "SELECT id, ids_destinos, ids_tipos_equipos, ids_equipos, descripcion, fecha_inicio, 
+    $query = "SELECT id_publico, ids_destinos, ids_tipos_equipos, ids_equipos, descripcion, fecha_inicio, 
     hora_inicio, horas, dias, semanas, meses, status
     FROM t_bitacoras_configuracion
     WHERE activo = 1 and id_publico = '$idBitacora'";
     if ($result = mysqli_query($conn_2020, $query)) {
       foreach ($result as $x) {
-        $idBitacora = $x['id'];
+        $idBitacora = $x['id_publico'];
         $descripcion = $x['descripcion'];
         $fechaInicio = $x['fecha_inicio'];
         $horaInicio = $x['hora_inicio'];
