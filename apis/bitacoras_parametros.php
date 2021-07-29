@@ -10,15 +10,27 @@ header("Access-Control-Allow-Origin: *");
 # CONEXION DB
 include '../php/conexion.php';
 
+#RUTA ABSOLUTA PARA ENLACES
+$rutaAbsoluta = "";
+if (strpos($_SERVER['REQUEST_URI'], "america") == true)
+  $rutaAbsoluta = "https://www.maphg.com/america";
+if (strpos($_SERVER['REQUEST_URI'], "europa") == true)
+  $rutaAbsoluta = "https://www.maphg.com/europa";
+if (strpos($_SERVER['REQUEST_URI'], "maphg-beta") == true)
+  $rutaAbsoluta = "https://www.maphg.com/america";
+
 #ARRAY GLOBAL
 $array = array();
-$array['status'] = '404';
+$array['status'] = '505';
 $array['response'] = "ERROR";
+$array['message'] = "";
+$array['conexion'] = false;
 
 #OBTIENE EL TIPO DE PETICIÓN
 $peticion = "";
 if ($_SERVER['REQUEST_METHOD'])
   $peticion = $_SERVER['REQUEST_METHOD'];
+
 
 #PETICIONES METODO _POST
 if ($peticion === "POST") {
@@ -30,8 +42,92 @@ if ($peticion === "POST") {
   $idUsuario = $_POST['idUsuario'];
   $action = $_POST['action'];
 
-  #OBTIENE LAS BITACORAS
-  if ($action === "bitacoras") {
+  #OBTIENE EL LISTADO DE LAS BITACORAS
+  if ($action === "listadoBitacoras") {
+    $array['response'] = "SUCCESS";
+    $array['listadoBitacoras'] = array();
+
+    if ($idDestino == 10)
+      $filtroDestino = "";
+    else
+      $filtroDestino = "and ids_destinos LIKE '%[$idDestino]%'";
+
+    $query = "SELECT b.id_publico, b.descripcion, b.ids_destinos, b.ids_tipos_equipos, b.fecha_creado,
+    b.status, c.nombre, c.apellido
+    FROM t_bitacoras_configuracion AS b
+    INNER JOIN t_users AS u ON b.creado_por = u.id
+    INNER JOIN t_colaboradores AS c ON u.id_colaborador = c.id
+    WHERE b.activo = 1 $filtroDestino";
+    if ($result = mysqli_query($conn_2020, $query)) {
+      foreach ($result as $x) {
+        $idBitacora = $x['id_publico'];
+        $descripcion = $x['descripcion'];
+        $fechaCreado = $x['fecha_creado'];
+        $creadoPor = $x['nombre'] . " " . $x['apellido'];
+        $status = $x['status'];
+
+        $caracteres = array("[", "]", "[ ", "] ");
+        $idsDestinos = str_replace($caracteres, "", $x['ids_destinos']);
+        $idsTiposEquipos = str_replace($caracteres, "", $x['ids_tipos_equipos']);
+
+        #DESTINOS
+        $destinos = array();
+        $query = "SELECT id, destino FROM c_destinos WHERE id IN($idsDestinos)";
+        if ($result = mysqli_query($conn_2020, $query)) {
+          foreach ($result as $x) {
+            $idDestinox = intval($x['id']);
+            $destino = $x['destino'];
+
+            $destinos[] = $destino;
+          }
+        }
+
+        #TIPOS DE EQUIPOS
+        $tiposEquipos = array();
+        $query = "SELECT id, tipo FROM c_tipos WHERE id IN($idsTiposEquipos)";
+        if ($result = mysqli_query($conn_2020, $query)) {
+          foreach ($result as $x) {
+            $idTipo = intval($x['id']);
+            $tipo = $x['tipo'];
+
+
+            $tiposEquipos[] = $tipo;
+          }
+        }
+
+        $array['listadoBitacoras'][] = array(
+          "idBitacora" => $idBitacora,
+          "descripcion" => $descripcion,
+          "creadoPor" => $creadoPor,
+          "fechaCreado" => $fechaCreado,
+          "destinos" => $destinos,
+          "tiposEquipos" => $tiposEquipos,
+          "status" => $status,
+        );
+      }
+    }
+  }
+
+
+  #AGREGA BITACORA CON VALORES DEFAULT
+  if ($action === "agregarBitacora") {
+    $idBitacora = $_POST['idBitacora'];
+
+    if ($idDestino == 10)
+      $idsDestinos = "";
+    else
+      $idsDestinos = "[$idDestino]";
+
+    $query = "INSERT INTO t_bitacoras_configuracion(id_publico, creado_por, ids_destinos, descripcion, status, fecha_creado, activo) VALUES('$idBitacora', $idUsuario, '$idsDestinos', '', 'DESACTIVADO', '$fechaActual', 1)";
+    if ($result = mysqli_query($conn_2020, $query)) {
+      $array['response'] = "SUCCESS";
+      $array['message'] = "Bitácora Creada!";
+    }
+  }
+
+
+  #OBTIENE DATOS DE LA BITACORA
+  if ($action === "bitacora") {
     $idBitacora = $_POST['idBitacora'];
 
     #FILTRO DESTINO
@@ -88,7 +184,7 @@ if ($peticion === "POST") {
     $query = "SELECT c.id, c.seccion
     FROM c_rel_destino_seccion AS rel
     INNER JOIN c_secciones AS c ON rel.id_seccion = c.id
-    WHERE rel.id_destino = 10";
+    WHERE rel.id_destino = 10 and c.id NOT IN(19, 23, 1001)";
     if ($result = mysqli_query($conn_2020, $query)) {
       foreach ($result as $x) {
         $idSeccion = intval($x['id']);
@@ -150,24 +246,28 @@ if ($peticion === "POST") {
       }
     }
 
-    $query = "SELECT id_publico, ids_destinos, ids_tipos_equipos, ids_equipos, descripcion, fecha_inicio, 
+
+    $array['usuariosPermitidos'] = array();
+
+    $query = "SELECT id_publico, ids_destinos, ids_usuarios, ids_tipos_equipos, ids_equipos, descripcion, fecha_inicio, 
     hora_inicio, horas, dias, semanas, meses, status
     FROM t_bitacoras_configuracion
     WHERE activo = 1 and id_publico = '$idBitacora'";
     if ($result = mysqli_query($conn_2020, $query)) {
       foreach ($result as $x) {
         $idBitacora = $x['id_publico'];
-        $descripcion = $x['descripcion'];
-        $fechaInicio = $x['fecha_inicio'];
-        $horaInicio = $x['hora_inicio'];
-        $horas = intval($x['horas']);
-        $dias = intval($x['dias']);
-        $semanas = intval($x['semanas']);
-        $meses = intval($x['meses']);
-        $status = $x['status'];
+        $descripcion_bitacora = $x['descripcion'];
+        $fechaInicio_bitacora = $x['fecha_inicio'];
+        $horaInicio_bitacora = $x['hora_inicio'];
+        $horas_bitacora = intval($x['horas']);
+        $dias_bitacora = intval($x['dias']) > 0? $x['dias'] / 24 : 0;
+        $semanas_bitacora = intval($x['semanas']) > 0? $x['semanas'] / 168 : 0;
+        $meses_bitacora = intval($x['meses']) > 0? $x['meses'] / 730 : 0;
+        $status_bitacora = $x['status'];
 
         $caracteres = array("[", "]", "[ ", "] ");
         $idsDestinos = str_replace($caracteres, "", $x['ids_destinos']);
+        $idsUsuarios = str_replace($caracteres, "", $x['ids_usuarios']);
         $idsTiposEquipos = str_replace($caracteres, "", $x['ids_tipos_equipos']);
         $idsEquipos = str_replace($caracteres, "", $x['ids_equipos']);
 
@@ -182,6 +282,25 @@ if ($peticion === "POST") {
             $destinos[] = array(
               "idDestino" => $idDestino,
               "destino" => $destino
+            );
+          }
+        }
+
+        #USUARIOS
+        $usuarios = array();
+        $query = "SELECT u.id, c.nombre, c.apellido 
+        FROM t_users AS u
+        INNER JOIN t_colaboradores AS c ON u.id_colaborador = c.id
+        WHERE u.id IN($idsUsuarios)";
+        if ($result = mysqli_query($conn_2020, $query)) {
+          foreach ($result as $x) {
+            $idUsuariosX = $x['id'];
+            $usuario = $x['nombre'] . " " . $x['apellido'];
+
+            $usuarios[] = array(
+              "idUsuario" => $idUsuariosX,
+              "idBitacora" => $idBitacora,
+              "usuario" => $usuario
             );
           }
         }
@@ -216,22 +335,59 @@ if ($peticion === "POST") {
           }
         }
 
+        #USUARIOS PERMITIDOS EN LA BITACORA
+        $query = "SELECT u.id, cargo.cargo, c.foto, c.nombre, c.apellido, d.destino
+        FROM t_users AS u
+        INNER JOIN t_colaboradores AS c ON u.id_colaborador = c.id
+        INNER JOIN c_destinos AS d ON u.id_destino = d.id
+        INNER JOIN c_cargos AS cargo ON c.id_cargo = cargo.id
+        WHERE (u.id_destino IN($idsDestinos) || u.id_destino = 10) and u.status = 'A' and u.activo = 1
+        ORDER BY c.nombre ASC";
+        if ($result = mysqli_query($conn_2020, $query)) {
+          foreach ($result as $x) {
+            $idUsuarioX = $x['id'];
+            $usuario = $x['nombre'] . " " . $x['apellido'];
+            $nombre = $x['nombre'];
+            $apellido = $x['apellido'];
+            $destino = $x['destino'];
+            $cargo = $x['cargo'];
+            $avatar = $x['foto'];
+
+            #VALIDACIÓN DE FOTO
+            if ($avatar === "" || $avatar === " ")
+              $avatar = "https://ui-avatars.com/api/?format=svg&rounded=false&size=300&background=2d3748&color=edf2f7&name=$nombre[0]$apellido[0]";
+            else
+              $avatar = "$rutaAbsoluta/planner/avatars/$avatar";
+
+            $array['usuariosPermitidos'][] = array(
+              "idBitacora" => $idBitacora,
+              "destino" => $destino,
+              "idUsuario" => $idUsuarioX,
+              "usuario" => $usuario,
+              "cargo" => $cargo,
+              "avatar" => $avatar,
+            );
+          }
+        }
+
+
         #PARAMETROS
         $parametros = array();
-        $query = "SELECT id_publico, parametro, configuracion_global, fecha_inicio, hora_inicio, horas, dias, semanas, meses, id_unidad_medida, parametro_minimo, parametro_maximo, generar_incidencia, titulo_incidencia, tipo_incidencia, notificar_telegram, notificar_ids_usuarios, fecha_creado, activo
+        $query = "SELECT id_publico, ids_usuarios,parametro, configuracion_global, fecha_inicio, hora_inicio, horas, dias, semanas, meses, id_unidad_medida, parametro_minimo, parametro_maximo, generar_incidencia, titulo_incidencia, tipo_incidencia, notificar_telegram, notificar_ids_usuarios, fecha_creado, activo
         FROM t_bitacoras_lista_parametros
         WHERE id_bitacoras_configuracion = '$idBitacora' and activo = 1 ORDER BY fecha_creado ASC";
         if ($result = mysqli_query($conn_2020, $query)) {
           foreach ($result as $x) {
+            $idsUsuarios = $x["ids_usuarios"];
             $idParametro = $x["id_publico"];
             $parametro = $x["parametro"];
             $configuracionGlobal = $x['configuracion_global'];
             $fechaInicio = $x['fecha_inicio'];
             $horaInicio = $x['hora_inicio'];
             $horas = intval($x['horas']);
-            $dias = intval($x['dias']);
-            $semanas = intval($x['semanas']);
-            $meses = intval($x['meses']);
+            $dias = intval($x['dias']) > 0? $x['dias'] / 24 : 0;
+            $semanas = intval($x['semanas']) > 0? $x['semanas'] / 168 : 0;
+            $meses = intval($x['meses']) > 0? $x['meses'] / 730 : 0;
             $idUnidadMedida = $x['id_unidad_medida'];
             $parametroMinimo = $x['parametro_minimo'];
             $parametroMaximo = $x['parametro_maximo'];
@@ -242,6 +398,7 @@ if ($peticion === "POST") {
             $notificarIdsUsuarios = $x['notificar_ids_usuarios'];
             $fechaCreado = $x['fecha_creado'];
             $activo = intval($x['activo']);
+            $caracteres = array("[", "]", "[ ", "] ");
 
             #CONVIERTE EN BOOLEAN
             if ($configuracionGlobal === "true")
@@ -261,9 +418,31 @@ if ($peticion === "POST") {
             else
               $notificarTelegram = false;
 
-            #USUARIOS A NOTIFICAR POT TELEGRAM
+            #USUARIOS SELECCIONADOS EN PARAMETRO
+            $usuariosParametro = array();
+            $idsUsuarios = str_replace($caracteres, "", $idsUsuarios);
+            $query = "SELECT u.id, c.nombre, c.apellido, d.destino
+            FROM t_users AS u 
+            INNER JOIN t_colaboradores AS c ON u.id_colaborador = c.id
+            INNER JOIN c_destinos AS d ON u.id_destino = d.id
+            WHERE u.id IN($idsUsuarios)";
+            if ($result = mysqli_query($conn_2020, $query)) {
+              foreach ($result as $x) {
+                $idUsuario = $x["id"];
+                $usuario = $x['nombre'] . " " . $x['apellido'];
+                $destino = $x['destino'];
+
+                $usuariosParametro[] = array(
+                  "idUsuario" => $idUsuario,
+                  "usuario" => $usuario,
+                  "destino" => $destino,
+                  "idParametro" => $idParametro,
+                );
+              }
+            }
+
+            #USUARIOS A NOTIFICAR POR TELEGRAM
             $usuariosTelegram = array();
-            $caracteres = array("[", "]", "[ ", "] ");
             $notificarIdsUsuarios = str_replace($caracteres, "", $notificarIdsUsuarios);
             $query = "SELECT u.id, c.nombre, c.apellido, d.destino
             FROM t_users AS u 
@@ -304,6 +483,7 @@ if ($peticion === "POST") {
               "tipoIncidencia" => $tipoIncidencia,
               "notificarTelegram" => $notificarTelegram,
               "usuariosTelegram" => $usuariosTelegram,
+              "usuariosParametro" => $usuariosParametro,
               "activo" => $activo,
               "change" => 0,
             );
@@ -313,23 +493,25 @@ if ($peticion === "POST") {
         #ARRAY DE RESULTADOS
         $array['bitacoras'][] = array(
           "idBitacora" => $idBitacora,
-          "descripcion" => $descripcion,
-          "fechaInicio" => $fechaInicio,
-          "horaInicio" => $horaInicio,
+          "descripcion" => $descripcion_bitacora,
+          "fechaInicio" => $fechaInicio_bitacora,
+          "horaInicio" => $horaInicio_bitacora,
           "repetir" => 0,
           "parametros" => $parametros,
           "destinos" => $destinos,
+          "usuarios" => $usuarios,
           "tipos" => $tipos,
           "equipos" => $equipos,
-          "horas" => $horas,
-          "dias" => $dias,
-          "semanas" => $semanas,
-          "meses" => $meses,
-          "status" => $status,
+          "horas" => $horas_bitacora,
+          "dias" => $dias_bitacora,
+          "semanas" => $semanas_bitacora,
+          "meses" => $meses_bitacora,
+          "status" => $status_bitacora,
         );
       }
     }
   }
+
 
   #ACTUALIZA COLUMNAS DE LA BITACORA
   if ($action === "actualizarBitacora") {
@@ -343,6 +525,7 @@ if ($peticion === "POST") {
       WHERE id_publico = '$idBitacora'";
       if ($result = mysqli_query($conn_2020, $query)) {
         $array['response'] = "SUCCESS";
+        $array['message'] = "Descripción Actualizada!";
       }
     }
 
@@ -352,6 +535,7 @@ if ($peticion === "POST") {
       WHERE id_publico = '$idBitacora'";
       if ($result = mysqli_query($conn_2020, $query)) {
         $array['response'] = "SUCCESS";
+        $array['message'] = "Fecha de Inicio, Actualizada!";
       }
     }
 
@@ -361,15 +545,30 @@ if ($peticion === "POST") {
       WHERE id_publico = '$idBitacora'";
       if ($result = mysqli_query($conn_2020, $query)) {
         $array['response'] = "SUCCESS";
+        $array['message'] = "Hora de Inicio, Actualizada!";
       }
     }
 
     #ACTUALIZA HORA DE INICIO DE LA BITACORA
     if (($opcion == "horas" || $opcion == "dias" || $opcion == "semanas" || $opcion == "meses") && $value >= 0) {
+      
+      if($opcion == "horas")
+        $value = $value * 1;
+
+      if($opcion == "dias")
+        $value = $value * 24;
+
+      if($opcion == "semanas")
+        $value = $value * 168;
+
+      if($opcion == "meses")
+        $value = $value * 730;
+
       $query = "UPDATE t_bitacoras_configuracion SET $opcion = '$value'
       WHERE id_publico = '$idBitacora'";
       if ($result = mysqli_query($conn_2020, $query)) {
         $array['response'] = "SUCCESS";
+        $array['message'] = strtoupper($opcion) . ", Actualizadas!";
       }
     }
 
@@ -379,22 +578,38 @@ if ($peticion === "POST") {
       WHERE id_publico = '$idBitacora'";
       if ($result = mysqli_query($conn_2020, $query)) {
         $array['response'] = "SUCCESS";
+        $array['message'] = "Status Actualizado!";
       }
     }
   }
+
 
   #OBTENER EQUIPOS POR SECCION Y SUBSECCION
   if ($action === "equipos") {
     $idSeccion = $_POST['idSeccion'];
     $idSubseccion = $_POST['idSubseccion'];
+    $idBitacora = $_POST['idBitacora'];
+
+    $idsDestinos = 0;
+    $query = "SELECT ids_destinos
+    FROM t_bitacoras_configuracion
+    WHERE id_publico = '$idBitacora'";
+    if ($result = mysqli_query($conn_2020, $query)) {
+      foreach ($result as $x) {
+        $caracteres = array("[", "]", "[ ", "] ");
+        $idsDestinos = str_replace($caracteres, "", $x['ids_destinos']);
+      }
+    }
 
     $array['equipos'] = array();
     $query = "SELECT e.id, e.equipo, d.id 'idDestino', d.destino
     FROM t_equipos_america AS e
     INNER JOIN c_destinos AS d ON e.id_destino = d.id
-    WHERE e.id_seccion = $idSeccion and e.id_subseccion = $idSubseccion and e.status IN('OPERATIVO') and e.activo = 1";
+    WHERE e.id_destino IN($idsDestinos) and e.id_seccion = $idSeccion and e.id_subseccion = $idSubseccion 
+    and e.status IN('OPERATIVO') and e.activo = 1";
     if ($result = mysqli_query($conn_2020, $query)) {
       $array['response'] = "SUCCESS";
+      $array['message'] = "Lista de Equipos, Actualizado!";
       foreach ($result as $x) {
         $idEquipo = intval($x['id']);
         $equipo = $x['equipo'];
@@ -403,6 +618,7 @@ if ($peticion === "POST") {
 
         $array['equipos'][] = array(
           "idEquipo" => $idEquipo,
+          "idBitacora" => $idBitacora,
           "equipo" => $equipo,
           "idDestino" => $idDestino,
           "destino" => $destino,
@@ -410,6 +626,7 @@ if ($peticion === "POST") {
       }
     }
   }
+
 
   #AGREGAR TIPO EQUIPO
   if ($action === "agregarTipoEquipo") {
@@ -441,10 +658,12 @@ if ($peticion === "POST") {
         WHERE id_publico = '$idBitacora'";
         if ($result = mysqli_query($conn_2020, $query)) {
           $array['response'] = "SUCCESS";
+          $array['message'] = "Tipos de Equipos, Actualizado!";
         }
       }
     }
   }
+
 
   #ELIMINAR TIPO EQUIPO
   if ($action === "eliminarTipoEquipo") {
@@ -473,10 +692,12 @@ if ($peticion === "POST") {
         WHERE id_publico = '$idBitacora'";
         if ($result = mysqli_query($conn_2020, $query)) {
           $array['response'] = "SUCCESS";
+          $array['message'] = "Equipo Eliminado!";
         }
       }
     }
   }
+
 
   #AGREGAR EQUIPO A LA BITACORA
   if ($action === "agregarEquipo") {
@@ -509,10 +730,12 @@ if ($peticion === "POST") {
         WHERE id_publico = '$idBitacora'";
         if ($result = mysqli_query($conn_2020, $query)) {
           $array['response'] = "SUCCESS";
+          $array['message'] = "Equipo Agregado!";
         }
       }
     }
   }
+
 
   #ELIMINAR TIPO EQUIPO
   if ($action === "eliminarEquipo") {
@@ -542,10 +765,12 @@ if ($peticion === "POST") {
         WHERE id_publico = '$idBitacora'";
         if ($result = mysqli_query($conn_2020, $query)) {
           $array['response'] = "SUCCESS";
+          $array['message'] = "Equipo Eliminado!";
         }
       }
     }
   }
+
 
   #AGREGAR DESTINO A LA BITACORA
   if ($action === "agregarDestino") {
@@ -580,6 +805,7 @@ if ($peticion === "POST") {
         WHERE id_publico = '$idBitacora'";
         if ($result = mysqli_query($conn_2020, $query)) {
           $array['response'] = "SUCCESS";
+          $array['message'] = "Destino Agregado!";
         }
       }
     }
@@ -614,10 +840,87 @@ if ($peticion === "POST") {
         WHERE id_publico = '$idBitacora'";
         if ($result = mysqli_query($conn_2020, $query)) {
           $array['response'] = "SUCCESS";
+          $array['message'] = "Destino Eliminado!";
         }
       }
     }
   }
+
+
+  #AGREGAR USUARIO A LA BITACORA
+  if ($action === "agregarUsuario") {
+    $idBitacora = $_POST['idBitacora'];
+    $idUsuarioX = $_POST['idUsuarioX'];
+
+    $query = "SELECT ids_usuarios
+    FROM t_bitacoras_configuracion
+    WHERE id_publico = '$idBitacora' LIMIT 1";
+    if ($result = mysqli_query($conn_2020, $query)) {
+      foreach ($result as $x) {
+        $idsUsuario = trim($x['ids_usuarios']);
+
+        #AGREGA NUEVO TIPO EQUIPO
+        if ($idsUsuario == "") {
+          $idsUsuario = array("[$idUsuarioX]");
+        } else {
+          $idsUsuario = preg_split("/[\s,]+/", $idsUsuario);
+          $idsUsuario[] = "[$idUsuarioX]";
+        }
+
+        #PREPARA EL ARRAY PARA ACTUALIZAR LA TABLA
+        if (
+          count($idsUsuario) > 0
+        ) {
+          $idsUsuario = implode(", ", $idsUsuario);
+        } else {
+          $idsUsuario = implode("", $idsUsuario);
+        }
+
+        $query = "UPDATE t_bitacoras_configuracion SET ids_usuarios = '$idsUsuario'
+        WHERE id_publico = '$idBitacora'";
+        if ($result = mysqli_query($conn_2020, $query)) {
+          $array['response'] = "SUCCESS";
+          $array['message'] = "Usuario Agregado!";
+        }
+      }
+    }
+  }
+
+
+  #ELIMINA USUARIO DE LA BITACORA
+  if ($action === "eliminarUsuario") {
+    $idBitacora = $_POST['idBitacora'];
+    $idUsuarioX = $_POST['idUsuarioX'];
+
+    $query = "SELECT ids_usuarios
+    FROM t_bitacoras_configuracion
+    WHERE id_publico = '$idBitacora' LIMIT 1";
+    if ($result = mysqli_query($conn_2020, $query)) {
+      foreach ($result as $x) {
+        $idsUsuarios = $x['ids_usuarios'];
+        $idsUsuarios = preg_split("/[\s,]+/", $idsUsuarios);
+
+        #ELIMINA EL TIPO EQUIPO
+        foreach ($idsUsuarios as $key => $value) {
+          if ($value === "[$idUsuarioX]") {
+            unset($idsUsuarios[$key]);
+          }
+        }
+
+        #PREPARA EL ARRAY PARA ACTUALIZAR LA TABLA
+        $idsUsuarios = implode(",", $idsUsuarios);
+        $array['x'] = $idsUsuarios;
+
+        $query = "UPDATE t_bitacoras_configuracion SET ids_usuarios = '$idsUsuarios'
+        WHERE id_publico = '$idBitacora'";
+        if ($result = mysqli_query($conn_2020, $query)) {
+          $array['response'] = "SUCCESS";
+          $array['message'] = "Usuario Eliminado!";
+        }
+      }
+    }
+  }
+
 
   #AGREGAR PARAMETRO A BITACORA
   if ($action === "agregarParametro") {
@@ -629,6 +932,7 @@ if ($peticion === "POST") {
     VALUES('$idParametro', $idDestino, $idUsuario, '$idBitacora', '$parametro', 'true', 'false', 'false', '$fechaActual',  1)";
     if ($result = mysqli_query($conn_2020, $query)) {
       $array['response'] = "SUCCESS";
+      $array['message'] = "Parámetro  Agregado!";
     }
   }
 
@@ -642,9 +946,9 @@ if ($peticion === "POST") {
     $fechaInicio = $_POST['fechaInicio'];
     $horaInicio = $_POST['horaInicio'];
     $horas = $_POST['horas'];
-    $dias = $_POST['dias'];
-    $semanas = $_POST['semanas'];
-    $meses = $_POST['meses'];
+    $dias = $_POST['dias'] * 24;
+    $semanas = $_POST['semanas'] * 168;
+    $meses = $_POST['meses'] * 730;
     $parametroMinimo = $_POST['parametroMinimo'];
     $parametroMaximo = $_POST['parametroMaximo'];
     $generarIncidencia = $_POST['generarIncidencia'];
@@ -684,9 +988,85 @@ if ($peticion === "POST") {
     WHERE id_publico = '$idParametro'";
     if ($result = mysqli_query($conn_2020, $query)) {
       $array['response'] = "SUCCESS";
+      $array['message'] = "Parámetro Actualizado!";
     }
-    $array['POST'] = $_POST;
   }
+
+
+  #ELIMINA USUARIO DE PARAMETRO
+  if ($action === "eliminarUsuarioParametro") {
+    $idParametro = $_POST['idParametro'];
+    $idUsuarioX = $_POST['idUsuarioX'];
+
+    $query = "SELECT ids_usuarios
+    FROM t_bitacoras_lista_parametros
+    WHERE id_publico = '$idParametro' LIMIT 1";
+    if ($result = mysqli_query($conn_2020, $query)) {
+      foreach ($result as $x) {
+        $idsUsuarios = $x['ids_usuarios'];
+        $idsUsuarios = preg_split("/[\s,]+/", $idsUsuarios);
+
+        #ELIMINA EL TIPO EQUIPO
+        foreach ($idsUsuarios as $key => $value) {
+          if ($value === "[$idUsuarioX]") {
+            unset($idsUsuarios[$key]);
+          }
+        }
+
+        #PREPARA EL ARRAY PARA ACTUALIZAR LA TABLA
+        $idsUsuarios = implode(",", $idsUsuarios);
+        $array['x'] = $idsUsuarios;
+
+        $query = "UPDATE t_bitacoras_lista_parametros SET ids_usuarios = '$idsUsuarios'
+        WHERE id_publico = '$idParametro'";
+        if ($result = mysqli_query($conn_2020, $query)) {
+          $array['response'] = "SUCCESS";
+          $array['message'] = "Usuario Eliminado!";
+        }
+      }
+    }
+  }
+
+
+  #AGREGAR DESTINO A LA BITACORA
+  if ($action === "agregarUsuarioParametro") {
+    $idParametro = $_POST['idParametro'];
+    $idUsuarioX = $_POST['idUsuarioX'];
+
+    $query = "SELECT ids_usuarios
+    FROM t_bitacoras_lista_parametros
+    WHERE id_publico = '$idParametro' LIMIT 1";
+    if ($result = mysqli_query($conn_2020, $query)) {
+      foreach ($result as $x) {
+        $idsUsuario = trim($x['ids_usuarios']);
+
+        #AGREGA NUEVO TIPO EQUIPO
+        if ($idsUsuario == "") {
+          $idsUsuario = array("[$idUsuarioX]");
+        } else {
+          $idsUsuario = preg_split("/[\s,]+/", $idsUsuario);
+          $idsUsuario[] = "[$idUsuarioX]";
+        }
+
+        #PREPARA EL ARRAY PARA ACTUALIZAR LA TABLA
+        if (
+          count($idsUsuario) > 0
+        ) {
+          $idsUsuario = implode(", ", $idsUsuario);
+        } else {
+          $idsUsuario = implode("", $idsUsuario);
+        }
+
+        $query = "UPDATE t_bitacoras_lista_parametros SET ids_usuarios = '$idsUsuario'
+        WHERE id_publico = '$idParametro'";
+        if ($result = mysqli_query($conn_2020, $query)) {
+          $array['response'] = "SUCCESS";
+          $array['message'] = "Usuario Agregado";
+        }
+      }
+    }
+  }
+
 
   #AGREGAR DESTINO A LA BITACORA
   if ($action === "agregarUsuarioTelegram") {
@@ -721,6 +1101,7 @@ if ($peticion === "POST") {
         WHERE id_publico = '$idParametro'";
         if ($result = mysqli_query($conn_2020, $query)) {
           $array['response'] = "SUCCESS";
+          $array['message'] = "Usuario Agregado!";
 
           $query = "SELECT u.telegram_chat_id, c.nombre
           FROM t_users AS u
@@ -733,12 +1114,14 @@ if ($peticion === "POST") {
 
               $url = "https://api.telegram.org/bot1652304972:AAETvxYiru38gHZ0nnx3DURU_583HULYKYI/sendMessage?chat_id=$idTelegram&text=Hola $nombre, Te han Activado las Notificaciones para las Bitacoras!";
               file_get_contents($url);
+              $array['message'] = "Usuario Notificado!";
             }
           }
         }
       }
     }
   }
+
 
   #ELIMINA DESTINO DE LA BITACORA
   if ($action === "eliminarUsuarioTelegram") {
@@ -769,6 +1152,7 @@ if ($peticion === "POST") {
         WHERE id_publico = '$idParametro'";
         if ($result = mysqli_query($conn_2020, $query)) {
           $array['response'] = "SUCCESS";
+          $array['message'] = "Usuario Eliminado!";
 
           $query = "SELECT u.telegram_chat_id, c.nombre
           FROM t_users AS u
@@ -781,12 +1165,129 @@ if ($peticion === "POST") {
 
               $url = "https://api.telegram.org/bot1652304972:AAETvxYiru38gHZ0nnx3DURU_583HULYKYI/sendMessage?chat_id=$idTelegram&text=Hola $nombre, Te han Desactivado las Notificaciones para las Bitacoras!";
               file_get_contents($url);
+              $array['message'] = "Usuario Notificado!";
             }
           }
-
         }
       }
     }
+  }
+
+  #CONEXION
+  if ($action === "conexion") {
+    $array['response'] = "SUCCESS";
+    $array['message'] = "Conexión Exitosa!";
+    $array['conexion'] = true;
+  }
+
+
+  #OBTIENE DATOS DE BITACORA PARA CAPTURAR.
+  if ($action === "getArray") {
+
+    $array['response'] = "SUCCESS";
+    $equipos = array();
+    
+    $query = "SELECT p.id_publico 'idParametro', b.id_publico 'idBitacora', um.medida,
+    IF(p.configuracion_global = 'false', p.fecha_inicio, b.fecha_inicio) 'fechaInicio',
+    IF(p.configuracion_global = 'false', p.hora_inicio, b.hora_inicio) 'horaInicio',
+    IF(p.configuracion_global = 'false',
+      sum(p.horas + p.dias + p.semanas + p.meses),
+      sum(b.horas + b.dias + b.semanas + b.meses)) 'ciclo',
+    IF(p.configuracion_global = 'false', p.ids_usuarios, b.ids_usuarios) 'idsUsuarios',
+    IF(p.notificar_telegram = 'false', '[0]', p.notificar_ids_usuarios) 'notifiarUsuarios',
+    p.parametro, p.parametro_minimo 'parametroMinimo', p.parametro_maximo 'parametroMaximo',
+    p.generar_incidencia 'generarIncidencia', p.titulo_incidencia 'tituloIncidencia',
+    p.tipo_incidencia 'tipoIncidencia', b.ids_destinos, b.ids_tipos_equipos, b.ids_equipos
+    FROM t_bitacoras_lista_parametros AS p
+    INNER JOIN t_bitacoras_configuracion AS b ON p.id_bitacoras_configuracion = b.id_publico
+    INNER JOIN t_unidades_medidas AS um ON p.id_unidad_medida = um.id
+    WHERE p.activo = 1 and b.activo = 1 and b.status = 'ACTIVADO' and
+    (
+      (p.configuracion_global = 'true' and b.ids_usuarios LIKE '%[$idUsuario]%') or
+      (p.configuracion_global = 'false' and p.ids_usuarios LIKE '%[$idUsuario]%')
+    )";
+    
+    if ($result = mysqli_query($conn_2020, $query)) {
+      foreach ($result as $x) {
+        $idBitacora = $x['idBitacora'];
+        $idParametro = $x['idParametro'];
+        $parametro = $x['parametro'];
+        $unidad = $x['medida'];
+        $ciclo = $x['ciclo'];
+        $fechaInicio = $x['fechaInicio'];
+        $horaInicio = $x['horaInicio'];
+        $idsUsuarios = $x['idsUsuarios'];
+        $notifiarUsuarios = $x['notifiarUsuarios'];
+        $parametroMinimo = $x['parametroMinimo'];
+        $parametroMaximo = $x['parametroMaximo'];
+        $generarIncidencia = $x['generarIncidencia'];
+        $tituloIncidencia = $x['tituloIncidencia'];
+        $tipoIncidencia = $x['tipoIncidencia'];
+        
+        $caracteres = array("[", "]", "[ ", "] ");
+
+        $idsDestinos = str_replace($caracteres, "", $x['ids_destinos']);
+        $idsTiposEquipos = str_replace($caracteres, "", $x['ids_tipos_equipos']);
+        $idsEquipos = str_replace($caracteres, "", $x['ids_equipos']);
+
+        if($idsDestinos == "")
+          $idsDestinos = 0;
+
+        if($idsTiposEquipos == "")
+          $idsTiposEquipos = -1;
+
+        if($idsEquipos == "")
+          $idsEquipos = 0;
+
+        #EQUIPOS AFECTADOS EN LA BITACORA
+        $query1 = "SELECT e.id, e.equipo, d.destino
+        FROM t_equipos_america AS e
+        INNER JOIN c_destinos AS d ON e.id_destino = d.id
+        WHERE e.id_destino IN($idsDestinos) and (e.id_tipo IN($idsTiposEquipos) or e.id IN($idsEquipos)) and
+        e.status IN('OPERATIVO') and e.activo = 1";
+        if ($result = mysqli_query($conn_2020, $query1)){
+          foreach ($result as $x){
+            $idEquipo = $x['id'];
+            $equipo = $x['equipo'];
+            $destino = $x['destino'];
+
+            $equipos[] = array(
+              "idEquipo" => $idEquipo,
+              "equipo" => $equipo,
+              "destino" => $destino,
+              "parametro" => $parametro,
+              "unidad" => $unidad,
+              "parametroMinimo" => $parametroMinimo,
+              "parametroMinimo" => $parametroMinimo,
+              "status" => "PENDIENTE",
+              "entiempo"=>"SI",
+              "incidencia" => "SI",
+            );
+          }
+        }
+
+        $array['data'][] = array(
+          "idBitacora" => $idBitacora,
+          "idParametro" => $idParametro,
+          "parametro" => $parametro,
+          "unidad" => $unidad,
+          "ciclo" => $ciclo,
+          "fechaInicio" => $fechaInicio,
+          "horaInicio" => $horaInicio,
+          "idsUsuarios" => $idsUsuarios,
+          "notifiarUsuarios" => $notifiarUsuarios,
+          "parametroMinimo" => $parametroMinimo,
+          "parametroMinimo" => $parametroMinimo,
+          "parametroMaximo" => $parametroMaximo,
+          "generarIncidencia" => $generarIncidencia,
+          "tituloIncidencia" => $tituloIncidencia,
+          "tipoIncidencia" => $tipoIncidencia,
+          "equipos" => $equipos,
+        );
+      }
+    }
+
+    $array['query'] = $query;
   }
 }
 
