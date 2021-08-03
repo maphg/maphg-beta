@@ -109,8 +109,8 @@ function consultaAdjuntosOT(idOT) {
                 const tipo = array[i].tipo;
 
                 if (tipo == "imagenes") {
-                    imagenes += `   
-                    <div class="w-24 h-24 bg-cover bg-center m-1 rounded" style="background-image: url(../planner/mp_ot/${url});"></div>         
+                    imagenes += `
+                        <a href="../planner/mp_ot/${url}" target="_blank" class="w-24 h-24 bg-cover bg-center m-1 rounded" style="background-image: url(../planner/mp_ot/${url});"></a>
                     `;
                 } else {
                     documentos += `                 
