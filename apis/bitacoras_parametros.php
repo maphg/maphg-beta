@@ -1118,9 +1118,9 @@ if ("POST" === $peticion) {
                     $array['message'] = "Usuario Agregado!";
 
                     $query = "SELECT u.telegram_chat_id, c.nombre
-          FROM t_users AS u
-          INNER JOIN t_colaboradores AS c ON u.id_colaborador = c.id
-          WHERE u.id = $idUsuario LIMIT 1";
+                    FROM t_users AS u
+                    INNER JOIN t_colaboradores AS c ON u.id_colaborador = c.id
+                    WHERE u.id = $idUsuario LIMIT 1";
                     if ($result = mysqli_query($conn_2020, $query)) {
                         foreach ($result as $x) {
                             $idTelegram = $x['telegram_chat_id'];
@@ -1315,15 +1315,19 @@ if ("POST" === $peticion) {
                                         $array['tiposEquipos'][] = $tipoEquipo;
 
                                         $idValor = 0;
-                                        $valor = 0;
+                                        $valor = "";
                                         $crearIncidencia = "NO";
                                         $idIncidencia = "";
                                         $fechaCaptura = "";
                                         $enTiempo = "";
-                                        $query = "SELECT id, valor, generar_incidencia, id_incidencia
+                                        $status = "PENDIENTE";
+                                        $enTiempo = "";
+                                        $estado = "ESPERA";
+
+                                        $query = "SELECT id, valor, crear_incidencia, id_incidencia, fecha_captura, status
                                         FROM t_bitacora_capturas
-                                        WHERE id_bitacora = $idBitacora and id_parametro = $idParametro 
-                                        and id_equipo = $idEquipo and fecha_token = '$fechaToken' and activo = 1";
+                                        WHERE id_bitacora = '$idBitacora' and id_parametro = '$idParametro' 
+                                        and id_equipo = '$idEquipo' and fecha_token = '$fechaToken' and activo = 1";
                                         if ($result = mysqli_query($conn_2020, $query)) {
                                             foreach ($result as $x) {
                                                 $idValor = $x['id'];
@@ -1331,6 +1335,16 @@ if ("POST" === $peticion) {
                                                 $crearIncidencia = $x['crear_incidencia'];
                                                 $idIncidencia = $x['id_incidencia'];
                                                 $fechaCaptura = $x['fecha_captura'];
+                                                $status = $x['status'];
+                                                $estado = "CAPTURADO";
+                                                $fechaLR = strtotime($fechaToken);
+                                                $fechaL = strtotime("+30 minutes", strtotime($fechaToken));
+                                                $fechaR = strtotime("-30 minutes", strtotime($fechaToken));
+
+                                                if ($fechaL <= $fechaLR && $fechaR >= $fechaLR)
+                                                    $enTiempo = "SI";
+                                                else
+                                                    $enTiempo = "NO";
                                             }
                                         }
 
@@ -1349,8 +1363,11 @@ if ("POST" === $peticion) {
                                             "idIncidencia" => $idIncidencia,
                                             "fechaCaptura" => $fechaCaptura,
                                             "tipoEquipo" => $tipoEquipo,
-                                            "fechaToken" => $horarioInput,
-                                            "status" => "PENDIENTE",
+                                            "horarioInput" => $horarioInput,
+                                            "fechaToken" => $fechaToken,
+                                            "status" => $status,
+                                            "enTiempo" => $enTiempo,
+                                            "estado" => $estado,
                                         );
                                     }
                                 }
@@ -1359,10 +1376,75 @@ if ("POST" === $peticion) {
 
                         $array['data'][] = array(
                             "parametro" => $parametro,
-                            "equipos" => $equipos
+                            "equipos" => $equipos,
+                            "idParametro" => $idParametro,
                         );
                     }
                 }
+            }
+        }
+    }
+
+
+    if ($action === "capturar") {
+        $array['conexion'] = true;
+
+        $idValor = $_POST['idValor'];
+        $idBitacora = $_POST['idBitacora'];
+        $idParametro = $_POST['idParametro'];
+        $idEquipo = $_POST['idEquipo'];
+        $fechaToken = $_POST['fechaToken'];
+        $parametroMaximo = $_POST['parametroMaximo'];
+        $parametroMinimo = $_POST['parametroMinimo'];
+        $valor = $_POST['valor'];
+
+        #DECISIÓN PARA CREAR INCIDENCIA
+        $idNuevaIncidencia = 0;
+        $crearIncidencia = "NO";
+
+        if (
+            ($valor < $parametroMinimo || $valor > $parametroMinimo) &&
+            ($valor < $parametroMaximo || $valor > $parametroMaximo)
+        ) {
+            $crearIncidencia = "SI";
+
+            #OBTIENE NUEVO ID DE INCIDENCIA
+            $query = "SELECT max(id) 'idIncidencia' FROM t_mc";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $x) {
+                    $idNuevaIncidencia = $x['idIncidencia'] + 1;
+                }
+            }
+
+            #NOTIFICAR TELEGRAM
+            $query = "SELECT titulo_incidencia, tipo_incidencia, ids_usuarios_telegram FROM t_bitacoras_lista_parametros WHERE id_publico = '$idParametro' and activo = 1 LIMIT 1";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $x) {
+                    $idsTelegram = $x['ids_usuarios_telegram'];
+                    $tituloIncidencia = $x['titulo_incidencia'];
+                }
+            }
+        }
+
+        if ($idValor == 0) {
+            $query = "INSERT INTO t_bitacora_capturas(id_bitacora, id_parametro, id_equipo, creado_por, fecha_token, valor, parametro_minimo, parametro_maximo, crear_incidencia, id_incidencia, fecha_captura, status, activo) VALUES('$idBitacora', '$idParametro', '$idEquipo', $idUsuario, '$fechaToken', '$valor', '$parametroMaximo','$parametroMinimo', '$crearIncidencia', '$idNuevaIncidencia', '$fechaActual', 'CAPTURADO', 1)";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $array['response'] = "SUCCESS";
+            }
+        }
+
+        if ($idValor > 0) {
+            $query = "UPDATE t_bitacora_capturas SET
+            creado_por = '$idUsuario',
+            valor = '$valor',
+            parametro_minimo = '$parametroMinimo',
+            parametro_maximo = '$parametroMaximo',
+            crear_incidencia = '$crearIncidencia',
+            id_incidencia = '$idNuevaIncidencia',
+            fecha_captura = '$fechaActual'
+            WHERE id = '$idValor' and activo = 1";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $array['response'] = "SUCCESS";
             }
         }
     }
@@ -1388,6 +1470,25 @@ function obtenerBitacora($idBitacora)
     }
 
     return $bitacora;
+}
+
+
+#NOTIFICACIONES TELEGRAM
+function notificar($msj, $idsUsuarios)
+{
+    $query = "SELECT u.telegram_chat_id, c.nombre
+    FROM t_users AS u
+    INNER JOIN t_colaboradores AS c ON u.id_colaborador = c.id
+    WHERE u.id IN($idsUsuarios)";
+    if ($result = mysqli_query($GLOBALS['conn_2020'], $query)) {
+        foreach ($result as $x) {
+            $idTelegram = $x['telegram_chat_id'];
+            $nombre = $x['nombre'];
+
+            $url = "https://api.telegram.org/bot1652304972:AAETvxYiru38gHZ0nnx3DURU_583HULYKYI/sendMessage?chat_id=$idTelegram&text=Hola $nombre, $msj";
+            file_get_contents($url);
+        }
+    }
 }
 
 echo json_encode($array);
