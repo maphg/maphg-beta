@@ -1419,11 +1419,45 @@ if ("POST" === $peticion) {
             }
 
             #NOTIFICAR TELEGRAM
-            $query = "SELECT titulo_incidencia, tipo_incidencia, ids_usuarios_telegram FROM t_bitacoras_lista_parametros WHERE id_publico = '$idParametro' and activo = 1 LIMIT 1";
+            $query = "SELECT p.titulo_incidencia, p.tipo_incidencia, p.notificar_ids_usuarios,
+            p.notificar_telegram, p.parametro, b.descripcion, u.medida
+            FROM t_bitacoras_configuracion AS b
+            INNER JOIN t_bitacoras_lista_parametros AS p ON b.id_publico = p.id_bitacoras_configuracion 
+            and p.id_publico = '$idParametro'
+            LEFT JOIN t_unidades_medidas AS u ON p.id_unidad_medida = u.id
+            WHERE b.id_publico = '$idBitacora' and b.activo = 1";
             if ($result = mysqli_query($conn_2020, $query)) {
                 foreach ($result as $x) {
-                    $idsTelegram = $x['ids_usuarios_telegram'];
+                    $caracteres = array("[", "]", "[ ", "] ");
+                    $idsUsuariosTelegram = str_replace($caracteres, "", $x['notificar_ids_usuarios']);
                     $tituloIncidencia = $x['titulo_incidencia'];
+                    $tipoIncidencia = $x['tipo_incidencia'];
+                    $notificar = $x['notificar_telegram'];
+                    $bitacora = $x['descripcion'];
+                    $parametro = $x['parametro'];
+                    $medida = $x['medida'];
+
+                    if ($idsUsuariosTelegram == "")
+                        $idsUsuariosTelegram = 0;
+
+                    $equipo = "";
+                    $destio = "";
+                    $query = "SELECT e.equipo, d.destino
+                    FROM t_equipos_america AS e
+                    INNER JOIN c_destinos AS d ON e.id_destino = d.id
+                    WHERE e.id = $idEquipo";
+                    if ($result = mysqli_query($conn_2020, $query)) {
+                        foreach ($result as $x) {
+                            $equipo = $x['equipo'];
+                            $destino = $x['destino'];
+                        }
+                    }
+
+                    $msj = "Se ha creado una 𝗜𝗻𝗰𝗶𝗱𝗲𝗻𝗰𝗶𝗮⠘ $tituloIncidencia, 𝗧𝗶𝗽𝗼⠘ $tipoIncidencia, 𝙀𝙦𝙪𝙞𝙥𝙤⠘ $destino -➤ $equipo. Debido a que se registro en la 𝗕𝗶𝘁𝗮́𝗰𝗼𝗿𝗮⠘ $bitacora, en el 𝗣𝗮𝗿𝗮́𝗺𝗲𝘁𝗿𝗼⠘ $parametro, el 𝗩𝗮𝗹𝗼𝗿⠘ $valor $medida";
+                    crearIncidencia($idEquipo, $idNuevaIncidencia, $idUsuario, $tituloIncidencia, $tipoIncidencia);
+
+                    if ($notificar == true);
+                    notificarTelegram($msj, $idsUsuariosTelegram);
                 }
             }
         }
@@ -1474,9 +1508,8 @@ function obtenerBitacora($idBitacora)
     return $bitacora;
 }
 
-
 #NOTIFICACIONES TELEGRAM
-function notificar($msj, $idsUsuarios)
+function notificarTelegram($msj, $idsUsuarios)
 {
     $query = "SELECT u.telegram_chat_id, c.nombre
     FROM t_users AS u
@@ -1487,10 +1520,38 @@ function notificar($msj, $idsUsuarios)
             $idTelegram = $x['telegram_chat_id'];
             $nombre = $x['nombre'];
 
-            $url = "https://api.telegram.org/bot1652304972:AAETvxYiru38gHZ0nnx3DURU_583HULYKYI/sendMessage?chat_id=$idTelegram&text=Hola $nombre, $msj";
+            $url = "https://api.telegram.org/bot1652304972:AAETvxYiru38gHZ0nnx3DURU_583HULYKYI/sendMessage?chat_id=$idTelegram&text=𝗛𝗼𝗹𝗮, $nombre, $msj";
             file_get_contents($url);
         }
     }
+}
+
+#CREAR INCIDENCIA
+function crearIncidencia($idEquipo, $idIncidencia, $creadoPor, $tituloIncidencia, $tipoIncidencia)
+{
+    $response = false;
+
+    #OBTIENE DATOS COMPLEMENTARIOS PARA LA INCIDENCIA
+    $fechaActual = date('Y-m-d H:m:s');
+    $idDestino = 0;
+    $idSeccion = 0;
+    $idSubseccion = 0;
+    $query = "SELECT id_destino, id_seccion, id_subseccion FROM t_equipos_america WHERE id = $idEquipo";
+    if ($result = mysqli_query($GLOBALS['conn_2020'], $query)) {
+        foreach ($result as $x) {
+            $idDestino = $x['id_destino'];
+            $idSeccion = $x['id_seccion'];
+            $idSubseccion = $x['id_subseccion'];
+        }
+    }
+
+    #CREACIÓN DE INCIDENCIA
+    $query = "INSERT INTO t_mc(id, id_equipo, actividad, tipo_incidencia, status, creado_por, fecha_creacion, id_destino, id_seccion, id_subseccion, activo) VALUES($idIncidencia, $idEquipo, '$tituloIncidencia', '$tipoIncidencia', 'PENDIENTE', $creadoPor, '$fechaActual', $idDestino, $idSeccion, $idSubseccion, 1)";
+    if ($result = mysqli_query($GLOBALS['conn_2020'], $query)) {
+        $response = true;
+    }
+
+    return $response;
 }
 
 echo json_encode($array);
