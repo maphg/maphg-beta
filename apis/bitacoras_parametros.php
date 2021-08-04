@@ -1198,6 +1198,7 @@ if ("POST" === $peticion) {
         $array['response'] = "SUCCESS";
         $array['data'] = array();
         $array['tiposEquipos'] = array();
+        $array['conexion'] = true;
 
         if ($idDestino == 10)
             $filtroDestino = "";
@@ -1397,6 +1398,7 @@ if ("POST" === $peticion) {
         $parametroMaximo = $_POST['parametroMaximo'];
         $parametroMinimo = $_POST['parametroMinimo'];
         $valor = $_POST['valor'];
+        $fechaCapturaActual = $_POST['fechaCapturaActual'];
 
         #DECISIÓN PARA CREAR INCIDENCIA
         $idNuevaIncidencia = 0;
@@ -1427,7 +1429,7 @@ if ("POST" === $peticion) {
         }
 
         if ($idValor == 0) {
-            $query = "INSERT INTO t_bitacora_capturas(id_bitacora, id_parametro, id_equipo, creado_por, fecha_token, valor, parametro_minimo, parametro_maximo, crear_incidencia, id_incidencia, fecha_captura, status, activo) VALUES('$idBitacora', '$idParametro', '$idEquipo', $idUsuario, '$fechaToken', '$valor', '$parametroMaximo','$parametroMinimo', '$crearIncidencia', '$idNuevaIncidencia', '$fechaActual', 'CAPTURADO', 1)";
+            $query = "INSERT INTO t_bitacora_capturas(id_bitacora, id_parametro, id_equipo, creado_por, fecha_token, valor, parametro_minimo, parametro_maximo, crear_incidencia, id_incidencia, fecha_captura, status, activo) VALUES('$idBitacora', '$idParametro', '$idEquipo', $idUsuario, '$fechaToken', '$valor', '$parametroMaximo','$parametroMinimo', '$crearIncidencia', '$idNuevaIncidencia', '$fechaCapturaActual', 'CAPTURADO', 1)";
             if ($result = mysqli_query($conn_2020, $query)) {
                 $array['response'] = "SUCCESS";
             }
@@ -1441,7 +1443,7 @@ if ("POST" === $peticion) {
             parametro_maximo = '$parametroMaximo',
             crear_incidencia = '$crearIncidencia',
             id_incidencia = '$idNuevaIncidencia',
-            fecha_captura = '$fechaActual'
+            fecha_captura = '$fechaCapturaActual'
             WHERE id = '$idValor' and activo = 1";
             if ($result = mysqli_query($conn_2020, $query)) {
                 $array['response'] = "SUCCESS";
