@@ -1425,7 +1425,7 @@ if ("POST" === $peticion) {
             INNER JOIN t_bitacoras_lista_parametros AS p ON b.id_publico = p.id_bitacoras_configuracion 
             and p.id_publico = '$idParametro'
             LEFT JOIN t_unidades_medidas AS u ON p.id_unidad_medida = u.id
-            WHERE b.id_publico = '$idBitacora' and b.activo = 1";
+            WHERE b.id_publico = '$idBitacora' and b.activo = 1 and p.generar_incidencia = 'true'";
             if ($result = mysqli_query($conn_2020, $query)) {
                 foreach ($result as $x) {
                     $caracteres = array("[", "]", "[ ", "] ");
@@ -1436,6 +1436,7 @@ if ("POST" === $peticion) {
                     $bitacora = $x['descripcion'];
                     $parametro = $x['parametro'];
                     $medida = $x['medida'];
+                    $crear = $x['generar_incidencia'];
 
                     if ($idsUsuariosTelegram == "")
                         $idsUsuariosTelegram = 0;
@@ -1454,9 +1455,11 @@ if ("POST" === $peticion) {
                     }
 
                     $msj = "Se ha creado una 𝗜𝗻𝗰𝗶𝗱𝗲𝗻𝗰𝗶𝗮⠘ $tituloIncidencia, 𝗧𝗶𝗽𝗼⠘ $tipoIncidencia, 𝙀𝙦𝙪𝙞𝙥𝙤⠘ $destino -➤ $equipo. Debido a que se registro en la 𝗕𝗶𝘁𝗮́𝗰𝗼𝗿𝗮⠘ $bitacora, en el 𝗣𝗮𝗿𝗮́𝗺𝗲𝘁𝗿𝗼⠘ $parametro, el 𝗩𝗮𝗹𝗼𝗿⠘ $valor $medida";
+
+                    #VERIFICA SI SE CREARA LA INCIDENCIA
                     crearIncidencia($idEquipo, $idNuevaIncidencia, $idUsuario, $tituloIncidencia, $tipoIncidencia);
 
-                    if ($notificar == true);
+                    #VERIFICA SI SE NOTIFICARA VÍA TELEGRAM
                     notificarTelegram($msj, $idsUsuariosTelegram);
                 }
             }
