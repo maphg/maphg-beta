@@ -24,6 +24,72 @@ if (strpos($_SERVER['REQUEST_URI'], "maphg-beta") == true) {
     $rutaAbsoluta = "https://www.maphg.com/america";
 }
 
+
+#FUNCIONES
+function obtenerBitacora($idBitacora)
+{
+    $bitacora = array();
+
+    #BITACORA
+    $query = "SELECT id
+  FROM t_bitacoras_configuracion_parametros
+  WHERE id = '$idBitacora'";
+    if ($result = mysqli_query($GLOBALS['conn_2020'], $query)) {
+        foreach ($result as $x) {
+            $idParametro = intval($x['id']);
+
+            $parametros[] = array(
+                "idParametro" => $idParametro,
+            );
+        }
+    }
+
+    return $bitacora;
+}
+
+#NOTIFICACIONES TELEGRAM
+function notificarTelegram($msj, $idsUsuarios)
+{
+    $query = "SELECT u.telegram_chat_id, c.nombre
+    FROM t_users AS u
+    INNER JOIN t_colaboradores AS c ON u.id_colaborador = c.id
+    WHERE u.id IN($idsUsuarios)";
+    if ($result = mysqli_query($GLOBALS['conn_2020'], $query)) {
+        foreach ($result as $x) {
+            $idTelegram = $x['telegram_chat_id'];
+            $nombre = $x['nombre'];
+
+            $url = "https://api.telegram.org/bot1652304972:AAETvxYiru38gHZ0nnx3DURU_583HULYKYI/sendMessage?chat_id=$idTelegram&text=𝗛𝗼𝗹𝗮, $nombre, $msj";
+            file_get_contents($url);
+        }
+    }
+}
+
+#CREAR INCIDENCIA
+function crearIncidencia($idEquipo, $idIncidencia, $creadoPor, $tituloIncidencia, $tipoIncidencia)
+{
+
+    #OBTIENE DATOS COMPLEMENTARIOS PARA LA INCIDENCIA
+    $fechaActual = date('Y-m-d H:m:s');
+    $idDestino = 0;
+    $idSeccion = 0;
+    $idSubseccion = 0;
+    $query = "SELECT id_destino, id_seccion, id_subseccion FROM t_equipos_america WHERE id = $idEquipo";
+    if ($result = mysqli_query($GLOBALS['conn_2020'], $query)) {
+        foreach ($result as $x) {
+            $idDestino = $x['id_destino'];
+            $idSeccion = $x['id_seccion'];
+            $idSubseccion = $x['id_subseccion'];
+        }
+    }
+
+    #CREACIÓN DE INCIDENCIA
+    $query = "INSERT INTO t_mc(id, id_equipo, actividad, tipo_incidencia, status, creado_por, fecha_creacion, id_destino, id_seccion, id_subseccion, activo) VALUES($idIncidencia, $idEquipo, '$tituloIncidencia', '$tipoIncidencia', 'PENDIENTE', $creadoPor, '$fechaActual', $idDestino, $idSeccion, $idSubseccion, 1)";
+    if ($result = mysqli_query($GLOBALS['conn_2020'], $query)) {
+        $response = true;
+    }
+}
+
 #ARRAY GLOBAL
 $array = array();
 $array['status'] = '505';
@@ -1388,7 +1454,6 @@ if ("POST" === $peticion) {
 
 
     if ($action === "capturar") {
-        $array['conexion'] = true;
 
         $idValor = $_POST['idValor'];
         $idBitacora = $_POST['idBitacora'];
@@ -1436,7 +1501,6 @@ if ("POST" === $peticion) {
                     $bitacora = $x['descripcion'];
                     $parametro = $x['parametro'];
                     $medida = $x['medida'];
-                    $crear = $x['generar_incidencia'];
 
                     if ($idsUsuariosTelegram == "")
                         $idsUsuariosTelegram = 0;
@@ -1469,6 +1533,7 @@ if ("POST" === $peticion) {
             $query = "INSERT INTO t_bitacora_capturas(id_bitacora, id_parametro, id_equipo, creado_por, fecha_token, valor, parametro_minimo, parametro_maximo, crear_incidencia, id_incidencia, fecha_captura, status, activo) VALUES('$idBitacora', '$idParametro', '$idEquipo', $idUsuario, '$fechaToken', '$valor', '$parametroMinimo','$parametroMaximo', '$crearIncidencia', '$idNuevaIncidencia', '$fechaCapturaActual', 'CAPTURADO', 1)";
             if ($result = mysqli_query($conn_2020, $query)) {
                 $array['response'] = "SUCCESS";
+                $array['conexion'] = true;
             }
         }
 
@@ -1484,77 +1549,12 @@ if ("POST" === $peticion) {
             WHERE id = '$idValor' and activo = 1";
             if ($result = mysqli_query($conn_2020, $query)) {
                 $array['response'] = "SUCCESS";
+                $array['conexion'] = true;
             }
         }
     }
 }
 
-#FUNCIONES
-function obtenerBitacora($idBitacora)
-{
-    $bitacora = array();
 
-    #BITACORA
-    $query = "SELECT id
-  FROM t_bitacoras_configuracion_parametros
-  WHERE id = '$idBitacora'";
-    if ($result = mysqli_query($GLOBALS['conn_2020'], $query)) {
-        foreach ($result as $x) {
-            $idParametro = intval($x['id']);
-
-            $parametros[] = array(
-                "idParametro" => $idParametro,
-            );
-        }
-    }
-
-    return $bitacora;
-}
-
-#NOTIFICACIONES TELEGRAM
-function notificarTelegram($msj, $idsUsuarios)
-{
-    $query = "SELECT u.telegram_chat_id, c.nombre
-    FROM t_users AS u
-    INNER JOIN t_colaboradores AS c ON u.id_colaborador = c.id
-    WHERE u.id IN($idsUsuarios)";
-    if ($result = mysqli_query($GLOBALS['conn_2020'], $query)) {
-        foreach ($result as $x) {
-            $idTelegram = $x['telegram_chat_id'];
-            $nombre = $x['nombre'];
-
-            $url = "https://api.telegram.org/bot1652304972:AAETvxYiru38gHZ0nnx3DURU_583HULYKYI/sendMessage?chat_id=$idTelegram&text=𝗛𝗼𝗹𝗮, $nombre, $msj";
-            file_get_contents($url);
-        }
-    }
-}
-
-#CREAR INCIDENCIA
-function crearIncidencia($idEquipo, $idIncidencia, $creadoPor, $tituloIncidencia, $tipoIncidencia)
-{
-    $response = false;
-
-    #OBTIENE DATOS COMPLEMENTARIOS PARA LA INCIDENCIA
-    $fechaActual = date('Y-m-d H:m:s');
-    $idDestino = 0;
-    $idSeccion = 0;
-    $idSubseccion = 0;
-    $query = "SELECT id_destino, id_seccion, id_subseccion FROM t_equipos_america WHERE id = $idEquipo";
-    if ($result = mysqli_query($GLOBALS['conn_2020'], $query)) {
-        foreach ($result as $x) {
-            $idDestino = $x['id_destino'];
-            $idSeccion = $x['id_seccion'];
-            $idSubseccion = $x['id_subseccion'];
-        }
-    }
-
-    #CREACIÓN DE INCIDENCIA
-    $query = "INSERT INTO t_mc(id, id_equipo, actividad, tipo_incidencia, status, creado_por, fecha_creacion, id_destino, id_seccion, id_subseccion, activo) VALUES($idIncidencia, $idEquipo, '$tituloIncidencia', '$tipoIncidencia', 'PENDIENTE', $creadoPor, '$fechaActual', $idDestino, $idSeccion, $idSubseccion, 1)";
-    if ($result = mysqli_query($GLOBALS['conn_2020'], $query)) {
-        $response = true;
-    }
-
-    return $response;
-}
 
 echo json_encode($array);
