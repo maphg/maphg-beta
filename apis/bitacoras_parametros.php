@@ -1429,7 +1429,7 @@ if ("POST" === $peticion) {
         }
 
         if ($idValor == 0) {
-            $query = "INSERT INTO t_bitacora_capturas(id_bitacora, id_parametro, id_equipo, creado_por, fecha_token, valor, parametro_minimo, parametro_maximo, crear_incidencia, id_incidencia, fecha_captura, status, activo) VALUES('$idBitacora', '$idParametro', '$idEquipo', $idUsuario, '$fechaToken', '$valor', '$parametroMaximo','$parametroMinimo', '$crearIncidencia', '$idNuevaIncidencia', '$fechaCapturaActual', 'CAPTURADO', 1)";
+            $query = "INSERT INTO t_bitacora_capturas(id_bitacora, id_parametro, id_equipo, creado_por, fecha_token, valor, parametro_minimo, parametro_maximo, crear_incidencia, id_incidencia, fecha_captura, status, activo) VALUES('$idBitacora', '$idParametro', '$idEquipo', $idUsuario, '$fechaToken', '$valor', '$parametroMinimo','$parametroMaximo', '$crearIncidencia', '$idNuevaIncidencia', '$fechaCapturaActual', 'CAPTURADO', 1)";
             if ($result = mysqli_query($conn_2020, $query)) {
                 $array['response'] = "SUCCESS";
             }
