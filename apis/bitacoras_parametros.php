@@ -59,8 +59,13 @@ function notificarTelegram($msj, $idsUsuarios)
             $idTelegram = $x['telegram_chat_id'];
             $nombre = $x['nombre'];
 
-            $url = "https://api.telegram.org/bot1652304972:AAETvxYiru38gHZ0nnx3DURU_583HULYKYI/sendMessage?chat_id=$idTelegram&text=𝗛𝗼𝗹𝗮, $nombre, $msj";
-            file_get_contents($url);
+            try {
+                $url = "https://api.telegram.org/bot1652304972:AAETvxYiru38gHZ0nnx3DURU_583HULYKYI/sendMessage?chat_id=$idTelegram&text=𝗛𝗼𝗹𝗮, $nombre, $msj";
+                if (file_get_contents($url))
+                    $response = "OK";
+            } catch (\Throwable $th) {
+                //throw $th;
+            }
         }
     }
 }
