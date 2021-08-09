@@ -3,6 +3,7 @@
 date_default_timezone_set('America/Cancun');
 setlocale(LC_MONETARY, 'es_ES');
 $fechaActual = date('Y-m-d H:m:s');
+$caracteres = array("[", "]", "[ ", "] ");
 
 # CABECERA PARA JSON
 header("Access-Control-Allow-Origin: *");
@@ -32,8 +33,8 @@ function obtenerBitacora($idBitacora)
 
     #BITACORA
     $query = "SELECT id
-  FROM t_bitacoras_configuracion_parametros
-  WHERE id = '$idBitacora'";
+    FROM t_bitacoras_configuracion_parametros
+    WHERE id = '$idBitacora'";
     if ($result = mysqli_query($GLOBALS['conn_2020'], $query)) {
         foreach ($result as $x) {
             $idParametro = intval($x['id']);
@@ -151,7 +152,6 @@ if ($peticion === "POST") {
                 $creadoPor = $x['nombre'] . " " . $x['apellido'];
                 $status = $x['status'];
 
-                $caracteres = array("[", "]", "[ ", "] ");
                 $idsDestinos = str_replace($caracteres, "", $x['ids_destinos']);
                 $idsTiposEquipos = str_replace($caracteres, "", $x['ids_tipos_equipos']);
 
@@ -347,7 +347,6 @@ if ($peticion === "POST") {
                 $meses_bitacora = intval($x['meses']) > 0 ? $x['meses'] / 730 : 0;
                 $status_bitacora = $x['status'];
 
-                $caracteres = array("[", "]", "[ ", "] ");
                 $idsDestinos = str_replace($caracteres, "", $x['ids_destinos']);
                 $idsUsuarios = str_replace($caracteres, "", $x['ids_usuarios']);
                 $idsTiposEquipos = str_replace($caracteres, "", $x['ids_tipos_equipos']);
@@ -371,9 +370,9 @@ if ($peticion === "POST") {
                 #USUARIOS
                 $usuarios = array();
                 $query = "SELECT u.id, c.nombre, c.apellido
-        FROM t_users AS u
-        INNER JOIN t_colaboradores AS c ON u.id_colaborador = c.id
-        WHERE u.id IN($idsUsuarios)";
+                FROM t_users AS u
+                INNER JOIN t_colaboradores AS c ON u.id_colaborador = c.id
+                WHERE u.id IN($idsUsuarios)";
                 if ($result = mysqli_query($conn_2020, $query)) {
                     foreach ($result as $x) {
                         $idUsuariosX = $x['id'];
@@ -419,12 +418,12 @@ if ($peticion === "POST") {
 
                 #USUARIOS PERMITIDOS EN LA BITACORA
                 $query = "SELECT u.id, cargo.cargo, c.foto, c.nombre, c.apellido, d.destino
-        FROM t_users AS u
-        INNER JOIN t_colaboradores AS c ON u.id_colaborador = c.id
-        INNER JOIN c_destinos AS d ON u.id_destino = d.id
-        INNER JOIN c_cargos AS cargo ON c.id_cargo = cargo.id
-        WHERE (u.id_destino IN($idsDestinos) || u.id_destino = 10) and u.status = 'A' and u.activo = 1
-        ORDER BY c.nombre ASC";
+                FROM t_users AS u
+                INNER JOIN t_colaboradores AS c ON u.id_colaborador = c.id
+                INNER JOIN c_destinos AS d ON u.id_destino = d.id
+                INNER JOIN c_cargos AS cargo ON c.id_cargo = cargo.id
+                WHERE (u.id_destino IN($idsDestinos) || u.id_destino = 10) and u.status = 'A' and u.activo = 1
+                ORDER BY c.nombre ASC";
                 if ($result = mysqli_query($conn_2020, $query)) {
                     foreach ($result as $x) {
                         $idUsuarioX = $x['id'];
@@ -456,8 +455,8 @@ if ($peticion === "POST") {
                 #PARAMETROS
                 $parametros = array();
                 $query = "SELECT id_publico, usuarios_globales, ids_usuarios, parametro, configuracion_global, fecha_inicio, hora_inicio, horas, dias, semanas, meses, id_unidad_medida, parametro_minimo, parametro_maximo, generar_incidencia, titulo_incidencia, tipo_incidencia, notificar_telegram, notificar_ids_usuarios, fecha_creado, activo
-        FROM t_bitacoras_lista_parametros
-        WHERE id_bitacoras_configuracion = '$idBitacora' and activo = 1 ORDER BY fecha_creado ASC";
+                FROM t_bitacoras_lista_parametros
+                WHERE id_bitacoras_configuracion = '$idBitacora' and activo = 1 ORDER BY fecha_creado ASC";
                 if ($result = mysqli_query($conn_2020, $query)) {
                     foreach ($result as $x) {
                         $idsUsuarios = $x["ids_usuarios"];
@@ -481,31 +480,30 @@ if ($peticion === "POST") {
                         $notificarIdsUsuarios = $x['notificar_ids_usuarios'];
                         $fechaCreado = $x['fecha_creado'];
                         $activo = intval($x['activo']);
-                        $caracteres = array("[", "]", "[ ", "] ");
 
                         #CONVIERTE EN BOOLEAN
-                        if ("true" === $configuracionGlobal) {
+                        if ($configuracionGlobal == "true") {
                             $configuracionGlobal = true;
                         } else {
                             $configuracionGlobal = false;
                         }
 
                         #CONVIERTE EN BOOLEAN
-                        if ("true" === $usuariosGlobales) {
+                        if ($usuariosGlobales == "true") {
                             $usuariosGlobales = true;
                         } else {
                             $usuariosGlobales = false;
                         }
 
                         #CONVIERTE EN BOOLEAN
-                        if ("true" === $generarIncidencia) {
+                        if ($generarIncidencia == "true") {
                             $generarIncidencia = true;
                         } else {
                             $generarIncidencia = false;
                         }
 
                         #CONVIERTE EN BOOLEAN
-                        if ("true" === $notificarTelegram) {
+                        if ($notificarTelegram == "true") {
                             $notificarTelegram = true;
                         } else {
                             $notificarTelegram = false;
@@ -538,10 +536,10 @@ if ($peticion === "POST") {
                         $usuariosTelegram = array();
                         $notificarIdsUsuarios = str_replace($caracteres, "", $notificarIdsUsuarios);
                         $query = "SELECT u.id, c.nombre, c.apellido, d.destino
-            FROM t_users AS u
-            INNER JOIN t_colaboradores AS c ON u.id_colaborador = c.id
-            INNER JOIN c_destinos AS d ON u.id_destino = d.id
-            WHERE u.id IN($notificarIdsUsuarios)";
+                        FROM t_users AS u
+                        INNER JOIN t_colaboradores AS c ON u.id_colaborador = c.id
+                        INNER JOIN c_destinos AS d ON u.id_destino = d.id
+                        WHERE u.id IN($notificarIdsUsuarios)";
                         if ($result = mysqli_query($conn_2020, $query)) {
                             foreach ($result as $x) {
                                 $idUsuario = $x["id"];
@@ -615,7 +613,7 @@ if ($peticion === "POST") {
         #ACTUALIZA LA DESCRIPCION DE LA BITACORA
         if ("descripcion" == $opcion) {
             $query = "UPDATE t_bitacoras_configuracion SET descripcion = '$value'
-      WHERE id_publico = '$idBitacora'";
+            WHERE id_publico = '$idBitacora'";
             if ($result = mysqli_query($conn_2020, $query)) {
                 $array['response'] = "SUCCESS";
                 $array['message'] = "Descripción Actualizada!";
@@ -625,7 +623,7 @@ if ($peticion === "POST") {
         #ACTUALIZA FECHA DE INICIO DE LA BITACORA
         if ("fechaInicio" == $opcion) {
             $query = "UPDATE t_bitacoras_configuracion SET fecha_inicio = '$value'
-      WHERE id_publico = '$idBitacora'";
+            WHERE id_publico = '$idBitacora'";
             if ($result = mysqli_query($conn_2020, $query)) {
                 $array['response'] = "SUCCESS";
                 $array['message'] = "Fecha de Inicio, Actualizada!";
@@ -635,7 +633,7 @@ if ($peticion === "POST") {
         #ACTUALIZA HORA DE INICIO DE LA BITACORA
         if ("horaInicio" == $opcion) {
             $query = "UPDATE t_bitacoras_configuracion SET hora_inicio = '$value'
-      WHERE id_publico = '$idBitacora'";
+            WHERE id_publico = '$idBitacora'";
             if ($result = mysqli_query($conn_2020, $query)) {
                 $array['response'] = "SUCCESS";
                 $array['message'] = "Hora de Inicio, Actualizada!";
@@ -662,7 +660,7 @@ if ($peticion === "POST") {
             }
 
             $query = "UPDATE t_bitacoras_configuracion SET $opcion = '$value'
-      WHERE id_publico = '$idBitacora'";
+            WHERE id_publico = '$idBitacora'";
             if ($result = mysqli_query($conn_2020, $query)) {
                 $array['response'] = "SUCCESS";
                 $array['message'] = strtoupper($opcion) . ", Actualizadas!";
@@ -672,7 +670,7 @@ if ($peticion === "POST") {
         #ACTUALIZA HORA DE INICIO DE LA BITACORA
         if (("status" == $opcion) && ('ACTIVADO' === $value || 'DESACTIVADO' === $value)) {
             $query = "UPDATE t_bitacoras_configuracion SET status = '$value'
-      WHERE id_publico = '$idBitacora'";
+            WHERE id_publico = '$idBitacora'";
             if ($result = mysqli_query($conn_2020, $query)) {
                 $array['response'] = "SUCCESS";
                 $array['message'] = "Status Actualizado!";
@@ -692,17 +690,16 @@ if ($peticion === "POST") {
         WHERE id_publico = '$idBitacora'";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
-                $caracteres = array("[", "]", "[ ", "] ");
                 $idsDestinos = str_replace($caracteres, "", $x['ids_destinos']);
             }
         }
 
         $array['equipos'] = array();
         $query = "SELECT e.id, e.equipo, d.id 'idDestino', d.destino
-            FROM t_equipos_america AS e
-            INNER JOIN c_destinos AS d ON e.id_destino = d.id
-            WHERE e.id_destino IN($idsDestinos) and e.id_seccion = $idSeccion and e.id_subseccion = $idSubseccion
-            and e.status IN('OPERATIVO') and e.activo = 1";
+        FROM t_equipos_america AS e
+        INNER JOIN c_destinos AS d ON e.id_destino = d.id
+        WHERE e.id_destino IN($idsDestinos) and e.id_seccion = $idSeccion and e.id_subseccion = $idSubseccion
+        and e.status IN('OPERATIVO') and e.activo = 1";
         if ($result = mysqli_query($conn_2020, $query)) {
             $array['response'] = "SUCCESS";
             $array['message'] = "Lista de Equipos, Actualizado!";
@@ -750,7 +747,7 @@ if ($peticion === "POST") {
                 }
 
                 $query = "UPDATE t_bitacoras_configuracion SET ids_tipos_equipos = '$idsTiposEquipos'
-        WHERE id_publico = '$idBitacora'";
+                WHERE id_publico = '$idBitacora'";
                 if ($result = mysqli_query($conn_2020, $query)) {
                     $array['response'] = "SUCCESS";
                     $array['message'] = "Tipos de Equipos, Actualizado!";
@@ -783,7 +780,7 @@ if ($peticion === "POST") {
                 $array['x'] = $idsTiposEquipos;
 
                 $query = "UPDATE t_bitacoras_configuracion SET ids_tipos_equipos = '$idsTiposEquipos'
-        WHERE id_publico = '$idBitacora'";
+                WHERE id_publico = '$idBitacora'";
                 if ($result = mysqli_query($conn_2020, $query)) {
                     $array['response'] = "SUCCESS";
                     $array['message'] = "Equipo Eliminado!";
@@ -820,7 +817,7 @@ if ($peticion === "POST") {
                 }
 
                 $query = "UPDATE t_bitacoras_configuracion SET ids_equipos = '$idsEquipos'
-        WHERE id_publico = '$idBitacora'";
+                WHERE id_publico = '$idBitacora'";
                 if ($result = mysqli_query($conn_2020, $query)) {
                     $array['response'] = "SUCCESS";
                     $array['message'] = "Equipo Agregado!";
@@ -854,7 +851,7 @@ if ($peticion === "POST") {
                 $array['x'] = $idsEquipos;
 
                 $query = "UPDATE t_bitacoras_configuracion SET ids_equipos = '$idsEquipos'
-        WHERE id_publico = '$idBitacora'";
+                WHERE id_publico = '$idBitacora'";
                 if ($result = mysqli_query($conn_2020, $query)) {
                     $array['response'] = "SUCCESS";
                     $array['message'] = "Equipo Eliminado!";
@@ -893,7 +890,7 @@ if ($peticion === "POST") {
                 }
 
                 $query = "UPDATE t_bitacoras_configuracion SET ids_destinos = '$idsDestinos'
-        WHERE id_publico = '$idBitacora'";
+                WHERE id_publico = '$idBitacora'";
                 if ($result = mysqli_query($conn_2020, $query)) {
                     $array['response'] = "SUCCESS";
                     $array['message'] = "Destino Agregado!";
@@ -927,7 +924,7 @@ if ($peticion === "POST") {
                 $array['x'] = $idsDestinos;
 
                 $query = "UPDATE t_bitacoras_configuracion SET ids_destinos = '$idsDestinos'
-        WHERE id_publico = '$idBitacora'";
+                WHERE id_publico = '$idBitacora'";
                 if ($result = mysqli_query($conn_2020, $query)) {
                     $array['response'] = "SUCCESS";
                     $array['message'] = "Destino Eliminado!";
@@ -966,7 +963,7 @@ if ($peticion === "POST") {
                 }
 
                 $query = "UPDATE t_bitacoras_configuracion SET ids_usuarios = '$idsUsuario'
-        WHERE id_publico = '$idBitacora'";
+                WHERE id_publico = '$idBitacora'";
                 if ($result = mysqli_query($conn_2020, $query)) {
                     $array['response'] = "SUCCESS";
                     $array['message'] = "Usuario Agregado!";
@@ -1000,7 +997,7 @@ if ($peticion === "POST") {
                 $array['x'] = $idsUsuarios;
 
                 $query = "UPDATE t_bitacoras_configuracion SET ids_usuarios = '$idsUsuarios'
-        WHERE id_publico = '$idBitacora'";
+                WHERE id_publico = '$idBitacora'";
                 if ($result = mysqli_query($conn_2020, $query)) {
                     $array['response'] = "SUCCESS";
                     $array['message'] = "Usuario Eliminado!";
@@ -1043,19 +1040,19 @@ if ($peticion === "POST") {
         $tipoIncidencia = $_POST['tipoIncidencia'];
         $activo = $_POST['activo'];
 
-        if ($configuracionGlobal === true || 'true' === $configuracionGlobal) {
+        if ($configuracionGlobal === true || $configuracionGlobal == 'true') {
             $configuracionGlobal = 'true';
         } else {
             $configuracionGlobal = 'false';
         }
 
-        if ($usuariosGlobales === true || 'true' === $usuariosGlobales) {
+        if ($usuariosGlobales === true || $usuariosGlobales == 'true') {
             $usuariosGlobales = 'true';
         } else {
             $usuariosGlobales = 'false';
         }
 
-        if ($generarIncidencia === true || 'true' === $generarIncidencia) {
+        if ($generarIncidencia === true || $generarIncidencia == 'true') {
             $generarIncidencia = 'true';
         } else {
             $generarIncidencia = 'false';
@@ -1113,7 +1110,7 @@ if ($peticion === "POST") {
                 $array['x'] = $idsUsuarios;
 
                 $query = "UPDATE t_bitacoras_lista_parametros SET ids_usuarios = '$idsUsuarios'
-        WHERE id_publico = '$idParametro'";
+                WHERE id_publico = '$idParametro'";
                 if ($result = mysqli_query($conn_2020, $query)) {
                     $array['response'] = "SUCCESS";
                     $array['message'] = "Usuario Eliminado!";
@@ -1152,7 +1149,7 @@ if ($peticion === "POST") {
                 }
 
                 $query = "UPDATE t_bitacoras_lista_parametros SET ids_usuarios = '$idsUsuario'
-        WHERE id_publico = '$idParametro'";
+                WHERE id_publico = '$idParametro'";
                 if ($result = mysqli_query($conn_2020, $query)) {
                     $array['response'] = "SUCCESS";
                     $array['message'] = "Usuario Agregado";
@@ -1191,7 +1188,7 @@ if ($peticion === "POST") {
                 }
 
                 $query = "UPDATE t_bitacoras_lista_parametros SET notificar_ids_usuarios = '$idsUsuarios'
-        WHERE id_publico = '$idParametro'";
+                WHERE id_publico = '$idParametro'";
                 if ($result = mysqli_query($conn_2020, $query)) {
                     $array['response'] = "SUCCESS";
                     $array['message'] = "Usuario Agregado!";
@@ -1240,16 +1237,16 @@ if ($peticion === "POST") {
                 $array['x'] = $idsUsuariosTelegram;
 
                 $query = "UPDATE t_bitacoras_lista_parametros
-        SET notificar_ids_usuarios = '$idsUsuariosTelegram'
-        WHERE id_publico = '$idParametro'";
+                SET notificar_ids_usuarios = '$idsUsuariosTelegram'
+                WHERE id_publico = '$idParametro'";
                 if ($result = mysqli_query($conn_2020, $query)) {
                     $array['response'] = "SUCCESS";
                     $array['message'] = "Usuario Eliminado!";
 
                     $query = "SELECT u.telegram_chat_id, c.nombre
-          FROM t_users AS u
-          INNER JOIN t_colaboradores AS c ON u.id_colaborador = c.id
-          WHERE u.id = $idUsuario LIMIT 1";
+                    FROM t_users AS u
+                    INNER JOIN t_colaboradores AS c ON u.id_colaborador = c.id
+                    WHERE u.id = $idUsuario LIMIT 1";
                     if ($result = mysqli_query($conn_2020, $query)) {
                         foreach ($result as $x) {
                             $idTelegram = $x['telegram_chat_id'];
@@ -1305,16 +1302,17 @@ if ($peticion === "POST") {
                 $horaInicio_b = $x['hora_inicio'];
                 $ciclo_b = ($x['horas'] + $x['dias'] + $x['semanas'] + $x['meses']);
 
-                $caracteres = array("[", "]", "[ ", "] ");
                 $idsDestinos = str_replace($caracteres, "", $x['ids_destinos']);
                 $idsTiposEquipos = str_replace($caracteres, "", $x['ids_tipos_equipos']);
                 $idsEquipos = str_replace($caracteres, "", $x['ids_equipos']);
+                $idsUsuarios_b = str_replace($caracteres, "", $x['ids_usuarios']);
 
                 $query = "SELECT
                 p.id_publico,
                 p.ids_usuarios,
                 p.parametro,
                 p.configuracion_global,
+                p.usuarios_globales,
                 p.fecha_inicio,
                 p.hora_inicio,
                 p.horas,
@@ -1330,7 +1328,6 @@ if ($peticion === "POST") {
                 if ($result = mysqli_query($conn_2020, $query)) {
                     foreach ($result as $x) {
                         $idParametro = $x['id_publico'];
-                        $idsUsuarios_p = $x['ids_usuarios'];
                         $parametro = $x['parametro'];
                         $medida = $x['medida'];
                         $fechaInicio_p = $x['fecha_inicio'];
@@ -1339,119 +1336,135 @@ if ($peticion === "POST") {
                         $parametroMinimo = $x['parametro_minimo'];
                         $parametroMaximo = $x['parametro_maximo'];
                         $configuracionGlobal = $x['configuracion_global'];
+                        $usuariosGlobales = $x['usuarios_globales'];
+                        $idsUsuarios_p = str_replace($caracteres, "", $x['ids_usuarios']);
+
+
+                        if ($usuariosGlobales == "true") {
+                            $arrayUsuariosPermitidos = explode(", ", $idsUsuarios_b);
+                        } else {
+                            $arrayUsuariosPermitidos = explode(", ", $idsUsuarios_p);
+                        }
+
+                        $array['array'] = $arrayUsuariosPermitidos;
 
                         #ARRAY PARA ALAMCENAR DATOS DEL PARAMETRO
                         $equipos = array();
 
-                        if ($idsTiposEquipos == "")
-                            $idsTiposEquipos = -1;
+                        #VALIDA PERMISOS DE USUARIO
+                        if (isset($arrayUsuariosPermitidos[$idUsuario])) {
 
-                        if ($idsEquipos == "")
-                            $idsEquipos = 0;
+                            if ($idsTiposEquipos == "")
+                                $idsTiposEquipos = -1;
 
-                        if ($idsDestinos == "")
-                            $idsDestinos = 0;
+                            if ($idsEquipos == "")
+                                $idsEquipos = 0;
 
-                        if ($configuracionGlobal == 'true') {
-                            $filtroParametro = "and id_parametro = ''";
-                            $filtroFechaRegistro = "and fecha_inicio_registro = '$fechaInicio_b'";
-                            $filtroHoraRegistro = "and hora_inicio_registro = '$horaInicio_b'";
-                            $filtroCiclosHoras = "and ciclo_horas = '$ciclo_b'";
-                        } else {
-                            $filtroParametro = "and id_parametro = '$idParametro'";
-                            $filtroFechaRegistro = "and fecha_inicio_registro = '$fechaInicio_p'";
-                            $filtroHoraRegistro = "and hora_inicio_registro = '$horaInicio_p'";
-                            $filtroCiclosHoras = "and ciclo_horas = '$ciclo_p'";
-                        }
+                            if ($idsDestinos == "")
+                                $idsDestinos = 0;
 
-                        $query = "SELECT lt.id, fecha_token
-                        FROM t_bitacoras_linea_tiempo AS lt
-                        WHERE id_bitacora = '$idBitacora' and
-                        fecha_token BETWEEN '" . date("Y-m-d 00:00:01") . "' and '" . date("Y-m-d 23:59:59") . "' and activo = 1
-                        $filtroParametro $filtroFechaRegistro $filtroHoraRegistro $filtroCiclosHoras";
-                        if ($result = mysqli_query($conn_2020, $query)) {
-                            foreach ($result as $x) {
-                                $idLineaTiempo = $x['id'];
-                                $fechaToken = $x['fecha_token'];
-                                $horarioInput = (new \DateTime($fechaToken))->format('H:m');
-                                $query = "SELECT e.id, e.equipo, t.tipo
+                            if ($configuracionGlobal == 'true') {
+                                $filtroParametro = "and id_parametro = ''";
+                                $filtroFechaRegistro = "and fecha_inicio_registro = '$fechaInicio_b'";
+                                $filtroHoraRegistro = "and hora_inicio_registro = '$horaInicio_b'";
+                                $filtroCiclosHoras = "and ciclo_horas = '$ciclo_b'";
+                            } else {
+                                $filtroParametro = "and id_parametro = '$idParametro'";
+                                $filtroFechaRegistro = "and fecha_inicio_registro = '$fechaInicio_p'";
+                                $filtroHoraRegistro = "and hora_inicio_registro = '$horaInicio_p'";
+                                $filtroCiclosHoras = "and ciclo_horas = '$ciclo_p'";
+                            }
+
+                            $query = "SELECT lt.id, fecha_token
+                            FROM t_bitacoras_linea_tiempo AS lt
+                            WHERE id_bitacora = '$idBitacora' and
+                            fecha_token BETWEEN '" . date("Y-m-d 00:00:01") . "' and '" . date("Y-m-d 23:59:59") . "' and activo = 1
+                            $filtroParametro $filtroFechaRegistro $filtroHoraRegistro $filtroCiclosHoras";
+                            if ($result = mysqli_query($conn_2020, $query)) {
+                                foreach ($result as $x) {
+                                    $idLineaTiempo = $x['id'];
+                                    $fechaToken = $x['fecha_token'];
+                                    $horarioInput = (new \DateTime($fechaToken))->format('H:m');
+                                    $query = "SELECT e.id, e.equipo, t.tipo
                                 FROM t_equipos_america AS e
                                 LEFT JOIN c_tipos AS t ON e.id_tipo = t.id
                                 WHERE e.id_destino IN($idsDestinos) and (e.id_tipo IN($idsTiposEquipos) or e.id IN($idsEquipos)) and e.status IN('OPERATIVO') and e.activo = 1";
-                                if ($result = mysqli_query($conn_2020, $query)) {
-                                    foreach ($result as $x) {
-                                        $idEquipo = $x['id'];
-                                        $equipo = $x['equipo'];
-                                        $tipoEquipo = $x['tipo'];
+                                    if ($result = mysqli_query($conn_2020, $query)) {
+                                        foreach ($result as $x) {
+                                            $idEquipo = $x['id'];
+                                            $equipo = $x['equipo'];
+                                            $tipoEquipo = $x['tipo'];
 
-                                        #TIPOS DE EQUIPOS
-                                        $array['tiposEquipos'][] = $tipoEquipo;
+                                            #TIPOS DE EQUIPOS
+                                            $array['tiposEquipos'][] = $tipoEquipo;
 
-                                        $idValor = 0;
-                                        $valor = "";
-                                        $crearIncidencia = "NO";
-                                        $idIncidencia = "";
-                                        $fechaCaptura = "";
-                                        $enTiempo = "";
-                                        $status = "PENDIENTE";
-                                        $enTiempo = "";
-                                        $estado = "ESPERA";
+                                            $idValor = 0;
+                                            $valor = "";
+                                            $crearIncidencia = "NO";
+                                            $idIncidencia = "";
+                                            $fechaCaptura = "";
+                                            $enTiempo = "";
+                                            $status = "PENDIENTE";
+                                            $enTiempo = "";
+                                            $estado = "ESPERA";
 
-                                        $query = "SELECT id, valor, crear_incidencia, id_incidencia, fecha_captura, status
+                                            $query = "SELECT id, valor, crear_incidencia,
+                                        id_incidencia, fecha_captura, status
                                         FROM t_bitacora_capturas
                                         WHERE id_bitacora = '$idBitacora' and id_parametro = '$idParametro' 
                                         and id_equipo = '$idEquipo' and fecha_token = '$fechaToken' and activo = 1";
-                                        if ($result = mysqli_query($conn_2020, $query)) {
-                                            foreach ($result as $x) {
-                                                $idValor = $x['id'];
-                                                $valor = $x['valor'];
-                                                $crearIncidencia = $x['crear_incidencia'];
-                                                $idIncidencia = $x['id_incidencia'];
-                                                $fechaCaptura = $x['fecha_captura'];
-                                                $status = $x['status'];
-                                                $estado = "CAPTURADO";
-                                                $fechaLR = strtotime($fechaToken);
-                                                $fechaL = strtotime("+30 minutes", strtotime($fechaToken));
-                                                $fechaR = strtotime("-30 minutes", strtotime($fechaToken));
+                                            if ($result = mysqli_query($conn_2020, $query)) {
+                                                foreach ($result as $x) {
+                                                    $idValor = $x['id'];
+                                                    $valor = $x['valor'];
+                                                    $crearIncidencia = $x['crear_incidencia'];
+                                                    $idIncidencia = $x['id_incidencia'];
+                                                    $fechaCaptura = $x['fecha_captura'];
+                                                    $status = $x['status'];
+                                                    $estado = "CAPTURADO";
+                                                    $fechaLR = strtotime($fechaToken);
+                                                    $fechaL = strtotime("+30 minutes", strtotime($fechaToken));
+                                                    $fechaR = strtotime("-30 minutes", strtotime($fechaToken));
 
-                                                if ($fechaL <= $fechaLR && $fechaR >= $fechaLR)
-                                                    $enTiempo = "SI";
-                                                else
-                                                    $enTiempo = "NO";
+                                                    if ($fechaL <= $fechaLR && $fechaR >= $fechaLR)
+                                                        $enTiempo = "SI";
+                                                    else
+                                                        $enTiempo = "NO";
+                                                }
                                             }
-                                        }
 
-                                        $equipos[] = array(
-                                            "idBitacora" => $idBitacora,
-                                            "idParametro" => $idParametro,
-                                            "idLineaTiempo" => $idLineaTiempo,
-                                            "idEquipo" => $idEquipo,
-                                            "idValor" => $idValor,
-                                            "equipo" => $equipo,
-                                            "medida" => $medida,
-                                            "parametroMinimo" => $parametroMinimo,
-                                            "parametroMaximo" => $parametroMaximo,
-                                            "valor" => $valor,
-                                            "crearIncidencia" => $crearIncidencia,
-                                            "idIncidencia" => $idIncidencia,
-                                            "fechaCaptura" => $fechaCaptura,
-                                            "tipoEquipo" => $tipoEquipo,
-                                            "horarioInput" => $horarioInput,
-                                            "fechaToken" => $fechaToken,
-                                            "status" => $status,
-                                            "enTiempo" => $enTiempo,
-                                            "estado" => $estado,
-                                        );
+                                            $equipos[] = array(
+                                                "idBitacora" => $idBitacora,
+                                                "idParametro" => $idParametro,
+                                                "idLineaTiempo" => $idLineaTiempo,
+                                                "idEquipo" => $idEquipo,
+                                                "idValor" => $idValor,
+                                                "equipo" => $equipo,
+                                                "medida" => $medida,
+                                                "parametroMinimo" => $parametroMinimo,
+                                                "parametroMaximo" => $parametroMaximo,
+                                                "valor" => $valor,
+                                                "crearIncidencia" => $crearIncidencia,
+                                                "idIncidencia" => $idIncidencia,
+                                                "fechaCaptura" => $fechaCaptura,
+                                                "tipoEquipo" => $tipoEquipo,
+                                                "horarioInput" => $horarioInput,
+                                                "fechaToken" => $fechaToken,
+                                                "status" => $status,
+                                                "enTiempo" => $enTiempo,
+                                                "estado" => $estado,
+                                            );
+                                        }
                                     }
                                 }
                             }
-                        }
 
-                        $array['data'][] = array(
-                            "parametro" => $parametro,
-                            "equipos" => $equipos,
-                            "idParametro" => $idParametro,
-                        );
+                            $array['data'][] = array(
+                                "parametro" => $parametro,
+                                "equipos" => $equipos,
+                                "idParametro" => $idParametro,
+                            );
+                        }
                     }
                 }
             }
@@ -1470,15 +1483,22 @@ if ($peticion === "POST") {
         $parametroMinimo = $_POST['parametroMinimo'];
         $valor = $_POST['valor'];
         $fechaCapturaActual = $_POST['fechaCapturaActual'];
+        $idIncidencia = $_POST['idIncidencia'];
 
         #DECISIÓN PARA CREAR INCIDENCIA
         $idNuevaIncidencia = 0;
         $crearIncidencia = "NO";
 
-        if (
-            ($valor < $parametroMinimo || $valor > $parametroMinimo) &&
-            ($valor < $parametroMaximo || $valor > $parametroMaximo)
-        ) {
+
+        #CADA VEZ QUE SE MODIFICA EL PARAMETRO ELIMINA LA INCIDENCIA CREADA ANTERIORMENTE.
+        $query = "UPDATE t_mc SET activo = 0 WHERE id = $idIncidencia";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            $idIncidencia = 0;
+        }
+
+        if ($parametroMinimo <= $valor && $parametroMaximo >= $valor) {
+            $crearIncidencia = "NO";
+        } else {
             $crearIncidencia = "SI";
 
             #OBTIENE NUEVO ID DE INCIDENCIA
@@ -1499,7 +1519,6 @@ if ($peticion === "POST") {
             WHERE b.id_publico = '$idBitacora' and b.activo = 1 and p.generar_incidencia = 'true'";
             if ($result = mysqli_query($conn_2020, $query)) {
                 foreach ($result as $x) {
-                    $caracteres = array("[", "]", "[ ", "] ");
                     $idsUsuariosTelegram = str_replace($caracteres, "", $x['notificar_ids_usuarios']);
                     $tituloIncidencia = $x['titulo_incidencia'];
                     $tipoIncidencia = $x['tipo_incidencia'];
@@ -1610,16 +1629,17 @@ if ($peticion === "POST") {
 
                 $array['bitacoras'][] = $bitacora;
 
-                $caracteres = array("[", "]", "[ ", "] ");
                 $idsDestinos = str_replace($caracteres, "", $x['ids_destinos']);
                 $idsTiposEquipos = str_replace($caracteres, "", $x['ids_tipos_equipos']);
                 $idsEquipos = str_replace($caracteres, "", $x['ids_equipos']);
+                $idsUsuarios_b = str_replace($caracteres, "", $x['ids_usuarios']);
 
                 $query = "SELECT
                 p.id_publico,
                 p.ids_usuarios,
                 p.parametro,
                 p.configuracion_global,
+                p.usuarios_globales,
                 p.fecha_inicio,
                 p.hora_inicio,
                 p.horas,
@@ -1635,7 +1655,7 @@ if ($peticion === "POST") {
                 if ($result = mysqli_query($conn_2020, $query)) {
                     foreach ($result as $x) {
                         $idParametro = $x['id_publico'];
-                        $idsUsuarios_p = $x['ids_usuarios'];
+                        $usuariosGlobales = $x['usuarios_globales'];
                         $parametro = $x['parametro'];
                         $medida = $x['medida'];
                         $fechaInicio_p = $x['fecha_inicio'];
@@ -1644,120 +1664,138 @@ if ($peticion === "POST") {
                         $parametroMinimo = $x['parametro_minimo'];
                         $parametroMaximo = $x['parametro_maximo'];
                         $configuracionGlobal = $x['configuracion_global'];
+                        $idsUsuarios_p = str_replace($caracteres, "", $x['ids_usuarios']);
 
                         $array['parametros'][] = $parametro;
 
                         #ARRAY PARA ALAMCENAR DATOS DEL PARAMETRO
                         $equipos = array();
 
-                        if ($idsTiposEquipos == "")
-                            $idsTiposEquipos = -1;
-
-                        if ($idsEquipos == "")
-                            $idsEquipos = 0;
-
-                        if ($idsDestinos == "")
-                            $idsDestinos = 0;
-
-                        if ($configuracionGlobal == 'true') {
-                            $filtroParametro = "and id_parametro = ''";
-                            $filtroFechaRegistro = "and fecha_inicio_registro = '$fechaInicio_b'";
-                            $filtroHoraRegistro = "and hora_inicio_registro = '$horaInicio_b'";
-                            $filtroCiclosHoras = "and ciclo_horas = '$ciclo_b'";
+                        if ($usuariosGlobales == "true") {
+                            $arrayUsuariosPermitidos = explode(", ", $idsUsuarios_b);
                         } else {
-                            $filtroParametro = "and id_parametro = '$idParametro'";
-                            $filtroFechaRegistro = "and fecha_inicio_registro = '$fechaInicio_p'";
-                            $filtroHoraRegistro = "and hora_inicio_registro = '$horaInicio_p'";
-                            $filtroCiclosHoras = "and ciclo_horas = '$ciclo_p'";
+                            $arrayUsuariosPermitidos = explode(", ", $idsUsuarios_p);
                         }
 
-                        $query = "SELECT lt.id, fecha_token
-                        FROM t_bitacoras_linea_tiempo AS lt
-                        WHERE id_bitacora = '$idBitacora' and
-                        fecha_token BETWEEN '$fechaInicio' and '$fechaFin' and activo = 1
-                        $filtroParametro $filtroFechaRegistro $filtroHoraRegistro $filtroCiclosHoras";
-                        if ($result = mysqli_query($conn_2020, $query)) {
-                            foreach ($result as $x) {
-                                $idLineaTiempo = $x['id'];
-                                $fechaToken = $x['fecha_token'];
-                                $horarioInput = (new \DateTime($fechaToken))->format('H:m');
+                        #VALIDA PERMISOS DE USUARIO
+                        if (isset($arrayUsuariosPermitidos[$idUsuario])) {
 
-                                $query = "SELECT e.id, e.equipo, t.tipo, d.destino
-                                FROM t_equipos_america AS e
-                                INNER JOIN c_destinos AS d ON e.id_destino = d.id
-                                LEFT JOIN c_tipos AS t ON e.id_tipo = t.id
-                                WHERE e.id_destino IN($idsDestinos) and (e.id_tipo IN($idsTiposEquipos) or e.id IN($idsEquipos)) and e.status IN('OPERATIVO') and e.activo = 1";
-                                if ($result = mysqli_query($conn_2020, $query)) {
-                                    foreach ($result as $x) {
-                                        $idEquipo = $x['id'];
-                                        $equipo = $x['equipo'];
-                                        $tipoEquipo = $x['tipo'];
-                                        $destino = $x['destino'];
+                            if ($idsTiposEquipos == "")
+                                $idsTiposEquipos = -1;
 
-                                        #TIPOS DE EQUIPOS
-                                        $array['tiposEquipos'][] = $tipoEquipo;
+                            if ($idsEquipos == "")
+                                $idsEquipos = 0;
 
-                                        #DESTINOS DE EQUIPOS
-                                        $array['destinos'][] = $destino;
+                            if ($idsDestinos == "")
+                                $idsDestinos = 0;
 
-                                        $fechaRegistro = "";
-                                        $horaRegistro = "";
-                                        $query = "SELECT id, valor, crear_incidencia,
-                                        id_incidencia, fecha_captura, status
-                                        FROM t_bitacora_capturas
-                                        WHERE id_bitacora = '$idBitacora' and id_parametro = '$idParametro' 
-                                        and id_equipo = '$idEquipo' and fecha_token = '$fechaToken' and activo = 1";
-                                        if ($result = mysqli_query($conn_2020, $query)) {
-                                            foreach ($result as $x) {
-                                                $idValor = $x['id'];
-                                                $valor = $x['valor'];
-                                                $crearIncidencia = $x['crear_incidencia'];
-                                                $idIncidencia = $x['id_incidencia'];
-                                                $fechaCaptura = $x['fecha_captura'];
-                                                $status = $x['status'];
-                                                $estado = "CAPTURADO";
-                                                $fechaLR = strtotime($fechaToken);
-                                                $fechaL = strtotime("+30 minutes", strtotime($fechaToken));
-                                                $fechaR = strtotime("-30 minutes", strtotime($fechaToken));
+                            if ($configuracionGlobal == 'true') {
+                                $filtroParametro = "and id_parametro = ''";
+                                $filtroFechaRegistro = "and fecha_inicio_registro = '$fechaInicio_b'";
+                                $filtroHoraRegistro = "and hora_inicio_registro = '$horaInicio_b'";
+                                $filtroCiclosHoras = "and ciclo_horas = '$ciclo_b'";
+                            } else {
+                                $filtroParametro = "and id_parametro = '$idParametro'";
+                                $filtroFechaRegistro = "and fecha_inicio_registro = '$fechaInicio_p'";
+                                $filtroHoraRegistro = "and hora_inicio_registro = '$horaInicio_p'";
+                                $filtroCiclosHoras = "and ciclo_horas = '$ciclo_p'";
+                            }
 
-                                                if ($fechaCaptura != "")
-                                                    $fechaRegistro = (new \DateTime($fechaCaptura))->format('Y-m-d');
+                            $query = "SELECT lt.id, fecha_token
+                            FROM t_bitacoras_linea_tiempo AS lt
+                            WHERE id_bitacora = '$idBitacora' and
+                            fecha_token BETWEEN '$fechaInicio' and '$fechaFin' and activo = 1
+                            $filtroParametro $filtroFechaRegistro $filtroHoraRegistro $filtroCiclosHoras";
+                            if ($result = mysqli_query($conn_2020, $query)) {
+                                foreach ($result as $x) {
+                                    $idLineaTiempo = $x['id'];
+                                    $fechaToken = $x['fecha_token'];
+                                    $horarioInput = (new \DateTime($fechaToken))->format('H:m');
 
-                                                if ($fechaCaptura != "")
-                                                    $horaRegistro = (new \DateTime($fechaCaptura))->format('H:i:s');
+                                    $query = "SELECT e.id, e.equipo, t.tipo, d.destino
+                                    FROM t_equipos_america AS e
+                                    INNER JOIN c_destinos AS d ON e.id_destino = d.id
+                                    LEFT JOIN c_tipos AS t ON e.id_tipo = t.id
+                                    WHERE e.id_destino IN($idsDestinos) and (e.id_tipo IN($idsTiposEquipos) or e.id IN($idsEquipos)) and e.status IN('OPERATIVO') and e.activo = 1";
+                                    if ($result = mysqli_query($conn_2020, $query)) {
+                                        foreach ($result as $x) {
+                                            $idEquipo = $x['id'];
+                                            $equipo = $x['equipo'];
+                                            $tipoEquipo = $x['tipo'];
+                                            $destino = $x['destino'];
 
-                                                if ($fechaL <= $fechaLR && $fechaR >= $fechaLR)
-                                                    $enTiempo = "SI";
-                                                else
-                                                    $enTiempo = "NO";
+                                            #TIPOS DE EQUIPOS
+                                            $array['tiposEquipos'][] = $tipoEquipo;
 
+                                            #DESTINOS DE EQUIPOS
+                                            $array['destinos'][] = $destino;
 
-                                                $array['data'][] = array(
-                                                    "destino" => $destino,
-                                                    "idBitacora" => $idBitacora,
-                                                    "bitacora" => $bitacora,
-                                                    "idParametro" => $idParametro,
-                                                    "parametro" => $parametro,
-                                                    "idLineaTiempo" => $idLineaTiempo,
-                                                    "idEquipo" => $idEquipo,
-                                                    "idValor" => $idValor,
-                                                    "equipo" => $equipo,
-                                                    "medida" => $medida,
-                                                    "parametroMinimo" => $parametroMinimo,
-                                                    "parametroMaximo" => $parametroMaximo,
-                                                    "valor" => $valor,
-                                                    "crearIncidencia" => $crearIncidencia,
-                                                    "idIncidencia" => $idIncidencia,
-                                                    "fechaCaptura" => $fechaCaptura,
-                                                    "fechaRegistro" => $fechaRegistro,
-                                                    "horaRegistro" => $horaRegistro,
-                                                    "tipoEquipo" => $tipoEquipo,
-                                                    "horarioInput" => $horarioInput,
-                                                    "fechaToken" => $fechaToken,
-                                                    "status" => $status,
-                                                    "enTiempo" => $enTiempo,
-                                                    "estado" => $estado,
-                                                );
+                                            $fechaRegistro = "";
+                                            $horaRegistro = "";
+                                            $query = "SELECT id, valor, parametro_minimo, parametro_maximo, crear_incidencia,
+                                            id_incidencia, fecha_captura, status
+                                            FROM t_bitacora_capturas
+                                            WHERE id_bitacora = '$idBitacora' and id_parametro = '$idParametro' 
+                                            and id_equipo = '$idEquipo' and fecha_token = '$fechaToken' and activo = 1";
+                                            if ($result = mysqli_query($conn_2020, $query)) {
+                                                foreach ($result as $x) {
+                                                    $idValor = $x['id'];
+                                                    $valor = $x['valor'];
+                                                    $parametroMinimo = $x['parametro_minimo'];
+                                                    $parametroMaximo = $x['parametro_maximo'];
+                                                    $crearIncidencia = $x['crear_incidencia'];
+                                                    $idIncidencia = $x['id_incidencia'];
+                                                    $fechaCaptura = $x['fecha_captura'];
+                                                    $status = $x['status'];
+                                                    $estado = "CAPTURADO";
+                                                    $fechaLR = strtotime($fechaToken);
+                                                    $fechaL = strtotime("+30 minutes", strtotime($fechaToken));
+                                                    $fechaR = strtotime("-30 minutes", strtotime($fechaToken));
+
+                                                    if ($fechaCaptura != "")
+                                                        $fechaRegistro = (new \DateTime($fechaCaptura))->format('Y-m-d');
+
+                                                    if ($fechaCaptura != "")
+                                                        $horaRegistro = (new \DateTime($fechaCaptura))->format('H:i:s');
+
+                                                    if ($fechaL <= $fechaLR && $fechaR >= $fechaLR)
+                                                        $enTiempo = "SI";
+                                                    else
+                                                        $enTiempo = "NO";
+
+                                                    if ($parametroMinimo <= $valor && $parametroMaximo >= $valor)
+                                                        $fueraRango = "NO";
+                                                    else
+                                                        $fueraRango = "SI";
+
+                                                    $array['data'][] = array(
+                                                        "destino" => $destino,
+                                                        "idBitacora" => $idBitacora,
+                                                        "bitacora" => $bitacora,
+                                                        "idParametro" => $idParametro,
+                                                        "parametro" => $parametro,
+                                                        "idLineaTiempo" => $idLineaTiempo,
+                                                        "idEquipo" => $idEquipo,
+                                                        "idValor" => $idValor,
+                                                        "equipo" => $equipo,
+                                                        "medida" => $medida,
+                                                        "parametroMinimo" => $parametroMinimo,
+                                                        "parametroMaximo" => $parametroMaximo,
+                                                        "valor" => $valor,
+                                                        "fueraRango" => $fueraRango,
+                                                        "crearIncidencia" => $crearIncidencia,
+                                                        "idIncidencia" => $idIncidencia,
+                                                        "fechaCaptura" => $fechaCaptura,
+                                                        "fechaRegistro" => $fechaRegistro,
+                                                        "horaRegistro" => $horaRegistro,
+                                                        "tipoEquipo" => $tipoEquipo,
+                                                        "horarioInput" => $horarioInput,
+                                                        "fechaToken" => $fechaToken,
+                                                        "status" => $status,
+                                                        "enTiempo" => $enTiempo,
+                                                        "estado" => $estado,
+                                                    );
+                                                }
                                             }
                                         }
                                     }
