@@ -1339,20 +1339,20 @@ if ($peticion === "POST") {
                         $usuariosGlobales = $x['usuarios_globales'];
                         $idsUsuarios_p = str_replace($caracteres, "", $x['ids_usuarios']);
 
-
-                        if ($usuariosGlobales == "true") {
-                            $arrayUsuariosPermitidos = explode(", ", $idsUsuarios_b);
-                        } else {
-                            $arrayUsuariosPermitidos = explode(", ", $idsUsuarios_p);
-                        }
-
-                        $array['array'] = $arrayUsuariosPermitidos;
-
                         #ARRAY PARA ALAMCENAR DATOS DEL PARAMETRO
                         $equipos = array();
 
+                        $arrayUsuariosPermitidos = [];
+                        if ($usuariosGlobales == true) {
+                            $arrayUsuariosPermitidos = explode(", ", $idsUsuarios_b);
+                        }
+
+                        if ($usuariosGlobales == false) {
+                            $arrayUsuariosPermitidos = explode(", ", $idsUsuarios_p);
+                        }
+
                         #VALIDA PERMISOS DE USUARIO
-                        if (isset($arrayUsuariosPermitidos[$idUsuario])) {
+                        if (in_array($idUsuario, $arrayUsuariosPermitidos)) {
 
                             if ($idsTiposEquipos == "")
                                 $idsTiposEquipos = -1;
@@ -1671,14 +1671,17 @@ if ($peticion === "POST") {
                         #ARRAY PARA ALAMCENAR DATOS DEL PARAMETRO
                         $equipos = array();
 
-                        if ($usuariosGlobales == "true") {
+                        $arrayUsuariosPermitidos = [];
+                        if ($usuariosGlobales == true) {
                             $arrayUsuariosPermitidos = explode(", ", $idsUsuarios_b);
-                        } else {
+                        }
+
+                        if ($usuariosGlobales == false) {
                             $arrayUsuariosPermitidos = explode(", ", $idsUsuarios_p);
                         }
 
                         #VALIDA PERMISOS DE USUARIO
-                        if (isset($arrayUsuariosPermitidos[$idUsuario])) {
+                        if (in_array($idUsuario, $arrayUsuariosPermitidos)) {
 
                             if ($idsTiposEquipos == "")
                                 $idsTiposEquipos = -1;
