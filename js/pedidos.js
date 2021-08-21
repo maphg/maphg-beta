@@ -800,7 +800,7 @@ const obtenerSolicitudes2bend = () => {
 
                     const codigo =
                         /*html*/
-                        `<tr class="hover:bg-gray-200 cursor-pointer text-xs font-normal text-bluegray-800 font-normal" onclick="obtenerDetalles(${idItem}, ${numero2bend});">
+                        `<tr class="hover:bg-gray-200 cursor-pointer text-xs font-normal text-bluegray-800 font-normal" onclick="obtenerDetalles(${idItem}, ${solicitudSap});">
                             <td class="py-2 text-center font-semibold">${destino}</td>
 
                             <td class="py-2 text-center font-semibold">${numero2bend}</td>
@@ -938,7 +938,7 @@ const obtenerDetalles = (idItem, solicitud) => {
     const action = "obtenerDetalles";
     const URL = `php/pedidos.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idItem=${idItem}&solicitud=${solicitud}`;
 
-    if (solicitud <= 0) {
+    if (solicitud <= 0 && !solicitud.length) {
         alertaImg('Numero de Solicitud, NO Valida', '', 'info', 1500);
         return;
     }
@@ -956,7 +956,6 @@ const obtenerDetalles = (idItem, solicitud) => {
             return array.resultados;
         })
         .then(array => {
-            console.log(array)
             if (array.length) {
                 for (let x = 0; x < array.length; x++) {
                     const solicitud = array[x].solicitud;

@@ -187,7 +187,7 @@ if (isset($_GET['action'])) {
     // OBTENER SOLICITUDES
     if ($action == "obtenerDetalles") {
         $idItem = $_GET['idItem'];
-        $solicitud = $_GET['solicitud'];
+        $solicitudX = $_GET['solicitud'];
 
         $array['detalles'] = array();
         $array['resultados'] = array();
@@ -226,7 +226,7 @@ if (isset($_GET['action'])) {
         p.solicitud_borrada, 
         p.fecha_modificado
         FROM t_pedidos_sin_orden_compra AS p
-        WHERE p.activo = 1 and p.solicitud_pedido = '$solicitud'";
+        WHERE p.activo = 1 and p.solicitud_pedido = '$solicitudX'";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $solicitud = $x['solicitud_pedido'];
@@ -247,7 +247,7 @@ if (isset($_GET['action'])) {
                 $tipo = "";
 
                 $array['resultados'][] = array(
-                    "solicitud" => "1 $solicitud",
+                    "solicitud" => "$solicitud",
                     "fechaSolicitud" => $fechaSolicitud,
                     "documentoCompras" => $documentoCompras,
                     "fechaDocumento" => $fechaDocumento,
@@ -284,7 +284,7 @@ if (isset($_GET['action'])) {
         e.valor_usd, 
         e.seccion
         FROM t_pedidos_por_entregar AS e
-        WHERE e.activo = 1 and e.solicitud_pedido = '$solicitud'";
+        WHERE e.activo = 1 and e.solicitud_pedido = '$solicitudX'";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $solicitud = $x['solicitud_pedido'];
@@ -305,7 +305,7 @@ if (isset($_GET['action'])) {
                 $tipo = "";
 
                 $array['resultados'][] = array(
-                    "solicitud" => "2 $solicitud",
+                    "solicitud" => "$solicitud",
                     "fechaSolicitud" => $fechaSolicitud,
                     "documentoCompras" => $documentoCompras,
                     "fechaDocumento" => $fechaDocumento,

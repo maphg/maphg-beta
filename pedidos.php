@@ -554,42 +554,6 @@
 
                             <!-- DATA -->
                             <tbody id="dataSolicitudes2bend" class="bg-white divide-y divide-gray-200 px-2 border-b border-gray-200 text-left py-2 font-normal text-xs">
-                                <tr class="hover:bg-gray-200 cursor-pointer text-xs font-normal text-bluegray-800">
-                                    <td>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Delectus, molestiae?</td>
-                                    <td>Sit officia esse non amet asperiores inventore eaque laborum atque!</td>
-                                    <td>Quidem veritatis ab aliquid perspiciatis suscipit atque eaque nemo incidunt!</td>
-                                    <td>Corrupti tempore illum exercitationem, veniam ipsa porro libero ex dolorum.</td>
-                                    <td>Dicta illo et provident, ipsam amet labore consequuntur officiis quia.</td>
-                                    <td>Temporibus magnam voluptatem magni voluptates iure quaerat repudiandae expedita assumenda.</td>
-                                    <td>Fugit, ipsam assumenda? Adipisci nisi rerum ea consequatur. Dignissimos, eaque.</td>
-                                    <td>Velit et possimus praesentium aut tempora odio consequatur quos fuga!</td>
-                                    <td>Vel quia soluta, numquam distinctio id beatae quam aliquam omnis.</td>
-                                    <td>A at distinctio tenetur atque? Consequuntur odio minus natus ullam?</td>
-                                    <td>Quam non assumenda vitae doloribus rem tempore iusto laudantium sapiente?</td>
-                                    <td>Similique placeat maiores odio nisi doloribus architecto voluptas quas unde.</td>
-                                    <td>Iure itaque fuga unde recusandae dignissimos, perspiciatis voluptates nemo ab!</td>
-                                    <td>Odio eius ratione cumque dolorem veniam nemo dolore autem corporis.</td>
-                                    <td>Iste laudantium adipisci delectus earum est dolore dolorum ad quasi.</td>
-                                    <td>Aliquid, earum reiciendis enim expedita itaque modi recusandae perspiciatis eveniet.</td>
-                                </tr>
-                                <tr class="hover:bg-gray-200 cursor-pointer text-xs font-normal text-bluegray-800">
-                                    <td>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Delectus, molestiae?</td>
-                                    <td>Sit officia esse non amet asperiores inventore eaque laborum atque!</td>
-                                    <td>Quidem veritatis ab aliquid perspiciatis suscipit atque eaque nemo incidunt!</td>
-                                    <td>Corrupti tempore illum exercitationem, veniam ipsa porro libero ex dolorum.</td>
-                                    <td>Dicta illo et provident, ipsam amet labore consequuntur officiis quia.</td>
-                                    <td>Temporibus magnam voluptatem magni voluptates iure quaerat repudiandae expedita assumenda.</td>
-                                    <td>Fugit, ipsam assumenda? Adipisci nisi rerum ea consequatur. Dignissimos, eaque.</td>
-                                    <td>Velit et possimus praesentium aut tempora odio consequatur quos fuga!</td>
-                                    <td>Vel quia soluta, numquam distinctio id beatae quam aliquam omnis.</td>
-                                    <td>A at distinctio tenetur atque? Consequuntur odio minus natus ullam?</td>
-                                    <td>Quam non assumenda vitae doloribus rem tempore iusto laudantium sapiente?</td>
-                                    <td>Similique placeat maiores odio nisi doloribus architecto voluptas quas unde.</td>
-                                    <td>Iure itaque fuga unde recusandae dignissimos, perspiciatis voluptates nemo ab!</td>
-                                    <td>Odio eius ratione cumque dolorem veniam nemo dolore autem corporis.</td>
-                                    <td>Iste laudantium adipisci delectus earum est dolore dolorum ad quasi.</td>
-                                    <td>Aliquid, earum reiciendis enim expedita itaque modi recusandae perspiciatis eveniet.</td>
-                                </tr>
                             </tbody>
 
                         </table>
