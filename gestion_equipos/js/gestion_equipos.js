@@ -811,7 +811,7 @@ function consultaEquiposLocales() {
                     const idtipoEquipo = array[x].idtipoEquipo;
                     const tipoEquipo = array[x].tipoEquipo;
                     const id = array[x].id;
-                    xl[idtipoEquipo] = { "idTipo": idtipoEquipo, "tipo": tipoEquipo + ' ' + id };
+                    xl[idtipoEquipo] = { "idTipo": idtipoEquipo, "tipo": tipoEquipo };
                 }
 
                 xl.forEach(x => {
