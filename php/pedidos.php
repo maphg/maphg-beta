@@ -192,7 +192,8 @@ if (isset($_GET['action'])) {
         $array['detalles'] = array();
         $array['resultados'] = array();
 
-        $query = "SELECT d.destino, s.nombre, s.numero_2bend, s.fecha
+        $query = "SELECT d.destino, s.nombre, s.numero_2bend,
+        s.solicitud_sap, s.fecha
         FROM t_solicitudes_cod2bend AS s
         INNER JOIN c_destinos AS d ON s.id_destino = d.id
         WHERE s.id = $idItem and activo = 1";
@@ -200,7 +201,7 @@ if (isset($_GET['action'])) {
             foreach ($result as $x) {
                 $destino = $x['destino'];
                 $nombreCeco = $x['nombre'];
-                $solicitud2bend = $x['numero_2bend'];
+                $solicitud2bend = $x['solicitud_sap'];
                 $fechaSolicitud = $x['fecha'];
 
                 $array['detalles'] = array(
