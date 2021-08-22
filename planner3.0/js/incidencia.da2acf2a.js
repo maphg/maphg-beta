@@ -1,2 +1,0 @@
-(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["incidencia"],{"612f":function(c,n,e){"use strict";e.r(n);var i=e("7a23");function a(c,n,e,a,r,t){var o=Object(i["z"])("grafico-01");return Object(i["s"])(),Object(i["e"])("div",null,[Object(i["i"])(o)])}var r=e("08c2"),t={components:{Grafico01:r["a"]}};t.render=a;n["default"]=t}}]);
-//# sourceMappingURL=incidencia.da2acf2a.js.map

@@ -9,7 +9,19 @@ if (isset($_POST["action"])) {
    # CONEXION DB
    include '../php/conexion.php';
 
-   $array['status'] = '404';
+   #RUTA ABSOLUTA PARA ENLACES
+   $rutaAbsoluta = "";
+   if (strpos($_SERVER['REQUEST_URI'], "america") == true)
+      $rutaAbsoluta = "https://www.maphg.com/america";
+   if (strpos($_SERVER['REQUEST_URI'], "europa") == true)
+      $rutaAbsoluta = "https://www.maphg.com/europa";
+   if (strpos($_SERVER['REQUEST_URI'], "maphg-beta") == true)
+      $rutaAbsoluta = "http://10.30.30.104/maphg-beta";
+
+   #STATUS DE RESPUESTA DEL SERVER
+   $array['status'] = 'OK';
+   $array['resp'] = "ERROR";
+   $array['data'] = array();
 
    if ($action === "subirFotoUsuario") {
       $array['files'] = $_FILES;
@@ -23,6 +35,7 @@ if (isset($_POST["action"])) {
          $query = "UPDATE t_users u, t_colaboradores c SET c.foto = '$foto' WHERE u.id_colaborador = c.id and u.id = $idUsuario";
          if ($result = mysqli_query($conn_2020, $query)) {
             $array['resp'] = "SUCCESS";
+            $array['data'] = $rutaAbsoluta . "/planner/avatars/" . $foto;
          }
       }
    }

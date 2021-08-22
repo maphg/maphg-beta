@@ -18,7 +18,7 @@ if (strpos($_SERVER['REQUEST_URI'], "america") == true)
 if (strpos($_SERVER['REQUEST_URI'], "europa") == true)
   $rutaAbsoluta = "https://www.maphg.com/europa";
 if (strpos($_SERVER['REQUEST_URI'], "maphg-beta") == true)
-  $rutaAbsoluta = "https://www.maphg.com/america";
+  $rutaAbsoluta = "http://10.30.30.104/maphg-beta";
 
 # CONEXION DB
 include '../php/conexion.php';
@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'])
 
 #PETICIONES METODO _GET
 if ($peticion === "GET") {
-  $array['status'] = 'ok';
+  $array['status'] = 'okkkk';
   $array['GET'] = $_GET;
 }
 
@@ -54,8 +54,9 @@ if ($peticion === "POST") {
   $action = $_POST['action'];
 
   #STATUS DE RESPUESTA DEL SERVER
-  $array['status'] = 'ok';
+  $array['status'] = 'OK';
   $array['resp'] = "ERROR";
+  $array['data'] = array();
 
   #PERMISO DE SECCIONES POR USUARIO
   $seccionesPermitidas = [0];
@@ -1337,14 +1338,10 @@ if ($peticion === "POST") {
     $telefono = $_POST["telefono"];
     $telegram = $_POST["telegram"];
 
-    if ($telegram == "NO" && $telefono == "SI")
-      $telegram = "";
-    else
-      $telegram = ", u.telegram_chat_id = '$telegram'";
-
-
+    // ATUALIZA DATOS DEL USUARIO
     $query = "UPDATE t_users u, t_colaboradores c
-    SET c.nombre = '$nombre', c.apellido = '$apellido', c.email = '$correo', c.telefono = '$telefono' $telegram
+    SET c.nombre = '$nombre', c.apellido = '$apellido', c.email = '$correo',
+    c.telefono = '$telefono', u.telegram_chat_id = '$telegram'
     WHERE u.id_colaborador = c.id and u.id = $idUsuario";
     if ($result = mysqli_query($conn_2020, $query)) {
       $array['resp'] = "SUCCESS";
@@ -1353,6 +1350,7 @@ if ($peticion === "POST") {
 
   if ($action === "subirFotoUsuario") {
     $array['resp'] = "SUCCESS";
+    $array['files'] = $_FILES;
 
     // $rutaTemporal = $_FILES["file"]["tmp_name"];
     // $extension = pathinfo($_FILES["file"]["name"], PATHINFO_EXTENSION);
