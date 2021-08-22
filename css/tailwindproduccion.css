@@ -1267,7 +1267,7 @@ video {
   height: 3rem;
 }
 
-.auto-logo {
+.auto-logo, .aut-logo {
   --text-opacity: 1;
   color: #2c7a7b;
   color: rgba(44, 122, 123, var(--text-opacity));
@@ -1502,7 +1502,7 @@ video {
   font-size: 1rem;
 }
 
-.auto-logo-modal {
+.auto-logo-modal, .aut-logo-modal {
   --text-opacity: 1;
   color: #2c7a7b;
   color: rgba(44, 122, 123, var(--text-opacity));
