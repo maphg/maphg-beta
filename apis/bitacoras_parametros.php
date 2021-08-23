@@ -202,7 +202,7 @@ if ($peticion === "POST") {
             $idsDestinos = "[$idDestino]";
         }
 
-        $query = "INSERT INTO t_bitacoras_configuracion(id_publico, creado_por, ids_destinos, descripcion, status, fecha_creado, activo) VALUES('$idBitacora', $idUsuario, '$idsDestinos', '', 'DESACTIVADO', '$fechaActual', 1)";
+        $query = "INSERT INTO t_bitacoras_configuracion(id_publico, creado_por, ids_destinos, descripcion, status, fecha_creado, activo) VALUES('$idBitacora', $idUsuario, '$idsDestinos', '', 'DESACTIVADO', '$fechaActual', 0)";
         if ($result = mysqli_query($conn_2020, $query)) {
             $array['response'] = "SUCCESS";
             $array['message'] = "Bitácora Creada!";
@@ -246,7 +246,8 @@ if ($peticion === "POST") {
         FROM t_users AS u
         INNER JOIN t_colaboradores AS c ON u.id_colaborador = c.id
         INNER JOIN c_destinos AS d ON u.id_destino = d.id
-        WHERE u.telegram_chat_id !='' and u.telegram_chat_id != ' ' and u.activo = 1 and u.status = 'A'
+        WHERE u.telegram_chat_id !='' and u.telegram_chat_id != ' ' and 
+        u.activo IN(1) and u.status = 'A'
         ORDER BY c.nombre ASC";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
@@ -334,7 +335,7 @@ if ($peticion === "POST") {
         $query = "SELECT id_publico, ids_destinos, ids_usuarios, ids_tipos_equipos, ids_equipos, descripcion, fecha_inicio,
         hora_inicio, horas, dias, semanas, meses, status
         FROM t_bitacoras_configuracion
-        WHERE activo = 1 and id_publico = '$idBitacora'";
+        WHERE activo IN(0, 1) and id_publico = '$idBitacora'";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $idBitacora = $x['id_publico'];
@@ -612,7 +613,7 @@ if ($peticion === "POST") {
 
         #ACTUALIZA LA DESCRIPCION DE LA BITACORA
         if ("descripcion" == $opcion) {
-            $query = "UPDATE t_bitacoras_configuracion SET descripcion = '$value'
+            $query = "UPDATE t_bitacoras_configuracion SET descripcion = '$value', activo = 1
             WHERE id_publico = '$idBitacora'";
             if ($result = mysqli_query($conn_2020, $query)) {
                 $array['response'] = "SUCCESS";
