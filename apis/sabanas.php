@@ -274,6 +274,7 @@ if ($peticion === "POST") {
 
       $idsApartados = array();
       $idsActividades = array();
+      $totalActividades = 0;
 
       foreach ($data['apartados'] as $x) {
          $idApartado = $x['idApartado'];
@@ -281,6 +282,7 @@ if ($peticion === "POST") {
 
          $apartados = $x;
          foreach ($apartados['actividades'] as $y) {
+            $totalActividades++;
             $idActividad = $y['idActividad'];
             $idsActividades[] = "[$idActividad]";
          }
@@ -288,11 +290,82 @@ if ($peticion === "POST") {
       $idsApartados = implode(", ", $idsApartados);
       $idsActividades = implode(", ", $idsActividades);
 
-      $query = "INSERT INTO t_sabana_registros(id_publico, id_destino, id_equipo, id_sabana, ids_apartados, ids_actividades, semana, fecha_creado, activo)
-      VALUES('$idRegistro', $idDestino, $idEquipo, '$idSabana', '$idsApartados', '$idsActividades', $semana, '$fechaActual', 0)";
+      $query = "INSERT INTO t_sabanas_registros(id_publico, id_destino, id_equipo, id_sabana, ids_apartados, ids_actividades, semana, total_actividades, fecha_creado, activo)
+      VALUES('$idRegistro', $idDestino, $idEquipo, '$idSabana', '$idsApartados', '$idsActividades', $semana, $totalActividades, '$fechaActual', 0)";
       if ($result = mysqli_query($conn_2020, $query)) {
          $array['response'] = 'SUCCESS';
          $array['data'] = array($data);
+         $array['totalActividades'] = $totalActividades;
+      }
+   }
+
+   if ($action === "crearCaptura") {
+      $idCaptura = $_POST['idCaptura'];
+      $idRegistro = $_POST['idRegistro'];
+      $idEquipo = $_POST['idEquipo'];
+      $idActividad = $_POST['idActividad'];
+      $valor = $_POST['valor'];
+      $comentario = $_POST['comentario'];
+      $adjunto = $_POST['adjunto'];
+
+      // COMPRUEBA SI EXISTE LA CAPTURA
+      $existe = 0;
+      $query = "SELECT id_publico FROM t_sabanas_registros_capturas WHERE id_publico = '$idCaptura'";
+      if ($result = mysqli_query($conn_2020, $query)) {
+         $existe = mysqli_num_rows($result);
+      }
+
+      $array['existe'] = $existe;
+
+      // SE ACTUALIZA EL REGISTRO
+      if ($existe == 1) {
+         $query = "UPDATE t_sabanas_registros_capturas SET
+         valor = '$valor',
+         comentario = '$comentario',
+         url_adjunto = '$adjunto'
+         WHERE id_publico = '$idCaptura' and activo = 1";
+         if ($result = mysqli_query($conn_2020, $query)) {
+            $array['response'] = 'SUCCESS';
+            $array['accion'] = "ACTUALIZADO";
+         }
+      }
+
+      // SE CAPTURA REGISTRO NUEVO
+      if ($existe == 0) {
+         $query = "INSERT INTO t_sabanas_registros_capturas(id_publico, id_registro, id_equipo, id_actividad, valor, comentario, url_adjunto, creado_por, fecha_creado, activo)
+         VALUE('$idCaptura', '$idRegistro', '$idEquipo', '$idActividad', '$valor', '$comentario', '$adjunto', $idUsuario, '$fechaActual', 1)";
+         if ($result = mysqli_query($conn_2020, $query)) {
+            $array['response'] = 'SUCCESS';
+            $array['accion'] = "CAPTURADO";
+         }
+      }
+   }
+
+   if ($action === "confirmarRegistro") {
+      $idRegistro = $_POST['idRegistro'];
+      $totalActividades = $_POST['totalActividades'];
+
+      $totalActividadesCompletadas = 0;
+      $query = "SELECT count(id_publico) 'total' FROM t_sabanas_registros_capturas
+      WHERE id_registro = '$idRegistro'";
+      if ($result = mysqli_query($conn_2020, $query)) {
+         foreach ($result as $x) {
+            $totalActividadesCompletadas = $x['total'];
+         }
+      }
+
+
+      if ($totalActividadesCompletadas == $totalActividades) {
+         $query = "UPDATE t_sabanas_registros SET activo = 1 WHERE id_publico = '$idRegistro'";
+         if ($result = mysqli_query($conn_2020, $query)) {
+            $array['response'] = 'SUCCESS';
+            $array['completado'] = true;
+            $array['restantes'] = 0;
+         }
+      } else {
+         $array['response'] = 'SUCCESS';
+         $array['completado'] = false;
+         $array['restantes'] = $totalActividades - $totalActividadesCompletadas;
       }
    }
 }

@@ -24,7 +24,6 @@ if (isset($_POST["action"])) {
    $array['data'] = array();
 
    if ($action === "subirFotoUsuario") {
-      $array['files'] = $_FILES;
       $array['resp'] = "SUCCESS";
 
       $rutaTemporal = $_FILES["file"]["tmp_name"];
@@ -37,6 +36,19 @@ if (isset($_POST["action"])) {
             $array['resp'] = "SUCCESS";
             $array['data'] = $rutaAbsoluta . "/planner/avatars/" . $foto;
          }
+      }
+   }
+
+   if ($action === "subirFotoSabanas") {
+      $urlFoto = $_POST['urlFoto'];
+
+      $rutaTemporal = $_FILES["file"]["tmp_name"];
+      $extension = pathinfo($_FILES["file"]["name"], PATHINFO_EXTENSION);
+      $foto =  $urlFoto . ".$extension";
+
+      if (move_uploaded_file($rutaTemporal, "../sabanas/fotos/" . $foto)) {
+         $array['resp'] = "SUCCESS";
+         $array['urlFoto'] = $foto;
       }
    }
 }
