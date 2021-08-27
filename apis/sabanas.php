@@ -244,7 +244,6 @@ if ($peticion === "POST") {
       FROM t_sabanas_equipos AS e
       INNER JOIN t_sabanas as s ON e.id_hotel = s.id_hotel
       WHERE e.activo = 1 and s.id_publico = '$idSabana' $filtroDestino";
-      $array['o'] = $query;
       if ($result = mysqli_query($conn_2020, $query)) {
          foreach ($result as $x) {
             $idEquipo = $x['id_equipo'];
