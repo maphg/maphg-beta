@@ -290,8 +290,8 @@ if ($peticion === "POST") {
       $idsApartados = implode(", ", $idsApartados);
       $idsActividades = implode(", ", $idsActividades);
 
-      $query = "INSERT INTO t_sabanas_registros(id_publico, id_destino, id_equipo, id_sabana, ids_apartados, ids_actividades, semana, total_actividades, fecha_creado, activo)
-      VALUES('$idRegistro', $idDestino, $idEquipo, '$idSabana', '$idsApartados', '$idsActividades', $semana, $totalActividades, '$fechaActual', 0)";
+      $query = "INSERT INTO t_sabanas_registros(id_publico, id_destino, id_equipo, id_sabana, creado_por, ids_apartados, ids_actividades, semana, total_actividades, fecha_creado, activo)
+      VALUES('$idRegistro', $idDestino, $idEquipo, '$idSabana', $idUsuario, '$idsApartados', '$idsActividades', $semana, $totalActividades, '$fechaActual', 0)";
       if ($result = mysqli_query($conn_2020, $query)) {
          $array['response'] = 'SUCCESS';
          $array['data'] = array($data);
