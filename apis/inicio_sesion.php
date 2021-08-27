@@ -25,6 +25,25 @@ if ($peticion === "POST") {
    $_POST = json_decode(file_get_contents('php://input'), true);
    $action = $_POST['action'];
 
+   if ($action === "comprobarSesion") {
+      $idDestino = $_POST['idDestino'];
+      $idUsuario = $_POST['idUsuario'];
+
+      $query = "SELECT id, id_destino
+      FROM t_users
+      WHERE id = $idUsuario and status  = 'A' and activo = 1 LIMIT 1";
+      if ($result = mysqli_query($conn_2020, $query)) {
+         foreach ($result as $x) {
+            $idUsuarioX = $x['id'];
+            $idDestinoX = $x['id_destino'];
+
+            if ($idUsuario === $idUsuarioX) {
+               $array['response'] = "SUCCESS";
+            }
+         }
+      }
+   }
+
    if ($action === "sesion") {
       $usuario = $_POST['usuario'];
       $contrasena = $_POST['contrasena'];
