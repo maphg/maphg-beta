@@ -427,21 +427,9 @@ if ($peticion === "POST") {
          $filtroDestinoEquipo = "and e.id_destino = $idDestino";
       }
 
-      $array['hoteles'] = array();
-      $query = "SELECT id, hotel FROM t_sabanas_hoteles
-      WHERE activo = 1 $filtroDestino";
-      if ($result = mysqli_query($conn_2020, $query)) {
-         foreach ($result as $x) {
-            $idHotel = $x['id'];
-            $hotel = $x['hotel'];
 
-            $array['hoteles'][] = array(
-               "idHotel" => $idHotel,
-               "hotel" => $hotel,
-            );
-         }
-      }
 
+      // SABANAS
       $query = "SELECT id 'idHotel', hotel
       FROM t_sabanas_hoteles
       WHERE activo = 1 and id = '$idHotel' $filtroDestino";
@@ -502,6 +490,22 @@ if ($peticion === "POST") {
                "idHotel" => $idHotel,
                "hotel" => $hotel,
                "equipos" => $equipos,
+            );
+         }
+      }
+
+      // OBTIENE LOS HOTELES
+      $array['hoteles'] = array();
+      $query = "SELECT id, hotel FROM t_sabanas_hoteles
+      WHERE activo = 1 $filtroDestino";
+      if ($result = mysqli_query($conn_2020, $query)) {
+         foreach ($result as $x) {
+            $idHotel = $x['id'];
+            $hotel = $x['hotel'];
+
+            $array['hoteles'][] = array(
+               "idHotel" => $idHotel,
+               "hotel" => $hotel,
             );
          }
       }
