@@ -38,6 +38,7 @@ if ($peticion === "POST") {
       else
          $filtroDestino = "and id_destino = $idDestino";
 
+      $array['averias'] = array();
       $query = "SELECT id_publico, averia FROM t_gift_averias WHERE activo = 1 $filtroDestino";
       if ($result = mysqli_query($conn_2020, $query)) {
          foreach ($result as $x) {
@@ -51,19 +52,9 @@ if ($peticion === "POST") {
          }
       }
 
-      $query = "SELECT id_publico, solucion FROM t_gift_soluciones WHERE activo = 1 $filtroDestino";
-      if ($result = mysqli_query($conn_2020, $query)) {
-         foreach ($result as $x) {
-            $idSolucion = $x['id_publico'];
-            $solucion = $x['solucion'];
+      $array['soluciones'] = array();
 
-            $array['soluciones'][] = array(
-               "idSolucion" => $idSolucion,
-               "solucion" => $solucion,
-            );
-         }
-      }
-
+      $array['tecnicos'] = array();
       $query = "SELECT id_publico, tecnico FROM t_gift_tecnicos WHERE activo = 1 $filtroDestino";
       if ($result = mysqli_query($conn_2020, $query)) {
          foreach ($result as $x) {
@@ -113,6 +104,26 @@ if ($peticion === "POST") {
       }
    }
 
+
+   if ($action === "obtenerSoluciones") {
+      $idAveria = $_POST['idAveria'];
+      $array['response'] = "SUCCESS";
+
+      $query = "SELECT id_publico, solucion FROM t_gift_soluciones
+      WHERE id_averia = '$idAveria' and activo = 1";
+      if ($result = mysqli_query($conn_2020, $query)) {
+         foreach ($result as $x) {
+            $idSolucion = $x['id_publico'];
+            $solucion = $x['solucion'];
+
+            $array['data'][] = array(
+               "idSolucion" => $idSolucion,
+               "solucion" => $solucion,
+            );
+         }
+      }
+   }
+
    if ($action === "graficas") {
       $array['response'] = "SUCCESS";
       $fechaInicial = $_POST['fechaInicial'];
@@ -136,7 +147,7 @@ if ($peticion === "POST") {
             FROM t_gift AS g
             INNER JOIN t_gift_soluciones AS s ON g.id_solucion = s.id_publico
             WHERE g.id_averia = '$idAveria' and g.activo = 1 and
-            fecha_captura BETWEEN '$fechaInicial' and '$fechaFinal'";
+            fecha_captura BETWEEN '$fechaInicial 00:00:01' and '$fechaFinal 23:59:59'";
             if ($result = mysqli_query($conn_2020, $query)) {
                foreach ($result as $x) {
                   $idRegistro = $x['idRegistro'];
@@ -173,7 +184,7 @@ if ($peticion === "POST") {
 
             $query = "SELECT count(id_privado) 'total' FROM t_gift
             WHERE id_solucion = '1kswdwcd41kswdwcd5' and id_tecnico = '$idTecnico' and activo = 1
-            and fecha_captura BETWEEN '$fechaInicial 00:00:01' and '$fechaFinal 23:59:59'";
+            and fecha_captura BETWEEN '$fechaInicial 00:00:00' and '$fechaFinal 23:59:59'";
             if ($result = mysqli_query($conn_2020, $query)) {
                foreach ($result as $x) {
                   $total = $x['total'];
