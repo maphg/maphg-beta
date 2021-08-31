@@ -448,6 +448,7 @@ if ($peticion === "POST") {
             WHERE activo = 1 $filtroDestino";
             if ($result = mysqli_query($conn_2020, $query)) {
                foreach ($result as $x) {
+                  $totalRegistros = 0;
                   $idEquipo = $x['idEquipo'];
                   $equipo = $x['equipo'];
 
