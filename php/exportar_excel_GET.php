@@ -823,13 +823,6 @@ if (isset($_GET['action'])) {
                     $fechaFin = $fechaCreacion;
                 }
 
-                #Justifiacion
-                if ($justificacion != "") {
-                    $justificacion = "SI";
-                } else {
-                    $justificacion = "NO";
-                }
-
                 #Status de Proyecto
                 if ($status == "N" or $status == "PENDIENTE") {
                     $status = "PENDIENTE";
