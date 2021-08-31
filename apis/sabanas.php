@@ -441,7 +441,6 @@ if ($peticion === "POST") {
             $idHotel = $x['idHotel'];
             $hotel = $x['hotel'];
 
-            $totalRegistros = 0;
             $equipos = array();
             $query = "SELECT id_equipo 'idEquipo', equipo
             FROM t_sabanas_equipos
@@ -481,34 +480,41 @@ if ($peticion === "POST") {
                            "semana" => $semana,
                            "fecha" => $fecha,
                            "creadoPor" => $creadoPor,
+                           "totalRegistros" => $totalRegistros,
                         );
                      }
                   }
 
-                  $equipos[] = array(
-                     "idEquipo" => $idEquipo,
-                     "equipo" => $equipo,
-                     "registros" => $registros,
-                  );
+                  if ($visualizar == 0)
+                     $equipos[] = array(
+                        "idEquipo" => $idEquipo,
+                        "equipo" => $equipo,
+                        "registros" => $registros,
+                     );
+
+                  if ($visualizar == 1)
+                     if ($totalRegistros > 0)
+                        $equipos[] = array(
+                           "idEquipo" => $idEquipo,
+                           "equipo" => $equipo,
+                           "registros" => $registros,
+                        );
                }
             }
 
             // SOLO CON DATOS
-            if ($visualizar == 1)
-               if ($totalRegistros > 0)
-                  $array['data'][] = array(
-                     "idHotel" => $idHotel,
-                     "hotel" => $hotel,
-                     "equipos" => $equipos,
-                  );
+            $array['data'][] = array(
+               "idHotel" => $idHotel,
+               "hotel" => $hotel,
+               "equipos" => $equipos,
+            );
 
             // INCLUYE DATOS VACIOS
-            if ($visualizar == 0)
-               $array['data'][] = array(
-                  "idHotel" => $idHotel,
-                  "hotel" => $hotel,
-                  "equipos" => $equipos,
-               );
+            $array['data'][] = array(
+               "idHotel" => $idHotel,
+               "hotel" => $hotel,
+               "equipos" => $equipos,
+            );
          }
       }
 
