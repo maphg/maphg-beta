@@ -463,6 +463,18 @@ if ($peticion === "POST") {
                         $fecha = $x['fecha_creado'];
                         $idUsuarioX = $x['creado_por'];
                         $totalRegistros++;
+                        $color = 1;
+
+                        $query = "SELECT valor FROM t_sabanas_registros_capturas
+                        WHERE id_registro = '$idRegistro' and activo = 1";
+                        if ($result = mysqli_query($conn_2020, $query)) {
+                           foreach ($result as $x) {
+                              $valor = $x['valor'];
+
+                              if ($valor == "N/A" && $color = 1)
+                                 $color = 2;
+                           }
+                        }
 
                         $creadoPor = "";
                         $query = "SELECT u.id, c.nombre, c.apellido
@@ -481,6 +493,7 @@ if ($peticion === "POST") {
                            "fecha" => $fecha,
                            "creadoPor" => $creadoPor,
                            "totalRegistros" => $totalRegistros,
+                           "color" => $color,
                         );
                      }
                   }
