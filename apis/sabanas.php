@@ -501,15 +501,7 @@ if ($peticion === "POST") {
                         );
                }
             }
-
-            // SOLO CON DATOS
-            $array['data'][] = array(
-               "idHotel" => $idHotel,
-               "hotel" => $hotel,
-               "equipos" => $equipos,
-            );
-
-            // INCLUYE DATOS VACIOS
+            // INCLUYE DATOS
             $array['data'][] = array(
                "idHotel" => $idHotel,
                "hotel" => $hotel,
