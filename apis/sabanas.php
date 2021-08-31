@@ -444,7 +444,7 @@ if ($peticion === "POST") {
             $equipos = array();
             $query = "SELECT id_equipo 'idEquipo', equipo
             FROM t_sabanas_equipos
-            WHERE activo = 1 $filtroDestino";
+            WHERE id_hotel = '$idHotel' and activo = 1 $filtroDestino";
             if ($result = mysqli_query($conn_2020, $query)) {
                foreach ($result as $x) {
                   $totalRegistros = 0;
