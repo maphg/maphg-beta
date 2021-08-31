@@ -422,7 +422,7 @@ if ($peticion === "POST") {
          $filtroDestinoHotel = "";
          $filtroDestinoEquipo = "";
       } else {
-         $filtroDestino = "id_destino = $idDestino";
+         $filtroDestino = "and id_destino = $idDestino";
          $filtroDestinoHotel = "and h.id_destino = $idDestino";
          $filtroDestinoEquipo = "and e.id_destino = $idDestino";
       }
