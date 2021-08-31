@@ -652,7 +652,7 @@ if ($peticion === "POST") {
                               "tieneComentario" => $tieneComentario,
                               "comentario" => $comentario,
                               "tieneFoto" => $tieneFoto,
-                              "foto" => $foto,
+                              "foto" => $rutaAbsoluta . "/sabanas/fotos/" . $foto,
                               "valor" => $valor,
                            );
                         }
