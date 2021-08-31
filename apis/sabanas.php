@@ -471,7 +471,7 @@ if ($peticion === "POST") {
                            foreach ($result as $x) {
                               $valor = $x['valor'];
 
-                              if ($valor == "N/A" && $color = 1)
+                              if ($valor == "N/A" || $valor == "NO")
                                  $color = 2;
                            }
                         }
