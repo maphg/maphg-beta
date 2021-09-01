@@ -200,6 +200,165 @@ if ($peticion === "POST") {
          }
       }
    }
+
+   if ($action === "tecnicos") {
+      $array['response'] = "SUCCESS";
+
+      if ($idDestino == 10)
+         $filtroDestino = "";
+      else
+         $filtroDestino = "and id_destino = $idDestino";
+
+      #TECNICOS
+      $array['tecnicos'] = array();
+      $query = "SELECT id_publico, tecnico
+      FROM t_gift_tecnicos
+      WHERE activo = 1 $filtroDestino";
+      if ($result = mysqli_query($conn_2020, $query)) {
+         foreach ($result as $x) {
+            $idTecnico = $x['id_publico'];
+            $tecnico = $x['tecnico'];
+
+            $array['tecnicos'][] = array(
+               "idTecnico" => $idTecnico,
+               "tecnico" => $tecnico,
+               "select" => false,
+               "edit" => false,
+            );
+         }
+      }
+   }
+
+   if ($action === "crearTecnico") {
+      $idTecnico = $_POST["idTecnico"];
+      $tecnico = $_POST["tecnico"];
+
+      $query = "INSERT INTO t_gift_tecnicos(id_publico, id_destino, creado_por, tecnico, fecha_creado, activo)
+      VALUES('$idTecnico', $idDestino, $idUsuario, '$tecnico', '$fechaActual', 1)";
+      if ($result = mysqli_query($conn_2020, $query)) {
+         $array['response'] = "SUCCESS";
+      }
+   }
+
+   if ($action === "actualizarTecnico") {
+      $idTecnico = $_POST['idTecnico'];
+      $tecnico = $_POST['tecnico'];
+      $activo = $_POST['activo'];
+
+      $query = "UPDATE t_gift_tecnicos SET tecnico = '$tecnico', activo = '$activo'
+      WHERE id_publico = '$idTecnico'";
+      if ($result = mysqli_query($conn_2020, $query)) {
+         $array['response'] = "SUCCESS";
+      }
+   }
+
+   if ($action === "averias") {
+      $array['response'] = "SUCCESS";
+
+      if ($idDestino == 10)
+         $filtroDestino = "";
+      else
+         $filtroDestino = "and id_destino = $idDestino";
+
+      #AVERIAS
+      $array['averias'] = array();
+      $query = "SELECT id_publico, averia
+      FROM t_gift_averias
+      WHERE activo = 1 $filtroDestino";
+      if ($result = mysqli_query($conn_2020, $query)) {
+         foreach ($result as $x) {
+            $idAveria = $x['id_publico'];
+            $averia = $x['averia'];
+
+            $array['averias'][] = array(
+               "idAveria" => $idAveria,
+               "averia" => $averia,
+               "select" => false,
+               "edit" => false,
+            );
+         }
+      }
+   }
+
+   if ($action === "crearAveria") {
+      $idAveria = $_POST["idAveria"];
+      $averia = $_POST["averia"];
+
+      $query = "INSERT INTO t_gift_averias(id_publico, id_destino, creado_por, averia, fecha_creado, activo)
+      VALUES('$idAveria', $idDestino, $idUsuario, '$averia', '$fechaActual', 1)";
+      if ($result = mysqli_query($conn_2020, $query)) {
+         $array['response'] = "SUCCESS";
+      }
+   }
+
+   if ($action === "actualizarAveria") {
+      $idAveria = $_POST['idAveria'];
+      $averia = $_POST['averia'];
+      $activo = $_POST['activo'];
+
+      $query = "UPDATE t_gift_averias SET averia = '$averia', activo = '$activo'
+      WHERE id_publico = '$idAveria'";
+      if ($result = mysqli_query($conn_2020, $query)) {
+         $array['response'] = "SUCCESS";
+      }
+   }
+
+   if ($action === "soluciones") {
+      $array['response'] = "SUCCESS";
+
+      $idAveria = $_POST['idAveria'];
+
+      if ($idDestino == 10)
+         $filtroDestino = "";
+      else
+         $filtroDestino = "and id_destino = $idDestino";
+
+      #SOLUCIONES
+      $array['soluciones'] = array();
+      $query = "SELECT id_publico, solucion, id_averia
+      FROM t_gift_soluciones
+      WHERE id_averia = '$idAveria' and activo = 1 $filtroDestino";
+      if ($result = mysqli_query($conn_2020, $query)) {
+         foreach ($result as $x) {
+            $idSolucion = $x['id_publico'];
+            $idAveria = $x['id_averia'];
+            $solucion = $x['solucion'];
+
+            $array['soluciones'][] = array(
+               "idSolucion" => $idSolucion,
+               "idAveria" => $idAveria,
+               "solucion" => $solucion,
+               "select" => false,
+               "edit" => false,
+            );
+         }
+      }
+   }
+
+   if ($action === "crearSolucion") {
+      $idSolucion = $_POST["idSolucion"];
+      $idAveria = $_POST["idAveria"];
+      $solucion = $_POST["solucion"];
+
+      $query = "INSERT INTO t_gift_soluciones(id_publico, id_averia, id_destino, creado_por,
+      solucion, fecha_creado, activo)
+      VALUES('$idSolucion', '$idAveria', $idDestino, $idUsuario, '$solucion', '$fechaActual', 1)";
+      if ($result = mysqli_query($conn_2020, $query)) {
+         $array['response'] = "SUCCESS";
+      }
+   }
+
+   if ($action === "actualizarSolucion") {
+      $idSolucion = $_POST['idSolucion'];
+      $solucion = $_POST['solucion'];
+      $activo = $_POST['activo'];
+
+      $query = "UPDATE t_gift_soluciones SET solucion = '$solucion', activo = '$activo'
+      WHERE id_publico = '$idSolucion'";
+      if ($result = mysqli_query($conn_2020, $query)) {
+         $array['response'] = "SUCCESS";
+      }
+   }
 }
 
 
