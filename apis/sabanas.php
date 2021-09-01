@@ -570,11 +570,12 @@ if ($peticion === "POST") {
       $idRegistro = $_POST['idRegistro'];
 
       $query = "SELECT s.id_publico, s.sabana, c.nombre, c.apellido,
-      r.fecha_creado, r.ids_apartados, r.ids_actividades
+      r.fecha_creado, r.ids_apartados, r.ids_actividades, e.equipo
       FROM t_sabanas_registros AS r
       INNER JOIN t_sabanas AS s ON r.id_sabana = s.id_publico
       INNER JOIN t_users AS u ON r.creado_por = u.id
       INNER JOIN t_colaboradores AS c ON u.id_colaborador = c.id
+      INNER JOIN t_sabanas_equipos AS e ON r.id_equipo = e.id_equipo
       WHERE r.id_publico = '$idRegistro'";
       if ($result = mysqli_query($conn_2020, $query)) {
          foreach ($result as $x) {
@@ -582,6 +583,7 @@ if ($peticion === "POST") {
             $sabana = $x['sabana'];
             $creadoPor = $x['nombre'] . " " . $x['apellido'];
             $fechaCreado = $x['fecha_creado'];
+            $equipo = $x['equipo'];
 
             #APARTADOS
             $idsApartados = str_replace($caracteres, "", $x['ids_apartados']);
@@ -669,6 +671,7 @@ if ($peticion === "POST") {
 
             $array['data'][] = array(
                "idSabana" => $idSabana,
+               "equipo" => $equipo,
                "sabana" => $sabana,
                "creadoPor" => $creadoPor,
                "fechaCreado" => $fechaCreado,
