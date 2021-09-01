@@ -3596,7 +3596,7 @@
                 <div class="inline-block relative w-64">
                     <select id="tipoProyecto" class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
                         <option>CAPIN</option>
-                        <option>CAPEX</option>
+                        <option>FF&E</option>
                         <option>PROYECTO</option>
                     </select>
                     <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
@@ -3750,7 +3750,7 @@
                         <div class="relative">
                             <select id="tipoProyectoN" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" id="grid-state">
                                 <option value="">Seleccione</option>
-                                <option value="CAPEX">CAPEX</option>
+                                <option value="CAPEX">FF&E</option>
                                 <option value="CAPIN">CAPIN</option>
                                 <option value="PROYECTO">PROYECTO</option>
                             </select>
