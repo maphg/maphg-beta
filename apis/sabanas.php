@@ -49,13 +49,14 @@ function obtenerSabana($idSabana)
 
 
             $arrayApartados = array();
-            $query = "SELECT id_publico, apartado
+            $query = "SELECT id_publico, apartado, opciones
             FROM t_sabanas_apartados
             WHERE id_sabana = '$idSabana' and activo = 1";
             if ($result = mysqli_query($GLOBALS['conn_2020'], $query)) {
                foreach ($result as $x) {
                   $idApartado = $x['id_publico'];
                   $apartado = $x['apartado'];
+                  $opciones = $x['opciones'];
 
                   $arrayActividades = array();
                   $query = "SELECT id_publico, actividad
@@ -83,6 +84,7 @@ function obtenerSabana($idSabana)
                      "apartado" => $apartado,
                      "sabana" => $sabana,
                      "actividades" => $arrayActividades,
+                     "opciones" => $opciones,
                      "select" => false,
                      "edit" => false,
                   );
@@ -200,10 +202,11 @@ if ($peticion === "POST") {
    if ($action === "actualizarApartado") {
       $idApartado = $_POST['idApartado'];
       $apartado = $_POST['apartado'];
+      $opciones = $_POST['opciones'];
       $activo = $_POST['activo'];
 
       $query = "UPDATE t_sabanas_apartados
-      SET apartado = '$apartado', activo = $activo
+      SET apartado = '$apartado', opciones = '$opciones', activo = $activo
       WHERE id_publico = '$idApartado' and activo = 1";
       if ($result = mysqli_query($conn_2020, $query)) {
          $array['response'] = 'SUCCESS';
@@ -363,6 +366,7 @@ if ($peticion === "POST") {
          if ($result = mysqli_query($conn_2020, $query)) {
             $array['response'] = 'SUCCESS';
             $array['accion'] = "ACTUALIZADO";
+            $array['data'] = $valor;
          }
       }
 
@@ -373,6 +377,7 @@ if ($peticion === "POST") {
          if ($result = mysqli_query($conn_2020, $query)) {
             $array['response'] = 'SUCCESS';
             $array['accion'] = "CAPTURADO";
+            $array['data'] = $valor;
          }
       }
    }
@@ -448,6 +453,7 @@ if ($peticion === "POST") {
             if ($result = mysqli_query($conn_2020, $query)) {
                foreach ($result as $x) {
                   $totalRegistros = 0;
+
                   $idEquipo = $x['idEquipo'];
                   $equipo = $x['equipo'];
 
@@ -463,13 +469,19 @@ if ($peticion === "POST") {
                         $fecha = $x['fecha_creado'];
                         $idUsuarioX = $x['creado_por'];
                         $totalRegistros++;
+                        $reportadoRegistro = 0;
                         $color = 1;
 
-                        $query = "SELECT valor FROM t_sabanas_registros_capturas
+                        $query = "SELECT valor, reportado FROM t_sabanas_registros_capturas
                         WHERE id_registro = '$idRegistro' and activo = 1";
                         if ($result = mysqli_query($conn_2020, $query)) {
                            foreach ($result as $x) {
                               $valor = $x['valor'];
+                              $reportado = $x['reportado'];
+
+                              if ($reportado === "SI")
+                                 $reportadoRegistro = 1;
+
 
                               if ($valor == "NO")
                                  $color = 2;
@@ -494,6 +506,7 @@ if ($peticion === "POST") {
                            "creadoPor" => $creadoPor,
                            "totalRegistros" => $totalRegistros,
                            "color" => $color,
+                           "reportado" => $reportadoRegistro
                         );
                      }
                   }
@@ -622,7 +635,8 @@ if ($peticion === "POST") {
                            $tieneFoto = "NO";
                            $foto = "";
                            $valor = "0";
-                           $query = "SELECT id_publico, valor, comentario, url_adjunto
+                           $reportado = "NO";
+                           $query = "SELECT id_publico, valor, comentario, url_adjunto, reportado
                            FROM t_sabanas_registros_capturas
                            WHERE id_registro = '$idRegistro' and id_actividad = '$idActividad'";
                            if ($result = mysqli_query($conn_2020, $query)) {
@@ -631,6 +645,7 @@ if ($peticion === "POST") {
                                  $valor = $x['valor'];
                                  $comentario = $x['comentario'];
                                  $foto = $x['url_adjunto'];
+                                 $reportado = $x['reportado'];
 
                                  if ($comentario != "")
                                     $tieneComentario = "SI";
@@ -656,6 +671,7 @@ if ($peticion === "POST") {
                               "tieneFoto" => $tieneFoto,
                               "foto" => $rutaAbsoluta . "/sabanas/fotos/" . $foto,
                               "valor" => $valor,
+                              "reportado" => $reportado,
                            );
                         }
                      }
@@ -679,6 +695,23 @@ if ($peticion === "POST") {
                "apartados" => $arrayApartados,
             );
          }
+      }
+   }
+
+   if ($action === "reportado") {
+      $idCaptura = $_POST['idCaptura'];
+      $reportado = $_POST['reportado'];
+
+      if ($reportado === "SI")
+         $reportado = "NO";
+      else
+         $reportado = "SI";
+
+      $query = "UPDATE t_sabanas_registros_capturas SET reportado = '$reportado'
+      WHERE id_publico = '$idCaptura'";
+      if ($result = mysqli_query($conn_2020, $query)) {
+         $array['response'] = "SUCCESS";
+         $array['data'] = $reportado;
       }
    }
 }
