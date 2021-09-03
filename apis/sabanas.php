@@ -419,7 +419,7 @@ if ($peticion === "POST") {
       $fechaFinal = $_POST["fechaFinal"];
       $idSabana = $_POST["idSabana"];
       $idHotel = $_POST["idHotel"];
-      $idVilla = $_POST["idVilla"];
+      $villa = $_POST["villa"];
       $visualizar = $_POST["visualizar"]; // 0 = Todos, 1 = Con Registros.
 
       if ($idDestino == 10) {
@@ -437,6 +437,11 @@ if ($peticion === "POST") {
       else
          $filtroSabana = "and id_sabana = '$idSabana'";
 
+      if ($villa == "TODOS")
+         $filtroVilla = "";
+      else
+         $filtroVilla = "and villa_edificio = '$villa'";
+
       // SABANAS
       $query = "SELECT id 'idHotel', hotel
       FROM t_sabanas_hoteles
@@ -449,7 +454,7 @@ if ($peticion === "POST") {
             $equipos = array();
             $query = "SELECT id_equipo 'idEquipo', equipo
             FROM t_sabanas_equipos
-            WHERE id_hotel = '$idHotel' and activo = 1 $filtroDestino";
+            WHERE id_hotel = '$idHotel' and activo = 1 $filtroDestino $filtroVilla";
             if ($result = mysqli_query($conn_2020, $query)) {
                foreach ($result as $x) {
                   $totalRegistros = 0;
@@ -577,6 +582,30 @@ if ($peticion === "POST") {
          }
       }
    }
+
+
+   // OBTIENE LAS SABANAS PARA FILTRO
+   if ($action === "obtenerVillas") {
+      $array['response'] = "SUCCESS";
+      $idHotel = $_POST["idHotel"];
+
+      if ($idDestino == 10)
+         $filtroDestino = "";
+      else
+         $filtroDestino = "and id_destino = $idDestino";
+      $query = "SELECT villa_edificio FROM t_sabanas_equipos
+      WHERE activo = 1 and id_hotel = '$idHotel' and villa_edificio != ''
+      $filtroDestino ORDER BY villa_edificio ASC";
+      if ($result = mysqli_query($conn_2020, $query)) {
+         foreach ($result as $x) {
+            $villa = $x['villa_edificio'];
+
+            $array['data'][] = $villa;
+         }
+      }
+   }
+
+
 
    if ($action === "detallesActividad") {
       $array['response'] = "SUCCESS";
