@@ -583,7 +583,6 @@ if ($peticion === "POST") {
       }
    }
 
-
    // OBTIENE LAS SABANAS PARA FILTRO
    if ($action === "obtenerVillas") {
       $array['response'] = "SUCCESS";
@@ -604,8 +603,6 @@ if ($peticion === "POST") {
          }
       }
    }
-
-
 
    if ($action === "detallesActividad") {
       $array['response'] = "SUCCESS";
