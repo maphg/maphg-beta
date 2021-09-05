@@ -104,7 +104,6 @@ if ($peticion === "POST") {
       }
    }
 
-
    if ($action === "obtenerSoluciones") {
       $idAveria = $_POST['idAveria'];
       $array['response'] = "SUCCESS";
