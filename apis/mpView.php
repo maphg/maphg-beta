@@ -38,7 +38,7 @@ if ($peticion === "POST") {
       $array['subsecciones'] = array();
       $array['tipos'] = array();
       $array['estados'] = ['PROCESO', 'SOLUCIONADO', 'PLANIFICADO'];
-      $array['frecuncias'] = array();
+      $array['frecuencias'] = array();
       $array['años'] = array();
       $array['semanas'] = array();
 
@@ -125,7 +125,7 @@ if ($peticion === "POST") {
             $idFrecuencia = $x['id'];
             $frecuencia = $x['frecuencia'];
 
-            $array['frecuncias'][] = array(
+            $array['frecuencias'][] = array(
                "idFrecuencia" => $idFrecuencia,
                "frecuencia" => $frecuencia,
             );
@@ -313,6 +313,7 @@ if ($peticion === "POST") {
       $semanaFinal = $_POST['semanaFinal'];
       $estado = $_POST['status'];
       $idFrecuencia = $_POST['idFrecuencia'];
+      $vista = $_POST['vista'];
 
       #FILTRO DESTINO
       if ($idDestino == 10) {
@@ -377,6 +378,7 @@ if ($peticion === "POST") {
                   $idPlan = $x["id_plan"];
                   $frecuencia = $x['frecuencia'];
                   $semanas = array();
+                  $totalConActividad = 0;
 
                   for ($i = $semanaInicial; $i <= $semanaFinal; $i++) {
                      $semanaX = $x["semana_$i"];
@@ -405,6 +407,9 @@ if ($peticion === "POST") {
                         $totalPlaneaciones++;
                         $totalPlaneacionesGlobal++;
 
+                        if ($status === "PLANIFICADO" || $status === "PROCESO" || $status === "SOLUCIONADO")
+                           $totalConActividad++;
+
                         $semanas[$i] = array(
                            "idOT" => $idOT,
                            "status" => $status,
@@ -413,12 +418,16 @@ if ($peticion === "POST") {
                            "idPlan" => $idPlan,
                            "semana" => $i,
                         );
-                     }
-
-                     #FILTRO STATUS ESPECIFICO
-                     if ($estado === $status) {
+                     } else {
+                        #FILTRO STATUS ESPECIFICO
                         $totalPlaneaciones++;
                         $totalPlaneacionesGlobal++;
+
+                        if ($status === $estado) {
+                           $status = $estado;
+                           $totalConActividad++;
+                        } else
+                           $status = "NINGUNO";
 
                         $semanas[$i] = array(
                            "idOT" => $idOT,
@@ -431,12 +440,25 @@ if ($peticion === "POST") {
                      }
                   }
 
-                  $planeaciones[] = array(
-                     "idSemana" => $idSemana,
-                     "idPlan" => $idPlan,
-                     "frecuencia" => $frecuencia,
-                     "semanas" => $semanas,
-                  );
+                  #VISTA CON PLANES PLANIFICADOS
+                  if ($vista == 1 && $totalConActividad > 0) {
+                     $planeaciones[] = array(
+                        "idSemana" => $idSemana,
+                        "idPlan" => $idPlan,
+                        "frecuencia" => $frecuencia,
+                        "semanas" => $semanas,
+                     );
+                  }
+
+                  // VISTA TODOS
+                  if ($vista == 0) {
+                     $planeaciones[] = array(
+                        "idSemana" => $idSemana,
+                        "idPlan" => $idPlan,
+                        "frecuencia" => $frecuencia,
+                        "semanas" => $semanas,
+                     );
+                  }
                }
             }
 
