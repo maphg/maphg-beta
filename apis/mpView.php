@@ -300,6 +300,170 @@ if ($peticion === "POST") {
          "equipos" => $equipos,
       );
    }
+
+   if ($action === "gantt") {
+      $array['response'] = "SUCCESS";
+
+      $semana = $_POST['semana'];
+      $idSeccion = $_POST['idSeccion'];
+      $idSubseccion = $_POST['idSubseccion'];
+      $idTipo = $_POST['idTipo'];
+      $año = $_POST['año'];
+      $semanaInicial = $_POST['semanaInicial'];
+      $semanaFinal = $_POST['semanaFinal'];
+      $estado = $_POST['status'];
+      $idFrecuencia = $_POST['idFrecuencia'];
+
+      #FILTRO DESTINO
+      if ($idDestino == 10) {
+         $filtroDestino = "";
+         $filtroDestinoEquipo = "";
+      } else {
+         $filtroDestino = "and id_destino = $idDestino";
+         $filtroDestinoEquipo = "and e.id_destino = $idDestino";
+      }
+
+      #FILTRO SUBSECCIÓN
+      if ($idSubseccion == 0)
+         $filtroSubseccion = "";
+      else
+         $filtroSubseccion = "and e.id_subseccion = $idSubseccion";
+
+      #FILTRO TIPO EQUIPO
+      if ($idTipo == 0)
+         $filtroTipoEquipo = "";
+      else
+         $filtroTipoEquipo = "and id_tipo = $idTipo";
+
+      #FILTRO FRECUENCIA PLAN
+      if ($idFrecuencia == 0)
+         $filtroFrecuencia = "";
+      else
+         $filtroFrecuencia = "and frecuencia.id = $idFrecuencia";
+
+
+      #QUERY
+      $equipos = array();
+      $totalPlaneacionesGlobal = 0;
+      $totalEquipos = 0;
+
+      $query = "SELECT e.id 'idEquipo', e.equipo, e.status, seccion.seccion,
+      subseccion.grupo 'subseccion', tipo.tipo
+      FROM t_equipos_america AS e
+      INNER JOIN c_secciones AS seccion ON e.id_seccion = seccion.id
+      INNER JOIN c_subsecciones AS subseccion ON e.id_subseccion = subseccion.id
+      INNER JOIN c_tipos AS tipo ON e.id_tipo = tipo.id
+      WHERE e.id_seccion = $idSeccion and e.activo = 1 and e.status IN('OPERATIVO')
+      $filtroDestinoEquipo $filtroSubseccion $filtroTipoEquipo";
+      if ($result = mysqli_query($conn_2020, $query)) {
+         foreach ($result as $x) {
+            $idEquipo = $x['idEquipo'];
+            $equipo = $x['equipo'];
+            $status = $x['status'];
+            $seccion = $x['seccion'];
+            $subseccion = $x['subseccion'];
+            $tipo = $x['tipo'];
+            $totalPlaneaciones = 0;
+
+            $planeaciones = array();
+            $query = "SELECT plan.*, frecuencia.frecuencia
+            FROM t_mp_planeacion_semana AS plan
+            INNER JOIN t_mp_planes_mantenimiento AS planes ON plan.id_plan = planes.id
+            INNER JOIN c_frecuencias_mp AS frecuencia ON planes.id_periodicidad = frecuencia.id
+            WHERE plan.id_equipo = $idEquipo and plan.activo = 1 $filtroFrecuencia";
+            if ($result = mysqli_query($conn_2020, $query)) {
+               foreach ($result as $x) {
+                  $idSemana = $x['id'];
+                  $idPlan = $x["id_plan"];
+                  $frecuencia = $x['frecuencia'];
+                  $semanas = array();
+
+                  for ($i = $semanaInicial; $i <= $semanaFinal; $i++) {
+                     $semanaX = $x["semana_$i"];
+
+                     $status = "NINGUNO";
+                     if ($semanaX === "PLANIFICADO")
+                        $status = "PLANIFICADO";
+
+                     #PLANEACION EN INICIADA
+                     $idOT = 0;
+                     $query = "SELECT mp.id, mp.status, mp.id_plan
+                     FROM t_mp_planificacion_iniciada AS mp
+                     WHERE mp.id_equipo = $idEquipo and mp.semana = $i and mp.año = '$año' and
+                     mp.status IN('PROCESO', 'SOLUCIONADO') and mp.id_plan = $idPlan and mp.activo = 1";
+                     $array['message'] = $query;
+                     if ($result = mysqli_query($conn_2020, $query)) {
+                        foreach ($result as $y) {
+                           $idOT = $y['id'];
+                           $status = $y['status'];
+                           $idPlan = $y['id_plan'];
+                        }
+                     }
+
+                     #FILTRO TODOS LOS STATUS
+                     if ($estado === "TODOS") {
+                        $totalPlaneaciones++;
+                        $totalPlaneacionesGlobal++;
+
+                        $semanas[$i] = array(
+                           "idOT" => $idOT,
+                           "status" => $status,
+                           "frecuencia" => $frecuencia,
+                           "idEquipo" => $idEquipo,
+                           "idPlan" => $idPlan,
+                           "semana" => $i,
+                        );
+                     }
+
+                     #FILTRO STATUS ESPECIFICO
+                     if ($estado === $status) {
+                        $totalPlaneaciones++;
+                        $totalPlaneacionesGlobal++;
+
+                        $semanas[$i] = array(
+                           "idOT" => $idOT,
+                           "status" => $status,
+                           "frecuencia" => $frecuencia,
+                           "idEquipo" => $idEquipo,
+                           "idPlan" => $idPlan,
+                           "semana" => $i,
+                        );
+                     }
+                  }
+
+                  $planeaciones[] = array(
+                     "idSemana" => $idSemana,
+                     "idPlan" => $idPlan,
+                     "frecuencia" => $frecuencia,
+                     "semanas" => $semanas,
+                  );
+               }
+            }
+
+            #EQUIPOS CON PLANITIFACION
+            if (count($planeaciones)) {
+               $totalEquipos++;
+               $equipos[] = array(
+                  "idEquipo" => $idEquipo,
+                  "equipo" => $equipo,
+                  "status" => $status,
+                  "seccion" => $seccion,
+                  "subseccion" => $subseccion,
+                  "tipo" => $tipo,
+                  "totalPlaneaciones" => $totalPlaneaciones,
+                  "planeaciones" => $planeaciones,
+               );
+            }
+         }
+      }
+
+      #DATA
+      $array['data'] = array(
+         "totalEquipos" => $totalEquipos,
+         "totalPlaneaciones" => $totalPlaneacionesGlobal,
+         "equipos" => $equipos,
+      );
+   }
 }
 
 echo json_encode($array);
