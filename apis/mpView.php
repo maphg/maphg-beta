@@ -219,6 +219,17 @@ if ($peticion === "POST") {
                   $idPlan = $x["id_plan"];
                   $frecuencia = $x['frecuencia'];
 
+                  #PROCESO
+                  $idProceso = 0;
+                  $query = "SELECT id
+                     FROM t_mp_planeacion_proceso
+                     WHERE id_plan = $idPlan and id_equipo = $idEquipo and año = $año and activo = 1";
+                  if ($result = mysqli_query($conn_2020, $query)) {
+                     foreach ($result as $w) {
+                        $idProceso = $w['id'];
+                     }
+                  }
+
                   for ($i = $semanaInicial; $i < ($semanaFinal + 1); $i++) {
                      $semanaX = $x["semana_$i"];
                      $status = "";
@@ -254,7 +265,10 @@ if ($peticion === "POST") {
                            "frecuencia" => $frecuencia,
                            "idEquipo" => $idEquipo,
                            "idPlan" => $idPlan,
+                           "idSemana" => $idSemana,
                            "semana" => $i,
+                           "idProceso" => $idProceso,
+                           "año" => $año,
                         );
                      }
 
@@ -269,7 +283,10 @@ if ($peticion === "POST") {
                            "frecuencia" => $frecuencia,
                            "idEquipo" => $idEquipo,
                            "idPlan" => $idPlan,
+                           "idSemana" => $idSemana,
                            "semana" => $i,
+                           "idProceso" => $idProceso,
+                           "año" => $año,
                         );
                      }
                   }
@@ -402,6 +419,17 @@ if ($peticion === "POST") {
                         }
                      }
 
+                     #PROCESO
+                     $idProceso = 0;
+                     $query = "SELECT id
+                     FROM t_mp_planeacion_proceso
+                     WHERE id_plan = $idPlan and id_equipo = $idEquipo and año = $año and activo = 1";
+                     if ($result = mysqli_query($conn_2020, $query)) {
+                        foreach ($result as $w) {
+                           $idProceso = $w['id'];
+                        }
+                     }
+
                      #FILTRO TODOS LOS STATUS
                      if ($estado === "TODOS") {
                         $totalPlaneaciones++;
@@ -416,7 +444,10 @@ if ($peticion === "POST") {
                            "frecuencia" => $frecuencia,
                            "idEquipo" => $idEquipo,
                            "idPlan" => $idPlan,
+                           "idSemana" => $idSemana,
                            "semana" => $i,
+                           "idProceso" => $idProceso,
+                           "año" => $año,
                         );
                      } else {
                         #FILTRO STATUS ESPECIFICO
@@ -435,7 +466,10 @@ if ($peticion === "POST") {
                            "frecuencia" => $frecuencia,
                            "idEquipo" => $idEquipo,
                            "idPlan" => $idPlan,
+                           "idSemana" => $idSemana,
                            "semana" => $i,
+                           "idProceso" => $idProceso,
+                           "año" => $año,
                         );
                      }
                   }
@@ -485,6 +519,106 @@ if ($peticion === "POST") {
          "totalPlaneaciones" => $totalPlaneacionesGlobal,
          "equipos" => $equipos,
       );
+   }
+
+
+   if ($action === "programarMP") {
+      $array['response'] = "SUCCESS";
+
+      $idEquipo = $_POST['idEquipo'];
+      $idSemana = $_POST['idSemana'];
+      $idProceso = $_POST['idProceso'];
+      $semanaX = $_POST['semanaX'];
+      $accionMP = $_POST['accionMP'];
+      $numeroSemanas = $_POST['numeroSemanas'];
+      $año = $_POST['año'];
+      $idPlan = $_POST['idPlan'];
+      $resultado = 0;
+      $idOT = 0;
+      $array['idOT'] = $idOT;
+
+
+      $query = "SELECT max(id) 'id' FROM t_mp_planificacion_iniciada";
+      if ($result = mysqli_query($conn_2020, $query)) {
+         foreach ($result as $x) {
+            $idOT = $x['id'] + 1;
+         }
+      }
+
+
+      $idActividadesPreventivos = "";
+      $idActividadesTest = "";
+      $idActividadesCheck = "";
+
+      // Actividades Preventivo
+      $contador = 0;
+      $query = "SELECT id FROM t_mp_planes_actividades_preventivos
+      WHERE id_plan = $idPlan and status = 'ACTIVO' and activo = 1";
+      if ($result = mysqli_query($conn_2020, $query)) {
+         foreach ($result as $i) {
+            $contador++;
+            $id = $i['id'];
+            if ($contador > 1) {
+               $idActividadesPreventivos .= ", $id";
+            } else {
+               $idActividadesPreventivos .= "$id";
+            }
+         }
+      }
+
+      // Actividades TEST
+      $contador = 0;
+      $query = "SELECT id FROM t_mp_planes_actividades_test
+      WHERE id_plan = $idPlan and status= 'ACTIVO' and activo = 1";
+      if ($result = mysqli_query($conn_2020, $query)) {
+         foreach ($result as $i) {
+            $contador++;
+            $id = $i['id'];
+            if ($contador > 1) {
+               $idActividadesTest .= ", $id";
+            } else {
+               $idActividadesTest .= "$id";
+            }
+         }
+      }
+
+      // Actividades CHECK
+      $contador = 0;
+      $query = "SELECT id FROM t_mp_planes_actividades_checklist
+      WHERE id_plan = $idPlan and status= 'ACTIVO' and activo = 1";
+      if ($result = mysqli_query($conn_2020, $query)) {
+         foreach ($result as $i) {
+            $contador++;
+            $id = $i['id'];
+            if ($contador > 1) {
+               $idActividadesCheck .= ", $id";
+            } else {
+               $idActividadesCheck .= "$id";
+            }
+         }
+      }
+
+      $query = "SELECT id FROM t_mp_planeacion_proceso WHERE id_equipo = $idEquipo
+      and id_plan = $idPlan and año = '$año' and
+      semana_$semanaX IN ('PROCESO', 'SOLUCIONADO') and activo = 1";
+      if ($result = mysqli_query($conn_2020, $query)) {
+         if (mysqli_num_rows($result) > 0) {
+            $array['data'] = "EXISTENTE";
+         } else {
+
+            if ($idOT > 0) {
+               $query = "INSERT INTO t_mp_planificacion_iniciada(id, id_usuario, id_plan, id_equipo, semana, año, fecha_creacion, creado_por, actividades_preventivo, actividades_test, actividades_check, status, activo) VALUES($idOT, $idUsuario, $idPlan, $idEquipo, $semanaX, '$año', '$fechaActual', $idUsuario, '$idActividadesPreventivos', '$idActividadesTest', '$idActividadesCheck', 'PROCESO', 1)";
+               if ($result = mysqli_query($conn_2020, $query)) {
+                  $programarMP = "UPDATE t_mp_planeacion_proceso SET semana_$semanaX = 'PROCESO', ultima_modificacion = '$fechaActual' WHERE id_plan = $idPlan and id_equipo = $idEquipo and semana_$semanaX = '0'
+                  and activo = 1 and año = '$año'";
+                  if ($result = mysqli_query($conn_2020, $programarMP)) {
+                     $array['data'] = "PROCESO";
+                     $array['idOT'] = $idOT;
+                  }
+               }
+            }
+         }
+      }
    }
 }
 
