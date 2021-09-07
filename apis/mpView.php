@@ -190,7 +190,7 @@ if ($peticion === "POST") {
       $totalEquipos = 0;
 
       $query = "SELECT e.id 'idEquipo', e.equipo, e.status, seccion.seccion,
-      subseccion.grupo 'subseccion', tipo.tipo
+      subseccion.grupo 'subseccion', e.id_tipo, tipo.tipo
       FROM t_equipos_america AS e
       INNER JOIN c_secciones AS seccion ON e.id_seccion = seccion.id
       INNER JOIN c_subsecciones AS subseccion ON e.id_subseccion = subseccion.id
@@ -204,6 +204,7 @@ if ($peticion === "POST") {
             $status = $x['status'];
             $seccion = $x['seccion'];
             $subseccion = $x['subseccion'];
+            $idTipoEquipo = $x['id_tipo'];
             $tipo = $x['tipo'];
             $totalPlaneaciones = 0;
 
@@ -212,7 +213,8 @@ if ($peticion === "POST") {
             FROM t_mp_planeacion_semana AS plan
             INNER JOIN t_mp_planes_mantenimiento AS planes ON plan.id_plan = planes.id
             INNER JOIN c_frecuencias_mp AS frecuencia ON planes.id_periodicidad = frecuencia.id
-            WHERE plan.id_equipo = $idEquipo and plan.activo = 1 $filtroFrecuencia";
+            WHERE plan.id_equipo = $idEquipo and plan.activo = 1
+            and planes.tipo_local_equipo = $idTipoEquipo  $filtroFrecuencia";
             if ($result = mysqli_query($conn_2020, $query)) {
                foreach ($result as $x) {
                   $idSemana = $x['id'];
@@ -366,7 +368,7 @@ if ($peticion === "POST") {
       $totalEquipos = 0;
 
       $query = "SELECT e.id 'idEquipo', e.equipo, e.status, seccion.seccion,
-      subseccion.grupo 'subseccion', tipo.tipo
+      subseccion.grupo 'subseccion', e.id_tipo, tipo.tipo
       FROM t_equipos_america AS e
       INNER JOIN c_secciones AS seccion ON e.id_seccion = seccion.id
       INNER JOIN c_subsecciones AS subseccion ON e.id_subseccion = subseccion.id
@@ -382,11 +384,13 @@ if ($peticion === "POST") {
             $subseccion = $x['subseccion'];
             $tipo = $x['tipo'];
             $totalPlaneaciones = 0;
+            $idTipoEquipo = $x['id_tipo'];
 
             $planeaciones = array();
             $query = "SELECT plan.*, frecuencia.frecuencia
             FROM t_mp_planeacion_semana AS plan
             INNER JOIN t_mp_planes_mantenimiento AS planes ON plan.id_plan = planes.id
+            and planes.tipo_local_equipo = $idTipoEquipo
             INNER JOIN c_frecuencias_mp AS frecuencia ON planes.id_periodicidad = frecuencia.id
             WHERE plan.id_equipo = $idEquipo and plan.activo = 1 $filtroFrecuencia";
             if ($result = mysqli_query($conn_2020, $query)) {
