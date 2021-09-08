@@ -30,6 +30,7 @@ if ($peticion === "POST") {
    $idDestino = $_POST['idDestino'];
    $idUsuario = $_POST['idUsuario'];
 
+   #FILTROS INICIALES
    if ($action === "filtros") {
       $array['response'] = "SUCCESS";
 
@@ -143,6 +144,37 @@ if ($peticion === "POST") {
       }
    }
 
+   #FILTRO PARA TIPOS DE EQUIPOS
+   if ($action === "filtroTiposEquipos") {
+      $array['response'] = "SUCCESS";
+
+      $idSeccion = $_POST['idSeccion'];
+      $idSubseccion = $_POST['idSubseccion'];
+
+      if ($idSubseccion == 0)
+         $filtroSubseccion = "";
+      else
+         $filtroSubseccion = "and e.id_subseccion = $idSubseccion";
+
+      $query = "SELECT tipo.id, tipo.tipo
+      FROM t_equipos_america AS e
+      INNER JOIN c_tipos AS tipo ON e.id_tipo = tipo.id
+      WHERE e.id_destino = $idDestino and e.id_seccion = $idSeccion
+      and e.status IN('OPERATIVO') and e.activo = 1 $filtroSubseccion";
+      if ($result = mysqli_query($conn_2020, $query)) {
+         foreach ($result as $x) {
+            $idTipo = $x['id'];
+            $tipo = $x['tipo'];
+
+            $array['data'][] = array(
+               "idTipo" => $idTipo,
+               "tipo" => $tipo
+            );
+         }
+      }
+   }
+
+   #REGISTROS DE SEMANAS PROCESO, PENDIENTES Y PLANEADO
    if ($action == "registros") {
       $array['response'] = "SUCCESS";
 
@@ -320,6 +352,7 @@ if ($peticion === "POST") {
       );
    }
 
+   #REGISTROS BASADO EN SEMANAS PARA DIBUJAR GANTT
    if ($action === "gantt") {
       $array['response'] = "SUCCESS";
 
@@ -526,6 +559,7 @@ if ($peticion === "POST") {
    }
 
 
+   #INICIA UNA OT MP
    if ($action === "programarMP") {
       $array['response'] = "SUCCESS";
 
