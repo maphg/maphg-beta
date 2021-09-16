@@ -7,6 +7,7 @@ function verOT() {
     let idEquipo = url[2];
     let semanaX = url[3];
     let idPlan = url[4];
+    let año = url[5];
     const action = "GENERAROT";
 
     $.ajax({
@@ -20,7 +21,8 @@ function verOT() {
             idProceso: idProceso,
             idEquipo: idEquipo,
             semanaX: semanaX,
-            idPlan: idPlan
+            idPlan: idPlan,
+            año: año,
         },
         dataType: "JSON",
         success: function (data) {

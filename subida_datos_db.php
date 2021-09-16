@@ -541,8 +541,8 @@
                 document.getElementById("columna14").value = "valor_usd	";
                 document.getElementById("columna15").value = "id_seccion";
                 document.getElementById("columna16").value = "fecha_modificado";
-                document.getElementById("columna17").value = "";
-                document.getElementById("columna18").value = "";
+                document.getElementById("columna17").value = "estrategia_liberacion";
+                document.getElementById("columna18").value = "status_liberacion";
                 document.getElementById("columna19").value = "";
                 document.getElementById("columna20").value = "";
                 document.getElementById("columna21").value = "";
@@ -747,6 +747,7 @@
                 document.getElementById("columna28").value = '';
                 document.getElementById("columna29").value = '';
                 document.getElementById("columna30").value = '';
+
             } else if (tabla == "t_stock_america") {
                 document.getElementById("columna1").value = 'id_destino';
                 document.getElementById("columna2").value = 'seccion';
@@ -778,6 +779,7 @@
                 document.getElementById("columna28").value = '';
                 document.getElementById("columna29").value = '';
                 document.getElementById("columna30").value = '';
+
             } else if (tabla == "t_mp_np") {
                 document.getElementById("columna1").value = 'id';
                 document.getElementById("columna2").value = 'id_equipo';
@@ -809,6 +811,7 @@
                 document.getElementById("columna28").value = 'activo';
                 document.getElementById("columna29").value = '';
                 document.getElementById("columna30").value = '';
+
             } else if (tabla == "t_subcontratas_america_materiales") {
                 document.getElementById("columna1").value = 'id_destino';
                 document.getElementById("columna2").value = 'centro_coste';
@@ -840,6 +843,7 @@
                 document.getElementById("columna28").value = '';
                 document.getElementById("columna29").value = '';
                 document.getElementById("columna30").value = '';
+
             } else if (tabla == "t_compras_america_materiales") {
                 document.getElementById("columna1").value = 'id_destino';
                 document.getElementById("columna2").value = 'centro_coste';
@@ -871,6 +875,7 @@
                 document.getElementById("columna28").value = '';
                 document.getElementById("columna29").value = '';
                 document.getElementById("columna30").value = '';
+
             } else if (tabla == "t_stock_items") {
                 document.getElementById("columna1").value = 'id_destino';
                 document.getElementById("columna2").value = 'id_seccion';
@@ -902,6 +907,7 @@
                 document.getElementById("columna28").value = '';
                 document.getElementById("columna29").value = '';
                 document.getElementById("columna30").value = '';
+
             } else if (tabla == "t_equipos_america") {
                 document.getElementById("columna1").value = 'id_equipo_principal';
                 document.getElementById("columna2").value = 'equipo';
@@ -933,11 +939,12 @@
                 document.getElementById("columna28").value = '';
                 document.getElementById("columna29").value = '';
                 document.getElementById("columna30").value = '';
+
             } else if (tabla == "t_solicitudes_cod2bend") {
                 document.getElementById("columna1").value = 'id_destino';
                 document.getElementById("columna2").value = 'numero_2bend';
                 document.getElementById("columna3").value = 'nombre';
-                document.getElementById("columna4").value = 'nombre';
+                document.getElementById("columna4").value = 'coste';
                 document.getElementById("columna5").value = 'estado';
                 document.getElementById("columna6").value = 'fecha';
                 document.getElementById("columna7").value = 'periodo_de';
@@ -964,6 +971,7 @@
                 document.getElementById("columna28").value = '';
                 document.getElementById("columna29").value = '';
                 document.getElementById("columna30").value = '';
+                
             } else {
                 document.getElementById("columna1").value = '';
                 document.getElementById("columna2").value = '';

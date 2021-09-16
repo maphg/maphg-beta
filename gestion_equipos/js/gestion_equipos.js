@@ -909,6 +909,7 @@ function VerOTMP(idSemana, idProceso, idEquipo, semanaX, idPlan, accionMP) {
     let idUsuario = localStorage.getItem('usuario');
     let idDestino = localStorage.getItem('idDestino');
     let numeroSemanas = 0;
+    const año = (new Date()).getFullYear();
 
     const action = "programarMP";
     $.ajax({
@@ -929,7 +930,8 @@ function VerOTMP(idSemana, idProceso, idEquipo, semanaX, idPlan, accionMP) {
         // dataType: "JSON",
         success: function (data) {
             if (data == 13) {
-                localStorage.setItem('URL', `${idSemana};${idProceso};${idEquipo};${semanaX};${idPlan}`);
+                localStorage.setItem('URL',
+                    `${idSemana};${idProceso};${idEquipo};${semanaX};${idPlan};${año}`);
                 window.open('../OT/index.php', "OT", "directories=no, location=no, menubar=no, scrollbars=yes, statusbar=no, tittlebar=no, width=1200px, height=650px");
             } else {
                 alertaImg(`Semana ${semanaX}, Sin Proceso`, '', 'error', 3000);

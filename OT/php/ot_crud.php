@@ -17,7 +17,7 @@ if (isset($_POST['action'])) {
         $idPlan = $_POST['idPlan'];
         $semanaX = $_POST['semanaX'];
         $data = array();
-        $año = date('Y');
+        $año = $_POST['año'];
 
         // idActividades;
         $idActividades = 0;
