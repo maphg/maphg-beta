@@ -30,6 +30,28 @@ if ($peticion === "POST") {
    $idDestino = $_POST['idDestino'];
    $idUsuario = $_POST['idUsuario'];
 
+   if ($action === "hoteles") {
+      $array['response'] = "SUCCESS";
+
+      if ($idDestino == 10)
+         $filtroDestino = "";
+      else
+         $filtroDestino = "and id_destino = $idDestino";
+
+      $query = "SELECT id, hotel FROM c_hoteles WHERE activo = 1 $filtroDestino";
+      if ($result = mysqli_query($conn_2020, $query)) {
+         foreach ($result as $x) {
+            $idHotel = $x['id'];
+            $hotel = $x['hotel'];
+
+            $array['data'][] = array(
+               "idHotel" => $idHotel,
+               "hotel" => $hotel
+            );
+         }
+      }
+   }
+
    if ($action === "registros") {
       $array['response'] = "SUCCESS";
 
@@ -82,12 +104,13 @@ if ($peticion === "POST") {
 
    if ($action === "crearRegistro") {
       $idRegistro = $_POST['idRegistro'];
+      $idHotel = $_POST['idHotel'];
       $idGift = $_POST['idGift'];
       $idAveria = $_POST['idAveria'];
       $idSolucion = $_POST['idSolucion'];
       $idTecnico = $_POST['idTecnico'];
 
-      $query = "INSERT INTO t_gift(id_publico, id_destino, creado_por, id_gift, id_averia, id_solucion, id_tecnico, fecha_captura, activo) VALUES('$idRegistro', $idDestino, $idUsuario, '$idGift', '$idAveria', '$idSolucion', '$idTecnico', '$fechaActual', 1)";
+      $query = "INSERT INTO t_gift(id_publico, id_destino, creado_por, id_hotel, id_gift, id_averia, id_solucion, id_tecnico, fecha_captura, activo) VALUES('$idRegistro', $idDestino, $idUsuario, $idHotel, '$idGift', '$idAveria', '$idSolucion', '$idTecnico', '$fechaActual', 1)";
       if ($result = mysqli_query($conn_2020, $query)) {
          $array['response'] = "SUCCESS";
          $array['data'] = registro($idRegistro);
@@ -118,6 +141,108 @@ if ($peticion === "POST") {
             $array['data'][] = array(
                "idSolucion" => $idSolucion,
                "solucion" => $solucion,
+            );
+         }
+      }
+   }
+
+
+   if ($action === "graficas1") {
+      $array['response'] = "SUCCESS";
+      $fechaInicial = $_POST['fechaInicial'];
+      $fechaFinal = $_POST['fechaFinal'];
+
+      if ($idDestino == 10)
+         $filtroDestino = "";
+      else
+         $filtroDestino = "and h.id_destino = $idDestino";
+
+      $query = "SELECT h.id, h.hotel, d.id 'idDestino', d.destino
+      FROM c_hoteles AS h
+      INNER JOIN c_destinos AS d ON h.id_destino = d.id
+      WHERE h.activo = 1 $filtroDestino";
+      if ($result = mysqli_query($conn_2020, $query)) {
+         foreach ($result as $x) {
+            $idHotel = $x['id'];
+            $hotel = $x['hotel'];
+            $destino = $x['destino'];
+            $idDestinoX = $x['idDestino'];
+
+            $graficas = array();
+            $query = "SELECT id_publico, averia FROM t_gift_averias
+            WHERE activo = 1 and id_destino = $idDestinoX";
+            if ($result = mysqli_query($conn_2020, $query)) {
+               foreach ($result as $x) {
+                  $idAveria = $x['id_publico'];
+                  $averia = $x['averia'];
+
+                  $soluciones = array();
+                  $query = "SELECT g.id_publico 'idRegistro', g.id_gift 'idGift',
+                  s.id_publico 'idSolucion', s.solucion
+                  FROM t_gift AS g
+                  INNER JOIN t_gift_soluciones AS s ON g.id_solucion = s.id_publico
+                  WHERE g.id_averia = '$idAveria' and g.activo = 1 and id_hotel = $idHotel and
+                  fecha_captura BETWEEN '$fechaInicial 00:00:01' and '$fechaFinal 23:59:59'";
+                  if ($result = mysqli_query($conn_2020, $query)) {
+                     foreach ($result as $x) {
+                        $idRegistro = $x['idRegistro'];
+                        $idGift = $x['idGift'];
+                        $idSolucion = $x['idSolucion'];
+                        $solucion = $x['solucion'];
+
+                        $soluciones[] = array(
+                           "idRegistro" => $idRegistro,
+                           "idGift" => $idGift,
+                           "idSolucion" => $idSolucion,
+                           "solucion" => $solucion,
+                        );
+                     }
+                  }
+
+                  if (count($soluciones))
+                     $graficas[] = array(
+                        "idAveria" => $idAveria,
+                        "averia" => $averia,
+                        "soluciones" => $soluciones,
+                     );
+               }
+            }
+
+            $tecnicos = array();
+            $query = "SELECT id_publico, tecnico FROM t_gift_tecnicos
+            WHERE activo = 1 and id_destino = $idDestinoX";
+            if ($result = mysqli_query($conn_2020, $query)) {
+               foreach ($result as $x) {
+                  $idTecnico = $x['id_publico'];
+                  $tecnico = $x['tecnico'];
+                  $total = 0;
+
+                  $query = "SELECT count(id_privado) 'total' FROM t_gift
+                  WHERE id_solucion = '1kswdwcd41kswdwcd5' and id_hotel = $idHotel and
+                  id_tecnico = '$idTecnico' and activo = 1 and id_destino = $idDestinoX
+                  and fecha_captura BETWEEN '$fechaInicial 00:00:00' and '$fechaFinal 23:59:59'";
+                  if ($result = mysqli_query($conn_2020, $query)) {
+                     foreach ($result as $x) {
+                        $total = $x['total'];
+                     }
+                  }
+
+                  if ($total > 0)
+                     $tecnicos[] = array(
+                        "idTecnico" => $idTecnico,
+                        "tecnico" => $tecnico,
+                        "total" => $total,
+                     );
+               }
+            }
+
+            $array['data'][] = array(
+               "idDestino" => $idDestinoX,
+               "destino" => $destino,
+               "idHotel" => $idHotel,
+               "hotel" => $hotel,
+               "tecnicos" => $tecnicos,
+               "graficas" => $graficas
             );
          }
       }
