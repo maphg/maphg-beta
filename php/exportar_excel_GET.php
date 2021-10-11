@@ -2496,6 +2496,7 @@ if (isset($_GET['action'])) {
         $objPHPExcel->getActiveSheet()->setCellValue('N1', 'FECHA LLEGADA');
         $objPHPExcel->getActiveSheet()->setCellValue('O1', 'ORDEN COMPRA');
         $objPHPExcel->getActiveSheet()->setCellValue('P1', 'ULTIMO COMENTARIO');
+        $objPHPExcel->getActiveSheet()->setCellValue('Q1', 'FECHA DE FINALIZACIÓN');
         #CABECERAS DE EXCEL
 
         #INCIDENCIAS
@@ -2645,6 +2646,9 @@ if (isset($_GET['action'])) {
                     }
                 }
 
+                if ($fechaFinalizado != '' && $fechaFinalizado != '0000-00-00 00:00:00')
+                    $fechaFinalizado = (new DateTime($fechaFinalizado))->format('Y-m-d');
+
                 $objPHPExcel->getActiveSheet()->setCellValue('A' . $fila, $destino);
                 $objPHPExcel->getActiveSheet()->setCellValue('B' . $fila, $seccion);
                 $objPHPExcel->getActiveSheet()->setCellValue('C' . $fila, $subseccion);
@@ -2661,6 +2665,7 @@ if (isset($_GET['action'])) {
                 $objPHPExcel->getActiveSheet()->setCellValue('N' . $fila, $fechaLlegada);
                 $objPHPExcel->getActiveSheet()->setCellValue('O' . $fila, $ordenCompra);
                 $objPHPExcel->getActiveSheet()->setCellValue('P' . $fila, $ultimoComentario);
+                $objPHPExcel->getActiveSheet()->setCellValue('Q' . $fila, $fechaFinalizado);
             }
         }
 
@@ -2803,6 +2808,9 @@ if (isset($_GET['action'])) {
                     }
                 }
 
+                if ($fechaFinalizado != '' && $fechaFinalizado != '0000-00-00 00:00:00')
+                    $fechaFinalizado = (new DateTime($fechaFinalizado))->format('Y-m-d');
+
                 $objPHPExcel->getActiveSheet()->setCellValue('A' . $fila, $destino);
                 $objPHPExcel->getActiveSheet()->setCellValue('B' . $fila, $seccion);
                 $objPHPExcel->getActiveSheet()->setCellValue('C' . $fila, $subseccion);
@@ -2819,6 +2827,7 @@ if (isset($_GET['action'])) {
                 $objPHPExcel->getActiveSheet()->setCellValue('N' . $fila, $fechaLlegada);
                 $objPHPExcel->getActiveSheet()->setCellValue('O' . $fila, $ordenCompra);
                 $objPHPExcel->getActiveSheet()->setCellValue('P' . $fila, $ultimoComentario);
+                $objPHPExcel->getActiveSheet()->setCellValue('Q' . $fila, $fechaFinalizado);
             }
         }
 
@@ -2876,7 +2885,7 @@ if (isset($_GET['action'])) {
                 $destino = $x['destino'];
                 $seccion = $x['seccion'];
                 $subseccion = $x['grupo'];
-                $fecha = $x['fecha_finalizado'];
+                $fechaFinalizado = $x['fecha_finalizado'];
                 $idResponsable = $x['id_responsables'];
                 $cod2bend = $x['cod2bend'];
                 $fechaCreacion = $x['fecha_creacion'];
@@ -2949,6 +2958,9 @@ if (isset($_GET['action'])) {
                     }
                 }
 
+                if ($fechaFinalizado != '' && $fechaFinalizado != '0000-00-00 00:00:00')
+                    $fechaFinalizado = (new DateTime($fechaFinalizado))->format('Y-m-d');
+
                 $objPHPExcel->getActiveSheet()->setCellValue('A' . $fila, $destino);
                 $objPHPExcel->getActiveSheet()->setCellValue('B' . $fila, $seccion);
                 $objPHPExcel->getActiveSheet()->setCellValue('C' . $fila, $subseccion);
@@ -2965,6 +2977,7 @@ if (isset($_GET['action'])) {
                 $objPHPExcel->getActiveSheet()->setCellValue('N' . $fila, $fechaLlegada);
                 $objPHPExcel->getActiveSheet()->setCellValue('O' . $fila, $ordenCompra);
                 $objPHPExcel->getActiveSheet()->setCellValue('P' . $fila, $ultimoComentario);
+                $objPHPExcel->getActiveSheet()->setCellValue('Q' . $fila, $fechaFinalizado);
             }
         }
 
@@ -2993,6 +3006,7 @@ if (isset($_GET['action'])) {
         t_proyectos_planaccion.fecha_creacion,
         t_proyectos_planaccion.fecha_llegada,
         t_proyectos_planaccion.orden_compra,
+        t_proyectos_planaccion.fecha_realizado,
         c_destinos.destino,
         c_secciones.seccion,
         c_subsecciones.grupo
@@ -3009,7 +3023,7 @@ if (isset($_GET['action'])) {
                 $pda = $x['actividad'];
                 $proyecto = $x['titulo'];
                 $status = $x['status'];
-                $fechaProgramada = $x['rango_fecha'];
+                $fechaFinalizado = $x['fecha_realizado'];
                 $idCreadoPor = $x['creado_por'];
                 $destino = $x['destino'];
                 $seccion = $x['seccion'];
@@ -3107,6 +3121,9 @@ if (isset($_GET['action'])) {
                     }
                 }
 
+                if ($fechaFinalizado != '' && $fechaFinalizado != '0000-00-00 00:00:00')
+                    $fechaFinalizado = (new DateTime($fechaFinalizado))->format('Y-m-d');
+
                 $objPHPExcel->getActiveSheet()->setCellValue('A' . $fila, $destino);
                 $objPHPExcel->getActiveSheet()->setCellValue('B' . $fila, $seccion);
                 $objPHPExcel->getActiveSheet()->setCellValue('C' . $fila, $subseccion);
@@ -3123,6 +3140,7 @@ if (isset($_GET['action'])) {
                 $objPHPExcel->getActiveSheet()->setCellValue('N' . $fila, $fechaLlegada);
                 $objPHPExcel->getActiveSheet()->setCellValue('O' . $fila, $ordenCompra);
                 $objPHPExcel->getActiveSheet()->setCellValue('P' . $fila, $ultimoComentario);
+                $objPHPExcel->getActiveSheet()->setCellValue('Q' . $fila, $fechaFinalizado);
             }
         }
 
