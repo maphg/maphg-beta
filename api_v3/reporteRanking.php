@@ -18,6 +18,7 @@ class ReporteRanking extends Conexion
       $creadosGlobales = 0;
       $solucionadosGlobales = 0;
       $pendientesGlobales = 0;
+      $mediaHoras = 0;
 
       $secciones = seccionesSubsecciones::secciones($idDestino);
       foreach ($secciones as $x) {
@@ -59,6 +60,8 @@ class ReporteRanking extends Conexion
          );
          foreach ($incidencias as $x) {
             $status = $x['status'];
+            $fechaA = $x['fechaCreado'];
+            $fechaB = $x['fechaFinalizado'];
 
             #CREADOS
             $creados++;
@@ -70,17 +73,35 @@ class ReporteRanking extends Conexion
             ) {
                $pendientes++;
                $pendientesGlobales++;
+
+               if ($fechaA != '') {
+                  $fechaA = strtotime($fechaA);
+                  $fechaB = strtotime(date('Y-m-d H:m:s'));
+
+                  $diferencia = $fechaA - $fechaB;
+                  if ($diferencia > 0)
+                     $mediaHoras += $diferencia / 3600;
+               }
             }
 
             #SOLUCIONADOS
             if ($status == 'SOLUCIONADO') {
                $solucionados++;
                $solucionadosGlobales++;
+
+               if ($fechaA != '' && $fechaB != '') {
+                  $fechaA = strtotime($fechaA);
+                  $fechaB = strtotime($fechaB);
+
+                  $diferencia = $fechaA - $fechaB;
+                  if ($diferencia > 0)
+                     $mediaHoras += $diferencia / 3600;
+               }
             }
          }
 
          #INCIDENCIAS GENERALES
-         $incidencias = IncidenciasGenerales::totalRangoFechaStatus(
+         $incidenciasGenerales = IncidenciasGenerales::totalRangoFechaStatus(
             $idDestino,
             $idSeccionX,
             0,
@@ -89,8 +110,10 @@ class ReporteRanking extends Conexion
             'CREADO',
             'TODOS'
          );
-         foreach ($incidencias as $x) {
+         foreach ($incidenciasGenerales as $x) {
             $status = $x['status'];
+            $fechaA = $x['fechaCreado'];
+            $fechaB = $x['fechaFinalizado'];
 
             $creados++;
             $creadosGlobales++;
@@ -100,11 +123,29 @@ class ReporteRanking extends Conexion
             ) {
                $pendientes++;
                $pendientesGlobales++;
+
+               if ($fechaA != '') {
+                  $fechaA = strtotime($fechaA);
+                  $fechaB = strtotime(date('Y-m-d H:m:s'));
+
+                  $diferencia = $fechaA - $fechaB;
+                  if ($diferencia > 0)
+                     $mediaHoras += $diferencia / 3600;
+               }
             }
 
             if ($status == 'SOLUCIONADO') {
                $solucionados++;
                $solucionadosGlobales++;
+
+               if ($fechaA != '' && $fechaB != '') {
+                  $fechaA = strtotime($fechaA);
+                  $fechaB = strtotime($fechaB);
+
+                  $diferencia = $fechaA - $fechaB;
+                  if ($diferencia > 0)
+                     $mediaHoras += $diferencia / 3600;
+               }
             }
          }
 
@@ -118,10 +159,34 @@ class ReporteRanking extends Conexion
                "solucionados" => $solucionados,
                "fechaInicio" => $fechaInicio,
                "fechaFin" => $fechaFin,
+               "incidencias" => $incidencias,
+               "incidenciasGenerales" => $incidenciasGenerales,
             );
       }
 
       $array['secciones'] = $arraySecciones;
+
+      #MEDIA HORAS
+      if ($mediaHoras > 0 && $creadosGlobales > 0)
+         $mediaHoras = $mediaHoras / $creadosGlobales;
+      else
+         $mediaHoras = 0;
+
+      #RATIO
+      $habitaciones = 0;
+      $destinos = Destinos::all($idDestino);
+      foreach ($destinos as $x)
+         $habitaciones = $x['habitaciones'];
+
+      #CREADAS
+      $ratioCredas = 0;
+      if ($habitaciones > 0 && $creadosGlobales > 0)
+         $ratioCredas = $creadosGlobales / $habitaciones;
+
+      #SOLUCIONADAS
+      $ratioFinalizadas = 0;
+      if ($habitaciones > 0 && $solucionadosGlobales > 0)
+         $ratioFinalizadas = $solucionadosGlobales  / $habitaciones;
 
       #RESULTADOS GLOBALES
       $array['global'] = array(
@@ -129,6 +194,9 @@ class ReporteRanking extends Conexion
          "solucionadosGlobales" => $solucionadosGlobales,
          "pendientesGlobales" => $pendientesGlobales,
          "acumuladoGlobales" => $acumuladoGlobales,
+         "mediaHoras" => $mediaHoras,
+         "ratioCredas" => $ratioCredas,
+         "ratioFinalizadas" => $ratioFinalizadas,
       );
 
       return $array;
@@ -576,6 +644,17 @@ class ReporteRanking extends Conexion
       $creadasGlobal = 0;
       $pendientesGlobal = 0;
       $solucionadosGlobal = 0;
+      $ratio = 0;
+      $mediaHoras = 0;
+      $planificadoGlobal = MP::mpPlanificaciones(
+         $idDestino,
+         0,
+         0,
+         0,
+         "$fechaInicio 00:00:01",
+         "$fechaFin 23:59:59"
+      );
+
       $acumuladoGlobal = count(MP::totalRangoFechaStatus(
          $idDestino,
          0,
@@ -610,6 +689,8 @@ class ReporteRanking extends Conexion
 
          foreach ($preventivos as $x) {
             $status = $x['status'];
+            $fechaA = $x['fechaCreado'];
+            $fechaB = $x['fechaFinalizado'];
 
             #CREADOS
             $creadas++;
@@ -619,33 +700,87 @@ class ReporteRanking extends Conexion
             if ($status === 'PENDIENTE') {
                $pendientes++;
                $pendientesGlobal++;
+
+               if ($fechaA != '') {
+                  $fechaA = strtotime($fechaA);
+                  $fechaB = strtotime(date('Y-m-d H:m:s'));
+
+                  $diferencia = $fechaA - $fechaB;
+                  if ($diferencia > 0)
+                     $mediaHoras += $diferencia / 3600;
+               }
             }
 
             #SOLUCIONADOS
             if ($status === 'SOLUCIONADO') {
                $solucionados++;
                $solucionadosGlobal++;
+
+               if ($fechaA != '' && $fechaB != '') {
+                  $fechaA = strtotime($fechaA);
+                  $fechaB = strtotime($fechaB);
+
+                  $diferencia = $fechaA - $fechaB;
+                  if ($diferencia > 0)
+                     $mediaHoras += $diferencia / 3600;
+               }
             }
          }
 
          #DATA ARRAY
-         $array['secciones'][] = array(
-            "idSeccion" => $idSeccion,
-            "seccion" => $seccion,
-            "fechaInicio" => $fechaInicio,
-            "fechaFin" => $fechaFin,
-            "creadas" => $creadas,
-            "pendientes" => $pendientes,
-            "solucionados" => $solucionados,
-            "totalPreventivos" => count($preventivos),
-         );
+         if ($idSeccion != 1001)
+            $array['secciones'][] = array(
+               "idSeccion" => $idSeccion,
+               "seccion" => $seccion,
+               "fechaInicio" => $fechaInicio,
+               "fechaFin" => $fechaFin,
+               "creadas" => $creadas,
+               "pendientes" => $pendientes,
+               "solucionados" => $solucionados,
+               "totalPreventivos" => count($preventivos)
+            );
       }
+
+      $solucionadosExtraGlobal = 0;
+      if ($solucionadosGlobal > 0)
+         $solucionadosExtraGlobal = $solucionadosGlobal - $planificadoGlobal['totalSemanasPlanificadasGlobal'];
+
+      if ($solucionadosExtraGlobal < 0)
+         $solucionadosExtraGlobal = 0;
+
+      #MEDIA HORAS
+      if ($mediaHoras > 0 && $creadasGlobal > 0)
+         $mediaHoras = $mediaHoras / $creadasGlobal;
+      else
+         $mediaHoras = 0;
+
+      #RATIO
+      $habitaciones = 0;
+      $destinos = Destinos::all($idDestino);
+      foreach ($destinos as $x)
+         $habitaciones = $x['habitaciones'];
+
+      #CREADAS
+      $ratioCredas = 0;
+      if ($habitaciones > 0 && $creadasGlobal > 0)
+         $ratioCredas = $creadasGlobal / $habitaciones;
+
+      #SOLUCIONADAS
+      $ratioFinalizadas = 0;
+      if ($habitaciones > 0 && $solucionadosGlobal > 0)
+         $ratioFinalizadas = ($solucionadosGlobal + $solucionadosExtraGlobal) / $habitaciones;
+
 
       $array['global'] = array(
          "creadasGlobal" => $creadasGlobal,
          "pendientesGlobal" => $pendientesGlobal,
          "solucionadosGlobal" => $solucionadosGlobal,
          "acumuladoGlobal" => $acumuladoGlobal,
+         "planificadoGlobal" => $planificadoGlobal['totalConPlanificacionesGlobal'],
+         "solucionadosExtraGlobal" => $solucionadosExtraGlobal,
+         "ratioCredas" => $ratioCredas,
+         "ratioFinalizadas" => $ratioFinalizadas,
+         "mediaHoras" => $mediaHoras
       );
       return $array;
    }
