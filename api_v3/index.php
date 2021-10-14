@@ -266,6 +266,19 @@ if ($peticion === 'POST') {
          $array['data'] = $data;
       }
 
+      if ($accion === 'mpPlanificacionesEquipos') {
+         // REPORTE DE PREVENTIVOS POR SECCIONES (creadas, pendientes, solucionados, acumulado)
+
+         $fechaInicio = $_POST['fechaInicio'];
+         $fechaFin = $_POST['fechaFin'];
+
+         $data = ReporteRanking::mpPlanificacionesEquipos($idDestino, $fechaInicio, $fechaFin);
+
+         #ARRAY DE RESULTADOS
+         $array['response'] = "SUCCESS";
+         $array['data'] = $data;
+      }
+
       if ($accion === 'mpSubsecciones') {
          // REPORTE DE PREVENTIVOS POR SECCIONES (creadas, pendientes, solucionados, acumulado)
 

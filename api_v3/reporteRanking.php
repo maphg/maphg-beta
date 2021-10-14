@@ -644,7 +644,6 @@ class ReporteRanking extends Conexion
       $creadasGlobal = 0;
       $pendientesGlobal = 0;
       $solucionadosGlobal = 0;
-      $ratio = 0;
       $mediaHoras = 0;
       $planificadoGlobal = MP::mpPlanificaciones(
          $idDestino,
@@ -686,6 +685,15 @@ class ReporteRanking extends Conexion
          $creadas = 0;
          $pendientes = 0;
          $solucionados = 0;
+
+         $planificado = MP::mpPlanificaciones(
+            $idDestino,
+            0,
+            $idSeccion,
+            0,
+            "$fechaInicio 00:00:01",
+            "$fechaFin 23:59:59"
+         );
 
          foreach ($preventivos as $x) {
             $status = $x['status'];
@@ -737,7 +745,8 @@ class ReporteRanking extends Conexion
                "creadas" => $creadas,
                "pendientes" => $pendientes,
                "solucionados" => $solucionados,
-               "totalPreventivos" => count($preventivos)
+               "totalPreventivos" => count($preventivos),
+               "planificado" => $planificado['totalSemanasPlanificadasGlobal']
             );
       }
 
@@ -768,7 +777,7 @@ class ReporteRanking extends Conexion
       #SOLUCIONADAS
       $ratioFinalizadas = 0;
       if ($habitaciones > 0 && $solucionadosGlobal > 0)
-         $ratioFinalizadas = ($solucionadosGlobal + $solucionadosExtraGlobal) / $habitaciones;
+         $ratioFinalizadas = $solucionadosGlobal  / $habitaciones;
 
 
       $array['global'] = array(
@@ -780,7 +789,8 @@ class ReporteRanking extends Conexion
          "solucionadosExtraGlobal" => $solucionadosExtraGlobal,
          "ratioCredas" => $ratioCredas,
          "ratioFinalizadas" => $ratioFinalizadas,
-         "mediaHoras" => $mediaHoras
+         "mediaHoras" => $mediaHoras,
+         "totalSemanasPlanificadasGlobal" => $planificadoGlobal['totalSemanasPlanificadasGlobal']
       );
       return $array;
    }
@@ -1477,6 +1487,97 @@ class ReporteRanking extends Conexion
          "totalPlanificacionesGlobal" => $totalPlanificacionesGlobal,
          "totalPlanificadosCompletosGlobal" => $totalPlanificadosCompletosGlobal,
          "totalPlanificadosIncompletosGlobal" => $totalPlanificadosIncompletosGlobal
+      );
+
+      return $array;
+   }
+
+   public static function mpPlanificacionesEquipos($idDestino, $fechaInicio, $fechaFin)
+   {
+      $conexion = new Conexion();
+      $conexion->conectar();
+      $array = array();
+      $equipos = array();
+
+      #DATOS GLOBLES
+      $totalEquipos = count(Equipos::equiposFiltrados(0, $idDestino, 0, 0, 'OPERATIVO'));
+      $totalEquiposPlanificadosGlobal = 0;
+      $totalEquiposPlanCompleto = 0;
+
+      $planeaciones = MP::mpPlanificacionesEquipos($idDestino, 0, 0, 0, $fechaInicio, $fechaFin);
+      foreach ($planeaciones as $x) {
+
+         $idEquipo = 0;
+         $equipo = "";
+         $totalPlanes = 0;
+         $totalConPlanificaciones = 0;
+         $totalSinPlanificaciones = 0;
+         $totalPlanificaciones = 0;
+         $totalSemanasPlanificadas = 0;
+         $totalPlanificadosCompletos = 0;
+         $totalPlanificadosIncompletos = 0;
+         $totalSaltos = 0;
+         $porcentaje = 0;
+         $semanas = array();
+         $data = array();
+         $totalEquiposPlanificadosGlobal++;
+
+         foreach ($x as $y) {
+            $idEquipo = $y['idEquipo'];
+            $equipo = $y['equipo'];
+            $totalConPlanificaciones += $y['totalConPlanificaciones'];
+            $totalSinPlanificaciones += $y['totalSinPlanificaciones'];
+            $totalPlanificaciones += $y['totalPlanificaciones'];
+            $totalSemanasPlanificadas += $y['totalSemanasPlanificadas'];
+            $totalPlanificadosCompletos += $y['totalPlanificadosCompletos'];
+            $totalPlanificadosIncompletos += $y['totalPlanificadosIncompletos'];
+            $totalSaltos += $y['totalSaltos'];
+            $semanas = $y['semanas'];
+
+            #CALCULO DE PORCENTAJE
+            if ($y['totalSaltos'] > 0)
+               $porcentaje = (100 / intval($y['totalSaltos'])) * intval($y['totalSemanasPlanificadas']);
+
+            if ($porcentaje >= 100)
+               $porcentaje = 100;
+
+            $porcentaje += $porcentaje;
+
+            $totalPlanes++;
+            $data[] = $y;
+         }
+
+         if ($porcentaje > 0)
+            $porcentaje = $porcentaje / $totalPlanes;
+
+         if ($porcentaje >= 100)
+            $porcentaje = 100;
+
+         if ($porcentaje >= 100)
+            $totalEquiposPlanCompleto++;
+
+         #DATA
+         $equipos[] = array(
+            "idEquipo" => $idEquipo,
+            "equipos" => $equipo,
+            "totalPlanes" => $totalPlanes,
+            "totalConPlanificaciones" => $totalConPlanificaciones,
+            "totalSinPlanificaciones" => $totalSinPlanificaciones,
+            "totalPlanificaciones" => $totalPlanificaciones,
+            "totalSemanasPlanificadas" => $totalSemanasPlanificadas,
+            "totalPlanificadosCompletos" => $totalPlanificadosCompletos,
+            "totalPlanificadosIncompletos" => $totalPlanificadosIncompletos,
+            "totalSaltos" => $totalSaltos,
+            "porcentaje" => $porcentaje,
+            "data" => $data,
+         );
+      }
+
+      $array = array(
+         "totalEquipos" => $totalEquipos,
+         "totalEquiposConPlanificacion" => intval($totalEquiposPlanificadosGlobal),
+         "totalEquiposSinPlanificacion" => intval($totalEquipos - $totalEquiposPlanificadosGlobal),
+         "totalEquiposPlanCompleto" => $totalEquiposPlanCompleto,
       );
 
       return $array;
