@@ -251,6 +251,7 @@ if ($peticion === 'POST') {
          #ARRAY DE RESULTADOS
          $array['response'] = "SUCCESS";
          $array['data'] = $data;
+         $array['destino'] = Destinos::all($idDestino);
       }
 
       if ($accion === 'mpPlaneaciones') {
