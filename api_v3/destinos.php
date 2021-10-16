@@ -7,14 +7,10 @@ class Destinos extends Conexion
       $conexion = new Conexion();
       $conexion->conectar();
 
-      $filtroDestino = "and id = 0";
-
       if ($idDestino > 0)
          $filtroDestino = "and id = $idDestino";
-
-      if ($idDestino == 10)
+      else
          $filtroDestino = "";
-
 
       $query = "SELECT
       d.id 'idDestino',
