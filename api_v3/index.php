@@ -405,6 +405,151 @@ if ($peticion === 'POST') {
          $array['data'] = $destinos;
       }
    }
+
+
+   #APARTADO SABANAS
+   if ($apartado === 'sabanas') {
+      include_once "conexion.php";
+      include_once "destinos.php";
+      include_once "sabanas.php";
+      include_once "equipos.php";
+
+      if ($accion === 'listaTiposActivos') {
+         $idDestinoSeleccionado = $_POST['idDestinoSeleccionado'];
+
+         #ARRAY DE RESULTADOS
+         $array['response'] = "SUCCESS";
+         $array['data'] = Equipos::listaTiposActivos($idDestinoSeleccionado);
+      }
+
+      if ($accion === 'destinos') {
+         #ARRAY DE RESULTADOS
+         $array['response'] = "SUCCESS";
+         $array['data'] = Sabanas::getDestinos($idDestino);
+      }
+
+      if ($accion === 'hoteles') {
+         $idDestinoSeleccionado = $_POST['idDestinoSeleccionado'];
+
+         #ARRAY DE RESULTADOS
+         $array['response'] = "SUCCESS";
+         $array['data'] = Sabanas::getHoteles($idDestinoSeleccionado);
+      }
+
+      if ($accion === 'tiposActivos') {
+         $idDestinoSeleccionado = $_POST['idDestinoSeleccionado'];
+         $idHotel = $_POST['idHotel'];
+
+         #ARRAY DE RESULTADOS
+         $array['response'] = "SUCCESS";
+         $array['data'] = Sabanas::getTiposActivos($idDestinoSeleccionado, $idHotel);
+      }
+
+      if ($accion === 'sabanas') {
+         $idDestinoSeleccionado = $_POST['idDestinoSeleccionado'];
+         $idHotel = $_POST['idHotel'];
+         $idRegistroTipoActivo = $_POST['idRegistroTipoActivo'];
+
+         #ARRAY DE RESULTADOS
+         $array['response'] = "SUCCESS";
+         $array['data'] = Sabanas::getSabanas($idDestinoSeleccionado, $idHotel, $idRegistroTipoActivo);
+      }
+
+      if ($accion === 'apartados') {
+         $idDestinoSeleccionado = $_POST['idDestinoSeleccionado'];
+         $idSabana = $_POST['idSabana'];
+
+         #ARRAY DE RESULTADOS
+         $array['response'] = "SUCCESS";
+         $array['data'] = Sabanas::getApartados($idDestinoSeleccionado, $idSabana);
+      }
+
+      if ($accion === 'actividades') {
+         $idDestinoSeleccionado = $_POST['idDestinoSeleccionado'];
+         $idApartado = $_POST['idApartado'];
+
+         #ARRAY DE RESULTADOS
+         $array['response'] = "SUCCESS";
+         $array['data'] = Sabanas::getActividades($idDestinoSeleccionado, $idApartado);
+      }
+
+      if ($accion === 'actualizarActividad') {
+         $idDestinoSeleccionado = $_POST['idDestinoSeleccionado'];
+         $idActividad = $_POST['idActividad'];
+         $idApartado = $_POST['idApartado'];
+         $actividad = $_POST['actividad'];
+         $activo = $_POST['activo'];
+
+         #ARRAY DE RESULTADOS
+         $array['response'] = "SUCCESS";
+         $array['data'] = Sabanas::actualizarActividad(
+            $idDestinoSeleccionado,
+            $idActividad,
+            $idApartado,
+            $actividad,
+            $activo
+         );
+      }
+
+      if ($accion === 'agregarActividad') {
+         $idDestinoSeleccionado = $_POST['idDestinoSeleccionado'];
+         $idApartado = $_POST['idApartado'];
+         $idActividad = $_POST['idActividad'];
+         $actividad = $_POST['actividad'];
+
+         #ARRAY DE RESULTADOS
+         $array['response'] = "SUCCESS";
+         $array['data'] = Sabanas::agregarActividad($idDestinoSeleccionado, $idActividad, $idApartado, $idUsuario, $actividad);
+      }
+
+      if ($accion === 'agregarRegistroTipoActivo') {
+         $idDestinoSeleccionado = $_POST['idDestinoSeleccionado'];
+         $idHotel = $_POST['idHotel'];
+         $idTipoActivo = $_POST['idTipoActivo'];
+
+         #ARRAY DE RESULTADOS
+         $array['response'] = "SUCCESS";
+         $array['data'] = Sabanas::agregarRegistroTipoActivo($idDestinoSeleccionado, $idHotel, $idTipoActivo, $idUsuario);
+      }
+
+      if ($accion === 'agregarChecklist') {
+         $idDestinoSeleccionado = $_POST['idDestinoSeleccionado'];
+         $idHotel = $_POST['idHotel'];
+         $idRegistroTipoActivo = $_POST['idRegistroTipoActivo'];
+         $idSabana = $_POST['idSabana'];
+         $sabana = $_POST['sabana'];
+
+         #ARRAY DE RESULTADOS
+         $array['response'] = "SUCCESS";
+         $array['data'] = Sabanas::agregarChecklist(
+            $idDestinoSeleccionado,
+            $idSabana,
+            $idHotel,
+            $idRegistroTipoActivo,
+            $sabana,
+            $idUsuario
+         );
+      }
+
+      if ($accion === 'agregarApartado') {
+         $idDestinoSeleccionado = $_POST['idDestinoSeleccionado'];
+         $idSabana = $_POST['idSabana'];
+         $idApartado = $_POST['idApartado'];
+         $tituloApartado = $_POST['tituloApartado'];
+         $opciones = $_POST['opciones'];
+
+         #ARRAY DE RESULTADOS
+         $array['response'] = "SUCCESS";
+         $array['data'] = Sabanas::agregarApartado(
+            $idDestinoSeleccionado,
+            $idApartado,
+            $idSabana,
+            $opciones,
+            $tituloApartado,
+            $idUsuario
+         );
+      }
+   }
 }
 
 echo json_encode($array);

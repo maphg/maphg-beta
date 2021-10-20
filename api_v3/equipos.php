@@ -112,4 +112,35 @@ class Equipos extends Conexion
       }
       return $array;
    }
+
+
+   public static function listaTiposActivos($idDestino, $idTipoActivo = 0)
+   {
+      // DEVULVE LOS HOTELES ENCONTRADAS (DESTINO)
+      $conexion = new Conexion();
+      $conexion->conectar();
+
+      if ($idTipoActivo > 0)
+         $filtroTipoActivo = "and id = $idTipoActivo";
+      else
+         $filtroTipoActivo = "";
+
+      $query = "SELECT id 'idTipoActivo', tipo, tipo_activo 'tipoActivo'
+      FROM c_tipos
+      WHERE status = 'A' $filtroTipoActivo ORDER BY tipo_activo ASC";
+
+      $prepare = mysqli_prepare($conexion->con, $query);
+      // $prepare->bind_param("i", $idDestino);
+      $prepare->execute();
+      $response = $prepare->get_result();
+
+      #ARRAYS
+      $array = array();
+
+      foreach ($response as $x)
+         #RESULTADO FINAL DE PROYECTOS
+         $array[] = $x;
+
+      return $array;
+   }
 }

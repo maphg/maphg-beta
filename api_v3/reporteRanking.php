@@ -296,7 +296,7 @@ class ReporteRanking extends Conexion
       $conexion = new Conexion();
       $conexion->conectar();
 
-      $destinos = Destinos::all(0);
+      $destinos = Destinos::all(10);
       $array = array();
 
       foreach ($destinos as $x) {
@@ -354,7 +354,7 @@ class ReporteRanking extends Conexion
       $conexion = new Conexion();
       $conexion->conectar();
 
-      $destinos = Destinos::all(0);
+      $destinos = Destinos::all(10);
       $array = array();
 
       foreach ($destinos as $x) {
@@ -412,7 +412,7 @@ class ReporteRanking extends Conexion
       $conexion = new Conexion();
       $conexion->conectar();
 
-      $destinos = Destinos::all(0);
+      $destinos = Destinos::all(10);
       $array = array();
 
       foreach ($destinos as $x) {
@@ -470,7 +470,7 @@ class ReporteRanking extends Conexion
       $conexion = new Conexion();
       $conexion->conectar();
 
-      $destinos = Destinos::all(0);
+      $destinos = Destinos::all(10);
       $array = array();
 
       foreach ($destinos as $x) {
@@ -940,7 +940,7 @@ class ReporteRanking extends Conexion
       // REPORTE DE PREVENTIVOS POR DESTINOS (creadas, pendientes, solucionados, acumulado)
       $conexion = new Conexion();
       $conexion->conectar();
-      $destinos = Destinos::all(0);
+      $destinos = Destinos::all(10);
       $array = array();
 
       foreach ($destinos as $x) {
@@ -1123,7 +1123,7 @@ class ReporteRanking extends Conexion
       $conexion = new Conexion();
       $conexion->conectar();
 
-      $destinos = Destinos::all(0);
+      $destinos = Destinos::all(10);
       $array = array();
 
       foreach ($destinos as $x) {
@@ -1171,7 +1171,7 @@ class ReporteRanking extends Conexion
       $conexion = new Conexion();
       $conexion->conectar();
 
-      $destinos = Destinos::all(0);
+      $destinos = Destinos::all(10);
       $array = array();
 
       foreach ($destinos as $x) {
@@ -1219,7 +1219,7 @@ class ReporteRanking extends Conexion
       $conexion = new Conexion();
       $conexion->conectar();
 
-      $destinos = Destinos::all(0);
+      $destinos = Destinos::all(10);
       $array = array();
 
       foreach ($destinos as $x) {
@@ -1267,7 +1267,7 @@ class ReporteRanking extends Conexion
       $conexion = new Conexion();
       $conexion->conectar();
 
-      $destinos = Destinos::all(0);
+      $destinos = Destinos::all(10);
       $array = array();
 
       foreach ($destinos as $x) {
@@ -1418,6 +1418,7 @@ class ReporteRanking extends Conexion
       return $array;
    }
 
+
    public static function mpPlanificaciones($idDestino, $fechaInicio, $fechaFin)
    {
       $conexion = new Conexion();
@@ -1492,6 +1493,7 @@ class ReporteRanking extends Conexion
       return $array;
    }
 
+   
    public static function mpPlanificacionesEquipos($idDestino, $fechaInicio, $fechaFin)
    {
       $conexion = new Conexion();

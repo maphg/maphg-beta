@@ -160,7 +160,7 @@ if ($peticion === "POST") {
       FROM t_equipos_america AS e
       INNER JOIN c_tipos AS tipo ON e.id_tipo = tipo.id
       WHERE e.id_destino = $idDestino and e.id_seccion = $idSeccion
-      and e.status IN('OPERATIVO') and e.activo = 1 $filtroSubseccion";
+      and e.status NOT IN('BAJA', 'ELIMINADO') and e.activo = 1 $filtroSubseccion";
       if ($result = mysqli_query($conn_2020, $query)) {
          foreach ($result as $x) {
             $idTipo = $x['id'];
@@ -227,7 +227,7 @@ if ($peticion === "POST") {
       INNER JOIN c_secciones AS seccion ON e.id_seccion = seccion.id
       INNER JOIN c_subsecciones AS subseccion ON e.id_subseccion = subseccion.id
       INNER JOIN c_tipos AS tipo ON e.id_tipo = tipo.id
-      WHERE e.id_seccion = $idSeccion and e.activo = 1 and e.status IN('OPERATIVO')
+      WHERE e.id_seccion = $idSeccion and e.activo = 1 and e.status NOT IN('BAJA', 'ELIMINADO')
       $filtroDestinoEquipo $filtroSubseccion $filtroTipoEquipo";
       if ($result = mysqli_query($conn_2020, $query)) {
          foreach ($result as $x) {
@@ -406,7 +406,7 @@ if ($peticion === "POST") {
       INNER JOIN c_secciones AS seccion ON e.id_seccion = seccion.id
       INNER JOIN c_subsecciones AS subseccion ON e.id_subseccion = subseccion.id
       INNER JOIN c_tipos AS tipo ON e.id_tipo = tipo.id
-      WHERE e.id_seccion = $idSeccion and e.activo = 1 and e.status IN('OPERATIVO')
+      WHERE e.id_seccion = $idSeccion and e.activo = 1 and e.status NOT IN('BAJA', 'ELIMINADO')
       $filtroDestinoEquipo $filtroSubseccion $filtroTipoEquipo";
       if ($result = mysqli_query($conn_2020, $query)) {
          foreach ($result as $x) {

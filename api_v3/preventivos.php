@@ -258,7 +258,7 @@ class MP extends Conexion
       INNER JOIN t_mp_planeacion_semana AS sem ON e.id = sem.id_equipo
       INNER JOIN t_mp_planes_mantenimiento AS mp ON sem.id_plan = mp.id
       INNER JOIN c_frecuencias_mp AS frecuencia ON mp.id_periodicidad = frecuencia.id
-      WHERE  e.id_destino = $idDestino and e.status = 'OPERATIVO' and e.activo = 1 and e.local_equipo = 'EQUIPO' 
+      WHERE  e.id_destino = $idDestino and e.status NOT IN('BAJA', 'ELIMINADO') and e.activo = 1 and e.local_equipo = 'EQUIPO' 
       and mp.status = 'ACTIVO' and mp.activo = 1 and sem.activo = 1
       $filtroEquipo $filtroSeccion $filtroSubseccion";
 
@@ -662,7 +662,7 @@ class MP extends Conexion
       INNER JOIN t_mp_planeacion_semana AS sem ON e.id = sem.id_equipo
       INNER JOIN t_mp_planes_mantenimiento AS mp ON sem.id_plan = mp.id
       INNER JOIN c_frecuencias_mp AS frecuencia ON mp.id_periodicidad = frecuencia.id
-      WHERE  e.id_destino = $idDestino and e.status = 'OPERATIVO' and e.activo = 1 and e.local_equipo = 'EQUIPO' 
+      WHERE  e.id_destino = $idDestino and e.status NOT IN('BAJA', 'ELIMINADO') and e.activo = 1 and e.local_equipo = 'EQUIPO' 
       and mp.status = 'ACTIVO' and mp.activo = 1 and sem.activo = 1
       $filtroEquipo $filtroSeccion $filtroSubseccion";
 
