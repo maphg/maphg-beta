@@ -2367,8 +2367,8 @@ if (isset($_GET['action'])) {
                 $statusEquipo = "OPERATIVO";
             }
 
-            $query = "UPDATE t_equipos_america SET status = '$statusEquipo' WHERE id = $idEquipo";
-            $result = mysqli_query($conn_2020, $query) ?: '';
+            // $query = "UPDATE t_equipos_america SET status = '$statusEquipo' WHERE id = $idEquipo";
+            // $result = mysqli_query($conn_2020, $query) ?: '';
 
             $query = "SELECT max(id) 'id' FROM t_mc";
             if ($result = mysqli_query($conn_2020, $query)) {
