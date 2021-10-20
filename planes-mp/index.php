@@ -317,9 +317,9 @@
                     GUARDAR CAMBIOS
                 </button>
 
-                <button onclick="guardarCambiosPlanMP('BAJA');" class="btn btn-orange">
+                <!-- <button onclick="guardarCambiosPlanMP('BAJA');" class="btn btn-orange">
                     DESACTIVAR ESTE PLAN
-                </button>
+                </button> -->
             </div>
         </div>
     </div>
