@@ -473,11 +473,53 @@ if ($peticion === 'POST') {
          $array['data'] = Sabanas::getActividades($idDestinoSeleccionado, $idApartado);
       }
 
+      if ($accion === 'actualizarSabana') {
+         $idDestinoSeleccionado = $_POST['idDestinoSeleccionado'];
+         $idHotel = $_POST['idHotel'];
+         $idRegistroTipoActivo = $_POST['idRegistroTipoActivo'];
+         $idSabana = $_POST['idSabana'];
+         $sabana = $_POST['sabana'];
+         $activo = $_POST['activo'];
+
+         #ARRAY DE RESULTADOS
+         $array['response'] = "SUCCESS";
+         $array['data'] = Sabanas::actualizarSabana(
+            $idDestinoSeleccionado,
+            $idHotel,
+            $idRegistroTipoActivo,
+            $idSabana,
+            $sabana,
+            $activo
+         );
+      }
+
+      if ($accion === 'actualizarApartado') {
+         $idDestinoSeleccionado = $_POST['idDestinoSeleccionado'];
+         $idSabana = $_POST['idSabana'];
+         $idApartado = $_POST['idApartado'];
+         $apartado = $_POST['tituloApartado'];
+         $opciones = $_POST['opciones'];
+         $activo = $_POST['activo'];
+
+         #ARRAY DE RESULTADOS
+         $array['response'] = "SUCCESS";
+         $array['data'] = Sabanas::actualizarApartado(
+            $idDestino,
+            $idSabana,
+            $idApartado,
+            $apartado,
+            $opciones,
+            $activo
+         );
+      }
+
       if ($accion === 'actualizarActividad') {
          $idDestinoSeleccionado = $_POST['idDestinoSeleccionado'];
          $idActividad = $_POST['idActividad'];
          $idApartado = $_POST['idApartado'];
          $actividad = $_POST['actividad'];
+         $adjunto = $_POST['adjunto'];
+         $comentario = $_POST['comentario'];
          $activo = $_POST['activo'];
 
          #ARRAY DE RESULTADOS
@@ -487,6 +529,8 @@ if ($peticion === 'POST') {
             $idActividad,
             $idApartado,
             $actividad,
+            $adjunto,
+            $comentario,
             $activo
          );
       }

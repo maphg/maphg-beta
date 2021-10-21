@@ -84,7 +84,8 @@ class Sabanas extends Conexion
       id_hotel 'idHotel',
       id_registro_tipo_activo 'idRegistroTipoActivo',
       sabana,
-      fecha_creado 'fechaCreado'
+      fecha_creado 'fechaCreado',
+      activo
       FROM t_sabanas
       WHERE id_destino = ? and id_hotel = ? and id_registro_tipo_activo = ? and activo = 1
       ORDER BY id_privado DESC";
@@ -97,9 +98,11 @@ class Sabanas extends Conexion
       #ARRAYS
       $array = array();
 
-      foreach ($response as $x)
-         #RESULTADO FINAL DE PROYECTOS
+      foreach ($response as $x) {
+         $x['editar'] = false;
+
          $array[] = $x;
+      }
 
       return $array;
    }
@@ -116,7 +119,8 @@ class Sabanas extends Conexion
       id_sabana 'idSabana',
       apartado,
       opciones,
-      fecha_creado 'fechaCreado'
+      fecha_creado 'fechaCreado',
+      activo
       FROM t_sabanas_apartados
       WHERE id_sabana = ? and activo = 1 ORDER BY id_privado DESC";
 
@@ -128,9 +132,18 @@ class Sabanas extends Conexion
       #ARRAYS
       $array = array();
 
-      foreach ($response as $x)
-         #RESULTADO FINAL DE PROYECTOS
+      foreach ($response as $x) {
+         #EDITAR
+         $x['editar'] = false;
+
+         #OPCIONES
+         if ($x['opciones'] == 'SI' || $x['opciones'] == 'true' || $x['opciones'] == '1')
+            $x['opciones'] = true;
+         else
+            $x['opciones'] = false;
+
          $array[] = $x;
+      }
 
       return $array;
    }
@@ -147,7 +160,10 @@ class Sabanas extends Conexion
       id_publico  'idActividad',
       id_apartado 'idApartado',
       actividad,
-      fecha_creado 'fechaCreado'
+      adjunto,
+      comentario,
+      fecha_creado 'fechaCreado',
+      activo
       FROM t_sabanas_apartados_actividades
       WHERE id_apartado = ? and activo = 1
       ORDER BY id_privado DESC";
@@ -158,8 +174,21 @@ class Sabanas extends Conexion
       $response = $prepare->get_result();
 
       foreach ($response as $x) {
-         #RESULTADO FINAL
+         #EDITAR
          $x['editar'] = false;
+
+         #ADJUNTO
+         if ($x['adjunto'] == 'SI' || $x['adjunto'] == 'true' || $x['adjunto'] == '1')
+            $x['adjunto'] = true;
+         else
+            $x['adjunto'] = false;
+
+         #COMENTARIO
+         if ($x['comentario'] == 'SI' || $x['comentario'] == 'true' || $x['comentario'] == '1')
+            $x['comentario'] = true;
+         else
+            $x['comentario'] = false;
+
          $array[] = $x;
       }
 
@@ -167,19 +196,98 @@ class Sabanas extends Conexion
    }
 
 
-   public static function actualizarActividad($idDestino, $idActividad, $idApartado, $actividad, $activo)
+   public static function actualizarSabana(
+      $idDestino,
+      $idHotel,
+      $idRegistroTipoActivo,
+      $idSabana,
+      $sabana,
+      $activo
+   ) {
+      // DEVULVE LOS APRTADOS ENCONTRADAS (SABANA)
+      $conexion = new Conexion();
+      $conexion->conectar();
+      $array = array();
+
+      $query = "UPDATE t_sabanas
+      SET sabana = ?, activo = ?
+      WHERE id_publico = ?";
+
+      $prepare = mysqli_prepare($conexion->con, $query);
+      $prepare->bind_param("sis", $sabana, $activo, $idSabana);
+
+      if ($prepare->execute()) {
+         $apartados = Sabanas::getSabanas($idDestino, $idHotel, $idRegistroTipoActivo);
+         foreach ($apartados as $x)
+            $array[] = $x;
+      }
+
+      return $array;
+   }
+
+
+   public static function actualizarApartado($idDestino, $idSabana, $idApartado, $apartado, $opciones, $activo)
    {
       // DEVULVE LOS APRTADOS ENCONTRADAS (SABANA)
       $conexion = new Conexion();
       $conexion->conectar();
       $array = array();
 
-      $query = "UPDATE t_sabanas_apartados_actividades
-      SET actividad = ?, activo = ?
+      #OPCIONES
+      if ($opciones == true)
+         $opciones = "SI";
+      else
+         $opciones = "NO";
+
+      $query = "UPDATE t_sabanas_apartados
+      SET apartado = ?, opciones = ?, activo = ?
       WHERE id_publico = ?";
 
       $prepare = mysqli_prepare($conexion->con, $query);
-      $prepare->bind_param("ssi", $actividad, $activo, $idActividad);
+      $prepare->bind_param("ssis", $apartado, $opciones, $activo, $idApartado);
+
+      if ($prepare->execute()) {
+         $apartados = Sabanas::getApartados($idDestino, $idSabana);
+         foreach ($apartados as $x)
+            $array[] = $x;
+      }
+
+      return $array;
+   }
+
+
+   public static function actualizarActividad(
+      $idDestino,
+      $idActividad,
+      $idApartado,
+      $actividad,
+      $adjunto,
+      $comentario,
+      $activo
+   ) {
+      // DEVULVE LOS APRTADOS ENCONTRADAS (SABANA)
+      $conexion = new Conexion();
+      $conexion->conectar();
+      $array = array();
+
+      #ADJUNTO
+      if ($adjunto == true)
+         $adjunto = "SI";
+      else
+         $adjunto = "NO";
+
+      #COMENTARIO
+      if ($comentario == true)
+         $comentario = "SI";
+      else
+         $comentario = "NO";
+
+      $query = "UPDATE t_sabanas_apartados_actividades
+      SET actividad = ?, adjunto = ?, comentario = ?, activo = ?
+      WHERE id_publico = ?";
+
+      $prepare = mysqli_prepare($conexion->con, $query);
+      $prepare->bind_param("sssis", $actividad, $adjunto, $comentario, $activo, $idActividad);
 
       if ($prepare->execute()) {
          $actividades = Sabanas::getActividades($idDestino, $idApartado);
