@@ -243,20 +243,51 @@ if ($peticion === "POST") {
    }
 
    // CONSULTA LAS SABANAS DISPONIBLES POR DESTINO
-   if ($action === "consultaSabanas") {
-
+   if ($action === "consultarHoteles") {
       $array['response'] = 'SUCCESS';
-      if ($idDestino == 10)
-         $filtroDestino = "";
-      else
+
+      $filtroDestino = "and id_destino = 0";
+
+      if ($idDestino > 0)
          $filtroDestino = "and id_destino = $idDestino";
 
-      $query = "SELECT id_publico, sabana
-      FROM t_sabanas
+
+      $query = "SELECT id 'idHotel', hotel, marca, fecha_creado
+      FROM t_sabanas_hoteles 
       WHERE activo = 1 $filtroDestino";
       if ($result = mysqli_query($conn_2020, $query)) {
+         foreach ($result as $x)
+            $array['data'][] = $x;
+      }
+   }
+
+   // CONSULTA LAS SABANAS DISPONIBLES POR DESTINO
+   if ($action === "consultarTiposActivos") {
+      $array['response'] = 'SUCCESS';
+      $idHotel = $_POST['idHotel'];
+
+      $query = "SELECT registro.id 'idRegistroTipoActivo', tipo.id 'idTipoActivo', tipo.tipo
+      FROM t_sabanas_hoteles_tipos_activos AS registro
+      INNER JOIN c_tipos AS tipo ON registro.id_tipo_activo = tipo.id
+      WHERE registro.activo = 1 and registro.id_hotel = $idHotel";
+      if ($result = mysqli_query($conn_2020, $query)) {
+         foreach ($result as $x)
+            $array['data'][] = $x;
+      }
+   }
+
+   // CONSULTA LAS SABANAS DISPONIBLES POR DESTINO
+   if ($action === "consultaSabanas") {
+      $array['response'] = 'SUCCESS';
+      $idHotel = $_POST['idHotel'];
+      $idRegistroTipoActivo = $_POST['idRegistroTipoActivo'];
+
+      $query = "SELECT id_publico 'idSabana', sabana
+      FROM t_sabanas
+      WHERE id_destino = $idDestino and id_hotel = $idHotel and id_registro_tipo_activo = $idRegistroTipoActivo and activo = 1";
+      if ($result = mysqli_query($conn_2020, $query)) {
          foreach ($result as $x) {
-            $idSabana = $x['id_publico'];
+            $idSabana = $x['idSabana'];
             $sabana = $x['sabana'];
 
             $array['data'][] = array(
@@ -265,6 +296,7 @@ if ($peticion === "POST") {
             );
          }
       }
+      $array['query'] = $query;
    }
 
    // CONSULTA EQUIPOS DISPONIBLES PARA LA SABANA
@@ -272,27 +304,16 @@ if ($peticion === "POST") {
       $array['response'] = 'SUCCESS';
 
       $idSabana = $_POST['idSabana'];
+      $idHotel = $_POST['idHotel'];
+      $idTipoActivo = $_POST['idTipoActivo'];
 
-      if ($idDestino == 10)
-         $filtroDestino = "";
-      else
-         $filtroDestino = "and e.id_destino = $idDestino";
-
-      $query = "SELECT e.id_equipo, e.equipo
-      FROM t_sabanas_equipos AS e
-      INNER JOIN t_sabanas as s ON e.id_hotel = s.id_hotel
-      WHERE e.activo = 1 and s.id_publico = '$idSabana' $filtroDestino";
-      if ($result = mysqli_query($conn_2020, $query)) {
-         foreach ($result as $x) {
-            $idEquipo = $x['id_equipo'];
-            $equipo = $x['equipo'];
-
-            $array['data'][] = array(
-               "idEquipo" => $idEquipo,
-               "equipo" => $equipo,
-            );
-         }
-      }
+      $query = "SELECT id_equipo 'idEquipo', equipo
+      FROM t_sabanas_equipos
+      WHERE id_destino = $idDestino and id_hotel = $idHotel and
+      id_tipo_activo =  $idTipoActivo and activo = 1";
+      if ($result = mysqli_query($conn_2020, $query))
+         foreach ($result as $x)
+            $array['data'][] = $x;
    }
 
    // INICIA REGISTRO SIN CONFIRMAR DE LA SABANA DE LA HABITACIÓN
