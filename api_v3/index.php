@@ -210,9 +210,10 @@ if ($peticion === 'POST') {
          #ARRAY DE RESULTADOS
          $array['response'] = "SUCCESS";
          $array['data'] = $subsecciones;
+         $array['destino'] = Destinos::all($idDestino);
       }
 
-      if ($accion === 'destinos') {
+      if ($accion === 'destinosIncidencias') {
          $fechaInicio = $_POST['fechaInicio'];
          $fechaFin = $_POST['fechaFin'];
 
@@ -229,15 +230,49 @@ if ($peticion === 'POST') {
          $array['data']['mcmpCreados'] = $mcmpCreados;
       }
 
-      if ($accion === 'grafica') {
+      if ($accion === 'destinosIncidenciasSubsecciones') {
          $fechaInicio = $_POST['fechaInicio'];
          $fechaFin = $_POST['fechaFin'];
+         $idSeccion = $_POST['idSeccion'];
 
-         $grafica = ReporteRanking::grafica($idDestino, $fechaInicio, $fechaFin);
+         // FALTO CREAR LOS METODOS
+
+         $pendientes = ReporteRanking::destinosPendientesSubsecciones($idDestino, $idSeccion, $fechaInicio, $fechaFin);
+         $solucionados =
+            ReporteRanking::destinosSolucionadosSubsecciones($idDestino, $idSeccion, $fechaInicio, $fechaFin);
+         $creados = ReporteRanking::destinosCreadosSubsecciones($idDestino, $idSeccion, $fechaInicio, $fechaFin);
+         $mcmpCreados = ReporteRanking::mcmpCreadosSubsecciones($idDestino, $idSeccion, $fechaInicio, $fechaFin);
 
          #ARRAY DE RESULTADOS
          $array['response'] = "SUCCESS";
-         $array['data'] = $grafica;
+         $array['data']['pendientes'] = $pendientes;
+         $array['data']['solucionados'] = $solucionados;
+         $array['data']['creados'] = $creados;
+         $array['data']['mcmpCreados'] = $mcmpCreados;
+      }
+
+      if ($accion === 'graficaIncidencias') {
+         $fechaInicio = $_POST['fechaInicio'];
+         $fechaFin = $_POST['fechaFin'];
+
+         $graficaIncidencias = ReporteRanking::graficaIncidencias($idDestino, $fechaInicio, $fechaFin);
+
+         #ARRAY DE RESULTADOS
+         $array['response'] = "SUCCESS";
+         $array['data'] = $graficaIncidencias;
+      }
+
+      if ($accion === 'graficaIncidenciasSubsecciones') {
+         $fechaInicio = $_POST['fechaInicio'];
+         $fechaFin = $_POST['fechaFin'];
+         $idSeccion = $_POST['idSeccion'];
+
+         $graficaIncidenciasSubsecciones =
+            ReporteRanking::graficaIncidenciasSubsecciones($idDestino, $idSeccion, $fechaInicio, $fechaFin);
+
+         #ARRAY DE RESULTADOS
+         $array['response'] = "SUCCESS";
+         $array['data'] = $graficaIncidenciasSubsecciones;
       }
 
       if ($accion === 'mpSecciones') {
@@ -247,6 +282,21 @@ if ($peticion === 'POST') {
          $fechaFin = $_POST['fechaFin'];
 
          $data = ReporteRanking::mpSecciones($idDestino, $fechaInicio, $fechaFin);
+
+         #ARRAY DE RESULTADOS
+         $array['response'] = "SUCCESS";
+         $array['data'] = $data;
+         $array['destino'] = Destinos::all($idDestino);
+      }
+
+      if ($accion === 'mpSubsecciones') {
+         // REPORTE DE PREVENTIVOS POR SUBSECCIONES (creadas, pendientes, solucionados, acumulado)
+
+         $fechaInicio = $_POST['fechaInicio'];
+         $fechaFin = $_POST['fechaFin'];
+         $idSeccion = $_POST['idSeccion'];
+
+         $data = ReporteRanking::mpSubsecciones($idDestino, $idSeccion, $fechaInicio, $fechaFin);
 
          #ARRAY DE RESULTADOS
          $array['response'] = "SUCCESS";
@@ -267,6 +317,20 @@ if ($peticion === 'POST') {
          $array['data'] = $data;
       }
 
+      if ($accion === 'mpPlaneacionesSubsecciones') {
+         // REPORTE DE PREVENTIVOS POR SECCIONES (creadas, pendientes, solucionados, acumulado)
+
+         $fechaInicio = $_POST['fechaInicio'];
+         $fechaFin = $_POST['fechaFin'];
+         $idSeccion = $_POST['idSeccion'];
+
+         $data = ReporteRanking::mpPlaneacionesSubsecciones($idDestino, $idSeccion, $fechaInicio, $fechaFin);
+
+         #ARRAY DE RESULTADOS
+         $array['response'] = "SUCCESS";
+         $array['data'] = $data;
+      }
+
       if ($accion === 'mpPlanificacionesEquipos') {
          // REPORTE DE PREVENTIVOS POR SECCIONES (creadas, pendientes, solucionados, acumulado)
 
@@ -280,18 +344,18 @@ if ($peticion === 'POST') {
          $array['data'] = $data;
       }
 
-      if ($accion === 'mpSubsecciones') {
+      if ($accion === 'mpPlanificacionesEquiposSubsecciones') {
          // REPORTE DE PREVENTIVOS POR SECCIONES (creadas, pendientes, solucionados, acumulado)
 
-         $idSeccion = $_POST['idSeccion'];
          $fechaInicio = $_POST['fechaInicio'];
          $fechaFin = $_POST['fechaFin'];
+         $idSeccion = $_POST['idSeccion'];
 
-         $secciones = ReporteRanking::mpSubsecciones($idDestino, $idSeccion, $fechaInicio, $fechaFin);
+         $data = ReporteRanking::mpPlanificacionesEquiposSubsecciones($idDestino, $idSeccion, $fechaInicio, $fechaFin);
 
          #ARRAY DE RESULTADOS
          $array['response'] = "SUCCESS";
-         $array['data'] = $secciones;
+         $array['data'] = $data;
       }
 
       if ($accion === 'mpCreadasDestinos') {
@@ -360,6 +424,20 @@ if ($peticion === 'POST') {
          $array['data'] = $data;
       }
 
+      if ($accion === 'mpGraficaSubsecciones') {
+         // DATOS DEL AVANCE PLANIFICADO POR DESTINO (fecha, creadas, pendientes, solucionados, acumulado)
+
+         $fechaInicio = $_POST['fechaInicio'];
+         $fechaFin = $_POST['fechaFin'];
+         $idSeccion = $_POST['idSeccion'];
+
+         $data = ReporteRanking::mpGraficaSubsecciones($idDestino, $idSeccion, $fechaInicio, $fechaFin);
+
+         #ARRAY DE RESULTADOS
+         $array['response'] = "SUCCESS";
+         $array['data'] = $data;
+      }
+
       if ($accion === 'MPvsMC') {
          // DATOS DEL AVANCE PLANIFICADO POR DESTINO (fecha, creadas, pendientes, solucionados, acumulado)
 
@@ -374,6 +452,21 @@ if ($peticion === 'POST') {
          $array['data'] = $data;
       }
 
+      if ($accion === 'MPvsMCSubsecciones') {
+         // DATOS DEL AVANCE PLANIFICADO POR DESTINO (fecha, creadas, pendientes, solucionados, acumulado)
+
+         $fechaInicio = $_POST['fechaInicio'];
+         $fechaFin = $_POST['fechaFin'];
+         $status = $_POST['status'];
+         $idSeccion = $_POST['idSeccion'];
+
+         $data = ReporteRanking::MPvsMCSubsecciones($idDestino, $idSeccion, $fechaInicio, $fechaFin, $status);
+
+         #ARRAY DE RESULTADOS
+         $array['response'] = "SUCCESS";
+         $array['data'] = $data;
+      }
+
       if ($accion === 'rankingMP') {
          $fechaInicio = $_POST['fechaInicio'];
          $fechaFin = $_POST['fechaFin'];
@@ -382,6 +475,24 @@ if ($peticion === 'POST') {
          $solucionados = ReporteRanking::mpSolucionados($idDestino, $fechaInicio, $fechaFin);
          $pendientes = ReporteRanking::mpPendientes($idDestino, $fechaInicio, $fechaFin);
          $mpmcCreados = ReporteRanking::mpmcCreados($idDestino, $fechaInicio, $fechaFin);
+
+         #ARRAY DE RESULTADOS
+         $array['response'] = "SUCCESS";
+         $array['data']['creados'] = $creados;
+         $array['data']['solucionados'] = $solucionados;
+         $array['data']['pendientes'] = $pendientes;
+         $array['data']['mpmcCreados'] = $mpmcCreados;
+      }
+
+      if ($accion === 'rankingMPSubsecciones') {
+         $fechaInicio = $_POST['fechaInicio'];
+         $fechaFin = $_POST['fechaFin'];
+         $idSeccion = $_POST['idSeccion'];
+
+         $creados = ReporteRanking::mpCreadosSubsecciones($idDestino, $idSeccion, $fechaInicio, $fechaFin);
+         $solucionados = ReporteRanking::mpSolucionadosSubsecciones($idDestino, $idSeccion, $fechaInicio, $fechaFin);
+         $pendientes = ReporteRanking::mpPendientesSubsecciones($idDestino, $idSeccion, $fechaInicio, $fechaFin);
+         $mpmcCreados = ReporteRanking::mpmcCreadosSubsecciones($idDestino, $idSeccion, $fechaInicio, $fechaFin);
 
          #ARRAY DE RESULTADOS
          $array['response'] = "SUCCESS";
