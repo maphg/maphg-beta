@@ -57,6 +57,7 @@ class MP extends Conexion
          mp.activo,
          mp.id_usuario 'creado_por',
          mp.id_responsables,
+         mp.realizado_por 'realizadoPor',
          mp.fecha_creacion,
          mp.fecha_finalizado,
          d.id 'idDestino',
@@ -88,8 +89,9 @@ class MP extends Conexion
          $preventivo = "PREVENTIVO";
          $tipoIncidencia = "PREVENTIVO";
          $status = $x['status'];
-         $creadoPor = $x['creado_por'];
-         $responsable = $x['id_responsables'];
+         $creadoPor = intval($x['creado_por']);
+         $responsable = intval($x['id_responsables']);
+         $realizadoPor = $x['realizadoPor'];
          $fechaCreado = $x['fecha_creacion'];
          $fechaFinalizado = $x['fecha_finalizado'];
          $idDestinoX = $x['idDestino'];
@@ -124,6 +126,8 @@ class MP extends Conexion
                "subseccion" => $subseccion,
                "idEquipo" => $idEquipo,
                "equipo" => $equipo,
+               "creadoPor" => $creadoPor,
+               "responsable" => $responsable,
                "activo" => $activo
             );
       }

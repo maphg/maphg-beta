@@ -87,8 +87,8 @@ class IncidenciasGenerales extends Conexion
          $incidencia = $x['actividad'];
          $tipoIncidencia = $x['tipo_incidencia'];
          $status = $x['status'];
-         $creadoPor = $x['creado_por'];
-         $responsable = $x['responsable'];
+         $creadoPor = intval($x['creado_por']);
+         $responsable = intval($x['responsable']);
          $fechaCreado = $x['fecha_creacion'];
          $fechaFinalizado = $x['fecha_finalizado'];
          $idDestinoX = $x['idDestino'];
@@ -123,10 +123,11 @@ class IncidenciasGenerales extends Conexion
                "subseccion" => $subseccion,
                "idEquipo" => $idEquipo,
                "equipo" => $equipo,
+               "creadoPor" => $creadoPor,
+               "responsable" => $responsable,
                "activo" => $activo
             );
       }
       return $array;
    }
-   
 }

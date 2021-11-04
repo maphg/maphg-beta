@@ -187,6 +187,7 @@ if ($peticion === 'POST') {
       include_once "incidenciasGenerales.php";
       include_once "preventivos.php";
       include_once "seccionesSubsecciones.php";
+      include_once "usuarios.php";
 
       if ($accion === 'incidenciasSecciones') {
          $fechaInicio = $_POST['fechaInicio'];
@@ -500,6 +501,40 @@ if ($peticion === 'POST') {
          $array['data']['solucionados'] = $solucionados;
          $array['data']['pendientes'] = $pendientes;
          $array['data']['mpmcCreados'] = $mpmcCreados;
+      }
+
+      if ($accion === 'incidenciasUsuarios') {
+         $fechaInicio = $_POST['fechaInicio'];
+         $fechaFin = $_POST['fechaFin'];
+         $idSeccion = $_POST['idSeccion'];
+
+         $data = ReporteRanking::incidenciasUsuarios($idDestino, $idSeccion, $fechaInicio, $fechaFin);
+
+         #ARRAY DE RESULTADOS
+         $array['response'] = "SUCCESS";
+         $array['data'] = $data;
+      }
+
+      if ($accion === 'preventivosUsuarios') {
+         $fechaInicio = $_POST['fechaInicio'];
+         $fechaFin = $_POST['fechaFin'];
+         $idSeccion = $_POST['idSeccion'];
+
+         $data = ReporteRanking::preventivosUsuarios($idDestino, $idSeccion, $fechaInicio, $fechaFin);
+
+         #ARRAY DE RESULTADOS
+         $array['response'] = "SUCCESS";
+         $array['data'] = $data;
+      }
+
+      if ($accion === 'detalleSeccion') {
+         $idSeccion = $_POST['idSeccion'];
+
+         $data = seccionesSubsecciones::detalleSeccion($idDestino, $idSeccion);
+
+         #ARRAY DE RESULTADOS
+         $array['response'] = "SUCCESS";
+         $array['data'] = $data;
       }
    }
 

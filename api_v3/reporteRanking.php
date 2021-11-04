@@ -2711,4 +2711,181 @@ class ReporteRanking extends Conexion
 
       return $array;
    }
+
+
+   public static function incidenciasUsuarios($idDestino, $idSeccion, $fechaInicio, $fechaFin)
+   {
+      $conexion = new Conexion();
+      $conexion->conectar();
+      $array = array();
+
+      $usuarios = Usuarios::getAll($idDestino);
+      foreach ($usuarios as $key => $x) {
+         $usuarios[$key]['incidenciasCreadas'] = 0;
+         $usuarios[$key]['incidenciasSolucionadas'] = 0;
+         $usuarios[$key]['incidenciasPendientes'] = 0;
+      }
+
+      #INCIDENCIAS GENERALES
+      $incidenciasGenerales = IncidenciasGenerales::totalRangoFechaStatus(
+         $idDestino,
+         $idSeccion,
+         0,
+         "$fechaInicio 00:00:01",
+         "$fechaFin 23:59:59",
+         'CREADO',
+         'TODOS'
+      );
+      foreach ($incidenciasGenerales as $x) {
+         $creadoPor = $x['creadoPor'];
+         $responsable = $x['responsable'];
+         $status = $x['status'];
+
+         if ($responsable > 0) {
+            foreach ($usuarios as $key => $y) {
+               $idUsuario = $y['idUsuario'];
+               if ($responsable == $idUsuario) {
+                  $usuarios[$key]['incidenciasCreadas'] += 1;
+
+                  if ($status === 'SOLUCIONADO')
+                     $usuarios[$key]['incidenciasSolucionadas'] += 1;
+
+                  if ($status === 'PENDIENTE')
+                     $usuarios[$key]['incidenciasPendientes'] += 1;
+               }
+            }
+         } else {
+            foreach ($usuarios as $key => $y) {
+               $idUsuario = $y['idUsuario'];
+               if ($creadoPor == $idUsuario) {
+                  $usuarios[$key]['incidenciasCreadas'] += 1;
+
+                  if ($status === 'SOLUCIONADO')
+                     $usuarios[$key]['incidenciasSolucionadas'] += 1;
+
+                  if ($status === 'PENDIENTE')
+                     $usuarios[$key]['incidenciasPendientes'] += 1;
+               }
+            }
+         }
+      }
+
+      #INCIDENCIAS EQUIPOS
+      $incidenciasEquipos = Incidencias::totalRangoFechaStatus(
+         $idDestino,
+         $idSeccion,
+         0,
+         "$fechaInicio 00:00:01",
+         "$fechaFin 23:59:59",
+         'CREADO',
+         'TODOS'
+      );
+      foreach ($incidenciasEquipos as $x) {
+         $creadoPor = $x['creadoPor'];
+         $responsable = $x['responsable'];
+         $status = $x['status'];
+
+         if ($responsable > 0) {
+            foreach ($usuarios as $key => $y) {
+               $idUsuario = $y['idUsuario'];
+               if ($responsable == $idUsuario) {
+                  $usuarios[$key]['incidenciasCreadas'] += 1;
+
+                  if ($status === 'SOLUCIONADO')
+                     $usuarios[$key]['incidenciasSolucionadas'] += 1;
+
+                  if ($status === 'PENDIENTE')
+                     $usuarios[$key]['incidenciasPendientes'] += 1;
+               }
+            }
+         } else {
+            foreach ($usuarios as $key => $y) {
+               $idUsuario = $y['idUsuario'];
+               if ($creadoPor == $idUsuario) {
+                  $usuarios[$key]['incidenciasCreadas'] += 1;
+
+                  if ($status === 'SOLUCIONADO')
+                     $usuarios[$key]['incidenciasSolucionadas'] += 1;
+
+                  if ($status === 'PENDIENTE')
+                     $usuarios[$key]['incidenciasPendientes'] += 1;
+               }
+            }
+         }
+      }
+
+      foreach ($usuarios as $key => $x) {
+         if ($x['incidenciasCreadas'] > 0)
+            $array[] = $x;
+      }
+
+      return $array;
+   }
+
+
+   public static function preventivosUsuarios($idDestino, $idSeccion, $fechaInicio, $fechaFin)
+   {
+      $conexion = new Conexion();
+      $conexion->conectar();
+      $array = array();
+
+      $usuarios = Usuarios::getAll($idDestino);
+      foreach ($usuarios as $key => $x) {
+         $usuarios[$key]['preventivosCreados'] = 0;
+         $usuarios[$key]['preventivosSolucionados'] = 0;
+         $usuarios[$key]['preventivosPendientes'] = 0;
+      }
+
+      #MP
+      $preventivos =
+         MP::totalRangoFechaStatus(
+            $idDestino,
+            $idSeccion,
+            0,
+            "$fechaInicio 00:00:01",
+            "$fechaFin 23:59:59",
+            'CREADO',
+            "TODOS"
+         );
+
+      foreach ($preventivos as $x) {
+         $creadoPor = $x['creadoPor'];
+         $responsable = $x['responsable'];
+         $status = $x['status'];
+
+         if ($responsable > 0) {
+            foreach ($usuarios as $key => $y) {
+               $idUsuario = $y['idUsuario'];
+               if ($responsable == $idUsuario) {
+                  $usuarios[$key]['preventivosCreados'] += 1;
+
+                  if ($status === 'SOLUCIONADO')
+                  $usuarios[$key]['preventivosSolucionados'] += 1;
+
+                  if ($status === 'PENDIENTE')
+                  $usuarios[$key]['preventivosPendientes'] += 1;
+               }
+            }
+         } else {
+            foreach ($usuarios as $key => $y) {
+               $idUsuario = $y['idUsuario'];
+               if ($creadoPor == $idUsuario) {
+                  $usuarios[$key]['preventivosCreados'] += 1;
+
+                  if ($status === 'SOLUCIONADO')
+                  $usuarios[$key]['preventivosSolucionados'] += 1;
+
+                  if ($status === 'PENDIENTE')
+                  $usuarios[$key]['preventivosPendientes'] += 1;
+               }
+            }
+         }
+      }
+      foreach ($usuarios as $key => $x) {
+         if ($x['preventivosCreados'] > 0)
+         $array[] = $x;
+      }
+
+      return $array;
+   }
 }

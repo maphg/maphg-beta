@@ -58,6 +58,30 @@ class seccionesSubsecciones extends Conexion
       return $array;
    }
 
+   #DETALLES DE LA SECCIÓN POR ID
+   public static function detalleSeccion($idDestino, $idSeccion)
+   {
+      $conexion = new Conexion();
+      $conexion->conectar();
+
+      $query = "SELECT sec.id 'idSeccion', sec.seccion
+      FROM c_rel_destino_seccion AS relSec
+      INNER JOIN c_secciones AS sec ON relSec.id_seccion = sec.id
+      WHERE relSec.id_destino = ? and sec.id = ?";
+
+      $prepare = mysqli_prepare($conexion->con, $query);
+      $prepare->bind_param("ii", $idDestino, $idSeccion);
+      $prepare->execute();
+      $response = $prepare->get_result();
+
+      $array = array();
+      foreach ($response as $x) {
+         $array[] = $x;
+      }
+
+      return $array;
+   }
+
    #SUBSECCIONES
    public static function subsecciones($idDestino, $idSeccion)
    {
