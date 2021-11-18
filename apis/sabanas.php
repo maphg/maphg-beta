@@ -537,19 +537,30 @@ if ($peticion === "POST") {
                      }
                   }
 
+                  $planificacion = array();
+                  $query = "SELECT * FROM t_sabanas_planificaciones
+                  WHERE id_equipo =  $idEquipo and activo = 1";
+                  if ($result = mysqli_query($conn_2020, $query))
+                     foreach ($result as $x)
+                        $planificacion[] = $x;
+
+                  #VISUALIZA LOS EQUIPOS CON O  SIN REGISTROS
                   if ($visualizar == 0)
                      $equipos[] = array(
                         "idEquipo" => $idEquipo,
                         "equipo" => $equipo,
                         "registros" => $registros,
+                        "planificacion" => $planificacion,
                      );
 
+                  #VISUALIZA LOS EQUIPOS CON REGISTROS
                   if ($visualizar == 1)
                      if ($totalRegistros > 0)
                         $equipos[] = array(
                            "idEquipo" => $idEquipo,
                            "equipo" => $equipo,
                            "registros" => $registros,
+                           "planificacion" => $planificacion,
                         );
                }
             }
@@ -746,6 +757,7 @@ if ($peticion === "POST") {
    }
 
    if ($action === "reportado") {
+
       $idCaptura = $_POST['idCaptura'];
       $reportado = $_POST['reportado'];
 
@@ -760,6 +772,105 @@ if ($peticion === "POST") {
          $array['response'] = "SUCCESS";
          $array['data'] = $reportado;
       }
+   }
+
+   if ($action === "planificacion") {
+      $array['response'] = "SUCCESS";
+
+      $idEquipo = $_POST['idEquipo'];
+      $semana = intval($_POST['semana']);
+      $frecuencia = intval($_POST['frecuencia']);
+      $opcion = $_POST['opcion'];
+      $planificacion = $_POST['planificacion'];
+      $idPlaneacion = $_POST['idPlaneacion'];
+      $totalPlaneaciones = 0;
+
+      if (!$planificacion) {
+         $query = "INSERT INTO t_sabanas_planificaciones (id_publico, id_equipo, fecha_creado, creado_por, activo)
+         VALUES('$idPlaneacion', $idEquipo, '$fechaActual', $idUsuario, 1)";
+         if ($result = mysqli_query($conn_2020, $query)) {
+            $array['data'] = "AGREGADO";
+         }
+      }
+
+      $query = "SELECT count(id_privado) 'totalPlaneaciones'
+      FROM t_sabanas_planificaciones
+      WHERE id_publico = '$idPlaneacion'";
+      if ($result = mysqli_query($conn_2020, $query))
+         foreach ($result as $x)
+            $totalPlaneaciones = intval($x['totalPlaneaciones']);
+
+      if ($opcion === "planificarDesdeAqui" && $totalPlaneaciones === 1) {
+         #PLANIFICAR DESDE AQUÍ
+         $rango = "";
+         $semanaX = $semana;
+         while ($semanaX <= 52) {
+            $rango .= ", semana_$semanaX = ''";
+            $semanaX++;
+         }
+
+         $query = "UPDATE t_sabanas_planificaciones
+         SET fecha_modificado = '$fechaActual', modificado_por = $idUsuario $rango
+         WHERE id_publico = '$idPlaneacion' and activo = 1";
+         if ($result = mysqli_query($conn_2020, $query))
+            $array['data'] = $opcion;
+
+         $rango = "";
+         while ($semana <= 52) {
+            $rango .= ", semana_$semana = 'PLANIFICADO'";
+            $semana += $frecuencia;
+         }
+
+         $query = "UPDATE t_sabanas_planificaciones
+         SET fecha_modificado = '$fechaActual', modificado_por = $idUsuario $rango
+         WHERE id_publico = '$idPlaneacion' and activo = 1";
+         if ($result = mysqli_query($conn_2020, $query))
+            $array['data'] = $opcion;
+      }
+
+      if ($opcion === "planificarIndividual" && $totalPlaneaciones === 1) {
+         #PLANIFICAR INVIDIVUAL
+         $query = "UPDATE t_sabanas_planificaciones SET semana_$semana = 'PLANIFICADO',
+         fecha_modificado = '$fechaActual', modificado_por = $idUsuario
+         WHERE id_publico = '$idPlaneacion' and activo = 1";
+         if ($result = mysqli_query($conn_2020, $query)) {
+            $array['data'] = $opcion;
+         }
+      }
+
+      if ($opcion === "eliminarIndividual" && $totalPlaneaciones === 1) {
+         #ELIMINAR INVIDIVUAL
+         $query = "UPDATE t_sabanas_planificaciones SET semana_$semana = '0',
+         fecha_modificado = '$fechaActual', modificado_por = $idUsuario
+         WHERE id_publico = '$idPlaneacion' and activo = 1";
+         if ($result = mysqli_query($conn_2020, $query)) {
+            $array['data'] = $opcion;
+         }
+      }
+
+      if ($opcion === "eliminarDesdeAqui" && $totalPlaneaciones === 1) {
+         #ELIMINAR DESDE AQUÍ
+         $rango = "";
+
+         while ($semana <= 52) {
+            $rango .= ", semana_$semana = '0'";
+
+            $semana++;
+         }
+
+         $query = "UPDATE t_sabanas_planificaciones
+         SET fecha_modificado = '$fechaActual', modificado_por = $idUsuario $rango
+         WHERE id_publico = '$idPlaneacion' and activo = 1";
+         if ($result = mysqli_query($conn_2020, $query))
+            $array['data'] = $opcion;
+      }
+
+      $planificacion = array();
+      $query = "SELECT * FROM t_sabanas_planificaciones WHERE id_equipo =  $idEquipo and activo = 1";
+      if ($result = mysqli_query($conn_2020, $query))
+         foreach ($result as $x)
+            $planificacion[] = $x;
+      $array['data'] = $planificacion;
    }
 }
 
