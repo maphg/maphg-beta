@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="shortcut icon" href="svg/favicon.ico" type="image/x-icon">
+   <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+   <title>Parámetros PTAR MAPHG</title>
+</head>
+
+<body>
+   <div id="frame" class="w-full h-screen flex flex-col md:flex-row bg-red-50"></div>
+
+   <script>
+      const frame = document.getElementById('frame');
+
+      const cmu = document.getElementById("cmu");
+      const rvm = document.getElementById("rvm");
+      const cmuG = document.getElementById("cmuG");
+      const rvmG = document.getElementById("rvmG");
+
+      const cmuLink = "https://app.powerbi.com/view?r=eyJrIjoiYjEyY2Y5MzEtNDliNC00MjMzLWE1NDMtYjZkNTljYzY4N2ZmIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9&pageName=ReportSection";
+
+      const rvmLink = "https://app.powerbi.com/view?r=eyJrIjoiNzY1MDM4MzItMWJkMS00ZjRhLWFhMzgtOTY1NzA4MzRhZjhjIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9&pageName=ReportSection";
+
+      if (localStorage.getItem("idDestino") == 10) {
+         frame.insertAdjacentHTML('beforeend', `
+         <iframe src="${cmuLink}" class="w-full mb-2 md:mb-0 md:w-1/2 h-full md:mx-1" />
+         `);
+
+         frame.insertAdjacentHTML('beforeend', `
+         <iframe src="${rvmLink}" class="w-full md:w-1/2 h-full mx-1 md:my-1" />
+         `);
+      }
+
+      if (localStorage.getItem("idDestino") == 1) {
+         frame.innerHTML = `
+            <iframe src="${rvmLink}" class="w-full h-full md:px-4" frameborder="0" allowFullScreen="true" />
+         `;
+      }
+
+      if (localStorage.getItem("idDestino") == 7) {
+         frame.innerHTML = `
+            <iframe src="${cmuLink}" class="w-full h-full md:px-4" frameborder="0" allowFullScreen="true" />
+         `;
+      }
+   </script>
+
+</body>
+
+</html>
