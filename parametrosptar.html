@@ -28,33 +28,30 @@
       const render = () => {
 
          if (localStorage.getItem("idDestino") == 10) {
-            frame.insertAdjacentHTML('beforeend', `
-         <iframe src="${cmuLink}" class="w-full md:w-1/2 h-full mb-2 md:mb-0 md:mx-1" />
-         `);
+            frame.insertAdjacentHTML('beforeend',
+               `<iframe src="${cmuLink}" class="w-full md:w-1/2 h-full mb-2 md:mb-0 md:mx-1" />`
+            );
 
-            frame.insertAdjacentHTML('beforeend', `
-         <iframe src="${rvmLink}" class="w-full md:w-1/2 h-full mb-2 md:mb-0 md:mx-1" />
-         `);
+            frame.insertAdjacentHTML('beforeend',
+               `<iframe src="${rvmLink}" class="w-full md:w-1/2 h-full mb-2 md:mb-0 md:mx-1" />`
+            );
             return;
          }
 
          if (localStorage.getItem("idDestino") == 1) {
-            frame.innerHTML = `
-            <iframe src="${rvmLink}" class="w-full h-full md:px-4" frameborder="0" allowFullScreen="true" />
-         `;
+            frame.innerHTML =
+               `<iframe src="${rvmLink}" class="w-full h-full md:px-4" frameborder="0" allowFullScreen="true" />`;
             return;
          }
 
          if (localStorage.getItem("idDestino") == 7) {
-            frame.innerHTML = `
-            <iframe src="${cmuLink}" class="w-full h-full md:px-4" frameborder="0" allowFullScreen="true" />
-         `;
+            frame.innerHTML =
+               `<iframe src="${cmuLink}" class="w-full h-full md:px-4" frameborder="0" allowFullScreen="true" />`;
             return;
          }
 
-         frame.innerHTML = `
-         <p class="w-full text-center m-auto">No se encuentra el Microsoft Power BI</p>
-         `;
+         frame.innerHTML =
+            `<p class="w-full text-center m-auto">No se encuentra el Microsoft Power BI</p>`;
          return;
       }
       render();
