@@ -11,7 +11,7 @@
 </head>
 
 <body>
-   <div id="frame" class="w-full h-screen flex flex-col md:flex-row bg-red-50"></div>
+   <div id="frame" class="w-full h-screen flex flex-col md:flex-row bg-gray-50" />
 
    <script>
       const frame = document.getElementById('frame');
@@ -25,27 +25,39 @@
 
       const rvmLink = "https://app.powerbi.com/view?r=eyJrIjoiNzY1MDM4MzItMWJkMS00ZjRhLWFhMzgtOTY1NzA4MzRhZjhjIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9&pageName=ReportSection";
 
-      if (localStorage.getItem("idDestino") == 10) {
-         frame.insertAdjacentHTML('beforeend', `
-         <iframe src="${cmuLink}" class="w-full mb-2 md:mb-0 md:w-1/2 h-full md:mx-1" />
+      const render = () => {
+
+         if (localStorage.getItem("idDestino") == 10) {
+            frame.insertAdjacentHTML('beforeend', `
+         <iframe src="${cmuLink}" class="w-full md:w-1/2 h-full mb-2 md:mb-0 md:mx-1" />
          `);
 
-         frame.insertAdjacentHTML('beforeend', `
-         <iframe src="${rvmLink}" class="w-full md:w-1/2 h-full mx-1 md:my-1" />
+            frame.insertAdjacentHTML('beforeend', `
+         <iframe src="${rvmLink}" class="w-full md:w-1/2 h-full mb-2 md:mb-0 md:mx-1" />
          `);
-      }
+            return;
+         }
 
-      if (localStorage.getItem("idDestino") == 1) {
-         frame.innerHTML = `
+         if (localStorage.getItem("idDestino") == 1) {
+            frame.innerHTML = `
             <iframe src="${rvmLink}" class="w-full h-full md:px-4" frameborder="0" allowFullScreen="true" />
          `;
-      }
+            return;
+         }
 
-      if (localStorage.getItem("idDestino") == 7) {
-         frame.innerHTML = `
+         if (localStorage.getItem("idDestino") == 7) {
+            frame.innerHTML = `
             <iframe src="${cmuLink}" class="w-full h-full md:px-4" frameborder="0" allowFullScreen="true" />
          `;
+            return;
+         }
+
+         frame.innerHTML = `
+         <p class="w-full text-center m-auto">No se encuentra el Microsoft Power BI</p>
+         `;
+         return;
       }
+      render();
    </script>
 
 </body>
