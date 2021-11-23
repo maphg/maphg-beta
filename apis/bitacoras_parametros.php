@@ -127,14 +127,12 @@ if ($peticion === "POST") {
     $idUsuario = $_POST['idUsuario'];
     $action = $_POST['action'];
 
-
     #CONEXION
     if ($action === "conexion") {
         $array['response'] = "SUCCESS";
         $array['message'] = "Conexión Exitosa!";
         $array['conexion'] = true;
     }
-
 
     #OBTIENE EL LISTADO DE LAS BITACORAS
     if ($action === "listadoBitacoras") {
@@ -1501,7 +1499,6 @@ if ($peticion === "POST") {
 
 
     if ($action === "capturar") {
-
         $idValor = $_POST['idValor'];
         $idBitacora = $_POST['idBitacora'];
         $idParametro = $_POST['idParametro'];
@@ -1516,7 +1513,6 @@ if ($peticion === "POST") {
         #DECISIÓN PARA CREAR INCIDENCIA
         $idNuevaIncidencia = 0;
         $crearIncidencia = "NO";
-
 
         #CADA VEZ QUE SE MODIFICA EL PARAMETRO ELIMINA LA INCIDENCIA CREADA ANTERIORMENTE.
         $query = "UPDATE t_mc SET activo = 0 WHERE id = $idIncidencia";
@@ -1763,11 +1759,30 @@ if ($peticion === "POST") {
 
                                             $fechaRegistro = "";
                                             $horaRegistro = "";
-                                            $query = "SELECT id, valor, parametro_minimo, parametro_maximo, crear_incidencia,
-                                            id_incidencia, fecha_captura, status
-                                            FROM t_bitacora_capturas
-                                            WHERE id_bitacora = '$idBitacora' and id_parametro = '$idParametro' 
-                                            and id_equipo = '$idEquipo' and fecha_token = '$fechaToken' and activo = 1";
+
+                                            #Registro
+                                            $idValor = 0;
+                                            $valor = "";
+                                            $fueraRango = "";
+                                            $crearIncidencia = "";
+                                            $idIncidencia = "";
+                                            $fechaCaptura = "";
+                                            $status = "";
+                                            $enTiempo = "";
+                                            $estado = "PENDIENTE";
+                                            $nombre = "";
+
+                                            $query = "SELECT captura.id, captura.valor, captura.parametro_minimo, captura.parametro_maximo, captura.crear_incidencia,
+                                            captura.id_incidencia, captura.fecha_captura, captura.status,
+                                            c.nombre, c.apellido
+                                            FROM t_bitacora_capturas AS captura
+                                            INNER JOIN t_users AS u ON captura.creado_por = u.id
+                                            INNER JOIN t_colaboradores AS c ON u.id_colaborador = c.id
+                                            WHERE captura.id_bitacora = '$idBitacora' and
+                                            captura.id_parametro = '$idParametro' and
+                                            captura.id_equipo = '$idEquipo' and
+                                            captura.fecha_token = '$fechaToken' and
+                                            captura.activo = 1";
                                             if ($result = mysqli_query($conn_2020, $query)) {
                                                 foreach ($result as $x) {
                                                     $idValor = $x['id'];
@@ -1782,6 +1797,7 @@ if ($peticion === "POST") {
                                                     $fechaLR = strtotime($fechaToken);
                                                     $fechaL = strtotime("+30 minutes", strtotime($fechaToken));
                                                     $fechaR = strtotime("-30 minutes", strtotime($fechaToken));
+                                                    $nombre = $x['nombre'] . " " . $x['apellido'];
 
                                                     if ($fechaCaptura != "")
                                                         $fechaRegistro = (new \DateTime($fechaCaptura))->format('Y-m-d');
@@ -1798,36 +1814,37 @@ if ($peticion === "POST") {
                                                         $fueraRango = "NO";
                                                     else
                                                         $fueraRango = "SI";
-
-                                                    $array['data'][] = array(
-                                                        "destino" => $destino,
-                                                        "idBitacora" => $idBitacora,
-                                                        "bitacora" => $bitacora,
-                                                        "idParametro" => $idParametro,
-                                                        "parametro" => $parametro,
-                                                        "idLineaTiempo" => $idLineaTiempo,
-                                                        "idEquipo" => $idEquipo,
-                                                        "idValor" => $idValor,
-                                                        "equipo" => $equipo,
-                                                        "medida" => $medida,
-                                                        "parametroMinimo" => $parametroMinimo,
-                                                        "parametroMaximo" => $parametroMaximo,
-                                                        "valor" => $valor,
-                                                        "fueraRango" => $fueraRango,
-                                                        "crearIncidencia" => $crearIncidencia,
-                                                        "idIncidencia" => $idIncidencia,
-                                                        "fechaCaptura" => $fechaCaptura,
-                                                        "fechaRegistro" => $fechaRegistro,
-                                                        "horaRegistro" => $horaRegistro,
-                                                        "tipoEquipo" => $tipoEquipo,
-                                                        "horarioInput" => $horarioInput,
-                                                        "fechaToken" => $fechaToken,
-                                                        "status" => $status,
-                                                        "enTiempo" => $enTiempo,
-                                                        "estado" => $estado,
-                                                    );
                                                 }
                                             }
+
+                                            $array['data'][] = array(
+                                                "destino" => $destino,
+                                                "idBitacora" => $idBitacora,
+                                                "bitacora" => $bitacora,
+                                                "idParametro" => $idParametro,
+                                                "parametro" => $parametro,
+                                                "idLineaTiempo" => $idLineaTiempo,
+                                                "idEquipo" => $idEquipo,
+                                                "idValor" => $idValor,
+                                                "equipo" => $equipo,
+                                                "medida" => $medida,
+                                                "parametroMinimo" => $parametroMinimo,
+                                                "parametroMaximo" => $parametroMaximo,
+                                                "valor" => $valor,
+                                                "fueraRango" => $fueraRango,
+                                                "crearIncidencia" => $crearIncidencia,
+                                                "idIncidencia" => $idIncidencia,
+                                                "fechaCaptura" => $fechaCaptura,
+                                                "fechaRegistro" => $fechaRegistro,
+                                                "horaRegistro" => $horaRegistro,
+                                                "tipoEquipo" => $tipoEquipo,
+                                                "horarioInput" => $horarioInput,
+                                                "fechaToken" => $fechaToken,
+                                                "status" => $status,
+                                                "enTiempo" => $enTiempo,
+                                                "estado" => $estado,
+                                                "nombre" => $nombre,
+                                            );
                                         }
                                     }
                                 }
@@ -2019,9 +2036,10 @@ if ($peticion === "POST") {
 
                                                     $data[] = array(
                                                         "fecha" => $fechaCaptura,
-                                                        "valor" => $valor,
-                                                        "parametroMinimo" => $parametroMinimo,
-                                                        "parametroMaximo" => $parametroMaximo,
+                                                        "valor" => floatval($valor),
+                                                        "parametroMinimo" => floatval($parametroMinimo),
+                                                        "parametroMaximo" => floatval($parametroMaximo),
+                                                        "medida" => $medida
                                                     );
                                                 }
                                             }
@@ -2195,7 +2213,6 @@ if ($peticion === "POST") {
                                         $status = "PENDIENTE";
                                         $enTiempo = "";
                                         $estado = "ESPERA";
-
 
                                         #VALOR
                                         $query = "SELECT id, valor, crear_incidencia,
