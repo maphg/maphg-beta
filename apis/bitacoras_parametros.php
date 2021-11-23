@@ -1728,11 +1728,12 @@ if ($peticion === "POST") {
                                 $filtroCiclosHoras = "and ciclo_horas = '$ciclo_p'";
                             }
 
-                            $query = "SELECT lt.id, fecha_token
-                            FROM t_bitacoras_linea_tiempo AS lt
+                            $query = "SELECT id, fecha_token
+                            FROM t_bitacoras_linea_tiempo
                             WHERE id_bitacora = '$idBitacora' and
                             fecha_token BETWEEN '$fechaInicio' and '$fechaFin' and activo = 1
-                            $filtroParametro $filtroFechaRegistro $filtroHoraRegistro $filtroCiclosHoras";
+                            $filtroParametro $filtroFechaRegistro $filtroHoraRegistro $filtroCiclosHoras
+                            ORDER BY fecha_token ASC";
                             if ($result = mysqli_query($conn_2020, $query)) {
                                 foreach ($result as $x) {
                                     $idLineaTiempo = $x['id'];
@@ -1771,6 +1772,8 @@ if ($peticion === "POST") {
                                             $enTiempo = "";
                                             $estado = "PENDIENTE";
                                             $nombre = "";
+                                            $fechaSolicitada = (new \DateTime($fechaToken))->format('Y-m-d');
+                                            $horaSolicitada = (new \DateTime($fechaToken))->format('H:m');
 
                                             $query = "SELECT captura.id, captura.valor, captura.parametro_minimo, captura.parametro_maximo, captura.crear_incidencia,
                                             captura.id_incidencia, captura.fecha_captura, captura.status,
@@ -1840,6 +1843,8 @@ if ($peticion === "POST") {
                                                 "tipoEquipo" => $tipoEquipo,
                                                 "horarioInput" => $horarioInput,
                                                 "fechaToken" => $fechaToken,
+                                                "fechaSolicitada" => $fechaSolicitada,
+                                                "horaSolicitada" => $horaSolicitada,
                                                 "status" => $status,
                                                 "enTiempo" => $enTiempo,
                                                 "estado" => $estado,
