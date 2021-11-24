@@ -7,7 +7,7 @@
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <link rel="shortcut icon" href="svg/favicon.ico" type="image/x-icon">
    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
-   <title>Parámetros PTAR MAPHG</title>
+   <title>Planta Tratamiento MAPHG</title>
 </head>
 
 <body>
@@ -16,21 +16,13 @@
    <script>
       const frame = document.getElementById('frame');
 
-      const cmu = document.getElementById("cmu");
-      const rvm = document.getElementById("rvm");
-      const cmuG = document.getElementById("cmuG");
-      const rvmG = document.getElementById("rvmG");
+      const cmuLink = "";
 
-      const cmuLink = "https://app.powerbi.com/view?r=eyJrIjoiYjEyY2Y5MzEtNDliNC00MjMzLWE1NDMtYjZkNTljYzY4N2ZmIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9&pageName=ReportSection";
-
-      const rvmLink = "https://app.powerbi.com/view?r=eyJrIjoiNzY1MDM4MzItMWJkMS00ZjRhLWFhMzgtOTY1NzA4MzRhZjhjIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9&pageName=ReportSection";
+      const rvmLink = "https://app.powerbi.com/view?r=eyJrIjoiNjI5MTg2NjEtZjBkMC00NGRhLThiZjktMTdmY2NiNmY0OWJjIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9";
 
       const render = () => {
 
          if (localStorage.getItem("idDestino") == 10) {
-            frame.insertAdjacentHTML('beforeend',
-               `<iframe src="${cmuLink}" class="w-full md:w-1/2 h-full mb-2 md:mb-0 md:mx-1" />`
-            );
 
             frame.insertAdjacentHTML('beforeend',
                `<iframe src="${rvmLink}" class="w-full md:w-1/2 h-full mb-2 md:mb-0 md:mx-1" />`
@@ -41,12 +33,6 @@
          if (localStorage.getItem("idDestino") == 1) {
             frame.innerHTML =
                `<iframe src="${rvmLink}" class="w-full h-full md:px-4" frameborder="0" allowFullScreen="true" />`;
-            return;
-         }
-
-         if (localStorage.getItem("idDestino") == 7) {
-            frame.innerHTML =
-               `<iframe src="${cmuLink}" class="w-full h-full md:px-4" frameborder="0" allowFullScreen="true" />`;
             return;
          }
 
