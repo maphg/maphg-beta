@@ -112,10 +112,11 @@
                 <select id="filtroStatus" class="w-full border border-gray-200 text-gray-700 rounded-lg leading-tight focus:outline-none hover:bg-gray-200 focus:border-gray-500 mx-2 bg-white">
                     <option value="">Seleccione</option>
                     <option value="OPERATIVO">OPERATIVO</option>
-                    <option value="BAJA">BAJA</option>
                     <option value="TALLER">TALLER</option>
+                    <option value="BACKUP">BACKUP</option>
                     <option value="FUERASERVICIO">FUERA DE SERVICIO</option>
                     <option value="OPERAMAL">OPERA MAL</option>
+                    <option value="BAJA">BAJA</option>
                 </select>
             </div>
         </div>
@@ -205,10 +206,11 @@
                             <select id="estadoEquipo" class="text-xs font-bold bg-green-200 text-green-500 select-sinarrow">
                                 <option value="">Seleccione</option>
                                 <option value="OPERATIVO">OPERATIVO</option>
-                                <option value="BAJA">BAJA</option>
                                 <option value="TALLER">TALLER</option>
+                                <option value="BACKUP">BACKUP</option>
                                 <option value="FUERASERVICIO">FUERA DE SERVICIO</option>
                                 <option value="OPERAMAL">OPERA MAL</option>
+                                <option value="BAJA">BAJA</option>
                             </select>
 
                         </div>
