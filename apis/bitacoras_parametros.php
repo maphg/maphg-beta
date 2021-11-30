@@ -1755,6 +1755,9 @@ if ($peticion === "POST") {
                                             #TIPOS DE EQUIPOS
                                             $array['tiposEquipos'][] = $tipoEquipo;
 
+                                            #EQUIPOS
+                                            $array['equipos'][] = $equipo;
+
                                             #DESTINOS DE EQUIPOS
                                             $array['destinos'][] = $destino;
 
@@ -2012,6 +2015,9 @@ if ($peticion === "POST") {
 
                                             #TIPOS DE EQUIPOS
                                             $array['tiposEquipos'][] = $tipoEquipo;
+
+                                            #EQUIPOS
+                                            $array['equipos'][] = $equipo;
 
                                             #DESTINOS DE EQUIPOS
                                             $array['destinos'][] = $destino;
@@ -2289,6 +2295,118 @@ if ($peticion === "POST") {
                 }
             }
         }
+    }
+
+
+    if ($action === 'obtenerDestinos') {
+        $array['response'] = "SUCCESS";
+        $array['data'] = array();
+
+        if ($idDestino > 0)
+            $filtroDestino = "WHERE id = $idDestino";
+
+        if ($idDestino == 10)
+            $filtroDestino = "WHERE id != 10";
+
+        $query = "SELECT id 'idDestino', destino FROM c_destinos $filtroDestino";
+        if ($result = mysqli_query($conn_2020, $query))
+            foreach ($result as $x)
+                $array['data'][] = $x;
+    }
+
+
+    if ($action === 'graficaX') {
+        $array['response'] = "SUCCESS";
+        $array['data'] = array();
+
+        $fechaInicio = $_POST['fechaInicio'] . " 00:00:01";
+        $fechaFin = $_POST['fechaFin'] . " 23:59:59";
+
+        #FILTRO DESTINO ESPECIFICO
+        if ($idDestino > 10)
+            $filtroDestino = "AND e.id_destino = $idDestino";
+
+        #FILTRO DESTINO GLOBAL
+        if ($idDestino == 10)
+            $filtroDestino = "";
+
+        $query = "SELECT 
+        e.id 'idEquipo',
+        e.equipo,
+        tipo.tipo 'tipoEquipo',
+        destino.destino,
+        bc.id_publico 'idBitacora',
+        bc.descripcion 'bitacora',
+        bp.id_publico 'idParametro',
+        bp.parametro,
+        b.fecha_token 'fechaToken',
+        b.valor,
+        b.parametro_minimo 'parametroMinimo',
+        b.parametro_maximo 'parametroMaximo',
+        unidad.simbolo
+        FROM t_bitacora_capturas AS b
+        INNER JOIN t_equipos_america AS e ON b.id_equipo = e.id
+        INNER JOIN c_tipos AS tipo ON e.id_tipo = tipo.id
+        INNER JOIN c_destinos AS destino ON e.id_destino = destino.id
+        INNER JOIN t_bitacoras_configuracion AS bc ON b.id_bitacora = bc.id_publico
+        INNER JOIN t_bitacoras_lista_parametros AS bp ON b.id_parametro = bp.id_publico
+        INNER JOIN t_unidades_medidas AS unidad ON bp.id_unidad_medida = unidad.id
+        WHERE b.status = 'CAPTURADO' AND b.activo = 1 AND
+        b.fecha_token BETWEEN '$fechaInicio' AND '$fechaFin' $filtroDestino
+        ORDER BY b.fecha_token ASC";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idEquipo = $x['idEquipo'];
+                $equipo = $x['equipo'];
+                $tipoEquipo = $x['tipoEquipo'];
+                $destino = $x['destino'];
+                $idBitacora = $x['idBitacora'];
+                $bitacora = $x['bitacora'];
+                $idParametro = $x['idParametro'];
+                $parametro = $x['parametro'];
+                $fechaTokenFull = $x['fechaToken'];
+                $fechaTokenCorta = (new DateTime($x['fechaToken']))->format('Y-m-d');
+                $valor = $x['valor'];
+                $parametroMinimo = $x['parametroMinimo'];
+                $parametroMaximo = $x['parametroMaximo'];
+                $medida = $x['simbolo'];
+
+                #DESTINO
+                $array['data']['destinos'][] = $destino;
+
+                #BITACORAS
+                $array['data']['bitacoras'][] = $bitacora;
+
+                #PARAMETROS
+                $array['data']['parametros'][] = $parametro;
+
+                #TIPOS DE EQUIPOS
+                $array['data']['tiposEquipos'][] = $tipoEquipo;
+
+                #EQUIPOS
+                $array['data']['equipos'][] = $equipo;
+
+                #DATA
+                $array['data']['graficas'][] =
+                    array(
+                        "idEquipo" => $idEquipo,
+                        "equipo" => $equipo,
+                        "tipoEquipo" => $tipoEquipo,
+                        "destino" => $destino,
+                        "idBitacora" => $idBitacora,
+                        "bitacora" => $bitacora,
+                        "idParametro" => $idParametro,
+                        "parametro" => $parametro,
+                        "fechaTokenFull" => $fechaTokenFull,
+                        "fechaTokenCorta" => $fechaTokenCorta,
+                        "valor" => $valor,
+                        "parametroMinimo" => $parametroMinimo,
+                        "parametroMaximo" => $parametroMaximo,
+                        "medida" => $medida,
+                    );
+            }
+        }
+        // $array['data'] = $query;
     }
 
     // Cierre
