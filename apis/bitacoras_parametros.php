@@ -1369,11 +1369,11 @@ if ($peticion === "POST") {
                         $equipos = array();
 
                         $arrayUsuariosPermitidos = [];
-                        if ($usuariosGlobales == true) {
+                        if ($usuariosGlobales) {
                             $arrayUsuariosPermitidos = explode(", ", $idsUsuarios_b);
                         }
 
-                        if ($usuariosGlobales == false) {
+                        if (!$usuariosGlobales) {
                             $arrayUsuariosPermitidos = explode(", ", $idsUsuarios_p);
                         }
 
@@ -2251,31 +2251,41 @@ if ($peticion === "POST") {
                                             }
                                         }
 
-                                        $parametros[] = array(
-                                            "idBitacora" => $idBitacora,
-                                            "bitacora" => $bitacora,
-                                            "idParametro" => $idParametro,
-                                            "parametro" => $parametro,
-                                            "idEquipo" => $idEquipo,
-                                            "equipo" => $equipo,
-                                            "tipoEquipo" => $tipoEquipo,
-                                            "medida" => $medida,
-                                            "parametroMinimo" => $parametroMinimo,
-                                            "parametroMaximo" => $parametroMaximo,
-                                            "idLineaTiempo" => $idLineaTiempo,
-                                            "idLineaTiempo" => $idLineaTiempo,
-                                            "fechaToken" => $fechaToken,
-                                            "horarioInput" => $horarioInput,
-                                            "idValor" => $idValor,
-                                            "valor" => $valor,
-                                            "crearIncidencia" => $crearIncidencia,
-                                            "idIncidencia" => $idIncidencia,
-                                            "fechaCaptura" => $fechaCaptura,
-                                            "enTiempo" => $enTiempo,
-                                            "status" => $status,
-                                            "enTiempo" => $enTiempo,
-                                            "estado" => $estado,
-                                        );
+                                        $arrayUsuariosPermitidos = [];
+                                        if ($usuariosGlobales) {
+                                            $arrayUsuariosPermitidos = explode(", ", $idsUsuarios_b);
+                                        }
+
+                                        if (!$usuariosGlobales) {
+                                            $arrayUsuariosPermitidos = explode(", ", $idsUsuarios_p);
+                                        }
+
+                                        if (in_array($idUsuario, $arrayUsuariosPermitidos))
+                                            $parametros[] = array(
+                                                "idBitacora" => $idBitacora,
+                                                "bitacora" => $bitacora,
+                                                "idParametro" => $idParametro,
+                                                "parametro" => $parametro,
+                                                "idEquipo" => $idEquipo,
+                                                "equipo" => $equipo,
+                                                "tipoEquipo" => $tipoEquipo,
+                                                "medida" => $medida,
+                                                "parametroMinimo" => $parametroMinimo,
+                                                "parametroMaximo" => $parametroMaximo,
+                                                "idLineaTiempo" => $idLineaTiempo,
+                                                "idLineaTiempo" => $idLineaTiempo,
+                                                "fechaToken" => $fechaToken,
+                                                "horarioInput" => $horarioInput,
+                                                "idValor" => $idValor,
+                                                "valor" => $valor,
+                                                "crearIncidencia" => $crearIncidencia,
+                                                "idIncidencia" => $idIncidencia,
+                                                "fechaCaptura" => $fechaCaptura,
+                                                "enTiempo" => $enTiempo,
+                                                "status" => $status,
+                                                "enTiempo" => $enTiempo,
+                                                "estado" => $estado,
+                                            );
                                     }
                                 }
                             }
@@ -2323,7 +2333,7 @@ if ($peticion === "POST") {
         $fechaFin = $_POST['fechaFin'] . " 23:59:59";
 
         #FILTRO DESTINO ESPECIFICO
-        if ($idDestino > 10)
+        if ($idDestino > 0)
             $filtroDestino = "AND e.id_destino = $idDestino";
 
         #FILTRO DESTINO GLOBAL
