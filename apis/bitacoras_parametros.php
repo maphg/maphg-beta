@@ -2259,7 +2259,7 @@ if ($peticion === "POST") {
                                             $arrayUsuariosPermitidos = explode(", ", $idsUsuarios_b);
                                         }
 
-                                        if (!$usuariosGlobales == 'false') {
+                                        if ($usuariosGlobales == 'false') {
                                             $arrayUsuariosPermitidos = explode(", ", $idsUsuarios_p);
                                         }
 
