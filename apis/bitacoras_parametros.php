@@ -236,7 +236,8 @@ if ($peticion === "POST") {
 
         #TIPOS DE EQUIPOS
         $array['tiposEquipos'] = array();
-        $query = "SELECT id, tipo FROM c_tipos  ORDER BY tipo ASC";
+        $query = "SELECT id, tipo FROM c_tipos WHERE status = 'A'
+        ORDER BY tipo ASC";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $idTipoEquipo = intval($x["id"]);
@@ -2154,6 +2155,8 @@ if ($peticion === "POST") {
                         $idDestinoX = $x['idDestinoX'];
                         $destino = $x['destino'];
                         $tipoEquipo = $x['tipo'];
+
+                        #TIPOS DE EQUIPOS
                         $array['tiposEquipos'][] = $tipoEquipo;
 
                         #PARAMETROS
