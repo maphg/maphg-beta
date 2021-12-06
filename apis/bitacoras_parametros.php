@@ -2255,11 +2255,11 @@ if ($peticion === "POST") {
                                         }
 
                                         $arrayUsuariosPermitidos = [];
-                                        if ($usuariosGlobales) {
+                                        if ($usuariosGlobales == 'true') {
                                             $arrayUsuariosPermitidos = explode(", ", $idsUsuarios_b);
                                         }
 
-                                        if (!$usuariosGlobales) {
+                                        if (!$usuariosGlobales == 'false') {
                                             $arrayUsuariosPermitidos = explode(", ", $idsUsuarios_p);
                                         }
 
