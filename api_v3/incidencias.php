@@ -262,6 +262,7 @@ class Incidencias extends Conexion
                "equipo" => $equipo,
                "creadoPor" => $creadoPor,
                "responsable" => $responsable,
+               "arrayResponsable" => Usuarios::getById($responsable),
                "activo" => $activo
             );
       }

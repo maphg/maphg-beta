@@ -2254,16 +2254,17 @@ if ($peticion === "POST") {
                                             }
                                         }
 
-                                        $arrayUsuariosPermitidos = [];
-                                        if ($usuariosGlobales == 'true') {
+                                        $arrayUsuariosPermitidos = [-1];
+
+                                        if ($usuariosGlobales == true)
                                             $arrayUsuariosPermitidos = explode(", ", $idsUsuarios_b);
-                                        }
 
-                                        if ($usuariosGlobales == 'false') {
+
+                                        if ($usuariosGlobales == false)
                                             $arrayUsuariosPermitidos = explode(", ", $idsUsuarios_p);
-                                        }
 
-                                        if (in_array($idUsuario, $arrayUsuariosPermitidos))
+
+                                        if (in_array($idUsuario, $arrayUsuariosPermitidos, false))
                                             $parametros[] = array(
                                                 "idBitacora" => $idBitacora,
                                                 "bitacora" => $bitacora,

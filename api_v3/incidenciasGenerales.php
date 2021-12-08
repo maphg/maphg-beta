@@ -106,7 +106,7 @@ class IncidenciasGenerales extends Conexion
          else
             $status = 'SOLUCIONADO';
 
-         #RESULTADO FINAL DE PROYECTOS
+         #RESULTADO FINAL DE INCIDENCIAS GENERALES
          $array[] =
             array(
                "idIncidencia" => $idIncidencia,
@@ -124,7 +124,8 @@ class IncidenciasGenerales extends Conexion
                "idEquipo" => $idEquipo,
                "equipo" => $equipo,
                "creadoPor" => $creadoPor,
-               "responsable" => $responsable,
+               "responsable" =>  $responsable,
+               "arrayResponsable" => Usuarios::getById($responsable),
                "activo" => $activo
             );
       }

@@ -13,6 +13,7 @@ class Usuarios extends Conexion
    {
       $conexion = new Conexion();
       $conexion->conectar();
+      $array = array();
 
       $query = "SELECT
       u.id 'idUsuario',
@@ -31,8 +32,9 @@ class Usuarios extends Conexion
       $prepare->execute();
       $response = $prepare->get_result();
 
-      $array = array();
       foreach ($response as $x) {
+         $x['nombreCompleto'] = $x['nombre'] . " " . $x['apellido'];
+
          $array[] = $x;
       }
 
