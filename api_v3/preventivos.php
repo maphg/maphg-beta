@@ -127,7 +127,9 @@ class MP extends Conexion
                "idEquipo" => $idEquipo,
                "equipo" => $equipo,
                "creadoPor" => $creadoPor,
+               "arrayCreadoPor" => Usuarios::getById($creadoPor),
                "responsable" => $responsable,
+               "arrayResponsable" => Usuarios::getById($responsable),
                "activo" => $activo
             );
       }

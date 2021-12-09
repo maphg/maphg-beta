@@ -1222,7 +1222,8 @@ class ReporteRanking extends Conexion
                "pendientes" => $pendientes,
                "solucionados" => $solucionados,
                "totalPreventivos" => count($preventivos),
-               "planificado" => $planificado['totalSemanasPlanificadasGlobal']
+               "planificado" => $planificado['totalSemanasPlanificadasGlobal'],
+               "preventivos" => $preventivos,
             );
       }
 
@@ -2860,10 +2861,10 @@ class ReporteRanking extends Conexion
                   $usuarios[$key]['preventivosCreados'] += 1;
 
                   if ($status === 'SOLUCIONADO')
-                  $usuarios[$key]['preventivosSolucionados'] += 1;
+                     $usuarios[$key]['preventivosSolucionados'] += 1;
 
                   if ($status === 'PENDIENTE')
-                  $usuarios[$key]['preventivosPendientes'] += 1;
+                     $usuarios[$key]['preventivosPendientes'] += 1;
                }
             }
          } else {
@@ -2873,17 +2874,17 @@ class ReporteRanking extends Conexion
                   $usuarios[$key]['preventivosCreados'] += 1;
 
                   if ($status === 'SOLUCIONADO')
-                  $usuarios[$key]['preventivosSolucionados'] += 1;
+                     $usuarios[$key]['preventivosSolucionados'] += 1;
 
                   if ($status === 'PENDIENTE')
-                  $usuarios[$key]['preventivosPendientes'] += 1;
+                     $usuarios[$key]['preventivosPendientes'] += 1;
                }
             }
          }
       }
       foreach ($usuarios as $key => $x) {
          if ($x['preventivosCreados'] > 0)
-         $array[] = $x;
+            $array[] = $x;
       }
 
       return $array;
