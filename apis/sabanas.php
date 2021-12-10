@@ -419,7 +419,8 @@ if ($peticion === "POST") {
 
 
       if ($totalActividadesCompletadas == $totalActividades) {
-         $query = "UPDATE t_sabanas_registros SET activo = 1 WHERE id_publico = '$idRegistro'";
+         $query = "UPDATE t_sabanas_registros SET fecha_finalizado = '$fechaActual', activo = 1
+         WHERE id_publico = '$idRegistro'";
          if ($result = mysqli_query($conn_2020, $query)) {
             $array['response'] = 'SUCCESS';
             $array['completado'] = true;
