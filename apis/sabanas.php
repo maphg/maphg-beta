@@ -47,7 +47,6 @@ function obtenerSabana($idSabana)
             $idSabana = $x['id_publico'];
             $sabana = $x['sabana'];
 
-
             $arrayApartados = array();
             $query = "SELECT id_publico, apartado, opciones
             FROM t_sabanas_apartados
@@ -59,19 +58,23 @@ function obtenerSabana($idSabana)
                   $opciones = $x['opciones'];
 
                   $arrayActividades = array();
-                  $query = "SELECT id_publico, actividad
+                  $query = "SELECT id_publico, actividad, adjunto, comentario
                   FROM t_sabanas_apartados_actividades
                   WHERE id_apartado = '$idApartado' and activo = 1";
                   if ($result = mysqli_query($GLOBALS['conn_2020'], $query)) {
                      foreach ($result as $x) {
                         $idActividad = $x['id_publico'];
                         $actividad = $x['actividad'];
+                        $adjuntoObligatorio = $x['adjunto'] == 'SI' ? true : false;
+                        $comentarioObligatorio = $x['comentario'] == 'SI' ? true : false;
 
                         $arrayActividades[] = array(
                            "idSabana" => $idSabana,
                            "idApartado" => $idApartado,
                            "idActividad" => $idActividad,
                            "actividad" => $actividad,
+                           "adjuntoObligatorio" => $adjuntoObligatorio,
+                           "comentarioObligatorio" => $comentarioObligatorio,
                            "select" => false,
                            "edit" => false,
                         );
@@ -284,7 +287,8 @@ if ($peticion === "POST") {
 
       $query = "SELECT id_publico 'idSabana', sabana
       FROM t_sabanas
-      WHERE id_destino = $idDestino and id_hotel = $idHotel and id_registro_tipo_activo = $idRegistroTipoActivo and activo = 1";
+      WHERE id_destino = $idDestino and id_hotel = $idHotel and
+      id_registro_tipo_activo = $idRegistroTipoActivo and activo = 1";
       if ($result = mysqli_query($conn_2020, $query)) {
          foreach ($result as $x) {
             $idSabana = $x['idSabana'];
@@ -407,18 +411,37 @@ if ($peticion === "POST") {
    if ($action === "confirmarRegistro") {
       $idRegistro = $_POST['idRegistro'];
       $totalActividades = $_POST['totalActividades'];
-
       $totalActividadesCompletadas = 0;
-      $query = "SELECT count(id_publico) 'total' FROM t_sabanas_registros_capturas
-      WHERE id_registro = '$idRegistro'";
+      $totalComentariosObligatorios = 0;
+      $totalAdjuntosObligatorios = 0;
+
+      $query = "SELECT r.id_publico, a.comentario 'comentarioObligatorio', r.comentario,
+      a.adjunto 'adjuntoObligatorio', r.url_adjunto 'adjunto'
+      FROM t_sabanas_registros_capturas AS r
+      INNER JOIN t_sabanas_apartados_actividades AS a ON r.id_actividad = a.id_publico
+      WHERE r.id_registro = '$idRegistro'";
       if ($result = mysqli_query($conn_2020, $query)) {
          foreach ($result as $x) {
-            $totalActividadesCompletadas = $x['total'];
+            $totalActividadesCompletadas++;
+            $comentario = $x['comentario'];
+            $comentarioObligatorio = $x['comentarioObligatorio'];
+            $adjunto = $x['adjunto'];
+            $adjuntoObligatorio = $x['adjuntoObligatorio'];
+
+            #COMPROBACIÓN DE COMENTARIO OBLIGATORIO
+            if ($comentarioObligatorio === "SI" && $comentario === "")
+               $totalComentariosObligatorios++;
+
+            #COMPROBACIÓN DE ADJUNTO OBLIGATORIO
+            if ($adjuntoObligatorio === "SI" && $adjunto === "")
+               $totalAdjuntosObligatorios++;
          }
       }
 
-
-      if ($totalActividadesCompletadas == $totalActividades) {
+      if (
+         $totalActividadesCompletadas == $totalActividades && $totalComentariosObligatorios === 0
+         && $totalAdjuntosObligatorios === 0
+      ) {
          $query = "UPDATE t_sabanas_registros SET fecha_finalizado = '$fechaActual', activo = 1
          WHERE id_publico = '$idRegistro'";
          if ($result = mysqli_query($conn_2020, $query)) {
@@ -485,7 +508,8 @@ if ($peticion === "POST") {
                   $equipo = $x['equipo'];
 
                   $registros = array();
-                  $query = "SELECT id_publico 'idRegistro', semana, fecha_creado, creado_por
+                  $query = "SELECT id_publico 'idRegistro', semana,
+                  fecha_creado, fecha_finalizado, creado_por
                   FROM t_sabanas_registros
                   WHERE id_equipo ='$idEquipo' and activo = 1 and
                   fecha_creado BETWEEN '$fechaInicial 00:00:01' and '$fechaFinal 23:59:59' $filtroSabana";
@@ -493,7 +517,8 @@ if ($peticion === "POST") {
                      foreach ($result as $x) {
                         $idRegistro = $x['idRegistro'];
                         $semana = $x['semana'];
-                        $fecha = $x['fecha_creado'];
+                        $fechaCreado = $x['fecha_creado'];
+                        $fechaFinalizado = $x['fecha_finalizado'];
                         $idUsuarioX = $x['creado_por'];
                         $totalRegistros++;
                         $reportadoRegistro = 0;
@@ -508,7 +533,6 @@ if ($peticion === "POST") {
 
                               if ($reportado === "SI")
                                  $reportadoRegistro = 1;
-
 
                               if ($valor == "NO")
                                  $color = 2;
@@ -529,7 +553,8 @@ if ($peticion === "POST") {
                         $registros[] = array(
                            "idRegistro" => $idRegistro,
                            "semana" => $semana,
-                           "fecha" => $fecha,
+                           "fechaCreado" => $fechaCreado,
+                           "fechaFinalizado" => $fechaFinalizado,
                            "creadoPor" => $creadoPor,
                            "totalRegistros" => $totalRegistros,
                            "color" => $color,

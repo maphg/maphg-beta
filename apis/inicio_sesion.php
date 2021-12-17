@@ -29,16 +29,28 @@ if ($peticion === "POST") {
       $idDestino = $_POST['idDestino'];
       $idUsuario = $_POST['idUsuario'];
 
-      $query = "SELECT id, id_destino
-      FROM t_users
-      WHERE id = $idUsuario and status  = 'A' and activo = 1 LIMIT 1";
+      $query = "SELECT u.id, u.id_destino, c.nombre, c.apellido, d.destino
+      FROM t_users AS u
+      INNER JOIN t_colaboradores AS c ON u.id_colaborador = c.id
+      INNER JOIN c_destinos AS d ON u.id_destino = d.id
+      WHERE u.id = $idUsuario and u.status  = 'A'
+      and u.activo = 1 LIMIT 1";
       if ($result = mysqli_query($conn_2020, $query)) {
          foreach ($result as $x) {
             $idUsuarioX = $x['id'];
             $idDestinoX = $x['id_destino'];
+            $nombre = $x['nombre'];
+            $apellido = $x['apellido'];
+            $destino = $x['destino'];
 
             if ($idUsuario === $idUsuarioX) {
                $array['response'] = "SUCCESS";
+
+               $array['data'] = array(
+                  "idUsuario" => $idUsuarioX,
+                  "nombre" => $nombre,
+                  "destino" => $destino,
+               );
             }
          }
       }
