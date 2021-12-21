@@ -82,7 +82,9 @@ if (isset($_GET['action'])) {
         }
 
         $query = "SELECT entregar.id, entregar.nombre_ceco, entregar.solicitud_pedido, entregar.fecha_solicitud, entregar.documento_compras, entregar.fecha_entrega, entregar.fecha_documento, entregar.proveedor, 
-        entregar.material, entregar.descripcion_material, entregar.cantidad_solicitud, entregar.cantidad_por_entregar, entregar.tipo, entregar.valor_usd, entregar.seccion, entregar.fecha_modificado
+        entregar.material, entregar.descripcion_material, entregar.cantidad_solicitud,
+        entregar.cantidad_por_entregar, entregar.clasificacion, entregar.tipo, entregar.valor_usd,
+        entregar.seccion, entregar.fecha_modificado
         FROM t_pedidos_por_entregar AS entregar
         WHERE entregar.activo = 1 $filtroDestino $filtroStatus";
         if ($result = mysqli_query($conn_2020, $query)) {
@@ -99,6 +101,7 @@ if (isset($_GET['action'])) {
                 $descripcionMaterial = $x['descripcion_material'];
                 $cantidadSolicitud = $x['cantidad_solicitud'];
                 $cantidadPorEntregar = $x['cantidad_por_entregar'];
+                $clasificacion = $x['clasificacion'];
                 $tipo = $x['tipo'];
                 $valorUSD = $x['valor_usd'];
                 $seccion = $x['seccion'];
@@ -121,6 +124,7 @@ if (isset($_GET['action'])) {
                     "descripcionMaterial" => $descripcionMaterial,
                     "cantidadSolicitud" => $cantidadSolicitud,
                     "cantidadPorEntregar" => $cantidadPorEntregar,
+                    "clasificacion" => $clasificacion,
                     "tipo" => $tipo,
                     "valorUSD" => $valorUSD,
                     "seccion" => $seccion,

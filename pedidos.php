@@ -358,6 +358,10 @@
                                     </th>
 
                                     <th class="px-2 py-2 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-12">
+                                        Clasificación
+                                    </th>
+
+                                    <th class="px-2 py-2 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-12">
                                         Tipo
                                     </th>
 
@@ -419,6 +423,10 @@
 
                                     <th class="px-2 py-1 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky bottom-0 z-10 w-full">
                                         <select id="porEntregarEntregas" class="w-full"></select>
+                                    </th>
+
+                                    <th class="px-2 py-1 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky bottom-0 z-10 w-full">
+                                        <select id="clasificacionEntregas" class="w-full"></select>
                                     </th>
 
                                     <th class="px-2 py-1 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky bottom-0 z-10 w-full">

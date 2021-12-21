@@ -27,6 +27,7 @@ const materialEntregas = document.querySelector('#materialEntregas');
 const descripcionMaterialEntregas = document.querySelector('#descripcionMaterialEntregas');
 const cantidadEntregas = document.querySelector('#cantidadEntregas');
 const porEntregarEntregas = document.querySelector('#porEntregarEntregas');
+const clasificacionEntregas = document.querySelector('#clasificacionEntregas');
 const tipoEntregas = document.querySelector('#tipoEntregas');
 const valorEntregas = document.querySelector('#valorEntregas');
 const seccionEntregas = document.querySelector('#seccionEntregas');
@@ -471,6 +472,7 @@ const obtenerPedidosEntregar = status => {
             descripcionMaterialEntregas.innerHTML = '<option value="">Todos</option>';
             cantidadEntregas.innerHTML = '<option value="">Todos</option>';
             porEntregarEntregas.innerHTML = '<option value="">Todos</option>';
+            clasificacionEntregas.innerHTML = '<option value="">Todos</option>';
             tipoEntregas.innerHTML = '<option value="">Todos</option>';
             valorEntregas.innerHTML = '<option value="">Todos</option>';
             seccionEntregas.innerHTML = '<option value="">Todos</option>';
@@ -491,6 +493,9 @@ const obtenerPedidosEntregar = status => {
             const columna11 = new Set();
             const columna12 = new Set();
             const columna13 = new Set();
+            const columna14 = new Set();
+
+            console.log(array)
 
             if (array.length) {
                 for (let x = 0; x < array.length; x++) {
@@ -506,6 +511,7 @@ const obtenerPedidosEntregar = status => {
                     const descripcionMaterial = array[x].descripcionMaterial;
                     const cantidadSolicitud = array[x].cantidadSolicitud;
                     const cantidadPorEntregar = array[x].cantidadPorEntregar;
+                    const clasificacion = array[x].clasificacion;
                     const tipo = array[x].tipo;
                     const valorUSD = array[x].valorUSD;
                     const seccion = array[x].seccion;
@@ -529,6 +535,7 @@ const obtenerPedidosEntregar = status => {
                     columna11.add(tipo);
                     columna12.add(valorUSD);
                     columna13.add(seccion);
+                    columna14.add(clasificacion);
 
                     const codigo =
                         /*html*/
@@ -579,6 +586,10 @@ const obtenerPedidosEntregar = status => {
                             </td>
 
                             <td class="px-2 border-b border-gray-200 text-center py-2 font-semibold w-auto">
+                                <p class="truncate whitespace-no-wrap">${clasificacion}</p>
+                            </td>
+
+                            <td class="px-2 border-b border-gray-200 text-center py-2 font-semibold w-auto">
                                 <p class="truncate whitespace-no-wrap">${tipo}</p>
                             </td>
 
@@ -607,7 +618,8 @@ const obtenerPedidosEntregar = status => {
                     "columna10": columna10,
                     "columna11": columna11,
                     "columna12": columna12,
-                    "columna13": columna13
+                    "columna13": columna13,
+                    "columna14": columna14,
                 };
             }
         })
@@ -654,6 +666,9 @@ const obtenerPedidosEntregar = status => {
             for (const item of data.columna13) {
                 seccionEntregas.insertAdjacentHTML('beforeend', `<option value="${item}">${item}</option>`);
             }
+            for (const item of data.columna14) {
+                clasificacionEntregas.insertAdjacentHTML('beforeend', `<option value="${item}">${item}</option>`);
+            }
         })
         .catch(function (err) {
             dataEntregas.innerHTML = err;
@@ -670,6 +685,7 @@ const obtenerPedidosEntregar = status => {
             descripcionMaterialEntregas.innerHTML = '';
             cantidadEntregas.innerHTML = '';
             porEntregarEntregas.innerHTML = '';
+            clasificacionEntregas.innerHTML = '';
             tipoEntregas.innerHTML = '';
             valorEntregas.innerHTML = '';
             seccionEntregas.innerHTML = '';
@@ -718,14 +734,17 @@ cantidadEntregas.addEventListener('change', () => {
 porEntregarEntregas.addEventListener('change', () => {
     buscador('dataEntregas', 'porEntregarEntregas', 10);
 })
+clasificacionEntregas.addEventListener('change', () => {
+    buscador('dataEntregas', 'clasificacionEntregas', 11);
+})
 tipoEntregas.addEventListener('change', () => {
-    buscador('dataEntregas', 'tipoEntregas', 11);
+    buscador('dataEntregas', 'tipoEntregas', 12);
 })
 valorEntregas.addEventListener('change', () => {
-    buscador('dataEntregas', 'valorEntregas', 12);
+    buscador('dataEntregas', 'valorEntregas', 13);
 })
 seccionEntregas.addEventListener('change', () => {
-    buscador('dataEntregas', 'seccionEntregas', 13);
+    buscador('dataEntregas', 'seccionEntregas', 14);
 })
 
 
