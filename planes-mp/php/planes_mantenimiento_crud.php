@@ -82,7 +82,7 @@ if (isset($_POST['action'])) {
         }
 
         // Obtienes las opciones para los destinos.
-        $query = "SELECT id, destino FROM c_destinos WHERE status = 'A' AND id != 10 $filtroDestino 
+        $query = "SELECT id, destino FROM c_destinos WHERE status = 'A' $filtroDestino 
         ORDER BY destino DESC";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $value) {
