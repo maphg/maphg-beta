@@ -243,9 +243,9 @@ if ($peticion === "POST") {
             $planeaciones = array();
             $query = "SELECT plan.*, frecuencia.frecuencia
             FROM t_mp_planeacion_semana AS plan
-            INNER JOIN t_mp_planes_mantenimiento AS planes ON plan.id_plan = planes.id
+            INNER JOIN t_mp_planes_mantenimiento AS planes ON plan.id_plan = planes.id and planes.activo = 1
             INNER JOIN c_frecuencias_mp AS frecuencia ON planes.id_periodicidad = frecuencia.id
-            WHERE plan.id_equipo = $idEquipo and plan.activo = 1
+            WHERE plan.id_equipo = $idEquipo and planes.status = 'ACTIVO' and plan.activo = 1
             and planes.tipo_local_equipo = $idTipoEquipo  $filtroFrecuencia";
             if ($result = mysqli_query($conn_2020, $query)) {
                foreach ($result as $x) {
@@ -422,10 +422,10 @@ if ($peticion === "POST") {
             $planeaciones = array();
             $query = "SELECT plan.*, frecuencia.frecuencia
             FROM t_mp_planeacion_semana AS plan
-            INNER JOIN t_mp_planes_mantenimiento AS planes ON plan.id_plan = planes.id
+            INNER JOIN t_mp_planes_mantenimiento AS planes ON plan.id_plan = planes.id and planes.activo = 1
             and planes.tipo_local_equipo = $idTipoEquipo
             INNER JOIN c_frecuencias_mp AS frecuencia ON planes.id_periodicidad = frecuencia.id
-            WHERE plan.id_equipo = $idEquipo and plan.activo = 1 $filtroFrecuencia";
+            WHERE plan.id_equipo = $idEquipo and plan.activo = 1 and planes.status = 'ACTIVO' $filtroFrecuencia";
             if ($result = mysqli_query($conn_2020, $query)) {
                foreach ($result as $x) {
                   $idSemana = $x['id'];

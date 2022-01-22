@@ -9913,7 +9913,9 @@ if (isset($_POST['action'])) {
         FROM t_equipos_america 
         INNER JOIN t_mp_planes_mantenimiento ON t_equipos_america.id_tipo = t_mp_planes_mantenimiento.tipo_local_equipo
         and t_mp_planes_mantenimiento.local_equipo = t_equipos_america.local_equipo 
-        and t_equipos_america.id_destino = t_mp_planes_mantenimiento.id_destino and (t_mp_planes_mantenimiento.tipo_plan = 'PREVENTIVO' or t_mp_planes_mantenimiento.tipo_plan = 'TEST')
+        and (t_equipos_america.id_destino = t_mp_planes_mantenimiento.id_destino ||
+        t_mp_planes_mantenimiento.id_destino = 10) and
+        (t_mp_planes_mantenimiento.tipo_plan = 'PREVENTIVO' || t_mp_planes_mantenimiento.tipo_plan = 'TEST')
         INNER JOIN c_frecuencias_mp ON t_mp_planes_mantenimiento.id_periodicidad = c_frecuencias_mp.id
         WHERE t_equipos_america.id = $idEquipo and t_equipos_america.activo = 1 and 
         t_mp_planes_mantenimiento.status = 'ACTIVO'";

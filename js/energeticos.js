@@ -210,15 +210,21 @@ const obtenerEnlaces = () => {
                 for (let x = 0; x < array.length; x++) {
                     const idDestinoX = array[x].idDestinoX;
                     const url = array[x].url;
-                    const urlExcel = array[x].urlExcel;
+                    const urlExcelEnergetico = array[x].urlExcelEnergetico;
+                    const urlExcelPresupuesto = array[x].urlExcelPresupuesto;
 
-                    const sizeW = array.length > 1 ? '400px;' : '800px;';
-                    const sizeH = array.length > 1 ? '350px;' : '700px;';
+                    const sizeW = array.length > 1 ? '420px;' : '900px;';
+                    const sizeH = array.length > 1 ? '360px;' : '750px;';
 
                     const iconSize = array.length > 1 ?
-                        `<i class="fas fa-arrows-alt absolute top-0 right-0 fa-lg py-2 cursor-pointer" onclick="url('${url}');"></i>` : '';
+                        `<i class="fas fa-arrows-alt absolute top-0 right-0 fa-lg py-2 cursor-pointer" title="Ampliar Vista" onclick="url('${url}');"></i>` : '';
 
-                    const iconURL = `<i class="fas fa-file-excel absolute top-0 right-0 mt-1 mr-16 fa-lg py-2 cursor-pointer text-green-400" onclick="openUrl('${urlExcel}');"></i>`;
+                    const iconURL = `
+                    <div class="absolute top-0 right-0 mt-1 mr-6">
+                        <i class="fas fa-file-excel fa-lg mr-1 py-2 cursor-pointer text-green-400" title="Enlace Energéticos" onclick="openUrl('${urlExcelEnergetico}');"></i>
+                        <span class="text-black font-bold mr-1 text-sm cursor-pointer" title="Enlace Presupuestos" onclick="openUrl('${urlExcelPresupuesto}');">PPTO</span>
+                    </div>
+                    `;                     
 
                     const codigo = `
                     <div class="py-1 mx-auto relative text-transparent hover:text-gray-500">

@@ -4528,12 +4528,21 @@ if (isset($_GET['action'])) {
                 $descripcion = $x['descripcion'];
                 $fecha = $x['fecha'];
 
-                $urlExcel = '#';
+                $urlExcelEnergetico = '#';
                 $query = "SELECT url FROM t_enlaces 
                 WHERE tipo_enlace = 'ENERGETICOEXCEL' and id_destino = $idDestinoX";
                 if ($result = mysqli_query($conn_2020, $query)) {
                     foreach ($result as $x) {
-                        $urlExcel = $x['url'];
+                        $urlExcelEnergetico = $x['url'];
+                    }
+                }
+
+                $urlExcelPresupuesto = '#';
+                $query = "SELECT url FROM t_enlaces 
+                WHERE tipo_enlace = 'MENUPRESUPUESTOS' and id_destino = $idDestinoX";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $urlExcelPresupuesto = $x['url'];
                     }
                 }
 
@@ -4542,7 +4551,8 @@ if (isset($_GET['action'])) {
                     "idDestinoX" => intval($idDestinoX),
                     "tipoEnlace" => $tipoEnlace,
                     "url" => $url,
-                    "urlExcel" => $urlExcel,
+                    "urlExcelEnergetico" => $urlExcelEnergetico,
+                    "urlExcelPresupuesto" => $urlExcelPresupuesto,
                     "descripcion" => $descripcion,
                     "fecha" => $fecha
                 );
