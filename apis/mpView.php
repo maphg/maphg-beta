@@ -516,7 +516,7 @@ if ($peticion === "POST") {
                      $planeaciones[] = array(
                         "idSemana" => $idSemana,
                         "idPlan" => $idPlan,
-                        "frecuencia" => $frecuencia,
+                        "frecuencia" => "ID: " . $idPlan . " - " . $frecuencia,
                         "semanas" => $semanas,
                      );
                   }
@@ -526,7 +526,7 @@ if ($peticion === "POST") {
                      $planeaciones[] = array(
                         "idSemana" => $idSemana,
                         "idPlan" => $idPlan,
-                        "frecuencia" => $frecuencia,
+                        "frecuencia" =>  "ID: " . $idPlan . " - " . $frecuencia,
                         "semanas" => $semanas,
                      );
                   }

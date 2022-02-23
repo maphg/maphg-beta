@@ -538,6 +538,7 @@ if ($peticion === 'POST') {
       }
    }
 
+
    #APARTADO DESTINOS
    if ($apartado === 'destinos') {
       include_once "conexion.php";
@@ -738,6 +739,201 @@ if ($peticion === 'POST') {
             $tituloApartado,
             $idUsuario
          );
+      }
+   }
+
+   #APARTADO PEDIDOS
+   if ($apartado === 'pedidos') {
+      include 'conexion.php';
+      include 'pedidos.php';
+
+      if ($accion === 'solicitudes2bend') {
+         #SOLICITUDES COD2BEND
+
+         $pagina = intval($_POST['pagina']);
+         $rangoPaginas = intval($_POST['rangoPaginas']);
+         $palabra = $_POST['palabra'];
+         $columnaOrdenar = $_POST['columnaOrdenar'];
+         $tipoOrden = $_POST['tipoOrden'];
+
+         #ARRAY DE RESULTADOS
+         $array['response'] = "SUCCESS";
+         $array['data'] = Pedidos::solicitudes2bend(
+            $idDestino,
+            $pagina,
+            $rangoPaginas,
+            $palabra,
+            $columnaOrdenar,
+            $tipoOrden
+         );
+      }
+
+
+      if ($accion === 'totalPedidos') {
+         #SOLICITUDES COD2BEND
+
+         $palabra = $_POST['palabra'];
+
+         #ARRAY DE RESULTADOS
+         $array['response'] = "SUCCESS";
+         $array['data'] = Pedidos::totalPedidos($idDestino, $palabra);
+      }
+
+
+      if ($accion === 'pedidosSinOrden') {
+         #PEDIDOS SIN ORDEN
+
+         $pagina = intval($_POST['pagina']);
+         $rangoPaginas = intval($_POST['rangoPaginas']);
+         $palabra = $_POST['palabra'];
+         $columnaOrdenar = $_POST['columnaOrdenar'];
+         $tipoOrden = $_POST['tipoOrden'];
+
+         #ARRAY DE RESULTADOS
+         $array['response'] = "SUCCESS";
+         $array['data'] = Pedidos::pedidosSinOrden(
+            $idDestino,
+            $pagina,
+            $rangoPaginas,
+            $palabra,
+            $columnaOrdenar,
+            $tipoOrden
+         );
+      }
+
+
+      if ($accion === 'totalPedidosSinOrden') {
+         #PEDIDOS SIN ORDEN
+
+         $palabra = $_POST['palabra'];
+
+         #ARRAY DE RESULTADOS
+         $array['response'] = "SUCCESS";
+         $array['data'] = Pedidos::totalPedidosSinOrden($idDestino, $palabra);
+      }
+
+
+      if ($accion === 'pedidosPorEntregar') {
+         #PEDIDOS POR ENTREGAR
+
+         $pagina = intval($_POST['pagina']);
+         $rangoPaginas = intval($_POST['rangoPaginas']);
+         $palabra = $_POST['palabra'];
+         $columnaOrdenar = $_POST['columnaOrdenar'];
+         $tipoOrden = $_POST['tipoOrden'];
+
+         #ARRAY DE RESULTADOS
+         $array['response'] = "SUCCESS";
+         $array['data'] = Pedidos::pedidosPorEntregar(
+            $idDestino,
+            $pagina,
+            $rangoPaginas,
+            $palabra,
+            $columnaOrdenar,
+            $tipoOrden
+         );
+      }
+
+
+      if ($accion === 'totalPedidosPorEntregar') {
+         #PEDIDOS POR ENTREGAR
+
+         $palabra = $_POST['palabra'];
+
+         #ARRAY DE RESULTADOS
+         $array['response'] = "SUCCESS";
+         $array['data'] = Pedidos::totalPedidosPorEntregar($idDestino, $palabra);
+      }
+
+
+      if ($accion === 'pedidosEntregados') {
+         #PEDIDOS ENTREGADOS
+
+         $pagina = intval($_POST['pagina']);
+         $rangoPaginas = intval($_POST['rangoPaginas']);
+         $palabra = $_POST['palabra'];
+         $columnaOrdenar = $_POST['columnaOrdenar'];
+         $tipoOrden = $_POST['tipoOrden'];
+
+         #ARRAY DE RESULTADOS
+         $array['response'] = "SUCCESS";
+         $array['data'] = Pedidos::pedidosEntregados(
+            $idDestino,
+            $pagina,
+            $rangoPaginas,
+            $palabra,
+            $columnaOrdenar,
+            $tipoOrden
+         );
+      }
+
+
+      if ($accion === 'totalPedidosEntregados') {
+         #PEDIDOS ENTREGADOS
+
+         $palabra = $_POST['palabra'];
+
+         #ARRAY DE RESULTADOS
+         $array['response'] = "SUCCESS";
+         $array['data'] = Pedidos::totalPedidosEntregados($idDestino, $palabra);
+      }
+   }
+
+
+   #APARTADO DE STAFF COVID
+   if ($apartado === 'staffCovid') {
+      include 'conexion.php';
+      include_once "registros_staff_codiv.php";
+
+      if ($accion === "all") {
+         #PARAMETROS ADICIONALES
+         $mes = $_POST['mes'];
+         $año = intval($_POST['año']);
+
+         // OBTENER TODOS LOS REGISTROS STAFF
+         $registros = StaffCovid::all($idDestino, $año, $mes);
+
+         #ARRAY DE RESULTADOS
+         $array['response'] = "SUCCESS";
+         $array['data'] = $registros;
+      }
+
+      if ($accion === "crear") {
+         // CREAR REGISTRO
+         $idRegistro = $_POST['idRegistro'];
+         $mes = $_POST['mes'];
+         $año = $_POST['año'];
+         $numeroFaltantes = $_POST['numeroFaltantes'];
+         $porcentajeFaltantes = $_POST['porcentajeFaltantes'];
+         $numeroEmpleadosCovid = $_POST['numeroEmpleadosCovid'];
+         $incapacidadesMedica = $_POST['incapacidadesMedica'];
+         $observaciones = $_POST['observaciones'];
+
+         $staff = new StaffCovid();
+         $staff->idRegistro = intval($idRegistro);
+         $staff->idDestino = intval($idDestino);
+         $staff->idUsuario = intval($idUsuario);
+         $staff->mes = strtoupper($mes);
+         $staff->año = intval($año);
+         $staff->numeroFaltantes = intval($numeroFaltantes);
+         $staff->porcentajeFaltantes = doubleval($porcentajeFaltantes);
+         $staff->numeroEmpleadosCovid = intval($numeroEmpleadosCovid);
+         $staff->incapacidadesMedica = intval($incapacidadesMedica);
+         $staff->observaciones = $observaciones;
+         $staff->fechaActual = $fechaActual;
+         $staff->activo = 1;
+
+         #ARRAY DE RESULTADOS
+         $array['response'] = "SUCCESS";
+
+
+         #COMPRUEBA SI EXISTE, SINO EXISTE LO CREA
+         if ($idRegistro === 0)
+            $array['data'] = $staff->crear();
+
+         #COMPRUEBA SI EXISTE, SI EXISTE LO ACTUALIZA
+         if ($idRegistro > 0)
+            $array['data'] = $staff->actualizar();
       }
    }
 }
