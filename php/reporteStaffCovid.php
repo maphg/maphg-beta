@@ -3,7 +3,7 @@ date_default_timezone_set('America/Cancun');
 setlocale(LC_MONETARY, 'es_ES');
 
 include 'conexion.php';
-// require 'PHPExcel.php';
+require 'PHPExcel.php';
 $idDestino = $_GET['idDestino'];
 $año = $_GET['año'];
 
@@ -56,18 +56,18 @@ if ($result = mysqli_query($conn_2020, $query)) {
       $fechaModificado = $x['fechaModificado'];
       $modificadoPor = $x['modificadoPor'];
 
-      $fila = $mes == "ENERO" ? 2 :
-         $mes == "FEBRERO" ? 3 :
-         $mes == "MARZO" ? 4 :
-         $mes == "ABRIL" ? 5 :
-         $mes == "MAYO" ? 6 :
-         $mes == "JUNIO" ? 7 :
-         $mes == "JULIO" ? 8 :
-         $mes == "AGOSTO" ? 9 :
-         $mes == "SEPTIEMBRE" ? 10 :
-         $mes == "OCTUBRE" ? 11 :
-         $mes == "NOVIEMBRE" ? 12 :
-         $mes == "DICIEMBRE" ? 13 : 0;
+      // $fila = $mes == "ENERO" ? 2 :
+      //    $mes == "FEBRERO" ? 3 :
+      //    $mes == "MARZO" ? 4 :
+      //    $mes == "ABRIL" ? 5 :
+      //    $mes == "MAYO" ? 6 :
+      //    $mes == "JUNIO" ? 7 :
+      //    $mes == "JULIO" ? 8 :
+      //    $mes == "AGOSTO" ? 9 :
+      //    $mes == "SEPTIEMBRE" ? 10 :
+      //    $mes == "OCTUBRE" ? 11 :
+      //    $mes == "NOVIEMBRE" ? 12 :
+      //    $mes == "DICIEMBRE" ? 13 : 0;
 
       $objPHPExcel->getActiveSheet()->setCellValue('A' . $fila, $destino);
       $objPHPExcel->getActiveSheet()->setCellValue('B' . $fila, $mes);
