@@ -2270,7 +2270,7 @@ function informacionEquipo(idEquipo) {
                     e_caudalAireM3HEquipo.value = array.caudal_aire_m3h;
                     e_caudalAireCFMEquipo.value = array.caudal_aire_cfm;
 
-                    QREquipo.setAttribute("src", "https://api.qrserver.com/v1/create-qr-code/?size=300x300&format=svg&bgcolor=fff&color=4a5568&data=..%2Factivos%2F%23%2F" + idEquipo);
+                    QREquipo.setAttribute("src", "https://api.qrserver.com/v1/create-qr-code/?size=300x300&format=svg&bgcolor=fff&color=4a5568&data=https%3A%2F%2Fwww.maphg.com%2Famerica%2Factivos%2F%23%2F" + idEquipo);
 
                     if (array.localEquipo == "EQUIPO") {
                         btnPreventivosEquipo.classList.remove('hidden');
