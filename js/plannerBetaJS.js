@@ -5682,7 +5682,7 @@ function informacionEquipo(idEquipo) {
                e_caudalAireM3HEquipo.value = array.caudal_aire_m3h;
                e_caudalAireCFMEquipo.value = array.caudal_aire_cfm;
 
-               QREquipo.setAttribute("src", `https://api.qrserver.com/v1/create-qr-code/?size=300x300&format=svg&bgcolor=fff&color=4a5568&data=www.maphg.com/america/gestion_equipos/index.php?${array.idEquipo}`);
+               QREquipo.setAttribute("src", "https://api.qrserver.com/v1/create-qr-code/?size=300x300&format=svg&bgcolor=fff&color=4a5568&data=..%2Factivos%2F%23%2F" + idEquipo);
 
                if (array.localEquipo == "EQUIPO") {
                   btnPreventivosEquipo.classList.remove('hidden');
@@ -7836,7 +7836,7 @@ function VerOTMP(idSemana, idProceso, idEquipo, semanaX, idPlan, accionMP) {
 // Proceso para Ver OT
 function VerOTMPSolucionado(idEquipo, semanaX, idPlan) {
    localStorage.setItem('URL', '');
-    const año = (new Date()).getFullYear();
+   const año = (new Date()).getFullYear();
 
    if (idEquipo != "" && semanaX != "") {
       localStorage.setItem('URL', `0;0;${idEquipo};${semanaX};${idPlan};${año}`);
