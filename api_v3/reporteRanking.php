@@ -929,7 +929,7 @@ class ReporteRanking extends Conexion
    {
 
       $array = array();
-      $meses = ['', 'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ag', 'Sep', 'Oct', 'Nov', 'Dic'];
+      $meses = ['', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
       $fechaInicioX = strtotime($fechaInicio);
       $fechaFinX = strtotime($fechaFin);
 
@@ -1022,7 +1022,7 @@ class ReporteRanking extends Conexion
    {
 
       $array = array();
-      $meses = ['', 'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ag', 'Sep', 'Oct', 'Nov', 'Dic'];
+      $meses = ['', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
       $fechaInicioX = strtotime($fechaInicio);
       $fechaFinX = strtotime($fechaFin);
 
@@ -1453,7 +1453,7 @@ class ReporteRanking extends Conexion
       // DATOS PARA GRAFICAR PREVENTIVOS
 
       $array = array();
-      $meses = ['', 'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ag', 'Sep', 'Oct', 'Nov', 'Dic'];
+      $meses = ['', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
       $fechaInicioX = strtotime($fechaInicio);
       $fechaFinX = strtotime($fechaFin);
 
@@ -1522,7 +1522,7 @@ class ReporteRanking extends Conexion
       // DATOS PARA GRAFICAR PREVENTIVOS
 
       $array = array();
-      $meses = ['', 'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ag', 'Sep', 'Oct', 'Nov', 'Dic'];
+      $meses = ['', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
       $fechaInicioX = strtotime($fechaInicio);
       $fechaFinX = strtotime($fechaFin);
 

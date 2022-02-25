@@ -250,6 +250,9 @@ class MP extends Conexion
       if ($semanaI > 52)
          $semanaI = 1;
 
+      if ($fechaI->format("Y-m-d") == '2022-01-01' || $fechaI->format("Y-m-d") == '2022-01-02' || $fechaI->format("Y-m-d") == '2022-01-03' || $fechaI->format("Y-m-d") == '2023-01-01' || $fechaI->format("Y-m-d") == '2023-01-02' || $fechaI->format("Y-m-d") == '2023-01-03')
+         $semanaI = 1;
+
       if ($semanaI <= $semanaF) {
          for ($i = $semanaI; $i <= $semanaF; $i++) {
             $semanas[] = intval($i);
