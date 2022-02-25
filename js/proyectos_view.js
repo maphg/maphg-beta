@@ -52,6 +52,10 @@ const datosProyectos = params => {
             valorTipo = '<div class="px-2 bg-yellow-300 text-yellow-600 rounded-full uppercase"><h1>FF&E</h1></div>';
             break;
 
+        case 'FF&E':
+            valorTipo = '<div class="px-2 bg-yellow-300 text-yellow-600 rounded-full uppercase"><h1>FF&E</h1></div>';
+            break;
+
         case 'PROYECTO':
             valorTipo = '<div class="px-2 bg-blue-300 text-blue-600 rounded-full uppercase"><h1>proyecto</h1></div>';
             break;
