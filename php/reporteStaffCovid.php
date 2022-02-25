@@ -4,6 +4,7 @@ setlocale(LC_MONETARY, 'es_ES');
 
 include 'conexion.php';
 require 'PHPExcel.php';
+
 $idDestino = $_GET['idDestino'];
 $año = $_GET['año'];
 
@@ -35,8 +36,8 @@ FROM t_registro_staff AS st
 INNER JOIN c_destinos AS d ON st.id_destino = d.id
 INNER JOIN t_users AS u ON st.creado_por = u.id
 INNER JOIN t_colaboradores AS c ON u.id_colaborador = c.id
-INNER JOIN t_users AS u2 ON st.modificado_por = u2.id
-INNER JOIN t_colaboradores AS c2 ON u2.id_colaborador = c2.id
+LEFT JOIN t_users AS u2 ON st.modificado_por = u2.id
+LEFT JOIN t_colaboradores AS c2 ON u2.id_colaborador = c2.id
 WHERE st.id_destino = $idDestino and st.año = '$año' and st.activo = 1";
 if ($result = mysqli_query($conn_2020, $query)) {
    foreach ($result as $x) {
@@ -56,18 +57,18 @@ if ($result = mysqli_query($conn_2020, $query)) {
       $fechaModificado = $x['fechaModificado'];
       $modificadoPor = $x['modificadoPor'];
 
-      $fila = $mes == "ENERO" ? 2 :
-         $mes == "FEBRERO" ? 3 :
-         $mes == "MARZO" ? 4 :
-         $mes == "ABRIL" ? 5 :
-         $mes == "MAYO" ? 6 :
-         $mes == "JUNIO" ? 7 :
-         $mes == "JULIO" ? 8 :
-         $mes == "AGOSTO" ? 9 :
-         $mes == "SEPTIEMBRE" ? 10 :
-         $mes == "OCTUBRE" ? 11 :
-         $mes == "NOVIEMBRE" ? 12 :
-         $mes == "DICIEMBRE" ? 13 : 0;
+      if ($mes == "ENERO") $fila = 2;
+      if ($mes == "FEBRERO") $fila = 3;
+      if ($mes == "MARZO") $fila = 4;
+      if ($mes == "ABRIL") $fila = 5;
+      if ($mes == "MAYO") $fila = 6;
+      if ($mes == "JUNIO") $fila = 7;
+      if ($mes == "JULIO") $fila = 8;
+      if ($mes == "AGOSTO") $fila = 9;
+      if ($mes == "SEPTIEMBRE") $fila = 10;
+      if ($mes == "OCTUBRE") $fila = 11;
+      if ($mes == "NOVIEMBRE") $fila = 12;
+      if ($mes == "DICIEMBRE") $fila = 13;
 
       $objPHPExcel->getActiveSheet()->setCellValue('A' . $fila, $destino);
       $objPHPExcel->getActiveSheet()->setCellValue('B' . $fila, $mes);
@@ -79,8 +80,8 @@ if ($result = mysqli_query($conn_2020, $query)) {
       $objPHPExcel->getActiveSheet()->setCellValue('H' . $fila, $numeroEmpleadosCovid);
       $objPHPExcel->getActiveSheet()->setCellValue('I' . $fila, $incapacidadesMedica);
       $objPHPExcel->getActiveSheet()->setCellValue('J' . $fila, $observaciones);
-      $objPHPExcel->getActiveSheet()->setCellValue('K' . $fila, $fechaModificado);
-      $objPHPExcel->getActiveSheet()->setCellValue('L' . $fila, $modificadoPor);
+      $objPHPExcel->getActiveSheet()->setCellValue('K' . $fila, $modificadoPor);
+      $objPHPExcel->getActiveSheet()->setCellValue('L' . $fila, $fechaModificado);
    }
 }
 
