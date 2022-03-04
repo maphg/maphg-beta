@@ -123,7 +123,7 @@ const datosProyectos = params => {
     var fJustificacionAdjunto = '';
     var fStatus = '';
     var fRangoFecha = '';
-    var fCotizaciones = '';
+    var fCotizaciones = `onclick="obtenerCotizaciones(${idProyecto}); obtenerCatalogoConceptos(${idProyecto}); abrirmodal('modalMediaProyectos');"`;
     var fTipo = '';
     var fJustificacion = '';
     var fCoste = '';
@@ -153,8 +153,8 @@ const datosProyectos = params => {
         fPresupuesto = `onclick="obtenerPresupuestoProyecto(${idProyecto}); toggleModalTailwind('modalPresupuestoProyecto')"`;
 
     } else {
-        iconoStatus = '<i class="fas fa-undo fa-lg text-red-500"></i>';
         fStatus = `onclick="actualizarProyectos('N', 'status', ${idProyecto});"`;
+        iconoStatus = `<i class="fas fa-undo fa-lg text-red-500" ${fStatus}></i>`;
     }
 
     const coste = new Intl.NumberFormat('IN').format(params.coste);

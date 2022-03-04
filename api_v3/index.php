@@ -41,6 +41,7 @@ if ($peticion === 'POST') {
          $array['data'] = $proyecto;
       }
 
+
       if ($accion === "crear") {
          // CREAR PROYECTO
 
@@ -61,6 +62,7 @@ if ($peticion === 'POST') {
          $array['data'] = $proyecto->crear();
       }
 
+
       if ($accion === "actualizar") {
          // ACTUALIZA PROYECTO
 
@@ -74,6 +76,7 @@ if ($peticion === 'POST') {
          $array['response'] = "SUCCESS";
          $array['data'] = $proyecto->actualizar();
       }
+
 
       if ($accion === 'eliminar') {
          // ELIMINAR PROYECTO
@@ -742,6 +745,7 @@ if ($peticion === 'POST') {
       }
    }
 
+
    #APARTADO PEDIDOS
    if ($apartado === 'pedidos') {
       include 'conexion.php';
@@ -934,6 +938,31 @@ if ($peticion === 'POST') {
          #COMPRUEBA SI EXISTE, SI EXISTE LO ACTUALIZA
          if ($idRegistro > 0)
             $array['data'] = $staff->actualizar();
+      }
+   }
+
+
+   #APARTADO OT MP
+   if ($apartado === 'otMp') {
+      include 'conexion.php';
+      include_once "otMp.php";
+
+      if ($accion === "ot") {
+         #PARAMETROS ADICIONALES
+         $idOt = explode(",", $_POST['idOt']);
+         $registros = array();
+
+         // OBTENER TODOS LOS REGISTROS
+         foreach ($idOt as $x) {
+            $resultado =  OtMp::ot($idUsuario, $x);
+
+            if (count($resultado))
+               $registros[] = $resultado;
+         }
+
+         #ARRAY DE RESULTADOS
+         $array['response'] = "SUCCESS";
+         $array['data'] = $registros;
       }
    }
 }

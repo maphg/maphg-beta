@@ -107,6 +107,7 @@ class ReporteRanking extends Conexion
             'CREADO',
             'TODOS'
          );
+
          foreach ($incidenciasGenerales as $x) {
             $status = $x['status'];
             $fechaA = $x['fechaCreado'];
@@ -927,7 +928,6 @@ class ReporteRanking extends Conexion
    // GRAFICA POR DESTINO
    public static function graficaIncidencias($idDestino, $fechaInicio, $fechaFin)
    {
-
       $array = array();
       $meses = ['', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
       $fechaInicioX = strtotime($fechaInicio);
@@ -1020,7 +1020,6 @@ class ReporteRanking extends Conexion
    // GRAFICA POR DESTINO
    public static function graficaIncidenciasSubsecciones($idDestino, $idSeccion, $fechaInicio, $fechaFin)
    {
-
       $array = array();
       $meses = ['', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
       $fechaInicioX = strtotime($fechaInicio);
@@ -1781,6 +1780,8 @@ class ReporteRanking extends Conexion
          $idDestinoX = $x['idDestino'];
          $destino = $x['destino'];
          $total = 0;
+         $habitaciones = $x['habitaciones'];
+         $ratio = 0;
 
          #MP
          $total +=
@@ -1803,13 +1804,20 @@ class ReporteRanking extends Conexion
          #ARRAY DATA
          if (
             $idDestinoX != 10
-         )
+         ) {
+            #RATIO
+            if ($total > 0 && $habitaciones > 0)
+               $ratio = $total / $habitaciones;
+
             $array[] = array(
                "idDestino" => $idDestinoX,
                "destino" => $destino,
                "total" => $total,
-               "destinoActual" => $destinoActual
+               "destinoActual" => $destinoActual,
+               "habitaciones" => $habitaciones,
+               "ratio" => $ratio,
             );
+         }
       }
 
       return $array;
@@ -1829,6 +1837,8 @@ class ReporteRanking extends Conexion
          $idDestinoX = $x['idDestino'];
          $destino = $x['destino'];
          $total = 0;
+         $habitaciones = $x['habitaciones'];
+         $ratio = 0;
 
          #MP
          $total +=
@@ -1851,13 +1861,20 @@ class ReporteRanking extends Conexion
          #ARRAY DATA
          if (
             $idDestinoX != 10
-         )
+         ) {
+            #RATIO
+            if ($total > 0 && $habitaciones > 0)
+               $ratio = $total / $habitaciones;
+
             $array[] = array(
                "idDestino" => $idDestinoX,
                "destino" => $destino,
                "total" => $total,
-               "destinoActual" => $destinoActual
+               "destinoActual" => $destinoActual,
+               "habitaciones" => $habitaciones,
+               "ratio" => $ratio,
             );
+         }
       }
 
       return $array;
@@ -1877,6 +1894,8 @@ class ReporteRanking extends Conexion
          $idDestinoX = $x['idDestino'];
          $destino = $x['destino'];
          $total = 0;
+         $habitaciones = $x['habitaciones'];
+         $ratio = 0;
 
          #MP
          $total +=
@@ -1899,13 +1918,20 @@ class ReporteRanking extends Conexion
          #ARRAY DATA
          if (
             $idDestinoX != 10
-         )
+         ) {
+            #RATIO
+            if ($total > 0 && $habitaciones > 0)
+               $ratio = $total / $habitaciones;
+
             $array[] = array(
                "idDestino" => $idDestinoX,
                "destino" => $destino,
                "total" => $total,
-               "destinoActual" => $destinoActual
+               "destinoActual" => $destinoActual,
+               "habitaciones" => $habitaciones,
+               "ratio" => $ratio,
             );
+         }
       }
 
       return $array;
@@ -1925,6 +1951,8 @@ class ReporteRanking extends Conexion
          $idDestinoX = $x['idDestino'];
          $destino = $x['destino'];
          $total = 0;
+         $habitaciones = $x['habitaciones'];
+         $ratio = 0;
 
          #MP
          $total +=
@@ -1947,13 +1975,20 @@ class ReporteRanking extends Conexion
          #ARRAY DATA
          if (
             $idDestinoX != 10
-         )
+         ) {
+            #RATIO
+            if ($total > 0 && $habitaciones > 0)
+               $ratio = $total / $habitaciones;
+
             $array[] = array(
                "idDestino" => $idDestinoX,
                "destino" => $destino,
                "total" => $total,
-               "destinoActual" => $destinoActual
+               "destinoActual" => $destinoActual,
+               "habitaciones" => $habitaciones,
+               "ratio" => $ratio,
             );
+         }
       }
 
       return $array;
@@ -1973,6 +2008,8 @@ class ReporteRanking extends Conexion
          $idDestinoX = $x['idDestino'];
          $destino = $x['destino'];
          $total = 0;
+         $habitaciones = $x['habitaciones'];
+         $ratio = 0;
 
          #MP
          $total +=
@@ -1995,13 +2032,20 @@ class ReporteRanking extends Conexion
          #ARRAY DATA
          if (
             $idDestinoX != 10
-         )
+         ) {
+            #RATIO
+            if ($total > 0 && $habitaciones > 0)
+               $ratio = $total / $habitaciones;
+
             $array[] = array(
                "idDestino" => $idDestinoX,
                "destino" => $destino,
                "total" => $total,
-               "destinoActual" => $destinoActual
+               "destinoActual" => $destinoActual,
+               "habitaciones" => $habitaciones,
+               "ratio" => $ratio,
             );
+         }
       }
 
       return $array;
@@ -2021,6 +2065,8 @@ class ReporteRanking extends Conexion
          $idDestinoX = $x['idDestino'];
          $destino = $x['destino'];
          $total = 0;
+         $habitaciones = $x['habitaciones'];
+         $ratio = 0;
 
          #MP
          $total +=
@@ -2044,12 +2090,18 @@ class ReporteRanking extends Conexion
          if (
             $idDestinoX != 10
          )
-            $array[] = array(
-               "idDestino" => $idDestinoX,
-               "destino" => $destino,
-               "total" => $total,
-               "destinoActual" => $destinoActual
-            );
+            #RATIO
+            if ($total > 0 && $habitaciones > 0)
+               $ratio = $total / $habitaciones;
+
+         $array[] = array(
+            "idDestino" => $idDestinoX,
+            "destino" => $destino,
+            "total" => $total,
+            "destinoActual" => $destinoActual,
+            "habitaciones" => $habitaciones,
+            "ratio" => $ratio
+         );
       }
 
       return $array;
