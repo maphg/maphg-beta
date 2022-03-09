@@ -367,7 +367,7 @@ class OtMp extends Conexion
          $x['materialesRequeridos'] = OtMp::materiales($idPlan);
 
          #RESULTADO FINAL POR REGISTRO
-         $array = $x;
+         $array[] = $x;
       }
       return $array;
    }
