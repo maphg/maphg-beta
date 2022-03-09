@@ -4,7 +4,6 @@
 class OtMp extends Conexion
 {
 
-   // falta agregar actividades extra ***************************************
    public static function ot($idUsuario, $idOt)
    {
       // OBTIENE TODO LOS DATOS POR AÑO Y DESTINO.
@@ -12,10 +11,17 @@ class OtMp extends Conexion
       $conexion = new Conexion();
       $conexion->conectar();
 
-      $query = "SELECT mp.id 'idOt', mp.semana, mp.año, e.id 'idEquipo', mp.status,
-      mp.fecha_creacion 'fechaCreacion', mp.fecha_finalizado 'fechaFinalizado',
-      mp.creado_por idCreadoPor, CONCAT(c1.nombre, ' ', c1.apellido) 'creadoPor',
-      mp.realizado_por 'idRealizadoPor', CONCAT(c2.nombre, ' ', c2.apellido) 'finalizadoPor',
+      $query = "SELECT mp.id 'idOt',
+      mp.semana,
+      mp.año,
+      e.id 'idEquipo',
+      mp.status,
+      mp.fecha_creacion 'fechaCreacion',
+      mp.fecha_finalizado 'fechaFinalizado',
+      mp.creado_por idCreadoPor,
+      CONCAT(c1.nombre, ' ', c1.apellido) 'creadoPor',
+      mp.realizado_por 'idRealizadoPor',
+      CONCAT(c2.nombre, ' ', c2.apellido) 'finalizadoPor',
       mp.comentario,
       mp.actividades_preventivo 'actividadesPreventivo',
       mp.actividades_preventivo_realizadas 'actividadesPreventivoRealizadasX',
@@ -24,8 +30,13 @@ class OtMp extends Conexion
       mp.actividades_test 'actividadesTest',
       mp.actividades_test_realizadas 'actividadesTestRealizadasX',
       mp.actividades_extra 'actividadesExtra',
-      e.equipo 'nombreEquipo', des.id 'idDestino', des.destino, tipo.tipo 'tipoEquipo',
-      sec.id 'idSeccion', sec.seccion, sub.id 'idSubseccion',
+      e.equipo 'nombreEquipo',
+      des.id 'idDestino',
+      des.destino,
+      tipo.tipo 'tipoEquipo',
+      sec.id 'idSeccion',
+      sec.seccion,
+      sub.id 'idSubseccion',
       sub.grupo 'subseccion',
       plan.id 'idPlan',
       plan.tipo_plan 'tipoPlan',
@@ -56,65 +67,114 @@ class OtMp extends Conexion
 
       foreach ($response as $x) {
          $idPlan = $x['idPlan'];
+         $idOt = $x['idOt'];
 
-         #ACTIVIDADESALL
-         $actividadesRealizadas = array();
+         #RUTA URL QR (RUTA BASE: 'https://www.maphg.com/america/otMp/#/' + AQUÍ EL ID DE LA OT))
+            $urlQr = "_PATH/";
+         if (strpos($_SERVER['REQUEST_URI'], "america") == true)
+            $urlQr = "https://www.maphg.com/america/ot_test/#/$idOt";
+         if (strpos($_SERVER['REQUEST_URI'], "europa") == true)
+            $urlQr = "https://www.maphg.com/europa/ot_test/#/$idOt";
 
-         #ACTIVIDADES PREVENTIVAS REALIZADAS
-         $x['actividadesPreventivoRealizadas'] = array();
-         $actividadesPreventivoRealizadas = explode(";", $x['actividadesPreventivoRealizadasX']);
-         foreach ($actividadesPreventivoRealizadas as $apr) {
-            $actividadX = OtMp::actividad($apr, "PREVENTIVO", "REALIZADO");
+         $x['urlQr'] = str_replace(""," ",$urlQr);
 
-            $x['actividadesPreventivoRealizadas'][] = $actividadX;
-            $actividadesRealizadas[] = $actividadX;
+         #PREVENTIVO
+         $actividadesPreventivoAll = explode(',', str_replace(""," ",$x['actividadesPreventivo']));
+         $actividadesPreventivoRealizadas = explode(';', str_replace(""," ",$x['actividadesPreventivoRealizadasX']));
+
+         #CHECKLIST
+         $actividadesCheckAll = explode(',', str_replace(""," ",$x['actividadesCheck']));
+         $actividadesCheckRealizadas = explode(';', str_replace(""," ",$x['actividadesCheckRealizadasX']));
+         $actividadesCheckRealizadasX = array();
+
+         foreach($actividadesCheckRealizadas as $acrX){
+            $acrXTemp = explode("=", $acrX);
+
+            $actividadesCheckRealizadasX[] = $acrXTemp; 
          }
 
-         #ACTIVIDADES CHECK
-         $x['actividadesCheckRealizadas'] = array();
-         $actividadesCheckRealizadas = explode(";", $x['actividadesCheckRealizadasX']);
-         foreach ($actividadesCheckRealizadas as $acr) {
-            $valores = explode("=", $acr);
+         #TEST
+         $actividadesTestAll = explode(',', str_replace(""," ",$x['actividadesTest']));
+         $actividadesTestRealizadas = explode(';', $x['actividadesTestRealizadasX']);
+         $actividadesTestRealizadasX = array();
 
-            if (count($valores) >= 2) {
-               $actividadX = OtMp::actividad($valores[0], "CHECKLIST", $valores[1]);
+         foreach($actividadesTestRealizadas as $atrX){
+            $atrXTemp = explode("=", $atrX);
 
-               $x['actividadesCheckRealizadas'][] = $actividadX;
-               $actividadesRealizadas[] = $actividadX;
+            $actividadesTestRealizadasX[] = $atrXTemp; 
+         }
+
+         #ACTIVIDADES EXTRA
+         $actividadesExtraAll = explode(';', $x['actividadesExtra']);
+
+
+         #TODAS LAS ACTIVIDADES (PREVENTIVO, CHECKLIST, TEST Y EXTRA)
+         $x['actividadesRealizadas'] = array();
+
+         #TODAS LAS ACTIVIDADES TIPO PREVENTIVO.
+         foreach ($actividadesPreventivoAll as $apa){
+            if($apa != ""){
+               $apaX = array();
+               
+               if(array_search($apa, $actividadesPreventivoRealizadas)){
+                  $apaX = OtMp::actividad($apa, "PREVENTIVO", "REALIZADO");
+               }else{
+                  $apaX = OtMp::actividad($apa, "PREVENTIVO", "BLANK");
+               }
+
+               if(count($apaX)){
+                  $x['actividadesRealizadas'][] = $apaX;
+               }
             }
          }
 
-         #ACTIVIDADES TEST
-         $x['actividadesTestRealizadas'] = array();
-         $actividadesTestRealizadas = explode(";", $x['actividadesTestRealizadasX']);
-         foreach ($actividadesTestRealizadas as $acr) {
-            $valores = explode("=", $acr);
+         #TODAS LAS ACTIVIDADES TIPO CHECKLIST.
+         foreach ($actividadesCheckAll as $aca){
+            if($aca != ""){
+               $acaX = OtMp::actividad($aca, "CHECKLIST", "BLANK");
+                               
+               if(count($acaX)){
+                  foreach($actividadesCheckRealizadasX as $acrx){
+                     $x['test'] = $acaX['valor'];
+                     if($acrx[0] == $aca && $acrx[1] != ""){
+                        $acaX['valor'] = $acrx[1];
+                     }
+                  }
 
-            if (count($valores) >= 2) {
-               $actividadX = OtMp::actividad($valores[0], "TEST", $valores[1]);
-
-               $x['actividadesTestRealizadas'][] = $actividadX;
-               $actividadesRealizadas[] = $actividadX;
+                  $x['actividadesRealizadas'][] = $acaX;
+               }
             }
          }
 
-         #ACTIVIDADES ADICIONALES
-         if ($x['actividadesExtra'] && $x['actividadesExtra'] != '') {
-            $actividadX = explode(";", $x['actividadesExtra']);
-            foreach ($actividadX as $key => $ax) {
-               if ($ax != '')
-                  $actividadesRealizadas[] = array(
-                     "idActividad" => $key,
-                     "actividad" => $ax,
-                     "valor" => "REALIZADO",
-                     "tipo" => "PREVENTIVO"
-                  );
+         #TODAS LAS ACTIVIDADES TIPO TEST.
+         foreach ($actividadesTestAll as $ata){
+            if($ata != ""){
+               $ataX = OtMp::actividad($aca, "TEST", "BLANK");
+                               
+               if(count($ataX)){
+                  foreach($actividadesTestRealizadasX as $acrx){
+                     $x['test'] = $ataX['valor'];
+                     if($acrx[0] == $ata && $acrx[1] != ""){
+                        $ataX['valor'] = $acrx[1];
+                     }
+                  }
+
+                  $x['actividadesRealizadas'][] = $ataX;
+               }
             }
          }
 
-
-         #ACTIVIDADES REALIZADAS
-         $x['actividadesRealizadas'] = $actividadesRealizadas;
+         #ACTIVIDADES EXTRA
+         foreach ($actividadesExtraAll as $key => $axa){
+            if($axa != ""){   
+               $x['actividadesRealizadas'][] = array(
+                  "idActividad" => $key,
+                  "actividad" => $axa,
+                  "valor" => "REALIZADO",
+                  "tipo"=> "PREVENTIVO"
+               );
+            }
+         }
 
          #ADJUNTOS
          $x['adjuntos'] = OtMp::adjuntos($idOt);
