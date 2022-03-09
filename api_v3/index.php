@@ -965,6 +965,44 @@ if ($peticion === 'POST') {
          $array['data'] = $registros;
       }
    }
+
+
+   #APARTADO DE EQUIPOS
+   if ($apartado === 'equipo') {
+      include 'conexion.php';
+      include_once "equipos.php";
+      include_once "incidencias.php";
+      include_once "preventivos.php";
+      include_once "otMp.php";
+
+      if ($accion === 'detalle') {
+         $idEquipo = $_POST['idEquipo'];
+
+         #OBTIENE INFORMACIÓN DEL EQUIPO
+         $resultado = Equipos::equiposFiltrados($idEquipo, $idDestino, 0, 0, 0, '');
+         $equipo = array();
+
+         if (count($resultado)) {
+            $equipo = $resultado;
+
+            #INCIDENCIAS
+            $equipo[0]['incidencias'] = Incidencias::porEquipo($idDestino, $idEquipo);
+
+            #PLANIFICACIÓN
+            $equipo[0]['planificacion'] = MP::mpEquipo($idEquipo);
+
+            #PREVENTIVOS(Ots)
+            $equipo[0]['preventivos'] = OtMp::otEquipo($idDestino, $idEquipo);
+         }
+
+
+
+
+         #ARRAY DE RESULTADOS
+         $array['response'] = "SUCCESS";
+         $array['data'] = $equipo;
+      }
+   }
 }
 
 echo json_encode($array);

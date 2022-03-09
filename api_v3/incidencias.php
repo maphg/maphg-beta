@@ -105,6 +105,94 @@ class Incidencias extends Conexion
    }
 
 
+   #INCIDENCIAS POR EQUIPO
+   public static function porEquipo($idDestino, $idEquipo)
+   {
+      $conexion = new Conexion();
+      $conexion->conectar();
+
+      #ARRAYS
+      $array = array();
+
+      $query = "SELECT
+      i.id,
+      i.actividad,
+      i.tipo_incidencia,
+      i.status,
+      i.activo,
+      i.creado_por,
+      i.responsable,
+      d.id 'idDestino',
+      d.destino,
+      sec.id 'idSeccion',
+      sec.seccion,
+      sub.id 'idSubseccion',
+      sub.grupo 'subseccion',
+      e.id 'idEquipo',
+      e.equipo
+      FROM t_mc AS i
+      INNER JOIN c_destinos AS d ON i.id_destino = d.id
+      INNER JOIN c_secciones AS sec ON i.id_seccion = sec.id
+      INNER JOIN c_subsecciones AS sub ON i.id_subseccion = sub.id
+      INNER JOIN t_equipos_america AS e ON i.id_equipo = e.id
+      WHERE i.id_destino = ? and i.id_equipo = ? and i.activo = 1";
+
+      $prepare = mysqli_prepare($conexion->con, $query);
+      $prepare->bind_param("ii", $idDestino, $idEquipo);
+      $prepare->execute();
+      $response = $prepare->get_result();
+
+
+
+      foreach ($response as $x) {
+         $idIncidencia = $x['id'];
+         $incidencia = $x['actividad'];
+         $tipoIncidencia = $x['tipo_incidencia'];
+         $status = $x['status'];
+         $creadoPor = $x['creado_por'];
+         $responsable = $x['responsable'];
+         $idDestinoX = $x['idDestino'];
+         $destino = $x['destino'];
+         $idSeccion = $x['idSeccion'];
+         $seccion = $x['seccion'];
+         $idSubseccion = $x['idSubseccion'];
+         $subseccion = $x['subseccion'];
+         $idEquipo = $x['idEquipo'];
+         $equipo = $x['equipo'];
+         $activo = $x['activo'];
+
+         if ($status === 'N' || $status === 'PENDIENTE' || $status === 'PROCESO')
+            $status = 'PENDIENTE';
+         else
+            $status = 'SOLUCIONADO';
+
+         #RESULTADO FINAL DE PROYECTOS
+         $array[] = array(
+            "idIncidencia" => $idIncidencia,
+            "incidencia" => $incidencia,
+            "tipoIncidencia" => $tipoIncidencia,
+            "status" => $status,
+            "creadoPor" => Usuarios::getById($creadoPor),
+            "responsable" => Usuarios::getById($responsable),
+            "idDestino" => $idDestinoX,
+            "destino" => $destino,
+            "idSeccion" => $idSeccion,
+            "seccion" => $seccion,
+            "idSubseccion" => $idSubseccion,
+            "subseccion" => $subseccion,
+            "idEquipo" => $idEquipo,
+            "equipo" => $equipo,
+            "activo" => $activo,
+            "comentarios" => array(),
+            "adjuntos" => array(),
+            "catalogoConceptos" => array()
+         );
+      }
+
+      return $array;
+   }
+
+
    public function crear()
    {
       $this->conectar();
