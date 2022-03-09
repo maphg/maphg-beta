@@ -1018,9 +1018,9 @@ class MP extends Conexion
    }
 
 
+   #PLANIFICACIÓN DEL EQUIPO
    public static function mpEquipo($idEquipo)
    {
-      // MP PROGRAMADOS
       $conexion = new Conexion();
       $conexion->conectar();
       $array = array();
@@ -1039,6 +1039,4 @@ class MP extends Conexion
 
       return $array;
    }
-
-   
 }
