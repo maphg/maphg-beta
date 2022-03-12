@@ -72,9 +72,9 @@ class OtMp extends Conexion
          #RUTA URL QR (RUTA BASE: 'https://www.maphg.com/america/otMp/#/' + AQUÍ EL ID DE LA OT))
          $urlQr = "_PATH/";
          if (strpos($_SERVER['REQUEST_URI'], "america") == true)
-            $urlQr = "https://www.maphg.com/america/ot_test/#/$idOt";
+            $urlQr = "https://www.maphg.com/america/otMp/#/$idOt";
          if (strpos($_SERVER['REQUEST_URI'], "europa") == true)
-            $urlQr = "https://www.maphg.com/europa/ot_test/#/$idOt";
+            $urlQr = "https://www.maphg.com/europa/otMp/#/$idOt";
 
          $x['urlQr'] = str_replace(" ", "", $urlQr);
 

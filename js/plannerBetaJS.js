@@ -7833,7 +7833,7 @@ function consultarOpcionesEquipo() {
 
 // Proceso para Ver OT
 function VerOTMP(idOt) {
-   window.open('otMP/#/' + idOt, '_blank');
+   window.open('otMp/#/' + idOt, '_blank');
 }
 
 
