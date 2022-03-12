@@ -11116,7 +11116,7 @@ if (isset($_POST['action'])) {
 
         $query = "SELECT id, fecha_programada
         FROM t_mp_planificacion_iniciada 
-        WHERE id_equipo = $idEquipo and semana = $semana and id_plan = $idPlan and activo = 1 and status = 'PROCESO' and año = '$añoActual' ORDER BY id DESC LIMIT 1";
+        WHERE id_equipo = $idEquipo and semana = $semana and id_plan = $idPlan and activo = 1 and status IN('PROCESO', 'SOLUCIONADO') and año = '$añoActual' ORDER BY id DESC LIMIT 1";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $idOT = $x['id'];
