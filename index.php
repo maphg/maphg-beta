@@ -782,7 +782,7 @@
             <!-- FOTOS -->
             <div class="w-full h-32 mt-2 px-4 overflow-x-auto scrollbar flex items-center">
 
-                <div class="flex items-center justify-center w-10 h-10 bg-bluegray-900 hover:bg-indigo-300 hover:text-indigo-500 border-2 border-gray-200 text-bluegray-300 rounded-full absolute left-0 cursor-pointer" data-anijs="if: mouseover, do: tada animated">
+                <div class="flex items-center justify-center w-10 h-10 bg-bluegray-900 hover:bg-indigo-300 hover:text-indigo-500 border-2 border-gray-200 text-bluegray-300 rounded-full absolute right-0 cursor-pointer" data-anijs="if: mouseover, do: tada animated">
                     <i class="fas fa-plus ga-lg"></i>
                     <input id="inputFotografiaEquipo" type="file" class="absolute opacity-0 item-center mx-0 my-0 justify-center w-full" style="top:1px; left:5px" multiple="">
                 </div>

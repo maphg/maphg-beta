@@ -7231,6 +7231,7 @@ function consultarActividades(idOT) {
 
 // Muestra el Menú de los Planes
 function opcionesMenuMP(id, idSemana, idProceso, idEquipo, idPlan, semanaX) {
+
    let idDestino = localStorage.getItem('idDestino');
    let idUsuario = localStorage.getItem('usuario');
 
@@ -7258,9 +7259,6 @@ function opcionesMenuMP(id, idSemana, idProceso, idEquipo, idPlan, semanaX) {
 
    document.getElementById("eliminarMPDesdeAqui").
       setAttribute('onclick', `programarMP(${idSemana}, ${idProceso}, ${idEquipo}, ${semanaX}, ${idPlan}, "ELIMINARDESDEAQUI")`);
-
-   document.getElementById("VerOTMP").
-      setAttribute('onclick', `VerOTMP(${idSemana}, ${idProceso}, ${idEquipo}, ${semanaX}, ${idPlan}, "VEROT")`);
 
    document.getElementById("generarOTMP").
       setAttribute('onclick', `programarMP(${idSemana}, ${idProceso}, ${idEquipo}, ${semanaX}, ${idPlan}, "GENERAROT")`);
@@ -7291,6 +7289,12 @@ function opcionesMenuMP(id, idSemana, idProceso, idEquipo, idPlan, semanaX) {
       .then(array => array.json())
       .then(array => {
          fechaProgramadaOT.value = array.fechaProgramada;
+
+         if (array.idOT) {
+            document.getElementById("VerOTMP").
+               setAttribute('onclick',
+                  `VerOTMP(${array.idOT})`);
+         }
       })
       .catch(function (err) {
          fechaProgramadaOT.value = '';
@@ -7299,6 +7303,81 @@ function opcionesMenuMP(id, idSemana, idProceso, idEquipo, idPlan, semanaX) {
 
 
 }
+
+
+// Muestra el Menú de los Planes
+function opcionesMenuMPLocal(id, idSemana, idProceso, idEquipo, idPlan, semanaX) {
+
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+
+   document.getElementById("tooltipMP").classList.remove('hidden');
+
+   document.getElementById('semanaProgramacionMP').innerHTML = '(Semana ' + semanaX + ')';
+
+   // Propiedades para el tooltip
+   const button = document.getElementById(id);
+   const tooltip = document.getElementById('tooltipMP');
+
+   Popper.createPopper(button, tooltip, {
+      placement: 'top',
+   });
+
+   document.getElementById("programarMPIndividual").
+      setAttribute('onclick', `programarMPLocal(${idSemana}, ${idProceso}, ${idEquipo}, ${semanaX}, ${idPlan}, "PROGRAMARINDIVIDUAL")`);
+
+   document.getElementById("programarMPDesdeAqui").
+      setAttribute('onclick', `programarMPLocal(${idSemana}, ${idProceso}, ${idEquipo}, ${semanaX}, ${idPlan}, "PROGRAMARDESDEAQUI")`);
+
+   document.getElementById("programarMPPersonalizado").
+      setAttribute('onclick', `programarMPLocal(${idSemana}, ${idProceso}, ${idEquipo}, ${semanaX}, ${idPlan}, "PROGRAMARPERSONALIZADO")`);
+   document.getElementById("eliminarMPIndividual").
+      setAttribute('onclick', `programarMPLocal(${idSemana}, ${idProceso}, ${idEquipo}, ${semanaX}, ${idPlan}, "ELIMINARINDIVIDUAL")`);
+
+   document.getElementById("eliminarMPDesdeAqui").
+      setAttribute('onclick', `programarMPLocal(${idSemana}, ${idProceso}, ${idEquipo}, ${semanaX}, ${idPlan}, "ELIMINARDESDEAQUI")`);
+
+   document.getElementById("generarOTMP").
+      setAttribute('onclick', `programarMPLocal(${idSemana}, ${idProceso}, ${idEquipo}, ${semanaX}, ${idPlan}, "GENERAROT")`);
+
+   document.getElementById("solucionarOTMP").
+      setAttribute('onclick', `obtenerOTDigital(${idEquipo}, ${semanaX}, ${idPlan})`);
+
+   document.getElementById("cancelarOTMP").
+      setAttribute('onclick', `programarMPLocal(${idSemana}, ${idProceso}, ${idEquipo}, ${semanaX}, ${idPlan}, "CANCELAROT")`);
+
+
+   const action = "obtenerDatosOT";
+   const URL = `php/plannerCrudPHP.php`;
+
+   const data = new FormData();
+   data.append('action', action);
+   data.append('idDestino', idDestino);
+   data.append('idUsuario', idUsuario);
+   data.append('idEquipo', idEquipo);
+   data.append('semana', semanaX);
+   data.append('idPlan', idPlan);
+
+   fetch(URL, {
+      method: 'POST',
+      body: data,
+   })
+      .then(array => array.json())
+      .then(array => {
+         fechaProgramadaOT.value = array.fechaProgramada;
+
+         if (array.idOT) {
+            document.getElementById("VerOTMP").
+               setAttribute('onclick',
+                  `VerOTMP(${array.idOT})`);
+         }
+      })
+      .catch(function (err) {
+         fechaProgramadaOT.value = '';
+         fetch(APIERROR + err);
+      })
+}
+
 
 const programarFechaMP = (idEquipo, semana, idPlan) => {
    let idDestino = localStorage.getItem('idDestino');
@@ -7332,49 +7411,6 @@ const programarFechaMP = (idEquipo, semana, idPlan) => {
       .catch(function (err) {
          fetch(APIERROR + err);
       })
-}
-
-
-// Muestra el Menú de los Planes
-function opcionesMenuMPLocal(id, idSemana, idProceso, idEquipo, idPlan, semanaX) {
-
-   document.getElementById("tooltipMP").classList.remove('hidden');
-
-   document.getElementById('semanaProgramacionMP').innerHTML = '(Semana ' + semanaX + ')';
-
-   // Propiedades para el tooltip
-   const button = document.getElementById(id);
-   const tooltip = document.getElementById('tooltipMP');
-
-   Popper.createPopper(button, tooltip, {
-      placement: 'top',
-   });
-
-   document.getElementById("programarMPIndividual").
-      setAttribute('onclick', `programarMPLocal(${idSemana}, ${idProceso}, ${idEquipo}, ${semanaX}, ${idPlan}, "PROGRAMARINDIVIDUAL")`);
-
-   document.getElementById("programarMPDesdeAqui").
-      setAttribute('onclick', `programarMPLocal(${idSemana}, ${idProceso}, ${idEquipo}, ${semanaX}, ${idPlan}, "PROGRAMARDESDEAQUI")`);
-
-   document.getElementById("programarMPPersonalizado").
-      setAttribute('onclick', `programarMPLocal(${idSemana}, ${idProceso}, ${idEquipo}, ${semanaX}, ${idPlan}, "PROGRAMARPERSONALIZADO")`);
-   document.getElementById("eliminarMPIndividual").
-      setAttribute('onclick', `programarMPLocal(${idSemana}, ${idProceso}, ${idEquipo}, ${semanaX}, ${idPlan}, "ELIMINARINDIVIDUAL")`);
-
-   document.getElementById("eliminarMPDesdeAqui").
-      setAttribute('onclick', `programarMPLocal(${idSemana}, ${idProceso}, ${idEquipo}, ${semanaX}, ${idPlan}, "ELIMINARDESDEAQUI")`);
-
-   document.getElementById("VerOTMP").
-      setAttribute('onclick', `VerOTMP(${idSemana}, ${idProceso}, ${idEquipo}, ${semanaX}, ${idPlan}, "VEROT")`);
-
-   document.getElementById("generarOTMP").
-      setAttribute('onclick', `programarMPLocal(${idSemana}, ${idProceso}, ${idEquipo}, ${semanaX}, ${idPlan}, "GENERAROT")`);
-
-   document.getElementById("solucionarOTMP").
-      setAttribute('onclick', `obtenerOTDigital(${idEquipo}, ${semanaX}, ${idPlan})`);
-
-   document.getElementById("cancelarOTMP").
-      setAttribute('onclick', `programarMPLocal(${idSemana}, ${idProceso}, ${idEquipo}, ${semanaX}, ${idPlan}, "CANCELAROT")`);
 }
 
 
@@ -7618,7 +7654,7 @@ function programarMP(idSemana, idProceso, idEquipo, semanaX, idPlan, accionMP) {
             alertaImg(`Semana ${semanaX}, en Proceso`, '', 'success', 3500);
             consultarPlanEquipo(idEquipo);
             cerrarTooltip('tooltipMP');
-            VerOTMP(idSemana, idProceso, idEquipo, semanaX, idPlan, accionMP);
+            // VerOTMP(idSemana, idProceso, idEquipo, semanaX, idPlan, accionMP);
          } else if (data == 8) {
             alertaImg(`Semana ${semanaX}, Solucionada`, '', 'success', 3500);
             consultarPlanEquipo(idEquipo);
@@ -7704,7 +7740,7 @@ function programarMPLocal(idSemana, idProceso, idEquipo, semanaX, idPlan, accion
             alertaImg(`Semana ${semanaX}, en Proceso`, '', 'success', 3500);
             consultarPlanLocal(idEquipo);
             cerrarTooltip('tooltipMP');
-            VerOTMP(idSemana, idProceso, idEquipo, semanaX, idPlan, accionMP);
+            // VerOTMP(idSemana, idProceso, idEquipo, semanaX, idPlan, accionMP);
          } else if (data == 8) {
             alertaImg(`Semana ${semanaX}, Solucionada`, '', 'success', 3500);
             consultarPlanLocal(idEquipo);
@@ -7796,40 +7832,8 @@ function consultarOpcionesEquipo() {
 
 
 // Proceso para Ver OT
-function VerOTMP(idSemana, idProceso, idEquipo, semanaX, idPlan, accionMP) {
-   let idUsuario = localStorage.getItem('usuario');
-   let idDestino = localStorage.getItem('idDestino');
-   let numeroSemanas = 0;
-   const año = (new Date()).getFullYear();
-
-   const action = "programarMP";
-   $.ajax({
-      type: "POST",
-      url: "php/plannerCrudPHP.php",
-      data: {
-         action: action,
-         idUsuario: idUsuario,
-         idDestino: idDestino,
-         idSemana: idSemana,
-         idProceso: idProceso,
-         idEquipo: idEquipo,
-         semanaX: semanaX,
-         accionMP: accionMP,
-         idPlan: idPlan,
-         numeroSemanas: numeroSemanas
-      },
-      // dataType: "JSON",
-      success: function (data) {
-
-         if (data == 10 || data == 13) {
-            localStorage.setItem('URL',
-               `${idSemana};${idProceso};${idEquipo};${semanaX};${idPlan};${año}`);
-            window.open('OT/index.php', "OT", "directories=no, location=no, menubar=no, scrollbars=yes, statusbar=no, tittlebar=no, width=1200px, height=650px");
-         } else {
-            alertaImg('No se encontro la OT', '', 'info', 1400);
-         }
-      }
-   });
+function VerOTMP(idOt) {
+   window.open('otMP/#/' + idOt, '_blank');
 }
 
 
@@ -9855,7 +9859,7 @@ function obtenerEquiposAmerica(idSeccion, idSubseccion, pagina = 0) {
          obtenerTodosPendientes();
          document.getElementById("seccionSubseccionDestinoEquiposAmerica").innerHTML = '';
          alertaImg('No se Encontraron Equipos/Locales', '', 'info', 1500);
-         fetch(APIERROR + err + ` 2 obtenerEquiposAmerica(${iDseccion},${idSubseccion},${pagina}) ${idDestino}`);
+         fetch(APIERROR + err + ` 2 obtenerEquiposAmerica(${idSeccion},${idSubseccion},${pagina}) ${idDestino}`);
       });
 }
 
@@ -12484,7 +12488,6 @@ const exportarTareasAIncidencias = (idDestino) => {
    fetch(`php/select_REST_planner.php?action=exportarTareasAIncidencias&idDestino=${idDestino}&idUsuario=${idUsuario}`)
       .then(array => array.json())
       .then(array => {
-         console.log(array)
       })
       .catch(function (err) {
          fetch(APIERROR + err);

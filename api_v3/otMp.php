@@ -76,15 +76,16 @@ class OtMp extends Conexion
          if (strpos($_SERVER['REQUEST_URI'], "europa") == true)
             $urlQr = "https://www.maphg.com/europa/ot_test/#/$idOt";
 
-         $x['urlQr'] = str_replace("", " ", $urlQr);
+         $x['urlQr'] = str_replace(" ", "", $urlQr);
 
          #PREVENTIVO
-         $actividadesPreventivoAll = explode(',', str_replace("", " ", $x['actividadesPreventivo']));
-         $actividadesPreventivoRealizadas = explode(';', str_replace("", " ", $x['actividadesPreventivoRealizadasX']));
+         $actividadesPreventivoAll = explode(',', str_replace(" ", "", $x['actividadesPreventivo']));
+         $actividadesPreventivoRealizadas = explode(';', str_replace(" ", "", $x['actividadesPreventivoRealizadasX']));
 
          #CHECKLIST
-         $actividadesCheckAll = explode(',', str_replace("", " ", $x['actividadesCheck']));
-         $actividadesCheckRealizadas = explode(';', str_replace("", " ", $x['actividadesCheckRealizadasX']));
+         $actividadesCheckAll = explode(',', str_replace(" ", "", $x['actividadesCheck']));
+
+         $actividadesCheckRealizadas = explode(';', str_replace(" ", "", $x['actividadesCheckRealizadasX']));
          $actividadesCheckRealizadasX = array();
 
          foreach ($actividadesCheckRealizadas as $acrX) {
@@ -94,7 +95,7 @@ class OtMp extends Conexion
          }
 
          #TEST
-         $actividadesTestAll = explode(',', str_replace("", " ", $x['actividadesTest']));
+         $actividadesTestAll = explode(',', str_replace(" ", "", $x['actividadesTest']));
          $actividadesTestRealizadas = explode(';', $x['actividadesTestRealizadasX']);
          $actividadesTestRealizadasX = array();
 
@@ -116,7 +117,7 @@ class OtMp extends Conexion
             if ($apa != "") {
                $apaX = array();
 
-               if (array_search($apa, $actividadesPreventivoRealizadas)) {
+               if (array_search($apa, $actividadesPreventivoRealizadas)  || $actividadesPreventivoRealizadas[0] == $apa) {
                   $apaX = OtMp::actividad($apa, "PREVENTIVO", "REALIZADO");
                } else {
                   $apaX = OtMp::actividad($apa, "PREVENTIVO", "BLANK");
@@ -130,12 +131,12 @@ class OtMp extends Conexion
 
          #TODAS LAS ACTIVIDADES TIPO CHECKLIST.
          foreach ($actividadesCheckAll as $aca) {
+
             if ($aca != "") {
                $acaX = OtMp::actividad($aca, "CHECKLIST", "BLANK");
 
                if (count($acaX)) {
                   foreach ($actividadesCheckRealizadasX as $acrx) {
-                     $x['test'] = $acaX['valor'];
                      if ($acrx[0] == $aca && $acrx[1] != "") {
                         $acaX['valor'] = $acrx[1];
                      }
@@ -149,7 +150,8 @@ class OtMp extends Conexion
          #TODAS LAS ACTIVIDADES TIPO TEST.
          foreach ($actividadesTestAll as $ata) {
             if ($ata != "") {
-               $ataX = OtMp::actividad($aca, "TEST", "BLANK");
+               $ataX = OtMp::actividad($ata, "TEST", "BLANK");
+               $x['zzzzzzz'][] = $ataX;
 
                if (count($ataX)) {
                   foreach ($actividadesTestRealizadasX as $acrx) {
@@ -260,15 +262,15 @@ class OtMp extends Conexion
          if (strpos($_SERVER['REQUEST_URI'], "europa") == true)
             $urlQr = "https://www.maphg.com/europa/ot_test/#/$idOt";
 
-         $x['urlQr'] = str_replace("", " ", $urlQr);
+         $x['urlQr'] = str_replace(" ", "", $urlQr);
 
          #PREVENTIVO
-         $actividadesPreventivoAll = explode(',', str_replace("", " ", $x['actividadesPreventivo']));
-         $actividadesPreventivoRealizadas = explode(';', str_replace("", " ", $x['actividadesPreventivoRealizadasX']));
+         $actividadesPreventivoAll = explode(',', str_replace(" ", "", $x['actividadesPreventivo']));
+         $actividadesPreventivoRealizadas = explode(';', str_replace(" ", "", $x['actividadesPreventivoRealizadasX']));
 
          #CHECKLIST
-         $actividadesCheckAll = explode(',', str_replace("", " ", $x['actividadesCheck']));
-         $actividadesCheckRealizadas = explode(';', str_replace("", " ", $x['actividadesCheckRealizadasX']));
+         $actividadesCheckAll = explode(',', str_replace(" ", "", $x['actividadesCheck']));
+         $actividadesCheckRealizadas = explode(';', str_replace(" ", "", $x['actividadesCheckRealizadasX']));
          $actividadesCheckRealizadasX = array();
 
          foreach ($actividadesCheckRealizadas as $acrX) {
@@ -278,7 +280,7 @@ class OtMp extends Conexion
          }
 
          #TEST
-         $actividadesTestAll = explode(',', str_replace("", " ", $x['actividadesTest']));
+         $actividadesTestAll = explode(',', str_replace(" ", "", $x['actividadesTest']));
          $actividadesTestRealizadas = explode(';', $x['actividadesTestRealizadasX']);
          $actividadesTestRealizadasX = array();
 
@@ -383,9 +385,10 @@ class OtMp extends Conexion
       if ($tipo === "PREVENTIVO")
          $tipoX = "t_mp_planes_actividades_preventivos";
       if ($tipo === "TEST")
-         $tipoX = "t_mp_planes_actividades_checklist";
-      if ($tipo === "CHECKLIST")
          $tipoX = "t_mp_planes_actividades_test";
+      if ($tipo === "CHECKLIST")
+         $tipoX = "t_mp_planes_actividades_checklist";
+
 
       $query = "SELECT id 'idActividad', descripcion_actividad 'actividad'
       FROM $tipoX
@@ -400,7 +403,6 @@ class OtMp extends Conexion
       $array = array();
 
       foreach ($response as $x) {
-
          #RESULTADO FINAL POR REGISTRO
          $x['valor'] = $valor;
          $x['tipo'] = $tipo;
