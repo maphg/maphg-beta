@@ -891,11 +891,10 @@ if ($peticion === 'POST') {
 
       if ($accion === "all") {
          #PARAMETROS ADICIONALES
-         $mes = $_POST['mes'];
          $año = intval($_POST['año']);
 
          // OBTENER TODOS LOS REGISTROS STAFF
-         $registros = StaffCovid::all($idDestino, $año, $mes);
+         $registros = StaffCovid::all($idDestino, $año);
 
          #ARRAY DE RESULTADOS
          $array['response'] = "SUCCESS";
@@ -903,41 +902,89 @@ if ($peticion === 'POST') {
       }
 
       if ($accion === "crear") {
+
          // CREAR REGISTRO
-         $idRegistro = $_POST['idRegistro'];
-         $mes = $_POST['mes'];
-         $año = $_POST['año'];
-         $numeroFaltantes = $_POST['numeroFaltantes'];
-         $porcentajeFaltantes = $_POST['porcentajeFaltantes'];
-         $numeroEmpleadosCovid = $_POST['numeroEmpleadosCovid'];
-         $incapacidadesMedica = $_POST['incapacidadesMedica'];
-         $observaciones = $_POST['observaciones'];
+         $fechaEstimada = $_POST['fechaEstimada'];
+         $pais = "MEXICO";
+         $mes = intval(date('m', strtotime($fechaEstimada)));
+         $año = date('Y', strtotime($fechaEstimada));
+         $staffAprobado = $_POST['staffAprobado'];
+         $staffContratado = $_POST['staffContratado'];
+         $staffFaltanteConCovid = $_POST['staffFaltanteConCovid'];
+         $incapacidadesMedicas = $_POST['incapacidadesMedicas'];
 
          $staff = new StaffCovid();
-         $staff->idRegistro = intval($idRegistro);
          $staff->idDestino = intval($idDestino);
-         $staff->idUsuario = intval($idUsuario);
+         $staff->creadoPor = intval($idUsuario);
+         $staff->fechaActual = $fechaActual;
+         $staff->fechaEstimada = $fechaEstimada;
+         $staff->pais = strtoupper($pais);
          $staff->mes = strtoupper($mes);
          $staff->año = intval($año);
-         $staff->numeroFaltantes = intval($numeroFaltantes);
-         $staff->porcentajeFaltantes = doubleval($porcentajeFaltantes);
-         $staff->numeroEmpleadosCovid = intval($numeroEmpleadosCovid);
-         $staff->incapacidadesMedica = intval($incapacidadesMedica);
-         $staff->observaciones = $observaciones;
-         $staff->fechaActual = $fechaActual;
+         $staff->staffAprobado = intval($staffAprobado);
+         $staff->staffContratado = intval($staffContratado);
+         $staff->staffFaltanteConCovid = doubleval($staffFaltanteConCovid);
+         $staff->incapacidadesMedicas = intval($incapacidadesMedicas);
+         $staff->observaciones = "NA";
          $staff->activo = 1;
 
          #ARRAY DE RESULTADOS
          $array['response'] = "SUCCESS";
-
+         $array['data'] = $staff->crear();
 
          #COMPRUEBA SI EXISTE, SINO EXISTE LO CREA
-         if ($idRegistro === 0)
-            $array['data'] = $staff->crear();
+         // if ($idRegistro === 0)
+         // $array['data'] = $staff->crear();
 
          #COMPRUEBA SI EXISTE, SI EXISTE LO ACTUALIZA
-         if ($idRegistro > 0)
-            $array['data'] = $staff->actualizar();
+         // if ($idRegistro > 0)
+         //    $array['data'] = $staff->actualizar();
+      }
+
+      if ($accion === "actualizar") {
+
+         // ACTUALIZA REGISTRO
+         $idRegistro = $_POST['idRegistro'];
+         $fechaEstimada = $_POST['fechaEstimada'];
+         $pais = "MEXICO";
+         $mes = intval(date('m', strtotime($fechaEstimada)));
+         $año = date('Y', strtotime($fechaEstimada));
+         $staffAprobado = $_POST['staffAprobado'];
+         $staffContratado = $_POST['staffContratado'];
+         $staffFaltanteConCovid = $_POST['staffFaltanteConCovid'];
+         $incapacidadesMedicas = $_POST['incapacidadesMedicas'];
+
+
+
+         $staff = new StaffCovid();
+         $staff->idRegistro = intval($idRegistro);
+         $staff->idDestino = intval($idDestino);
+         $staff->actualizadoPor = intval($idUsuario);
+         $staff->fechaActual = $fechaActual;
+         $staff->fechaEstimada = $fechaEstimada;
+         $staff->pais = strtoupper($pais);
+         $staff->mes = strtoupper($mes);
+         $staff->año = intval($año);
+         $staff->staffAprobado = intval($staffAprobado);
+         $staff->staffContratado = intval($staffContratado);
+         $staff->staffFaltanteConCovid = doubleval($staffFaltanteConCovid);
+         $staff->incapacidadesMedicas = intval($incapacidadesMedicas);
+         $staff->observaciones = "NA";
+         $staff->activo = 1;
+
+         #ARRAY DE RESULTADOS
+         $array['response'] = "SUCCESS";
+         $array['data'] = $staff->actualizar();
+      }
+
+
+      if ($accion === "opcionesDestino") {
+
+         $staff = new StaffCovid();
+
+         #ARRAY DE RESULTADOS
+         $array['response'] = "SUCCESS";
+         $array['data'] = $staff->opcionesDestino($idUsuario);
       }
    }
 

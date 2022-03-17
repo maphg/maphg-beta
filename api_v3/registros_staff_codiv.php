@@ -4,25 +4,38 @@
 class StaffCovid extends Conexion
 {
 
-   public static function all($idDestino, $año, $mes)
+   public static function all($idDestino, $año)
    {
       // OBTIENE TODO LOS DATOS POR AÑO Y DESTINO.
 
       $conexion = new Conexion();
       $conexion->conectar();
 
-      $filtroMes = $mes === "TODOS" ? "" : "and mes = '$mes'";
+      #ARRAY DE LOS MESES POR NUMERO DE MES.
+      $meses = ["?", "ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO", "JULIO", "AGOSTO", "SEPTIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE"];
 
-
-      $query = "SELECT staff.id 'idRegistro', staff.fecha_creado 'fechaCreado', staff.mes, staff.año,
-      staff.numero_faltantes 'numeroFaltantes', staff.porcentaje_faltantes_vs_staffing 'porcentajeFaltantes',
-      staff.numero_empleados_covid 'numeroEmpleadosCovid', staff.incapacidades_medica 'incapacidadesMedica',
-      staff.observaciones, staff.activo, col.nombre, col.apellido, destino.destino
+      $query = "SELECT
+      staff.id 'idRegistro',
+      staff.fecha_creado 'fechaCreado',
+      staff.fecha_estimada 'fechaEstimada',
+      staff.mes, staff.pais,
+      staff.mes, staff.mes,
+      staff.mes, staff.año,
+      staff.staff_aprovado 'staffAprobado',
+      staff.staff_contratado 'staffContratado',
+      staff.staff_faltante_con_covid 'staffFaltanteConCovid',
+      staff.incapacidades_medicas 'incapacidadesMedicas',
+      staff.observaciones,
+      staff.activo,
+      CONCAT(col.nombre, ' ', col.apellido) 'creadoPor',
+      destino.id 'idDestino',
+      destino.destino
       FROM t_registro_staff AS staff
       INNER JOIN c_destinos AS destino ON staff.id_destino = destino.id
       INNER JOIN t_users AS u ON staff.creado_por = u.id
       INNER JOIN t_colaboradores AS col ON u.id_colaborador = col.id
-      WHERE staff.id_destino = ? and staff.año = ? and staff.activo = 1 $filtroMes";
+      WHERE staff.id_destino = ? and staff.año = ? and staff.activo = 1
+      ORDER BY staff.fecha_estimada ASC";
 
       $prepare = mysqli_prepare($conexion->con, $query);
       $prepare->bind_param("ii", $idDestino, $año);
@@ -33,6 +46,8 @@ class StaffCovid extends Conexion
       $array = array();
 
       foreach ($response as $x) {
+         if ($x['mes'] > 0)
+            $x['mes'] = $meses[$x['mes']];
 
          #RESULTADO FINAL POR REGISTRO
          $array[] = $x;
@@ -45,21 +60,23 @@ class StaffCovid extends Conexion
    {
       $this->conectar();
 
-      $query = "INSERT INTO t_registro_staff(id_destino, creado_por, fecha_creado, mes, año, numero_faltantes, porcentaje_faltantes_vs_staffing, numero_empleados_covid, incapacidades_medica, observaciones, activo)
-      VALUES(?,?,?,?,?,?,?,?,?,?,?)";
+      $query = "INSERT INTO t_registro_staff(id_destino, creado_por, fecha_creado, fecha_estimada, pais, mes, año, staff_aprovado, staff_contratado, staff_faltante_con_covid, incapacidades_medicas, observaciones, activo)
+      VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
       $prepare = mysqli_prepare($this->con, $query);
       $prepare->bind_param(
-         "iissiidiisi",
+         "iisssiiiiiisi",
          $this->idDestino,
-         $this->idUsuario,
+         $this->creadoPor,
          $this->fechaActual,
+         $this->fechaEstimada,
+         $this->pais,
          $this->mes,
          $this->año,
-         $this->numeroFaltantes,
-         $this->porcentajeFaltantes,
-         $this->numeroEmpleadosCovid,
-         $this->incapacidadesMedica,
+         $this->staffAprobado,
+         $this->staffContratado,
+         $this->staffFaltanteConCovid,
+         $this->incapacidadesMedicas,
          $this->observaciones,
          $this->activo
       );
@@ -77,24 +94,32 @@ class StaffCovid extends Conexion
       try {
          $this->conectar();
          $query = "UPDATE t_registro_staff SET
-         numero_faltantes = ?,
-         porcentaje_faltantes_vs_staffing = ?,
-         numero_empleados_covid = ?,
-         incapacidades_medica = ?,
+         fecha_estimada = ?,
+         mes = ?,
+         año = ?,
+         staff_aprovado = ?,
+         staff_contratado = ?,
+         staff_faltante_con_covid = ?,
+         incapacidades_medicas = ?,
          observaciones = ?,
          modificado_por = ?,
-         fecha_modificado = ?
+         fecha_modificado = ?,
+         activo = ?
          WHERE id = ?";
          $prepare = mysqli_prepare($this->con, $query);
          $prepare->bind_param(
-            "idiisisi",
-            $this->numeroFaltantes,
-            $this->porcentajeFaltantes,
-            $this->numeroEmpleadosCovid,
-            $this->incapacidadesMedica,
+            "siiiiiisisii",
+            $this->fechaEstimada,
+            $this->mes,
+            $this->año,
+            $this->staffAprobado,
+            $this->staffContratado,
+            $this->staffFaltanteConCovid,
+            $this->incapacidadesMedicas,
             $this->observaciones,
-            $this->idUsuario,
+            $this->actualizadoPor,
             $this->fechaActual,
+            $this->activo,
             $this->idRegistro
          );
 
@@ -105,5 +130,51 @@ class StaffCovid extends Conexion
       } catch (\Throwable $th) {
          return $th;
       }
+   }
+
+
+   #OPCIONES DE DESTINO
+   public static function opcionesDestino($idUsuario)
+   {
+      // OBTIENE TODO LOS DATOS POR AÑO Y DESTINO.
+
+      $conexion = new Conexion();
+      $conexion->conectar();
+
+      $query = "SELECT id_destino 'idDestino'
+      FROM t_users
+      WHERE id = ? and activo = 1 LIMIT 1";
+
+      $prepare = mysqli_prepare($conexion->con, $query);
+      $prepare->bind_param("i", $idUsuario);
+      $prepare->execute();
+      $response = $prepare->get_result();
+
+      #ARRAYS
+      $array = array();
+      $idDestinoX = 0;
+
+      foreach ($response as $x) {
+         #RESULTADO FINAL POR REGISTRO
+         $idDestinoX = intval($x['idDestino']);
+      }
+
+      $filtroDestino = "WHERE id IN($idDestinoX)";
+      if ($idDestinoX === 10)
+         $filtroDestino = "";
+
+      #OBTENEMOS DATOS SEGÚN PERMISOS DE DESTINO
+      $query = "SELECT id 'idDestino', destino FROM c_destinos $filtroDestino";
+
+      $prepare = mysqli_prepare($conexion->con, $query);
+      $prepare->execute();
+      $response = $prepare->get_result();
+      foreach ($response as $x) {
+         #RESULTADO FINAL POR REGISTRO
+         $array[] = $x;
+      }
+
+
+      return $array;
    }
 }
