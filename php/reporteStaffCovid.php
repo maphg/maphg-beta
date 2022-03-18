@@ -34,9 +34,9 @@ $query = "SELECT
 staff.id 'idRegistro',
 staff.fecha_creado 'fechaCreado',
 staff.fecha_estimada 'fechaEstimada',
-staff.mes, staff.pais,
-staff.mes, staff.mes,
-staff.mes, staff.año,
+staff.pais,
+staff.mes,
+staff.año,
 staff.staff_aprovado 'staffAprobado',
 staff.staff_contratado 'staffContratado',
 staff.staff_faltante_con_covid 'staffFaltanteConCovid',
@@ -70,13 +70,13 @@ if ($result = mysqli_query($conn_2020, $query)) {
       $incapacidadesMedicas = $x['incapacidadesMedicas'];
       
       #operación
-      $totalFaltante = $staffAprobado - $staffContratado +($staffFaltanteConCovid + $incapacidadesMedicas);
+      $totalFaltante = $staffAprobado - ($staffContratado +($staffFaltanteConCovid + $incapacidadesMedicas));
       
       #operación
       $totalReal = $staffContratado -
       ($staffAprobado -
-        $staffContratado +
-        ($staffFaltanteConCovid + $incapacidadesMedicas));
+        ($staffContratado +
+        ($staffFaltanteConCovid + $incapacidadesMedicas)));
 
       $objPHPExcel->getActiveSheet()->setCellValue('A' . $fila, $pais);
       $objPHPExcel->getActiveSheet()->setCellValue('B' . $fila, $destino);
@@ -95,9 +95,8 @@ if ($result = mysqli_query($conn_2020, $query)) {
 }
 
 
-$fecha = date('d-m-Y H:m:s');
 header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-header('Content-Disposition: attachment;filename="Reporte_Staff_Covid ' . $fecha . '.xlsx"');
+header('Content-Disposition: attachment;filename="Reporte_Staff_Covid ' . date('d-m-Y H:m:s') . '.xlsx"');
 header('Cache-Control: max-age=0');
 $objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
 $objWriter->save('PHP://output');
