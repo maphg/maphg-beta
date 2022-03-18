@@ -8,7 +8,7 @@ require 'PHPExcel.php';
 $idDestino = $_GET['idDestino'];
 $año = $_GET['año'];
 
-$meses = ["", "ENERO","FEBRERO","MARZO","ABRIL","MAYO","JUNIO","JULIO","AGOSTO","SEPTIEMBRE","OCTUBRE","NOVIEMBRE","DICIEMBRE"]
+$meses = ["", "ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO", "JULIO", "AGOSTO", "SEPTIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE"];
 
 $objPHPExcel = new PHPExcel();
 $objPHPExcel->getProperties()->setCreator("Reporte")->setDescription("Reporte");
@@ -68,17 +68,17 @@ if ($result = mysqli_query($conn_2020, $query)) {
       $diferenciaStaff = $staffAprobado - $staffContratado;
       $staffFaltanteConCovid = $x['staffFaltanteConCovid'];
       $incapacidadesMedicas = $x['incapacidadesMedicas'];
-      
+
       #operación
-      $totalFaltante = 0;
-      // $totalFaltante = $staffAprobado - ($staffContratado +($staffFaltanteConCovid + $incapacidadesMedicas));
-      
+      // $totalFaltante = 0;
+      $totalFaltante = $staffAprobado - ($staffContratado + ($staffFaltanteConCovid + $incapacidadesMedicas));
+
       #operación
-      $totalReal = 0;
-      // $totalReal = $staffContratado -
-      // ($staffAprobado -
-      //   ($staffContratado +
-      //   ($staffFaltanteConCovid + $incapacidadesMedicas)));
+      // $totalReal = 0;
+      $totalReal = $staffContratado -
+         ($staffAprobado -
+            ($staffContratado +
+               ($staffFaltanteConCovid + $incapacidadesMedicas)));
 
       $objPHPExcel->getActiveSheet()->setCellValue('A' . $fila, $pais);
       $objPHPExcel->getActiveSheet()->setCellValue('B' . $fila, $destino);
