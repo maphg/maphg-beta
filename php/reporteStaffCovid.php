@@ -8,80 +8,89 @@ require 'PHPExcel.php';
 $idDestino = $_GET['idDestino'];
 $año = $_GET['año'];
 
+$meses = ["", "ENERO","FEBRERO","MARZO","ABRIL","MAYO","JUNIO","JULIO","AGOSTO","SEPTIEMBRE","OCTUBRE","NOVIEMBRE","DICIEMBRE"]
+
 $objPHPExcel = new PHPExcel();
 $objPHPExcel->getProperties()->setCreator("Reporte")->setDescription("Reporte");
 $objPHPExcel->setActiveSheetIndex(0);
 $objPHPExcel->getActiveSheet()->setTitle("Reporte Staff Covid");
-$objPHPExcel->getActiveSheet()->setCellValue('A1', 'DESTINO');
-$objPHPExcel->getActiveSheet()->setCellValue('B1', 'MES');
-$objPHPExcel->getActiveSheet()->setCellValue('C1', 'AÑO');
-$objPHPExcel->getActiveSheet()->setCellValue('D1', 'FECHA DE REGISTRO');
-$objPHPExcel->getActiveSheet()->setCellValue('E1', 'REGISTRADO POR');
-$objPHPExcel->getActiveSheet()->setCellValue('F1', 'Nº FALTANTES (CIFRA CON STAFF COVID INCLUIDO)');
-$objPHPExcel->getActiveSheet()->setCellValue('G1', '% FALTANTES VS STAFFING PPTO');
-$objPHPExcel->getActiveSheet()->setCellValue('H1', 'Nº EMPLEADOS CON COVID');
-$objPHPExcel->getActiveSheet()->setCellValue('I1', 'INCAPACIDADES MEDICAS');
-$objPHPExcel->getActiveSheet()->setCellValue('J1', 'OBSERVACIONES');
-$objPHPExcel->getActiveSheet()->setCellValue('K1', 'ACTUALIZADO POR');
-$objPHPExcel->getActiveSheet()->setCellValue('L1', 'FECHA ACTUALIZADO');
+$objPHPExcel->getActiveSheet()->setCellValue('A1', 'PAÍS');
+$objPHPExcel->getActiveSheet()->setCellValue('B1', 'DESTINO');
+$objPHPExcel->getActiveSheet()->setCellValue('C1', 'FECHA REGISTRO');
+$objPHPExcel->getActiveSheet()->setCellValue('D1', 'MES');
+$objPHPExcel->getActiveSheet()->setCellValue('E1', 'AÑO');
+$objPHPExcel->getActiveSheet()->setCellValue('F1', 'REGISTRÓ');
+$objPHPExcel->getActiveSheet()->setCellValue('G1', 'STAFF APROBADO');
+$objPHPExcel->getActiveSheet()->setCellValue('H1', 'STAFF CONTRATADO');
+$objPHPExcel->getActiveSheet()->setCellValue('I1', 'DIFERENCIA STAFF');
+$objPHPExcel->getActiveSheet()->setCellValue('J1', 'STAFF FALT. Y CON COVID');
+$objPHPExcel->getActiveSheet()->setCellValue('K1', 'INCAPACIDADES MEDICAS');
+$objPHPExcel->getActiveSheet()->setCellValue('L1', 'TOTAL FALTANTE');
+$objPHPExcel->getActiveSheet()->setCellValue('M1', 'TOTAL REAL');
 
 $fila = 1;
 
-$query = "SELECT st.id 'idRegistro', st.fecha_creado 'fechaRegistro',
-st.mes, st.año, st.numero_faltantes 'numeroFaltantes', st.porcentaje_faltantes_vs_staffing 'porcentajeFaltantes',
-st.numero_empleados_covid 'numeroEmpleadosCovid', st.incapacidades_medica 'incapacidadesMedica',
-st.observaciones, CONCAT(c.nombre, ' ', c.apellido) 'registradoPor',
-CONCAT(c2.nombre, ' ', c2.apellido) 'modificadoPor', st.fecha_modificado 'fechaModificado', d.destino
-FROM t_registro_staff AS st
-INNER JOIN c_destinos AS d ON st.id_destino = d.id
-INNER JOIN t_users AS u ON st.creado_por = u.id
-INNER JOIN t_colaboradores AS c ON u.id_colaborador = c.id
-LEFT JOIN t_users AS u2 ON st.modificado_por = u2.id
-LEFT JOIN t_colaboradores AS c2 ON u2.id_colaborador = c2.id
-WHERE st.id_destino = $idDestino and st.año = '$año' and st.activo = 1";
+$query = "SELECT
+staff.id 'idRegistro',
+staff.fecha_creado 'fechaCreado',
+staff.fecha_estimada 'fechaEstimada',
+staff.mes, staff.pais,
+staff.mes, staff.mes,
+staff.mes, staff.año,
+staff.staff_aprovado 'staffAprobado',
+staff.staff_contratado 'staffContratado',
+staff.staff_faltante_con_covid 'staffFaltanteConCovid',
+staff.incapacidades_medicas 'incapacidadesMedicas',
+staff.observaciones,
+staff.activo,
+CONCAT(col.nombre, ' ', col.apellido) 'creadoPor',
+destino.id 'idDestino',
+destino.destino
+FROM t_registro_staff AS staff
+INNER JOIN c_destinos AS destino ON staff.id_destino = destino.id
+INNER JOIN t_users AS u ON staff.creado_por = u.id
+INNER JOIN t_colaboradores AS col ON u.id_colaborador = col.id
+WHERE staff.id_destino = ? and staff.año = ? and staff.activo = 1
+ORDER BY staff.fecha_estimada ASC";
 if ($result = mysqli_query($conn_2020, $query)) {
    foreach ($result as $x) {
       // CONTADOR
       $fila++;
       $idRegistro = $x['idRegistro'];
+      $pais = $x['pais'];
       $destino = $x['destino'];
+      $fechaCreado = $x['fechaCreado'];
       $mes = $x['mes'];
       $año = $x['año'];
-      $fechaRegistro = $x['fechaRegistro'];
-      $registradoPor = $x['registradoPor'];
-      $numeroFaltantes = $x['numeroFaltantes'];
-      $porcentajeFaltantes = $x['porcentajeFaltantes'];
-      $numeroEmpleadosCovid = $x['numeroEmpleadosCovid'];
-      $incapacidadesMedica = $x['incapacidadesMedica'];
-      $observaciones = $x['observaciones'];
-      $fechaModificado = $x['fechaModificado'];
-      $modificadoPor = $x['modificadoPor'];
+      $creadoPor = $x['creadoPor'];
+      $staffAprobado = $x['staffAprobado'];
+      $staffContratado = $x['staffContratado'];
+      $diferenciaStaff = $staffAprobado - $staffContratado;
+      $staffFaltanteConCovid = $x['staffFaltanteConCovid'];
+      $incapacidadesMedicas = $x['incapacidadesMedicas'];
+      
+      #operación
+      $totalFaltante = $staffAprobado - $staffContratado +($staffFaltanteConCovid + $incapacidadesMedicas);
+      
+      #operación
+      $totalReal = $staffContratado -
+      ($staffAprobado -
+        $staffContratado +
+        ($staffFaltanteConCovid + $incapacidadesMedicas));
 
-      if ($mes == "ENERO") $fila = 2;
-      if ($mes == "FEBRERO") $fila = 3;
-      if ($mes == "MARZO") $fila = 4;
-      if ($mes == "ABRIL") $fila = 5;
-      if ($mes == "MAYO") $fila = 6;
-      if ($mes == "JUNIO") $fila = 7;
-      if ($mes == "JULIO") $fila = 8;
-      if ($mes == "AGOSTO") $fila = 9;
-      if ($mes == "SEPTIEMBRE") $fila = 10;
-      if ($mes == "OCTUBRE") $fila = 11;
-      if ($mes == "NOVIEMBRE") $fila = 12;
-      if ($mes == "DICIEMBRE") $fila = 13;
-
-      $objPHPExcel->getActiveSheet()->setCellValue('A' . $fila, $destino);
-      $objPHPExcel->getActiveSheet()->setCellValue('B' . $fila, $mes);
-      $objPHPExcel->getActiveSheet()->setCellValue('C' . $fila, $año);
-      $objPHPExcel->getActiveSheet()->setCellValue('D' . $fila, $fechaRegistro);
-      $objPHPExcel->getActiveSheet()->setCellValue('E' . $fila, $registradoPor);
-      $objPHPExcel->getActiveSheet()->setCellValue('F' . $fila, $numeroFaltantes);
-      $objPHPExcel->getActiveSheet()->setCellValue('G' . $fila, $porcentajeFaltantes);
-      $objPHPExcel->getActiveSheet()->setCellValue('H' . $fila, $numeroEmpleadosCovid);
-      $objPHPExcel->getActiveSheet()->setCellValue('I' . $fila, $incapacidadesMedica);
-      $objPHPExcel->getActiveSheet()->setCellValue('J' . $fila, $observaciones);
-      $objPHPExcel->getActiveSheet()->setCellValue('K' . $fila, $modificadoPor);
-      $objPHPExcel->getActiveSheet()->setCellValue('L' . $fila, $fechaModificado);
+      $objPHPExcel->getActiveSheet()->setCellValue('A' . $fila, $pais);
+      $objPHPExcel->getActiveSheet()->setCellValue('B' . $fila, $destino);
+      $objPHPExcel->getActiveSheet()->setCellValue('C' . $fila, $fechaCreado);
+      $objPHPExcel->getActiveSheet()->setCellValue('D' . $fila, $mes);
+      $objPHPExcel->getActiveSheet()->setCellValue('E' . $fila, $año);
+      $objPHPExcel->getActiveSheet()->setCellValue('F' . $fila, $creadoPor);
+      $objPHPExcel->getActiveSheet()->setCellValue('G' . $fila, $staffAprobado);
+      $objPHPExcel->getActiveSheet()->setCellValue('H' . $fila, $staffContratado);
+      $objPHPExcel->getActiveSheet()->setCellValue('I' . $fila, $diferenciaStaff);
+      $objPHPExcel->getActiveSheet()->setCellValue('J' . $fila, $staffFaltanteConCovid);
+      $objPHPExcel->getActiveSheet()->setCellValue('K' . $fila, $incapacidadesMedicas);
+      $objPHPExcel->getActiveSheet()->setCellValue('L' . $fila, $totalFaltante);
+      $objPHPExcel->getActiveSheet()->setCellValue('M' . $fila, $totalReal);
    }
 }
 
