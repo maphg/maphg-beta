@@ -70,13 +70,15 @@ if ($result = mysqli_query($conn_2020, $query)) {
       $incapacidadesMedicas = $x['incapacidadesMedicas'];
       
       #operación
-      $totalFaltante = $staffAprobado - ($staffContratado +($staffFaltanteConCovid + $incapacidadesMedicas));
+      $totalFaltante = 0;
+      // $totalFaltante = $staffAprobado - ($staffContratado +($staffFaltanteConCovid + $incapacidadesMedicas));
       
       #operación
-      $totalReal = $staffContratado -
-      ($staffAprobado -
-        ($staffContratado +
-        ($staffFaltanteConCovid + $incapacidadesMedicas)));
+      $totalReal = 0;
+      // $totalReal = $staffContratado -
+      // ($staffAprobado -
+      //   ($staffContratado +
+      //   ($staffFaltanteConCovid + $incapacidadesMedicas)));
 
       $objPHPExcel->getActiveSheet()->setCellValue('A' . $fila, $pais);
       $objPHPExcel->getActiveSheet()->setCellValue('B' . $fila, $destino);
