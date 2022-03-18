@@ -50,7 +50,7 @@ FROM t_registro_staff AS staff
 INNER JOIN c_destinos AS destino ON staff.id_destino = destino.id
 INNER JOIN t_users AS u ON staff.creado_por = u.id
 INNER JOIN t_colaboradores AS col ON u.id_colaborador = col.id
-WHERE staff.id_destino = ? and staff.año = ? and staff.activo = 1
+WHERE staff.id_destino = $idDestino and staff.año = $año and staff.activo = 1
 ORDER BY staff.fecha_estimada ASC";
 if ($result = mysqli_query($conn_2020, $query)) {
    foreach ($result as $x) {
@@ -60,7 +60,7 @@ if ($result = mysqli_query($conn_2020, $query)) {
       $pais = $x['pais'];
       $destino = $x['destino'];
       $fechaCreado = $x['fechaCreado'];
-      $mes = $x['mes'];
+      $mes = $meses[$x['mes']];
       $año = $x['año'];
       $creadoPor = $x['creadoPor'];
       $staffAprobado = $x['staffAprobado'];
