@@ -953,8 +953,7 @@ if ($peticion === 'POST') {
          $staffContratado = $_POST['staffContratado'];
          $staffFaltanteConCovid = $_POST['staffFaltanteConCovid'];
          $incapacidadesMedicas = $_POST['incapacidadesMedicas'];
-
-
+         $activo = $_POST['activo'];
 
          $staff = new StaffCovid();
          $staff->idRegistro = intval($idRegistro);
@@ -970,7 +969,7 @@ if ($peticion === 'POST') {
          $staff->staffFaltanteConCovid = doubleval($staffFaltanteConCovid);
          $staff->incapacidadesMedicas = intval($incapacidadesMedicas);
          $staff->observaciones = "NA";
-         $staff->activo = 1;
+         $staff->activo = intval($activo);
 
          #ARRAY DE RESULTADOS
          $array['response'] = "SUCCESS";
