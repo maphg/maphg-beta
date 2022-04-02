@@ -912,6 +912,7 @@ if ($peticion === 'POST') {
          $staffContratado = $_POST['staffContratado'];
          $staffFaltanteConCovid = $_POST['staffFaltanteConCovid'];
          $incapacidadesMedicas = $_POST['incapacidadesMedicas'];
+         $observaciones = $_POST['observaciones'];
 
          $staff = new StaffCovid();
          $staff->idDestino = intval($idDestino);
@@ -925,20 +926,12 @@ if ($peticion === 'POST') {
          $staff->staffContratado = intval($staffContratado);
          $staff->staffFaltanteConCovid = doubleval($staffFaltanteConCovid);
          $staff->incapacidadesMedicas = intval($incapacidadesMedicas);
-         $staff->observaciones = "NA";
+         $staff->observaciones = $observaciones;
          $staff->activo = 1;
 
          #ARRAY DE RESULTADOS
          $array['response'] = "SUCCESS";
          $array['data'] = $staff->crear();
-
-         #COMPRUEBA SI EXISTE, SINO EXISTE LO CREA
-         // if ($idRegistro === 0)
-         // $array['data'] = $staff->crear();
-
-         #COMPRUEBA SI EXISTE, SI EXISTE LO ACTUALIZA
-         // if ($idRegistro > 0)
-         //    $array['data'] = $staff->actualizar();
       }
 
       if ($accion === "actualizar") {
@@ -953,6 +946,7 @@ if ($peticion === 'POST') {
          $staffContratado = $_POST['staffContratado'];
          $staffFaltanteConCovid = $_POST['staffFaltanteConCovid'];
          $incapacidadesMedicas = $_POST['incapacidadesMedicas'];
+         $observaciones = $_POST['observaciones'];
          $activo = $_POST['activo'];
 
          $staff = new StaffCovid();
@@ -968,7 +962,7 @@ if ($peticion === 'POST') {
          $staff->staffContratado = intval($staffContratado);
          $staff->staffFaltanteConCovid = doubleval($staffFaltanteConCovid);
          $staff->incapacidadesMedicas = intval($incapacidadesMedicas);
-         $staff->observaciones = "NA";
+         $staff->observaciones = $observaciones;
          $staff->activo = intval($activo);
 
          #ARRAY DE RESULTADOS
