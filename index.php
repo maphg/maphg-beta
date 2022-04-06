@@ -751,7 +751,7 @@
 
                         </div>
 
-                        <div class="flex items-center text-xs font-bold text-purple-400 px-1 bg-purple-100 rounded-full w-auto cursor-pointer mr-4 hidden">
+                        <div class="flex items-center text-xs font-bold text-purple-400 px-1 bg-purple-100 rounded-full w-auto cursor-pointer mr-4">
                             <i class="fas fa-cog mr-1 fa-lg text-purple-300"></i>
                             <h2 class="mr-2">
                                 <select id="tipoLocalEquipo" class="text-xs font-bold">
