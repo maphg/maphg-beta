@@ -1043,6 +1043,23 @@ if ($peticion === 'POST') {
          $array['data'] = $equipo;
       }
    }
+
+
+   #APARTADO DE AUDITORIA DE PROYECTOS
+   if ($apartado === 'auditoriaProyectos') {
+      include 'conexion.php';
+      include_once "auditoriaProyectos.php";
+
+      if ($accion === 'all') {
+
+         #OBTIENE INFORMACIÓN DEL EQUIPO
+         $resultado = AuditoriaProyectos::all($idDestino);
+
+         #ARRAY DE RESULTADOS
+         $array['response'] = "SUCCESS";
+         $array['data'] = $resultado;
+      }
+   }
 }
 
 echo json_encode($array);
