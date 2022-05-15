@@ -1,21 +1,40 @@
 <?php
 class AuditoriaProyectos extends Conexion
 {
-    public static function all($idDestino)
+    public static function all($destino, $post)
     {
         // DEVULVE LOS HOTELES ENCONTRADAS (DESTINO)
         $conexion = new Conexion();
         $conexion->conectar();
 
-        $query = "SELECT p.id 'idProyecto', s.seccion, p.titulo 'proyecto', CONCAT(c.nombre, ' ', c.apellido) 'responsable'
+        #FILTRO DESTINOS
+        $filtroDestino = "AND p.id_destino = 0";
+        if ($destino == "AME") $filtroDestino = "";
+        if ($destino == "MEX") $filtroDestino = "AND p.id_destino IN(1,2,7)";
+        if ($destino == "RVM") $filtroDestino = "AND p.id_destino IN(1)";
+        if ($destino == "PVR") $filtroDestino = "AND p.id_destino IN(2)";
+        if ($destino == "CMU") $filtroDestino = "AND p.id_destino IN(7)";
+        if ($destino == "DOM") $filtroDestino = "AND p.id_destino IN(5,11)";
+        if ($destino == "PUJ") $filtroDestino = "AND p.id_destino IN(5)";
+        if ($destino == "CAP") $filtroDestino = "AND p.id_destino IN(11)";
+        if ($destino == "SDQ") $filtroDestino = "AND p.id_destino IN(3)";
+        if ($destino == "SSA") $filtroDestino = "AND p.id_destino IN(4)";
+        if ($destino == "MBJ") $filtroDestino = "AND p.id_destino IN(6)";
+
+        $query = "SELECT
+        p.id 'idProyecto',
+        s.seccion,
+        p.titulo 'proyecto',
+        CONCAT(c.nombre, ' ', c.apellido) 'responsable',
+        p.status
         FROM t_proyectos AS p
         INNER JOIN c_secciones AS s ON p.id_seccion = s.id
         LEFT JOIN t_users AS u ON p.responsable = u.id
         LEFT JOIN t_colaboradores AS c ON u.id_colaborador = c.id
-        WHERE p.id_destino = ? and p.titulo LIKE '%AUDITORIA%'  and p.activo = 1 ORDER BY p.id ASC";
+        WHERE p.titulo LIKE '%AUDITORIA%'  and p.activo = 1 $filtroDestino ORDER BY p.id ASC";
 
         $prepare = mysqli_prepare($conexion->con, $query);
-        $prepare->bind_param("i", $idDestino);
+        // $prepare->bind_param("i", $idDestino);
         $prepare->execute();
         $response = $prepare->get_result();
 
@@ -25,35 +44,44 @@ class AuditoriaProyectos extends Conexion
         foreach ($response as $x) {
             $idProyecto = intval($x['idProyecto']);
 
-            $tareas = AuditoriaProyectos::tareas($idProyecto);
-            $totalTareas = 0;
-            $solucionasTareas = 0;
-            $pendientesTareas = 0;
-            $aprobadasTareas = 0;
-            $porAprobarTareas = 0;
-            $porcentajeTareas = 0;
+            $tareas = AuditoriaProyectos::tareas($idProyecto, $post);
+            $ots = 0;
+            $finalizados = 0;
+            $proceso = 0;
+            $proveedor = 0;
+            $pAprobar = 0;
+            $avance = 0;
 
             // TAREAS DEL PROYECTO
             foreach ($tareas as $y) {
-                $totalTareas++;
-
-                if ($y['status'] == "SOLUCIONADA") $solucionasTareas++;
-
-
-                if ($y['status'] == "PENDIENTE") $pendientesTareas++;
+                $ots++;
+                if ($y['statusAlterno'] == "FINALIZADO") $finalizados++;
+                if ($y['statusAlterno'] == "PROCESO") $proceso++;
+                if ($y['statusAlterno'] == "PAPROBADO") $pAprobar++;
+                if ($y['statusAlterno'] == "PROVEEDOR") $proveedor++;
             }
 
             #PORCENTAJE SOLUCIONADAS
-            if ($totalTareas > 0)
-                $porcentajeTareas = (100 / $totalTareas) * $solucionasTareas;
+            if ($ots > 0)
+                $avance = (100 / $ots) * $finalizados;
 
+            $x['ots'] = $ots;
+            $x['finalizados'] = $finalizados;
+            $x['proceso'] = $proceso;
+            $x['proveedor'] = $proveedor;
+            $x['pAprobar'] = $pAprobar;
+            $x['avance'] = $avance;
 
-            $x['totalTareas'] = $totalTareas;
-            $x['solucionasTareas'] = $solucionasTareas;
-            $x['pendientesTareas'] = $pendientesTareas;
-            $x['aprobadasTareas'] = $aprobadasTareas;
-            $x['porAprobarTareas'] = $porAprobarTareas;
-            $x['porcentajeTareas'] = $porcentajeTareas;
+            if (
+                $x['status'] === "F" ||
+                $x['status'] === "SOLUCIONADA" ||
+                $x['status'] === "FINALIZADO"
+            ) {
+                $x['status'] = "FINALIZADO";
+            } else {
+                $x['status'] = "PROCESO";
+            }
+
             $x['tareas'] = $tareas;
 
             #RESULTADO FINAL DE PROYECTOS
@@ -64,18 +92,62 @@ class AuditoriaProyectos extends Conexion
     }
 
 
-    public static function tareas($idProyecto)
+    #OBTIENE TAREAS DEL PROYECTO
+    public static function tareas($idProyecto, $post)
     {
         // DEVULVE LOS HOTELES ENCONTRADAS (DESTINO)
         $conexion = new Conexion();
         $conexion->conectar();
 
-        $query = "SELECT t.id 'idTarea', t.actividad 'tarea',
-        CONCAT(c.nombre, ' ', c.apellido) 'responsable', t.status
+        #FILTROS PARA STATUS
+        $filtroStatus = "";
+
+        if ($post['status'] == "FINALIZADO")
+            $filtroStatus = "AND t.status IN('F', 'FINALIZADO', 'SOLUCIONADO')";
+
+        if ($post['status'] == "PROCESO")
+            $filtroStatus = "AND t.status IN('N', 'PENDIENTE', 'PROCESO') AND t.departamento_direccion = '0' AND t.departamento_compras = '0'";
+
+        if ($post['status'] == "PAPROBACION")
+            $filtroStatus = "AND t.departamento_direccion = '1' AND t.status IN('N', 'PENDIENTE', 'PROCESO')";
+
+        if ($post['status'] == "PROVEEDOR")
+            $filtroStatus = "AND t.departamento_compras = '1' AND t.status IN('N', 'PENDIENTE', 'PROCESO')";
+
+
+        #FILTROS PARA FECHAS
+        $filtroFechas = "";
+        $fechaInicio = $post['fechaInicio'];
+        $fechaFin = $post['fechaFin'];
+
+        if ($post['fechaDe'] == "ALTA") $filtroFechas = "AND t.fecha_alta BETWEEN '$fechaInicio' AND '$fechaFin'";
+
+        if ($post['fechaDe'] == "CADUCIDAD") $filtroFechas = "AND t.fecha_caducidad BETWEEN '$fechaInicio' AND '$fechaFin'";
+
+        if ($post['fechaDe'] == "SUBSANACION") $filtroFechas = "AND t.fecha_subsanacion BETWEEN '$fechaInicio' AND '$fechaFin'";
+
+
+        #FILTROS PARA PALABRA
+        $filtroPalabra = "";
+        $palabra = $post['palabra'];
+
+        if (strlen($palabra) > 0) $filtroPalabra = "AND t.actividad LIKE '%$palabra%'";
+
+        $query = "SELECT
+        t.id 'idTarea',
+        t.actividad 'tarea',
+        CONCAT(c.nombre, ' ', c.apellido) 'responsable',
+        t.departamento_direccion 'aprobado',
+        t.departamento_compras 'proveedor',
+        t.fecha_alta 'fechaAlta',
+        t.fecha_caducidad 'fechaCaducidad',
+        t.fecha_subsanacion 'fechaSubsanacion',
+        t.status
         FROM t_proyectos_planaccion AS t
         LEFT JOIN t_users AS u ON t.responsable = u.id
         LEFT JOIN t_colaboradores AS c ON u.id_colaborador = c.id
-        WHERE t.id_proyecto = ? and t.activo = 1 ORDER BY t.id ASC";
+        WHERE t.id_proyecto = ? and t.activo = 1 $filtroStatus $filtroFechas $filtroPalabra
+        ORDER BY t.id ASC";
 
         $prepare = mysqli_prepare($conexion->con, $query);
         $prepare->bind_param("i", $idProyecto);
@@ -88,13 +160,25 @@ class AuditoriaProyectos extends Conexion
         foreach ($response as $x) {
             $idTarea = $x['idTarea'];
 
-            if ($x['status'] == "F" || $x['status'] == "FINALIZADO" || $x['status'] == "SOLUCIONADO") {
-                $x['status'] = "SOLUCIONADA";
+            $x['statusAlterno'] = "PROCESO";
+
+            if ($x['aprobado'] == 1) $x['statusAlterno'] = "PAPROBADO";
+            if ($x['proveedor'] == 1) $x['statusAlterno'] = "PROVEEDOR";
+
+            if (
+                $x['status'] == "F" ||
+                $x['status'] == "FINALIZADO" ||
+                $x['status'] == "SOLUCIONADO"
+            ) {
+                $x['status'] = "FINALIZADO";
+                $x['statusAlterno'] = "FINALIZADO";
             } else {
-                $x['status'] = "PENDIENTE";
+                $x['status'] = "PROCESO";
             }
 
+            $x['comentarios'] = AuditoriaProyectos::comentarios($idTarea);
             $x['adjuntos'] = AuditoriaProyectos::adjuntos($idTarea);
+
             $array[] = $x;
         }
 
@@ -102,7 +186,7 @@ class AuditoriaProyectos extends Conexion
         return $array;
     }
 
-
+    #ADJUNTOS DE LAS TAREAS POR ID
     public static function adjuntos($idTarea)
     {
         // DEVULVE LOS HOTELES ENCONTRADAS (DESTINO)
@@ -137,5 +221,58 @@ class AuditoriaProyectos extends Conexion
 
         #RESULTADO FINAL DE PROYECTOS
         return $array;
+    }
+
+    #COMENTARIOS DE LAS TAREAS POR ID
+    public static function comentarios($idTarea)
+    {
+        // DEVULVE LOS HOTELES ENCONTRADAS (DESTINO)
+        $conexion = new Conexion();
+        $conexion->conectar();
+
+        $query = "SELECT
+        c.id 'idComentario',
+        c.comentario,
+        CONCAT(col.nombre, ' ', col.apellido) 'nombre',
+        c.fecha
+        FROM t_proyectos_planaccion_comentarios AS c
+        INNER JOIN t_users AS u ON c.usuario = u.id
+        INNER JOIN t_colaboradores AS col ON u.id_colaborador = col.id
+        WHERE c.id_actividad = ? and c.activo = 1
+        ORDER BY c.id ASC";
+
+        $prepare = mysqli_prepare($conexion->con, $query);
+        $prepare->bind_param("i", $idTarea);
+        $prepare->execute();
+        $response = $prepare->get_result();
+
+        #ARRAYS
+        $array = array();
+
+        foreach ($response as $x) {
+            $array[] = $x;
+        }
+
+        #RESULTADO FINAL DE PROYECTOS
+        return $array;
+    }
+
+    #ACTUALIZAR TAREAS
+    public static function actualizarTareas($post)
+    {
+        // DEVULVE LOS HOTELES ENCONTRADAS (DESTINO)
+        $conexion = new Conexion();
+        $conexion->conectar();
+
+        $query = "UPDATE t_proyectos_planaccion SET fecha_alta = ?, fecha_caducidad = ?, fecha_subsanacion = ? WHERE id = ?";
+
+        $prepare = mysqli_prepare($conexion->con, $query);
+        $prepare->bind_param("sssi", $post['fechaAlta'], $post['fechaCaducidad'], $post['fechaSubsanacion'], $post['idTarea']);
+
+        $respuesta = false;
+        if ($prepare->execute()) $respuesta = true;
+
+        #RESULTADO FINAL
+        return $respuesta;
     }
 }

@@ -1053,7 +1053,19 @@ if ($peticion === 'POST') {
       if ($accion === 'all') {
 
          #OBTIENE INFORMACIÓN DEL EQUIPO
-         $resultado = AuditoriaProyectos::all($idDestino);
+         $destino = $_POST['destino'];
+
+         $resultado = AuditoriaProyectos::all($destino, $_POST);
+
+         #ARRAY DE RESULTADOS
+         $array['response'] = "SUCCESS";
+         $array['data'] = $resultado;
+      }
+
+      if ($accion === 'actualizar') {
+
+         #OBTIENE INFORMACIÓN DEL EQUIPO
+         $resultado = AuditoriaProyectos::actualizarTareas($_POST);
 
          #ARRAY DE RESULTADOS
          $array['response'] = "SUCCESS";
