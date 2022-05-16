@@ -57,8 +57,8 @@ class AuditoriaProyectos extends Conexion
                 $ots++;
                 if ($y['statusAlterno'] == "FINALIZADO") $finalizados++;
                 if ($y['statusAlterno'] == "PROCESO") $proceso++;
-                if ($y['statusAlterno'] == "PAPROBADO") $pAprobar++;
-                if ($y['statusAlterno'] == "PROVEEDOR") $proveedor++;
+                if ($y['statusAlterno'] == "P. APROBACION") $pAprobar++;
+                if ($y['statusAlterno'] == "P. PROVEEDOR") $proveedor++;
             }
 
             #PORCENTAJE SOLUCIONADAS
@@ -108,11 +108,11 @@ class AuditoriaProyectos extends Conexion
         if ($post['status'] == "PROCESO")
             $filtroStatus = "AND t.status IN('N', 'PENDIENTE', 'PROCESO') AND t.departamento_direccion = '0' AND t.departamento_compras = '0'";
 
-        if ($post['status'] == "PAPROBACION")
+        if ($post['status'] == "P. APROBACION")
             $filtroStatus = "AND t.departamento_direccion = '1' AND t.status IN('N', 'PENDIENTE', 'PROCESO')";
 
-        if ($post['status'] == "PROVEEDOR")
-            $filtroStatus = "AND t.departamento_compras = '1' AND t.status IN('N', 'PENDIENTE', 'PROCESO')";
+        if ($post['status'] == "P. PROVEEDOR")
+            $filtroStatus = "AND t.departamento_compras = '1' AND t.departamento_direccion = '0' AND t.status IN('N', 'PENDIENTE', 'PROCESO')";
 
 
         #FILTROS PARA FECHAS
@@ -162,8 +162,8 @@ class AuditoriaProyectos extends Conexion
 
             $x['statusAlterno'] = "PROCESO";
 
-            if ($x['aprobado'] == 1) $x['statusAlterno'] = "PAPROBADO";
-            if ($x['proveedor'] == 1) $x['statusAlterno'] = "PROVEEDOR";
+            if ($x['proveedor'] == 1) $x['statusAlterno'] = "P. PROVEEDOR";
+            if ($x['aprobado'] == 1) $x['statusAlterno'] = "P. APROBACION";
 
             if (
                 $x['status'] == "F" ||
