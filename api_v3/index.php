@@ -1071,6 +1071,16 @@ if ($peticion === 'POST') {
          $array['response'] = "SUCCESS";
          $array['data'] = $resultado;
       }
+
+      if ($accion === 'actualizarAdjunto') {
+
+         #OBTIENE INFORMACIÓN DEL EQUIPO
+         $resultado = AuditoriaProyectos::actualizarAdjunto($_POST);
+
+         #ARRAY DE RESULTADOS
+         $array['response'] = "SUCCESS";
+         $array['data'] = $resultado;
+      }
    }
 }
 

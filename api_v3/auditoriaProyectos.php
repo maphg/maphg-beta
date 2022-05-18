@@ -193,7 +193,7 @@ class AuditoriaProyectos extends Conexion
         $conexion = new Conexion();
         $conexion->conectar();
 
-        $query = "SELECT id 'idAdjunto', url_adjunto 'url'
+        $query = "SELECT id 'idAdjunto', url_adjunto 'url', posicion
         FROM t_proyectos_planaccion_adjuntos
         WHERE id_actividad = ? and status = 1
         ORDER BY id ASC";
@@ -205,18 +205,28 @@ class AuditoriaProyectos extends Conexion
 
         #ARRAYS
         $array = array();
+        $array['all'] = array();
+        $array['antes'] = array();
+        $array['despues'] = array();
 
-        $path = "_PATH/";
+        $path = "https://www.maphg.com/planner/proyectos/";
         if (strpos($_SERVER['REQUEST_URI'], "america") == true)
             $path = "https://www.maphg.com/planner/proyectos/";
         if (strpos($_SERVER['REQUEST_URI'], "europa") == true)
             $path = "https://www.maphg.com/planner/proyectos/";
 
         foreach ($response as $x) {
-            $x['posicion'] = "PRINCIPAL";
-            $x['url'] = $path . $x['url'];
+            $posicion = $x['posicion'];
+            $url = $path . $x['url'];
 
-            $array[] = $x;
+            $x['idTarea'] = $idTarea;
+            $x['tipo'] = pathinfo($url, PATHINFO_EXTENSION);
+            $x['url'] = $url;
+
+            if ($posicion == "ANTES") $array['antes'][] = $x;
+            if ($posicion == "DESPUES") $array['despues'][] = $x;
+
+            $array['all'][] = $x;
         }
 
         #RESULTADO FINAL DE PROYECTOS
@@ -271,6 +281,28 @@ class AuditoriaProyectos extends Conexion
 
         $respuesta = false;
         if ($prepare->execute()) $respuesta = true;
+
+        #RESULTADO FINAL
+        return $respuesta;
+    }
+
+    #ACTUALIZAR ADJUNTO
+    public static function actualizarAdjunto($post)
+    {
+        // DEVULVE LOS HOTELES ENCONTRADAS (DESTINO)
+        $conexion = new Conexion();
+        $conexion->conectar();
+
+        $query = "UPDATE t_proyectos_planaccion_adjuntos SET posicion = ?
+        WHERE id = ?";
+
+        $prepare = mysqli_prepare($conexion->con, $query);
+        $prepare->bind_param("si", $post['posicion'], $post['idAdjunto']);
+
+        $respuesta = array();
+        if ($prepare->execute()) {
+            $respuesta = AuditoriaProyectos::adjuntos($post['idTarea']);
+        }
 
         #RESULTADO FINAL
         return $respuesta;
