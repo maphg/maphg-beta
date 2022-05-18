@@ -222,11 +222,11 @@ class AuditoriaProyectos extends Conexion
             $adjunto = $x['url'];
             $url = $x['url'];
 
-            if (file_exists("https://www.maphg.com/planner/proyectos/$adjunto")) {
+            if (file_exists("../../planner/proyectos/$adjunto")) {
                 $url = "https://www.maphg.com/planner/proyectos/$adjunto";
-            } elseif (file_exists("$path/planner/proyectos/$adjunto")) {
+            } elseif (file_exists("../planner/proyectos/$adjunto")) {
                 $url = "$path/planner/proyectos/$adjunto";
-            } elseif (file_exists("$path/planner/proyectos/planaccion/$adjunto")) {
+            } elseif (file_exists("../planner/proyectos/planaccion/$adjunto")) {
                 $url = "$path/planner/proyectos/planaccion/$adjunto";
             }
 
