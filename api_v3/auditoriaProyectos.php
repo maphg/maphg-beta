@@ -209,18 +209,29 @@ class AuditoriaProyectos extends Conexion
         $array['antes'] = array();
         $array['despues'] = array();
 
-        $path = "https://www.maphg.com/planner/proyectos/";
+
+
+        $path = "https://www.maphg.com";
         if (strpos($_SERVER['REQUEST_URI'], "america") == true)
-            $path = "https://www.maphg.com/planner/proyectos/";
+            $path = "https://www.maphg.com";
         if (strpos($_SERVER['REQUEST_URI'], "europa") == true)
-            $path = "https://www.maphg.com/planner/proyectos/";
+            $path = "https://www.maphg.com";
 
         foreach ($response as $x) {
             $posicion = $x['posicion'];
-            $url = $path . $x['url'];
+            $adjunto = $x['url'];
+            $url = $x['url'];
+
+            if (file_exists("../../../planner/proyectos/$adjunto")) {
+                $url = "$path/planner/proyectos/$adjunto";
+            } elseif (file_exists("../../planner/proyectos/$adjunto")) {
+                $url = "$path/america/planner/proyectos/$adjunto";
+            } elseif (file_exists("../../planner/proyectos/planaccion/$adjunto")) {
+                $url = "$path/america/planner/proyectos/planaccion/$adjunto";
+            }
 
             $x['idTarea'] = $idTarea;
-            $x['tipo'] = pathinfo($url, PATHINFO_EXTENSION);
+            $x['tipo'] = pathinfo($adjunto, PATHINFO_EXTENSION);
             $x['url'] = $url;
 
             if ($posicion == "ANTES") $array['antes'][] = $x;
