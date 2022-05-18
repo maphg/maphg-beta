@@ -213,21 +213,21 @@ class AuditoriaProyectos extends Conexion
 
         $path = "https://www.maphg.com";
         if (strpos($_SERVER['REQUEST_URI'], "america") == true)
-            $path = "https://www.maphg.com";
+            $path = "https://www.maphg.com/america";
         if (strpos($_SERVER['REQUEST_URI'], "europa") == true)
-            $path = "https://www.maphg.com";
+            $path = "https://www.maphg.com/europa";
 
         foreach ($response as $x) {
             $posicion = $x['posicion'];
             $adjunto = $x['url'];
             $url = $x['url'];
 
-            if (file_exists("../../../planner/proyectos/$adjunto")) {
+            if (file_exists("https://www.maphg.com/planner/proyectos/$adjunto")) {
+                $url = "https://www.maphg.com/planner/proyectos/$adjunto";
+            } elseif (file_exists("$path/planner/proyectos/$adjunto")) {
                 $url = "$path/planner/proyectos/$adjunto";
-            } elseif (file_exists("../../planner/proyectos/$adjunto")) {
-                $url = "$path/america/planner/proyectos/$adjunto";
-            } elseif (file_exists("../../planner/proyectos/planaccion/$adjunto")) {
-                $url = "$path/america/planner/proyectos/planaccion/$adjunto";
+            } elseif (file_exists("$path/planner/proyectos/planaccion/$adjunto")) {
+                $url = "$path/planner/proyectos/planaccion/$adjunto";
             }
 
             $x['idTarea'] = $idTarea;
