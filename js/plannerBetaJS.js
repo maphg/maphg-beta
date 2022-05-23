@@ -13227,7 +13227,11 @@ const trsIbiza = () => {
    const url = location.href;
    const id = document.getElementById("contenedor-columnas-principal");
 
-   if (url === 'https://www.maphg.com/europa/') {
+   if (
+      url === 'https://www.maphg.com/europa/' ||
+      url === 'https://www.maphg.com/europa/#' ||
+      url === 'https://www.maphg.com/europa/index.php#'
+   ) {
       id.classList.add('hidden');
 
       obtenerSecciones(1003, 0)
