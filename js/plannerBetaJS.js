@@ -404,7 +404,7 @@ const obtenerSecciones = (idSeccion, status) => {
                      <div id="contenedor_seccion_${idSeccion}" class="flex items-center py-3"> 
                         <div id="col${seccion.toLowerCase()}" class="scrollbar flex flex-col justify-center items-center w-22rem mr-4">
                            <div class="bg-white rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full relative">
-                              <div class="absolute flex justify-center items-center top-20 rounded-lg w-12 h-12 cursor-pointer ${estiloLogo}" onclick="pendientesSubsecciones(${idSeccion}, 'MCS', '${seccion}', ${idUsuario}, ${idDestino});">
+                              <div class="absolute flex justify-center items-center top-20 rounded-lg absolute flex justify-center items-center top-20 h-12 cursor-pointer ${estiloLogo}" onclick="pendientesSubsecciones(${idSeccion}, 'MCS', '${seccion}', ${idUsuario}, ${idDestino});">
                                  <h1 class="font-medium text-md">${logoSeccion}</h1>
                               </div>
                               <div class="flex justify-center items-center absolute text-gray-500 top-0 right-0 m-1 text-md cursor-pointer hover:text-gray-900">
@@ -13219,3 +13219,42 @@ const asignarMaterialIncidencia = (idItem, idIncidencia, tipoIncidencia) => {
       alertaImg('Cantidad No Valida', '', 'info', 1500);
    }
 }
+
+
+// SCRIPT PARA EUROPA TRS IBIZA.
+
+const trsIbiza = () => {
+   const url = location.href;
+   const id = document.getElementById("contenedor-columnas-principal");
+
+   if (url === 'https://www.maphg.com/europa/') {
+      id.classList.add('hidden');
+
+      obtenerSecciones(1003, 0)
+      obtenerSecciones(1002, 0)
+      obtenerSecciones(1004, 0)
+      obtenerSecciones(1005, 0)
+      obtenerSecciones(1006, 0)
+      obtenerSecciones(1007, 0)
+      obtenerSecciones(1008, 0)
+      obtenerSecciones(1009, 0)
+      obtenerSecciones(1010, 0)
+      obtenerSecciones(1011, 0)
+      obtenerSecciones(1012, 0)
+      obtenerSecciones(1013, 0)
+      obtenerSecciones(1014, 0)
+      obtenerSecciones(1015, 0)
+      obtenerSecciones(1016, 0)
+      obtenerSecciones(1017, 0)
+      obtenerSecciones(1018, 0)
+      obtenerSecciones(1019, 0)
+      obtenerSecciones(1020, 0)
+      obtenerSecciones(1021, 0)
+      obtenerSecciones(1022, 0)
+      obtenerSecciones(1023, 0)
+      // SCRIPT PARA EUROPA TRS IBIZA.
+   }
+}
+
+trsIbiza();
+
