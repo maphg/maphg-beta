@@ -25,6 +25,7 @@ class AuditoriaProyectos extends Conexion
         p.id 'idProyecto',
         s.seccion,
         p.titulo 'proyecto',
+        p.fase,
         CONCAT(c.nombre, ' ', c.apellido) 'responsable',
         p.status
         FROM t_proyectos AS p
@@ -51,6 +52,7 @@ class AuditoriaProyectos extends Conexion
             $proveedor = 0;
             $pAprobar = 0;
             $avance = 0;
+            $x['fase'] = explode(",", $x['fase']);
 
             // TAREAS DEL PROYECTO
             foreach ($tareas as $y) {
@@ -314,6 +316,29 @@ class AuditoriaProyectos extends Conexion
         if ($prepare->execute()) {
             $respuesta = AuditoriaProyectos::adjuntos($post['idTarea']);
         }
+
+        #RESULTADO FINAL
+        return $respuesta;
+    }
+
+    #ACTUALIZAR FASE
+    public static function actualizarFase($post)
+    {
+        // DEVULVE LOS HOTELES ENCONTRADAS (DESTINO)
+        $conexion = new Conexion();
+        $conexion->conectar();
+
+        $valor = implode(',', $post['fase']);
+
+        $query = "UPDATE t_proyectos SET fase = ?
+        WHERE id = ?";
+
+        $prepare = mysqli_prepare($conexion->con, $query);
+        $prepare->bind_param("si", $valor, $post['idProyecto']);
+
+        $respuesta = false;
+        if ($prepare->execute())
+            $respuesta = true;
 
         #RESULTADO FINAL
         return $respuesta;

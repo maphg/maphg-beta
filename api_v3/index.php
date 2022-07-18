@@ -1055,31 +1055,27 @@ if ($peticion === 'POST') {
          #OBTIENE INFORMACIÓN DEL EQUIPO
          $destino = $_POST['destino'];
 
-         $resultado = AuditoriaProyectos::all($destino, $_POST);
-
          #ARRAY DE RESULTADOS
          $array['response'] = "SUCCESS";
-         $array['data'] = $resultado;
+         $array['data'] = AuditoriaProyectos::all($destino, $_POST);
       }
 
       if ($accion === 'actualizar') {
-
-         #OBTIENE INFORMACIÓN DEL EQUIPO
-         $resultado = AuditoriaProyectos::actualizarTareas($_POST);
-
          #ARRAY DE RESULTADOS
          $array['response'] = "SUCCESS";
-         $array['data'] = $resultado;
+         $array['data'] = AuditoriaProyectos::actualizarTareas($_POST);
       }
 
       if ($accion === 'actualizarAdjunto') {
-
-         #OBTIENE INFORMACIÓN DEL EQUIPO
-         $resultado = AuditoriaProyectos::actualizarAdjunto($_POST);
-
          #ARRAY DE RESULTADOS
          $array['response'] = "SUCCESS";
-         $array['data'] = $resultado;
+         $array['data'] = AuditoriaProyectos::actualizarAdjunto($_POST);
+      }
+
+      if ($accion === 'actualizarFase') {
+         #ARRAY DE RESULTADOS
+         $array['response'] = "SUCCESS";
+         $array['data'] = AuditoriaProyectos::actualizarFase($_POST);
       }
    }
 }
