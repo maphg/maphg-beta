@@ -21,6 +21,16 @@ class AuditoriaProyectos extends Conexion
         if ($destino == "SSA") $filtroDestino = "AND p.id_destino IN(4)";
         if ($destino == "MBJ") $filtroDestino = "AND p.id_destino IN(6)";
 
+        $filtroFaseZi = "";
+        if ($post['zi'] == true) $filtroFaseZi = "AND p.fase LIKE '%ZI'";
+
+        $filtroFaseGp = "";
+        if ($post['gp'] == true) $filtroFaseGp = "AND p.fase LIKE '%GP'";
+
+        $filtroFaseTrs = "";
+        if ($post['TRS'] == true) $filtroFaseTrs = "AND p.fase LIKE '%TRS'";
+
+
         $query = "SELECT
         p.id 'idProyecto',
         s.seccion,
@@ -32,7 +42,7 @@ class AuditoriaProyectos extends Conexion
         INNER JOIN c_secciones AS s ON p.id_seccion = s.id
         LEFT JOIN t_users AS u ON p.responsable = u.id
         LEFT JOIN t_colaboradores AS c ON u.id_colaborador = c.id
-        WHERE p.titulo LIKE '%AUDITORIA%'  and p.activo = 1 $filtroDestino ORDER BY p.id ASC";
+        WHERE p.titulo LIKE '%AUDITORIA%'  and p.activo = 1 $filtroDestino $filtroFaseZi $filtroFaseGp $filtroFaseTrs ORDER BY p.id ASC";
 
         $prepare = mysqli_prepare($conexion->con, $query);
         // $prepare->bind_param("i", $idDestino);
