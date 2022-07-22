@@ -22,13 +22,13 @@ class AuditoriaProyectos extends Conexion
         if ($destino == "MBJ") $filtroDestino = "AND p.id_destino IN(6)";
 
         $filtroFaseZi = "";
-        if ($post['zi'] == true) $filtroFaseZi = "AND p.fase LIKE '%ZI'";
+        if ($post['zi'] == true) $filtroFaseZi = "AND p.fase LIKE '%ZI%'";
 
         $filtroFaseGp = "";
-        if ($post['gp'] == true) $filtroFaseGp = "AND p.fase LIKE '%GP'";
+        if ($post['gp'] == true) $filtroFaseGp = "AND p.fase LIKE '%GP%'";
 
         $filtroFaseTrs = "";
-        if ($post['TRS'] == true) $filtroFaseTrs = "AND p.fase LIKE '%TRS'";
+        if ($post['trs'] == true) $filtroFaseTrs = "AND p.fase LIKE '%TRS%'";
 
 
         $query = "SELECT
