@@ -28,7 +28,7 @@ class AuditoriaProyectos extends Conexion
         if ($post['gp'] == true) $filtroFaseGp = "AND p.fase LIKE '%GP%'";
 
         $filtroFaseTrs = "";
-        if ($post['trs'] == true) $filtroFaseTrs = "AND p.fase LIKE '%TRS%'";
+        if ($post['trs'] == true) $filtroFaseTrs = "AND p.fase LIKE '%TRS'";
 
 
         $query = "SELECT

@@ -9,8 +9,7 @@ class Sabanas extends Conexion
 
       $destinos = Destinos::all($idDestino);
       foreach ($destinos as $x)
-         if ($x['idDestino'] != 10)
-            $array[] = $x;
+         $array[] = $x;
 
       return $array;
    }
@@ -79,6 +78,12 @@ class Sabanas extends Conexion
       $conexion = new Conexion();
       $conexion->conectar();
 
+      #Filtro Tipo Activo
+      $filtroTipoActivo = "";
+
+      if ($idRegistroTipoActivo > 0)
+         $filtroTipoActivo = "and id_registro_tipo_activo = $idRegistroTipoActivo";
+
       $query = "SELECT id_publico 'idSabana',
       id_destino 'idDestino',
       id_hotel 'idHotel',
@@ -87,11 +92,11 @@ class Sabanas extends Conexion
       fecha_creado 'fechaCreado',
       activo
       FROM t_sabanas
-      WHERE id_destino = ? and id_hotel = ? and id_registro_tipo_activo = ? and activo = 1
+      WHERE id_destino = ? and id_hotel = ? and activo = 1 $filtroTipoActivo
       ORDER BY id_privado DESC";
 
       $prepare = mysqli_prepare($conexion->con, $query);
-      $prepare->bind_param("iii", $idDestino, $idHotel, $idRegistroTipoActivo);
+      $prepare->bind_param("ii", $idDestino, $idHotel);
       $prepare->execute();
       $response = $prepare->get_result();
 
@@ -431,6 +436,123 @@ class Sabanas extends Conexion
          foreach ($listaTiposActivos as $x)
             $array[] = $x;
       }
+
+      return $array;
+   }
+
+
+
+   public static function filtrosReporte($post)
+   {
+      $conexion = new Conexion();
+      $conexion->conectar();
+      $array = array();
+      $idDestinoUsuario = 0;
+
+      #Usuario
+      $usuario = Usuarios::getById($post['idUsuario']);
+      foreach ($usuario as $z)
+         $idDestinoUsuario = $z['idDestino'];
+
+      #Destinos
+      $destinos = Destinos::all($idDestinoUsuario);
+      foreach ($destinos as $x) {
+         $idDestino = $x['idDestino'];
+
+         $array['destinos'][] = $x;
+
+         #HOTELES
+         $hoteles = Sabanas::getHoteles($idDestino);
+         foreach ($hoteles as $a)
+            $array['hoteles'][] = $a;
+
+
+         #CheckList
+         foreach ($hoteles as $y) {
+            $idHotel = $y['idHotel'];
+            $checkList = Sabanas::getSabanas($idDestino, $idHotel, 0);
+            foreach ($checkList as $b) {
+               #Renombramiento de variables.
+               $b['checkList'] = $b['sabana'];
+               $b['idCheckList'] = $b['idSabana'];
+
+               $array['checkList'][] = $b;
+            }
+         }
+      }
+
+      return $array;
+   }
+
+
+   public static function actividades($idRegistro)
+   {
+      $conexion = new Conexion();
+      $conexion->conectar();
+      $array = array();
+
+      $query = "SELECT r.id_publico, r.valor, r.comentario
+      FROM t_sabanas_registros_capturas AS r
+      INNER JOIN t_sabanas_apartados_actividades AS a ON r.id_actividad = a.id_publico
+      WHERE r.id_registro = ? and r.activo = 1";
+
+      $prepare = mysqli_prepare($conexion->con, $query);
+      $prepare->bind_param('s', $idRegistro);
+      $prepare->execute();
+      $response = $prepare->get_result();
+
+      foreach ($response as $x)
+         $array[] = $x;
+
+
+      return $array;
+   }
+
+
+   public static function reporte($post)
+   {
+      $conexion = new Conexion();
+      $conexion->conectar();
+      $array = array();
+
+      #VARIABLES
+      $fechaInicio = $post['fechaInicio'];
+      $fechaFin = $post['fechaFin'];
+      $idCheckList = $post['idCheckList'];
+
+      // CONSULTA
+      $query = "SELECT
+      r.id_publico idRegistro,
+      r.id_destino idDestino,
+      r.fecha_creado fechaCreado,
+      r.fecha_finalizado fechaFinalizado,
+      e.id_equipo idEquipo,
+      e.equipo,
+      u.id idCreadoPor,
+      CONCAT(c.nombre, ' ', c.apellido) creadoPor
+      FROM t_sabanas_registros AS r
+      INNER JOIN t_sabanas_equipos AS e ON r.id_equipo = e.id_equipo
+      INNER JOIN t_users AS u ON r.creado_por = u.id
+      INNER JOIN t_colaboradores AS c ON u.id_colaborador = c.id
+      WHERE r.fecha_creado BETWEEN ? AND ? AND r.id_sabana = ?
+      AND r.fecha_finalizado > '01-02-2022' AND r.activo = 1
+      ORDER BY r.fecha_creado ASC";
+
+      $prepare = mysqli_prepare($conexion->con, $query);
+      $prepare->bind_param('sss', $fechaInicio, $fechaFin, $idCheckList);
+      $prepare->execute();
+      $response = $prepare->get_result();
+
+      foreach ($response as $x) {
+         $idRegistro = $x['idRegistro'];
+         $actividades = Sabanas::actividades($idRegistro);
+
+         $x['actividades'] = $actividades;
+         $x['totalActividades'] = count($actividades);
+
+         $array[] = $x;
+      }
+
 
       return $array;
    }

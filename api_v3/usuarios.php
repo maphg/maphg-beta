@@ -46,9 +46,11 @@ class Usuarios extends Conexion
    {
       $conexion = new Conexion();
       $conexion->conectar();
+      $array = array();
 
       $query = "SELECT
       u.id 'idUsuario',
+      u.id_destino 'idDestino',
       colaborador.nombre,
       colaborador.apellido,
       colaborador.foto,
@@ -64,6 +66,11 @@ class Usuarios extends Conexion
       $prepare->execute();
       $response = $prepare->get_result();
 
-      return $response->fetch_object(Usuarios::class);
+      foreach ($response as $x)
+         $array[] = $x;
+
+
+      // return $response->fetch_object(Usuarios::class);
+      return $array;
    }
 }

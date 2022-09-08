@@ -563,6 +563,7 @@ if ($peticion === 'POST') {
       include_once "destinos.php";
       include_once "sabanas.php";
       include_once "equipos.php";
+      include_once "usuarios.php";
 
       if ($accion === 'listaTiposActivos') {
          $idDestinoSeleccionado = $_POST['idDestinoSeleccionado'];
@@ -742,6 +743,18 @@ if ($peticion === 'POST') {
             $tituloApartado,
             $idUsuario
          );
+      }
+
+      if ($accion === 'reporte') {
+         #ARRAY DE RESULTADOS
+         $array['response'] = "SUCCESS";
+         $array['data'] = Sabanas::reporte($_POST);
+      }
+
+      if ($accion === 'filtrosReporte') {
+         #ARRAY DE RESULTADOS
+         $array['response'] = "SUCCESS";
+         $array['data'] = Sabanas::filtrosReporte($_POST);
       }
    }
 
