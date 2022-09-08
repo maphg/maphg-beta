@@ -325,11 +325,12 @@ if ($peticion === "POST") {
       $idRegistro = $_POST['idRegistro'];
       $idEquipo = $_POST['idEquipo'];
       $idSabana = $_POST['idSabana'];
+      $fechaCreado = $_POST['fechaCreado'];
 
       // NUMERO SEMANA
-      $dia   = substr($fechaActual, 8, 2);
-      $mes = substr($fechaActual, 5, 2);
-      $año = substr($fechaActual, 0, 4);
+      $dia   = substr($fechaCreado, 8, 2);
+      $mes = substr($fechaCreado, 5, 2);
+      $año = substr($fechaCreado, 0, 4);
       $semana = date('W',  mktime(0, 0, 0, $mes, $dia, $año));
 
       $data = obtenerSabana($idSabana);
@@ -354,7 +355,7 @@ if ($peticion === "POST") {
       $idsActividades = implode(", ", $idsActividades);
 
       $query = "INSERT INTO t_sabanas_registros(id_publico, id_destino, id_equipo, id_sabana, creado_por, ids_apartados, ids_actividades, semana, total_actividades, fecha_creado, activo)
-      VALUES('$idRegistro', $idDestino, $idEquipo, '$idSabana', $idUsuario, '$idsApartados', '$idsActividades', $semana, $totalActividades, '$fechaActual', 0)";
+      VALUES('$idRegistro', $idDestino, $idEquipo, '$idSabana', $idUsuario, '$idsApartados', '$idsActividades', $semana, $totalActividades, '$fechaCreado', 0)";
       if ($result = mysqli_query($conn_2020, $query)) {
          $array['response'] = 'SUCCESS';
          $array['data'] = array($data);
@@ -371,10 +372,12 @@ if ($peticion === "POST") {
       $valor = $_POST['valor'];
       $comentario = $_POST['comentario'];
       $adjunto = $_POST['adjunto'];
+      $fechaCreado = $_POST['fechaCreado'];
 
       // COMPRUEBA SI EXISTE LA CAPTURA
       $existe = 0;
-      $query = "SELECT id_publico FROM t_sabanas_registros_capturas WHERE id_publico = '$idCaptura'";
+      $query = "SELECT id_publico FROM t_sabanas_registros_capturas
+      WHERE id_publico = '$idCaptura'";
       if ($result = mysqli_query($conn_2020, $query)) {
          $existe = mysqli_num_rows($result);
       }
@@ -398,7 +401,7 @@ if ($peticion === "POST") {
       // SE CAPTURA REGISTRO NUEVO
       if ($existe == 0) {
          $query = "INSERT INTO t_sabanas_registros_capturas(id_publico, id_registro, id_equipo, id_actividad, valor, comentario, url_adjunto, creado_por, fecha_creado, activo)
-         VALUE('$idCaptura', '$idRegistro', '$idEquipo', '$idActividad', '$valor', '$comentario', '$adjunto', $idUsuario, '$fechaActual', 1)";
+         VALUE('$idCaptura', '$idRegistro', '$idEquipo', '$idActividad', '$valor', '$comentario', '$adjunto', $idUsuario, '$fechaCreado', 1)";
          if ($result = mysqli_query($conn_2020, $query)) {
             $array['response'] = 'SUCCESS';
             $array['accion'] = "CAPTURADO";
@@ -414,6 +417,7 @@ if ($peticion === "POST") {
       $totalActividadesCompletadas = 0;
       $totalComentariosObligatorios = 0;
       $totalAdjuntosObligatorios = 0;
+      $fechaFinalizado = $_POST['fechaFinalizado'];
 
       $query = "SELECT r.id_publico, a.comentario 'comentarioObligatorio', r.comentario,
       a.adjunto 'adjuntoObligatorio', r.url_adjunto 'adjunto'
@@ -442,7 +446,7 @@ if ($peticion === "POST") {
          $totalActividadesCompletadas == $totalActividades && $totalComentariosObligatorios === 0
          && $totalAdjuntosObligatorios === 0
       ) {
-         $query = "UPDATE t_sabanas_registros SET fecha_finalizado = '$fechaActual', activo = 1
+         $query = "UPDATE t_sabanas_registros SET fecha_finalizado = '$fechaFinalizado', status = 'SOLUCIONADO', activo = 1
          WHERE id_publico = '$idRegistro'";
          if ($result = mysqli_query($conn_2020, $query)) {
             $array['response'] = 'SUCCESS';

@@ -535,7 +535,7 @@ class Sabanas extends Conexion
       INNER JOIN t_users AS u ON r.creado_por = u.id
       INNER JOIN t_colaboradores AS c ON u.id_colaborador = c.id
       WHERE r.fecha_creado BETWEEN ? AND ? AND r.id_sabana = ?
-      AND r.fecha_finalizado > '01-02-2022' AND r.activo = 1
+      AND r.status = 'SOLUCIONADO' AND r.activo = 1
       ORDER BY r.fecha_creado ASC";
 
       $prepare = mysqli_prepare($conexion->con, $query);
