@@ -537,7 +537,7 @@ class Sabanas extends Conexion
       // CONSULTA
       $query = "SELECT
       s.id_sabana idCheckList,
-      s.saban checkList,
+      s.sabana checkList,
       r.id_publico idRegistro,
       r.id_destino idDestino,
       r.fecha_creado fechaCreado,
