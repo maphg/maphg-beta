@@ -491,7 +491,11 @@ class Sabanas extends Conexion
       $conexion->conectar();
       $array = array();
 
-      $query = "SELECT r.id_publico, r.valor, r.comentario
+      $query = "SELECT
+      r.id_publico,
+      r.valor,
+      r.comentario,
+      r.url_adjunto urlAdjunto
       FROM t_sabanas_registros_capturas AS r
       INNER JOIN t_sabanas_apartados_actividades AS a ON r.id_actividad = a.id_publico
       WHERE r.id_registro = ? and r.activo = 1";
