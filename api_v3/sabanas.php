@@ -514,8 +514,10 @@ class Sabanas extends Conexion
       $response = $prepare->get_result();
 
       foreach ($response as $x) {
-         $x['urlAdjunto'] =
-            $rutaAbsoluta . "/sabanas/fotos/" . $x['urlAdjunto'];
+         if ($x['urlAdjunto'] != "")
+            $x['urlAdjunto'] =
+               $rutaAbsoluta . "/sabanas/fotos/" . $x['urlAdjunto'];
+
          $array[] = $x;
       }
 
