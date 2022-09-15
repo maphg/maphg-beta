@@ -491,6 +491,14 @@ class Sabanas extends Conexion
       $conexion->conectar();
       $array = array();
 
+      $rutaAbsoluta = "";
+      if (strpos($_SERVER['REQUEST_URI'], "america") == true)
+         $rutaAbsoluta = "https://www.maphg.com/america";
+      if (strpos($_SERVER['REQUEST_URI'], "europa") == true)
+         $rutaAbsoluta = "https://www.maphg.com/europa";
+      if (strpos($_SERVER['REQUEST_URI'], "maphg-beta") == true)
+         $rutaAbsoluta = "http://10.30.30.104/maphg-beta";
+
       $query = "SELECT
       r.id_publico,
       r.valor,
@@ -505,9 +513,11 @@ class Sabanas extends Conexion
       $prepare->execute();
       $response = $prepare->get_result();
 
-      foreach ($response as $x)
+      foreach ($response as $x) {
+         $x['urlAdjunto'] =
+            $rutaAbsoluta . "/sabanas/fotos/" . $x['urlAdjunto'];
          $array[] = $x;
-
+      }
 
       return $array;
    }
@@ -526,6 +536,8 @@ class Sabanas extends Conexion
 
       // CONSULTA
       $query = "SELECT
+      s.id_sabana idCheckList,
+      s.saban checkList,
       r.id_publico idRegistro,
       r.id_destino idDestino,
       r.fecha_creado fechaCreado,
@@ -535,6 +547,7 @@ class Sabanas extends Conexion
       u.id idCreadoPor,
       CONCAT(c.nombre, ' ', c.apellido) creadoPor
       FROM t_sabanas_registros AS r
+      INNER JOIN t_sabanas AS s ON r.id_sabana = s.id_publico
       INNER JOIN t_sabanas_equipos AS e ON r.id_equipo = e.id_equipo
       INNER JOIN t_users AS u ON r.creado_por = u.id
       INNER JOIN t_colaboradores AS c ON u.id_colaborador = c.id
