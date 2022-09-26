@@ -501,6 +501,7 @@ class Sabanas extends Conexion
 
       $query = "SELECT
       r.id_publico,
+      a.actividad,
       r.valor,
       r.comentario,
       r.url_adjunto urlAdjunto
