@@ -13,13 +13,15 @@ $objPHPExcel->setActiveSheetIndex(0);
 $objPHPExcel->getActiveSheet()->setTitle("Reporte");
 $objPHPExcel->getActiveSheet()->setCellValue('A1', 'DESTINO');
 $objPHPExcel->getActiveSheet()->setCellValue('B1', 'PROYECTO');
-$objPHPExcel->getActiveSheet()->setCellValue('C1', 'ACTIVIDAD');
-$objPHPExcel->getActiveSheet()->setCellValue('D1', 'STATUS');
-$objPHPExcel->getActiveSheet()->setCellValue('E1', 'ADJUNTOS');
-$objPHPExcel->getActiveSheet()->setCellValue('F1', 'COMENTARIO');
-$objPHPExcel->getActiveSheet()->setCellValue('G1', 'FECHA ALTA');
-$objPHPExcel->getActiveSheet()->setCellValue('H1', 'FECHA CADUCIDAD');
-$objPHPExcel->getActiveSheet()->setCellValue('I1', 'FEHCA SUBSANACIÓN');
+$objPHPExcel->getActiveSheet()->setCellValue('C1', 'SECCIÓN');
+$objPHPExcel->getActiveSheet()->setCellValue('D1', 'ACTIVIDAD');
+$objPHPExcel->getActiveSheet()->setCellValue('E1', 'RESPONSABLE');
+$objPHPExcel->getActiveSheet()->setCellValue('F1', 'STATUS');
+$objPHPExcel->getActiveSheet()->setCellValue('G1', 'ADJUNTOS');
+$objPHPExcel->getActiveSheet()->setCellValue('H1', 'COMENTARIO');
+$objPHPExcel->getActiveSheet()->setCellValue('I1', 'FECHA ALTA');
+$objPHPExcel->getActiveSheet()->setCellValue('J1', 'FECHA CADUCIDAD');
+$objPHPExcel->getActiveSheet()->setCellValue('K1', 'FEHCA SUBSANACIÓN');
 
 $fila = 1;
 $filaPadre = 1;
@@ -47,7 +49,6 @@ WHERE  p.titulo LIKE '%Auditoria Propco%' and p.activo = 1 $filtroDestinos";
 
 if ($result = mysqli_query($conn_2020, $query)) {
     foreach ($result as $x) {
-        $fila++;
         $filaPadre++;
         $filaHijo++;
 
@@ -71,6 +72,8 @@ if ($result = mysqli_query($conn_2020, $query)) {
         WHERE a.id_proyecto = $idProyecto and a.activo = 1";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $y) {
+                $fila++;
+
                 $idActividad = $y['idActividad'];
                 $d = $y['actividad'];
                 $e = $y['responsable'];
@@ -95,6 +98,12 @@ if ($result = mysqli_query($conn_2020, $query)) {
                 if ($result = mysqli_query($conn_2020, $query))
                     $h = mysqli_num_rows($result);
 
+                $i = $y['fechaAlta'];
+                $j = $y['fechaCaducidad'];
+                $k = $y['fechaSubsanacion'];
+
+
+
                 $objPHPExcel->getActiveSheet()->setCellValue("A$fila", $a);
                 $objPHPExcel->getActiveSheet()->setCellValue("B$fila", $b);
                 $objPHPExcel->getActiveSheet()->setCellValue("C$fila", $c);
@@ -104,6 +113,8 @@ if ($result = mysqli_query($conn_2020, $query)) {
                 $objPHPExcel->getActiveSheet()->setCellValue("G$fila", $g);
                 $objPHPExcel->getActiveSheet()->setCellValue("H$fila", $h);
                 $objPHPExcel->getActiveSheet()->setCellValue("I$fila", $i);
+                $objPHPExcel->getActiveSheet()->setCellValue("J$fila", $j);
+                $objPHPExcel->getActiveSheet()->setCellValue("K$fila", $k);
             }
         }
     }
