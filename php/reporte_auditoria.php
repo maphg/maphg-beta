@@ -83,7 +83,7 @@ if ($result = mysqli_query($conn_2020, $query)) {
 
                 #STATUS
                 $f = $y['status'];
-                if ($f == "F" || $f = "SOLUCIONADO" || $f == "S")
+                if ($f == "F" || $f == "SOLUCIONADO" || $f == "FINALIZADO")
                     $f = "FINALIZADO";
                 else
                     $f = "PROCESO";
