@@ -22,6 +22,7 @@ $objPHPExcel->getActiveSheet()->setCellValue('H1', 'COMENTARIO');
 $objPHPExcel->getActiveSheet()->setCellValue('I1', 'FECHA ALTA');
 $objPHPExcel->getActiveSheet()->setCellValue('J1', 'FECHA CADUCIDAD');
 $objPHPExcel->getActiveSheet()->setCellValue('K1', 'FEHCA SUBSANACIÓN');
+$objPHPExcel->getActiveSheet()->setCellValue('L1', 'FASES');
 
 $fila = 1;
 $filaPadre = 1;
@@ -41,11 +42,12 @@ p.id idProyecto,
 p.titulo proyecto,
 p.activo,
 d.ubicacion,
-s.seccion
+s.seccion,
+p.fase
 FROM t_proyectos AS p
 INNER JOIN c_destinos AS d ON p.id_destino = d.id
 INNER JOIN c_secciones as s ON p.id_seccion = s.id
-WHERE  p.titulo LIKE '%Auditoria Propco%' and p.activo = 1 $filtroDestinos";
+WHERE  p.titulo LIKE '%Auditoria%' and p.activo = 1 $filtroDestinos";
 
 if ($result = mysqli_query($conn_2020, $query)) {
     foreach ($result as $x) {
@@ -57,6 +59,7 @@ if ($result = mysqli_query($conn_2020, $query)) {
         $a = strtoupper($x['ubicacion']);
         $b = $x['proyecto'];
         $c = $x['seccion'];
+        $l = $x['fase'];
 
         $query = "SELECT
         a.id idActividad,
@@ -102,8 +105,7 @@ if ($result = mysqli_query($conn_2020, $query)) {
                 $j = $y['fechaCaducidad'];
                 $k = $y['fechaSubsanacion'];
 
-
-
+                #RESULTADOS
                 $objPHPExcel->getActiveSheet()->setCellValue("A$fila", $a);
                 $objPHPExcel->getActiveSheet()->setCellValue("B$fila", $b);
                 $objPHPExcel->getActiveSheet()->setCellValue("C$fila", $c);
@@ -115,6 +117,7 @@ if ($result = mysqli_query($conn_2020, $query)) {
                 $objPHPExcel->getActiveSheet()->setCellValue("I$fila", $i);
                 $objPHPExcel->getActiveSheet()->setCellValue("J$fila", $j);
                 $objPHPExcel->getActiveSheet()->setCellValue("K$fila", $k);
+                $objPHPExcel->getActiveSheet()->setCellValue("L$fila", $l);
             }
         }
     }
