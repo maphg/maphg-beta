@@ -67,8 +67,8 @@ if ($result = mysqli_query($conn_2020, $query)) {
         a.fecha_subsanacion fechaSubsanacion,
         CONCAT(c.nombre, ' ', c.apellido) responsable
         FROM t_proyectos_planaccion AS a
-        INNER JOIN t_users AS u ON a.responsable = u.id
-        INNER JOIN t_colaboradores AS c ON u.id_colaborador = c.id  
+        LEFT JOIN t_users AS u ON a.responsable = u.id
+        LEFT JOIN t_colaboradores AS c ON u.id_colaborador = c.id  
         WHERE a.id_proyecto = $idProyecto and a.activo = 1";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $y) {
