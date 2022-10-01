@@ -743,6 +743,8 @@ if ($peticion === 'POST') {
             $tituloApartado,
             $idUsuario
          );
+
+         // $array['data'] = $_POST;
       }
 
       if ($accion === 'reporte') {
@@ -755,6 +757,24 @@ if ($peticion === 'POST') {
          #ARRAY DE RESULTADOS
          $array['response'] = "SUCCESS";
          $array['data'] = Sabanas::filtrosReporte($_POST);
+      }
+
+      if ($accion === 'filtrosClonarConfiguracion') {
+         #ARRAY DE RESULTADOS PARA CLONAR
+         $array['response'] = "SUCCESS";
+         $array['data'] = Sabanas::filtrosClonarConfiguracion($_POST);
+      }
+
+      if ($accion === 'consultarTipos') {
+         #ARRAY DE RESULTADOS PARA CLONAR
+         $array['response'] = "SUCCESS";
+         $array['data'] = Sabanas::getTiposActivos(0, $_POST['idHotel']);
+      }
+
+      if ($accion === 'consultaActividades') {
+         #ARRAY DE RESULTADOS PARA CLONAR
+         $array['response'] = "SUCCESS";
+         $array['data'] = Sabanas::consultaActividades($_POST);
       }
    }
 

@@ -127,7 +127,7 @@ class Sabanas extends Conexion
       fecha_creado 'fechaCreado',
       activo
       FROM t_sabanas_apartados
-      WHERE id_sabana = ? and activo = 1 ORDER BY id_privado DESC";
+      WHERE id_sabana = ? and activo = 1 ORDER BY apartado DESC";
 
       $prepare = mysqli_prepare($conexion->con, $query);
       $prepare->bind_param("s", $idSabana);
@@ -171,7 +171,7 @@ class Sabanas extends Conexion
       activo
       FROM t_sabanas_apartados_actividades
       WHERE id_apartado = ? and activo = 1
-      ORDER BY id_privado DESC";
+      ORDER BY actividad DESC";
 
       $prepare = mysqli_prepare($conexion->con, $query);
       $prepare->bind_param("s", $idApartado);
@@ -573,6 +573,82 @@ class Sabanas extends Conexion
          $array[] = $x;
       }
 
+
+      return $array;
+   }
+
+
+   public static function filtrosClonarConfiguracion($post)
+   {
+      // OPCIONES PARA CLONAR
+      $conexion = new Conexion();
+      $conexion->conectar();
+      $array = array();
+      $idDestinoUsuario = 0;
+
+      #Usuario
+      $usuario = Usuarios::getById($post['idUsuario']);
+      foreach ($usuario as $z)
+         $idDestinoUsuario = $z['idDestino'];
+
+      #Destinos
+      $destinos = Destinos::all($idDestinoUsuario);
+      foreach ($destinos as $x) {
+         $idDestino = $x['idDestino'];
+
+         $array['destinos'][] = $x;
+
+         #HOTELES
+         $hoteles = Sabanas::getHoteles($idDestino);
+         foreach ($hoteles as $a)
+            $array['hoteles'][] = $a;
+
+
+         #CheckList
+         foreach ($hoteles as $y) {
+            $idHotel = $y['idHotel'];
+            $checkList = Sabanas::getSabanas($idDestino, $idHotel, 0);
+            foreach ($checkList as $b) {
+               #Renombramiento de variables.
+               $b['checkList'] = $b['sabana'];
+               $b['idCheckList'] = $b['idSabana'];
+
+               $array['checkList'][] = $b;
+            }
+         }
+      }
+
+      return $array;
+   }
+
+
+   public static function consultaActividades($post)
+   {
+      $array = array();
+      $idDestino = $post['idDestino'];
+      $idHotel = $post['idHotel'];
+      $idCheckList = $post['idCheckList'];
+
+      $apartados = Sabanas::getApartados($idDestino, $idCheckList);
+      foreach ($apartados as $a) {
+         $idApartado = $a['idApartado'];
+         $actividadesX = array();
+
+         $actividades = Sabanas::getActividades($idDestino, $idApartado);
+         foreach ($actividades as $b) {
+
+            $actividadesX[] = array(
+               "idActividad" => $b['idActividad'],
+               "actividad" => $b['actividad']
+            );
+         }
+
+         $array[] = array(
+            "idApartado" => $a['idApartado'],
+            "apartado" => $a['apartado'],
+            "actividades" => $actividadesX
+         );
+      }
 
       return $array;
    }
