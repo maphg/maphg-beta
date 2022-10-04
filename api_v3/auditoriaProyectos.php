@@ -7,6 +7,8 @@ class AuditoriaProyectos extends Conexion
         $conexion = new Conexion();
         $conexion->conectar();
 
+        $palabraClave = $post['palabraClave'];
+
         #FILTRO DESTINOS
         $filtroDestino = "AND p.id_destino = 0";
         if ($destino == "AME") $filtroDestino = "";
@@ -42,10 +44,10 @@ class AuditoriaProyectos extends Conexion
         INNER JOIN c_secciones AS s ON p.id_seccion = s.id
         LEFT JOIN t_users AS u ON p.responsable = u.id
         LEFT JOIN t_colaboradores AS c ON u.id_colaborador = c.id
-        WHERE p.titulo LIKE '%AUDITORIA%'  and p.activo = 1 $filtroDestino $filtroFaseZi $filtroFaseGp $filtroFaseTrs ORDER BY p.id ASC";
+        WHERE (p.titulo LIKE '%$palabraClave%' OR p.titulo = '$palabraClave')  and p.activo = 1 $filtroDestino $filtroFaseZi $filtroFaseGp $filtroFaseTrs ORDER BY p.id ASC";
 
         $prepare = mysqli_prepare($conexion->con, $query);
-        // $prepare->bind_param("i", $idDestino);
+        // $prepare->bind_param("?", $palabraClave);
         $prepare->execute();
         $response = $prepare->get_result();
 
