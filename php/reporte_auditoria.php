@@ -94,12 +94,11 @@ if ($result = mysqli_query($conn_2020, $query)) {
                 )
                     $fTemp = "FINALIZADO";
 
-                if ($f['proveedor'] == 1 && $fTemp == "PROCESO")
+                if ($y['proveedor'] == 1 && $fTemp == "PROCESO")
                     $fTemp = "P. PROVEEDOR";
 
-                if ($f['aprobado'] == 1 && $fTemp == "PROCESO")
+                if ($y['aprobado'] == 1 && $fTemp == "PROCESO")
                     $fTemp = "P. APROBACION";
-
 
                 $f = $fTemp;
 
