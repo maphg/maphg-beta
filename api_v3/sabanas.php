@@ -441,7 +441,6 @@ class Sabanas extends Conexion
    }
 
 
-
    public static function filtrosReporte($post)
    {
       $conexion = new Conexion();
@@ -572,7 +571,6 @@ class Sabanas extends Conexion
 
          $array[] = $x;
       }
-
 
       return $array;
    }

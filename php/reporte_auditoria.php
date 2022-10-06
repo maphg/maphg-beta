@@ -65,6 +65,8 @@ if ($result = mysqli_query($conn_2020, $query)) {
         a.id idActividad,
         a.actividad,
         a.status,
+        a.departamento_compras 'proveedor',
+        a.departamento_direccion 'aprobado',
         a.fecha_alta fechaAlta,
         a.fecha_caducidad fechaCaducidad,
         a.fecha_subsanacion fechaSubsanacion,
@@ -83,10 +85,25 @@ if ($result = mysqli_query($conn_2020, $query)) {
 
                 #STATUS
                 $f = $y['status'];
-                if ($f == "F" || $f == "SOLUCIONADO" || $f == "FINALIZADO")
-                    $f = "FINALIZADO";
-                else
-                    $f = "PROCESO";
+                $fTemp = "PROCESO";
+
+                if (
+                    $f['status'] == "F" ||
+                    $f['status'] == "FINALIZADO" ||
+                    $f['status'] == "SOLUCIONADO"
+                )
+                    $fTemp = "FINALIZADO";
+
+                if ($f['proveedor'] == 1 && $fTemp == "PROCESO")
+                    $fTemp = "P. PROVEEDOR";
+
+                if ($f['aprobado'] == 1 && $fTemp == "PROCESO")
+                    $fTemp = "P. APROBACION";
+
+
+                $f = $fTemp;
+
+
 
                 #COMENTARIO
                 $g = 0;
