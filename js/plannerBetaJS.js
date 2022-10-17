@@ -13232,6 +13232,7 @@ const trsIbiza = () => {
       url === 'https://www.maphg.com/europa/#' ||
       url === 'https://maphg.com/europa/' ||
       url === 'https://maphg.com/europa/#' ||
+      url === 'https://maphg.com/europa/index.php#' ||
       url === 'https://www.maphg.com/europa/index.php#'
    ) {
       id.classList.add('hidden');
