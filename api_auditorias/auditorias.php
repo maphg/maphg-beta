@@ -6,19 +6,75 @@ class Auditorias extends Conexion
     {
         #OBTIENE TODOS LOS RESULTADOS
         $array = array();
+        $tareasTotalGlobal = 0;
+        $tareasEnProcesoGlobal = 0;
+        $tareasPProveedorGlobal = 0;
+        $tareasPAprovacionGlobal = 0;
+        $tareasFinalizadoGlobal = 0;
 
         $auditorias = Auditorias::Grupos($_POST);
 
         foreach ($auditorias as $x) {
+            $tareasTotal = 0;
+            $tareasEnProceso = 0;
+            $tareasPProveedor = 0;
+            $tareasPAprovacion = 0;
+            $tareasFinalizado = 0;
 
             $idGrupo = $x['idGrupo'];
             $tareas = Auditorias::Tareas($idGrupo);
 
+            foreach ($tareas as $y) {
+                $estado = $y['estado'];
+
+                $tareasTotal++;
+
+                if ($estado == "En Proceso") $tareasEnProceso++;
+                if ($estado == "P. Proveedor") $tareasPProveedor++;
+                if ($estado == "P. Aprovación") $tareasPAprovacion++;
+                if ($estado == "Finalizado") $tareasFinalizado++;
+            }
+
+            $x['tareasTotalPorcentaje'] =
+                $tareasTotal > 0 ? 100 / $tareasTotal : 0;
+
+            $x['tareasTotal'] = $tareasTotal;
+            $x['tareasEnProceso'] = $tareasEnProceso;
+            $x['tareasPProveedor'] = $tareasPProveedor;
+            $x['tareasPAprovacion'] = $tareasPAprovacion;
+            $x['tareasFinalizado'] = $tareasFinalizado;
+
             $x['tareas'] = $tareas;
 
+            #DATOS GLOBALES
+            $tareasTotalGlobal += $tareasTotal;
+            $tareasEnProcesoGlobal += $tareasEnProceso;
+            $tareasPProveedorGlobal += $tareasPProveedor;
+            $tareasPAprovacionGlobal += $tareasPAprovacion;
+            $tareasFinalizadoGlobal += $tareasFinalizado;
 
-            $array[] = $x;
+
+            $array['data'][] = $x;
         }
+
+        #DATOS GLOBALES
+        $array['dataGlobales']['tareasTotalGlobal'] =
+            $tareasTotalGlobal;
+
+        $array['dataGlobales']['tareasTotalPorcentajeGlobal'] =
+            $tareasTotalGlobal > 0 ? 100 / $tareasTotalGlobal : 0;
+
+        $array['dataGlobales']['tareasEnProcesoGlobal'] =
+            $tareasEnProcesoGlobal;
+
+        $array['dataGlobales']['tareasPProveedorGlobal'] =
+            $tareasPProveedorGlobal;
+
+        $array['dataGlobales']['tareasPAprovacionGlobal'] =
+            $tareasPAprovacionGlobal;
+
+        $array['dataGlobales']['tareasFinalizadoGlobal'] =
+            $tareasFinalizadoGlobal;
 
         return $array;
     }
@@ -38,6 +94,7 @@ class Auditorias extends Conexion
         $query = "SELECT
         a.id 'idGrupo',
         a.grupo,
+        a.activo,
         d.id 'idDestino',
         d.destino,
         d.ubicacion
@@ -87,6 +144,31 @@ class Auditorias extends Conexion
     }
 
 
+    public static function updateGrupo($post)
+    {
+        $conexion = new Conexion();
+        $conexion->conectar();
+
+        $array = array();
+
+        $query = "UPDATE t_auditorias SET grupo = ?, activo = ? WHERE id = ?";
+
+        $prepare = mysqli_prepare($conexion->con, $query);
+        $prepare->bind_param(
+            "sii",
+            $post['grupo'],
+            $post['activo'],
+            $post['idAuditoria']
+        );
+
+        if ($prepare->execute())
+            $array = Auditorias::all($_POST);
+
+
+        return $array;
+    }
+
+
     public static function Tareas($idGrupo)
     {
         // DEVULVE LOS HOTELES ENCONTRADAS (DESTINO)
@@ -101,17 +183,19 @@ class Auditorias extends Conexion
         at.id 'idTarea',
         at.descripcion 'tarea',
         at.estado,
-        at.fecha_alta,
-        at.fecha_caducidad,
-        at.fecha_subsanacion,
-        CONCAT(c.nombre, ' ', c.apellido) 'creadoPor'
+        at.fecha_alta 'fechaAlta',
+        at.fecha_caducidad 'fechaCaducidad',
+        at.fecha_subsanacion 'fechaSubsanacion',
+        at.id_responsable 'idResponsable',
+        CONCAT(c.nombre, ' ', c.apellido) 'responsable',
+        at.activo
         FROM  t_auditorias AS a
         INNER JOIN t_auditorias_tareas AS at ON a.id = at.id_auditoria
         INNER JOIN c_destinos AS d ON a.id_destino = d.id
-        INNER JOIN t_users AS u ON at.creado_por = u.id
+        INNER JOIN t_users AS u ON at.id_responsable = u.id
         INNER JOIN t_colaboradores AS c ON u.id_colaborador = c.id
         WHERE a.activo = 1 AND at.activo = 1 AND a.id = ?
-        ORDER BY at.descripcion DESC";
+        ORDER BY at.descripcion ASC";
 
         $prepare = mysqli_prepare($conexion->con, $query);
         $prepare->bind_param("i", $idGrupo);
@@ -122,9 +206,11 @@ class Auditorias extends Conexion
         $array = array();
 
         foreach ($response as $x) {
+            $x['responsable'] = strtolower($x['responsable']);
+
             $idTarea = $x['idTarea'];
-            $adjuntos = Auditorias::TareasComentarios($idTarea);
-            $comentarios = Auditorias::TareasAdjuntos($idTarea);
+            $comentarios = Auditorias::TareasComentarios($idTarea);
+            $adjuntos = Auditorias::TareasAdjuntos($idTarea);
 
             #COMENTARIOS
             $x['comentarios'] = $comentarios;
@@ -146,7 +232,7 @@ class Auditorias extends Conexion
         $conexion = new Conexion();
         $conexion->conectar();
         $activo = 1;
-        $array = array();
+        $array = "ERROR";
 
         $query = "INSERT INTO t_auditorias_tareas(id_auditoria, descripcion, id_responsable, estado, fecha_alta, fecha_caducidad, fecha_subsanacion, fecha_creado, creado_por, activo) VALUES(?,?,?,?,?,?,?,?,?,?)";
 
@@ -155,7 +241,7 @@ class Auditorias extends Conexion
             "isisssssii",
             $post['idAuditoria'],
             $post['descripcion'],
-            $post['idResponsable'],
+            $post['idUsuario'],
             $post['estado'],
             $post['fechaAlta'],
             $post['fechaCaducidad'],
@@ -166,7 +252,45 @@ class Auditorias extends Conexion
         );
 
         if ($prepare->execute())
-            $array = Auditorias::all($_POST);
+            $array = "SUCCESS";
+
+
+        return $array;
+    }
+
+
+    public static function updateTarea($post)
+    {
+        $conexion = new Conexion();
+        $conexion->conectar();
+        $activo = 1;
+        $array = "ERROR";
+
+        $query = "UPDATE t_auditorias_tareas SET
+        descripcion = ?,
+        id_responsable = ?,
+        estado = ?,
+        fecha_alta = ?,
+        fecha_caducidad = ?,
+        fecha_subsanacion = ?,
+        activo = ?
+        WHERE id = ?";
+
+        $prepare = mysqli_prepare($conexion->con, $query);
+        $prepare->bind_param(
+            "sissssii",
+            $post['tarea'],
+            $post['idResponsable'],
+            $post['estado'],
+            $post['fechaAlta'],
+            $post['fechaCaducidad'],
+            $post['fechaSubsanacion'],
+            $post['activo'],
+            $post['idTarea']
+        );
+
+        if ($prepare->execute())
+            $array = "SUCCESS";
 
 
         return $array;
@@ -217,7 +341,7 @@ class Auditorias extends Conexion
         $prepare = mysqli_prepare($conexion->con, $query);
         $prepare->bind_param(
             "issii",
-            $post['idAuditoriaTarea'],
+            $post['idTarea'],
             $post['comentario'],
             $post['fechaCreado'],
             $post['idUsuario'],
@@ -230,6 +354,7 @@ class Auditorias extends Conexion
 
         return $array;
     }
+
 
     public static function TareasAdjuntos($idTarea)
     {
@@ -265,6 +390,7 @@ class Auditorias extends Conexion
         return $array;
     }
 
+
     public static function addTareasAdjuntos($post)
     {
         $conexion = new Conexion();
@@ -289,6 +415,39 @@ class Auditorias extends Conexion
         if ($prepare->execute())
             $array = Auditorias::all($_POST);
 
+
+        return $array;
+    }
+
+
+    public static function responsables($idDestino)
+    {
+        // DEVULVE LOS HOTELES ENCONTRADAS (DESTINO)
+        $conexion = new Conexion();
+        $conexion->conectar();
+
+        $query = "SELECT
+        u.id 'idUsuario',
+        u.id 'idResponsable',
+        CONCAT(c.nombre, ' ', c.apellido) 'responsable'
+        FROM  t_users AS u
+        INNER JOIN t_colaboradores AS c ON u.id_colaborador = c.id
+        WHERE u.activo = 1 AND u.status = 'A' AND u.id_destino IN(?, 10)
+        ORDER BY c.nombre ASC";
+
+        $prepare = mysqli_prepare($conexion->con, $query);
+        $prepare->bind_param("i", $idDestino);
+        $prepare->execute();
+        $response = $prepare->get_result();
+
+        #ARRAYS
+        $array = array();
+
+        foreach ($response as $x) {
+            $x['responsable'] = strtolower($x['responsable']);
+
+            $array[] = $x;
+        }
 
         return $array;
     }

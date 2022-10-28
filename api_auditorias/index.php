@@ -1,7 +1,6 @@
 <?php
 header("Access-Control-Allow-Origin: *");
 date_default_timezone_set('America/Cancun');
-$fechaActual = date('Y-m-d H:m:s');
 
 #ARRAY GLOBAL
 $array = array();
@@ -50,9 +49,29 @@ if ($peticion === 'POST') {
             $array['data'] = $data;
         }
 
+        if ($accion === "updateGrupo") {
+            #AGREGA GRUPO
+            $data = Auditorias::updateGrupo($_POST);
+
+
+            #ARRAY DE RESULTADOS
+            $array['response'] = "SUCCESS";
+            $array['data'] = $data;
+        }
+
         if ($accion === "addTarea") {
             #AGREGA TAREA
             $data = Auditorias::addTarea($_POST);
+
+
+            #ARRAY DE RESULTADOS
+            $array['response'] = "SUCCESS";
+            $array['data'] = $data;
+        }
+
+        if ($accion === "updateTarea") {
+            #AGREGA TAREA
+            $data = Auditorias::updateTarea($_POST);
 
 
             #ARRAY DE RESULTADOS
@@ -80,6 +99,16 @@ if ($peticion === 'POST') {
                 #AGREGA TAREA
                 $data = Auditorias::addTareasAdjuntos($_POST);
             }
+
+
+            #ARRAY DE RESULTADOS
+            $array['response'] = "SUCCESS";
+            $array['data'] = $data;
+        }
+
+        if ($accion === "responsables") {
+            #OBTENER RESPONSABLES PARA ASIGNAR A TAREAS
+            $data = Auditorias::responsables($_POST['idDestino']);
 
 
             #ARRAY DE RESULTADOS
