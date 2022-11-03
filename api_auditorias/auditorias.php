@@ -374,9 +374,9 @@ class Auditorias extends Conexion
 
         $rutaAbsoluta = "https://maphg.com/america/planner/avatars/AVATAR_ID_0_0.svg";
         if (strpos($_SERVER['REQUEST_URI'], "america") == true)
-            $rutaAbsoluta = "https://maphg.com/america/planner/avatars/";
+            $rutaAbsoluta = "https://maphg.com/america/Auditorias/adjuntos/";
         if (strpos($_SERVER['REQUEST_URI'], "europa") == true)
-            $rutaAbsoluta = "https://maphg.com/europa/planner/avatars/";
+            $rutaAbsoluta = "https://maphg.com/europa/Auditorias/adjuntos/";
         if (strpos($_SERVER['REQUEST_URI'], "maphg-beta") == true)
             $rutaAbsoluta = "http://localhost/maphg-beta/Auditorias/adjuntos/";
 
