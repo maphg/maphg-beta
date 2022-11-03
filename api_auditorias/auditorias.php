@@ -21,8 +21,8 @@ class Auditorias extends Conexion
             $tareasPAprovacion = 0;
             $tareasFinalizado = 0;
 
-            $idGrupo = $x['idGrupo'];
-            $tareas = Auditorias::Tareas($idGrupo);
+            $post['idGrupo'] = $x['idGrupo'];
+            $tareas = Auditorias::Tareas($post);
 
             foreach ($tareas as $y) {
                 $estado = $y['estado'];
@@ -169,11 +169,20 @@ class Auditorias extends Conexion
     }
 
 
-    public static function Tareas($idGrupo)
+    public static function Tareas($post)
     {
         // DEVULVE LOS HOTELES ENCONTRADAS (DESTINO)
         $conexion = new Conexion();
         $conexion->conectar();
+
+        $estado = $post['estado'];
+        $palabra = $post['palabra'];
+
+        $filtroEstado =
+            $estado === "" ? "" : "AND at.estado = '$estado'";
+        $filtroPalabra =
+
+            $palabra === "" ? "" : "AND at.descripcion LIKE '%$palabra%'";
 
         $query = "SELECT
         d.id 'idDestino',
@@ -195,10 +204,11 @@ class Auditorias extends Conexion
         INNER JOIN t_users AS u ON at.id_responsable = u.id
         INNER JOIN t_colaboradores AS c ON u.id_colaborador = c.id
         WHERE a.activo = 1 AND at.activo = 1 AND a.id = ?
+        $filtroEstado $filtroPalabra
         ORDER BY at.descripcion ASC";
 
         $prepare = mysqli_prepare($conexion->con, $query);
-        $prepare->bind_param("i", $idGrupo);
+        $prepare->bind_param("i", $post['idGrupo']);
         $prepare->execute();
         $response = $prepare->get_result();
 
@@ -362,10 +372,19 @@ class Auditorias extends Conexion
         $conexion = new Conexion();
         $conexion->conectar();
 
+        $rutaAbsoluta = "https://maphg.com/america/planner/avatars/AVATAR_ID_0_0.svg";
+        if (strpos($_SERVER['REQUEST_URI'], "america") == true)
+            $rutaAbsoluta = "https://maphg.com/america/planner/avatars/";
+        if (strpos($_SERVER['REQUEST_URI'], "europa") == true)
+            $rutaAbsoluta = "https://maphg.com/europa/planner/avatars/";
+        if (strpos($_SERVER['REQUEST_URI'], "maphg-beta") == true)
+            $rutaAbsoluta = "http://localhost/maphg-beta/Auditorias/adjuntos/";
+
         $query = "SELECT
         ata.id 'idAdjunto',
         ata.url,
         ata.descripcion,
+        ata.posicion,
         ata.extension,
         ata.fecha_creado 'fechaCreado',
         ata.creado_por 'idCreadoPor',
@@ -384,8 +403,11 @@ class Auditorias extends Conexion
         #ARRAYS
         $array = array();
 
-        foreach ($response as $x)
+        foreach ($response as $x) {
+            $x['url'] = $rutaAbsoluta . $x['url'];
+
             $array[] = $x;
+        }
 
         return $array;
     }
@@ -398,14 +420,15 @@ class Auditorias extends Conexion
         $activo = 1;
         $array = array();
 
-        $query = "INSERT INTO t_auditorias_tareas_adjuntos(id_auditoria_tarea, url, descripcion, extension, fecha_creado, creado_por, activo) VALUES(?,?,?,?,?,?,?)";
+        $query = "INSERT INTO t_auditorias_tareas_adjuntos(id_auditoria_tarea, url, descripcion, posicion, extension, fecha_creado, creado_por, activo) VALUES(?,?,?,?,?,?,?,?)";
 
         $prepare = mysqli_prepare($conexion->con, $query);
         $prepare->bind_param(
-            "issssii",
+            "isssssii",
             $post['idAuditoriaTarea'],
             $post['url'],
             $post['descripcion'],
+            $post['posicion'],
             $post['extension'],
             $post['fechaCreado'],
             $post['idUsuario'],
@@ -413,7 +436,7 @@ class Auditorias extends Conexion
         );
 
         if ($prepare->execute())
-            $array = Auditorias::all($_POST);
+            $array = "Auditorias::all()";
 
 
         return $array;
@@ -448,6 +471,97 @@ class Auditorias extends Conexion
 
             $array[] = $x;
         }
+
+        return $array;
+    }
+
+
+    public static function sesion($idUsuario)
+    {
+        // DEVULVE LOS HOTELES PERMITIDOS AL USUARIO (IDUSAURIO)
+        $conexion = new Conexion();
+        $conexion->conectar();
+
+        $rutaAbsoluta = "https://maphg.com/america/planner/avatars/AVATAR_ID_0_0.svg";
+        if (strpos($_SERVER['REQUEST_URI'], "america") == true)
+            $rutaAbsoluta = "https://maphg.com/america/planner/avatars/";
+        if (strpos($_SERVER['REQUEST_URI'], "europa") == true)
+            $rutaAbsoluta = "https://maphg.com/europa/planner/avatars/";
+        if (strpos($_SERVER['REQUEST_URI'], "maphg-beta") == true)
+            $rutaAbsoluta = "https://maphg.com/america/planner/avatars/";
+
+        $query = "SELECT
+        u.id 'idUsuario',
+        CONCAT(c.nombre, ' ', c.apellido) 'usuario',
+        u.id_destino 'idDestino',
+        c.foto
+        FROM  t_users AS u
+        INNER JOIN t_colaboradores AS c ON u.id_colaborador = c.id
+        WHERE u.activo = 1 AND u.status = 'A' AND u.id = ?
+        ORDER BY c.nombre ASC";
+
+        $prepare = mysqli_prepare($conexion->con, $query);
+        $prepare->bind_param("i", $idUsuario);
+        $prepare->execute();
+        $response = $prepare->get_result();
+
+        #ARRAYS
+        $array = array();
+
+        foreach ($response as $x) {
+            $idDestino = $x['idDestino'];
+
+            $x['foto'] = $x['foto'] == "" ?
+                $rutaAbsoluta . "AVATAR_ID_0_0.svg" : $rutaAbsoluta . $x['foto'];
+
+            $destinosPermitidos = Auditorias::destinos($idDestino);
+            $x['destinosPermitidos'] = $destinosPermitidos;
+
+            $menuDestinos = array();
+
+            foreach ($destinosPermitidos as $y)
+                $menuDestinos[$y['pais']][] = $y;
+
+            $x['menuDestinos'] = $menuDestinos;
+
+
+
+            $array = $x;
+        }
+
+        return $array;
+    }
+
+
+    public static function destinos($idDestino)
+    {
+        // DEVULVE LOS DESTINOS ENCONTRADOS (DESTINO)
+        $conexion = new Conexion();
+        $conexion->conectar();
+
+        $filtroDestino = $idDestino == 10 ? "" : "WHERE id = $idDestino";
+
+        $query = "SELECT
+        id 'idDestino',
+        destino,
+        ubicacion,
+        continente,
+        pais
+        FROM  c_destinos
+        $filtroDestino
+        ORDER BY destino ASC";
+
+        $prepare = mysqli_prepare($conexion->con, $query);
+        // $prepare->bind_param("i", $idDestino);
+        $prepare->execute();
+        $response = $prepare->get_result();
+
+        #ARRAYS
+        $array = array();
+
+        foreach ($response as $x)
+            $array[] = $x;
+
 
         return $array;
     }

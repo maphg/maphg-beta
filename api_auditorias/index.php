@@ -95,11 +95,10 @@ if ($peticion === 'POST') {
             $extension = pathinfo($_FILES["file"]["name"], PATHINFO_EXTENSION);
             $foto =  "AVATAR_ID_" . $idUsuario . "_" . rand(1, 999) . ".$extension";
 
-            if (move_uploaded_file($rutaTemporal, "../planner/avatars/" . $foto)) {
+            if (move_uploaded_file($rutaTemporal, "/" . $foto)) {
                 #AGREGA TAREA
-                $data = Auditorias::addTareasAdjuntos($_POST);
+                // $data = Auditorias::addTareasAdjuntos($_POST);
             }
-
 
             #ARRAY DE RESULTADOS
             $array['response'] = "SUCCESS";
@@ -109,6 +108,16 @@ if ($peticion === 'POST') {
         if ($accion === "responsables") {
             #OBTENER RESPONSABLES PARA ASIGNAR A TAREAS
             $data = Auditorias::responsables($_POST['idDestino']);
+
+
+            #ARRAY DE RESULTADOS
+            $array['response'] = "SUCCESS";
+            $array['data'] = $data;
+        }
+
+        if ($accion === "sesion") {
+            #OBTENER RESPONSABLES PARA ASIGNAR A TAREAS
+            $data = Auditorias::sesion($_POST['idUsuario']);
 
 
             #ARRAY DE RESULTADOS
