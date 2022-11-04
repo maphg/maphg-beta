@@ -8255,7 +8255,7 @@ const Yi = (e, t) => {
           s.value = []
           try {
             const u = { apartado: "auditorias", accion: "responsables", idDestino: n.array.idDestino, idUsuario: localStorage.getItem("usuario") },
-              p = await (await fetch("https://maphg.com/europa/api_auditorias/", { method: "POST", body: JSON.stringify(u) })).json()
+              p = await (await fetch("../api_auditorias/", { method: "POST", body: JSON.stringify(u) })).json()
             p.response == "SUCCESS" && (s.value = p.data)
           } catch (u) {
             console.log(u)
@@ -8277,7 +8277,7 @@ const Yi = (e, t) => {
               fechaSubsanacion: n.array.fechaSubsanacion,
               activo: n.array.activo,
             }
-            ;(await (await fetch("https://maphg.com/europa/api_auditorias/", { method: "POST", body: JSON.stringify(u) })).json()).response == "SUCCESS" &&
+            ;(await (await fetch("../api_auditorias/", { method: "POST", body: JSON.stringify(u) })).json()).response == "SUCCESS" &&
               (t("obtenerAll"),
               (r.value.menu = !1),
               (r.value.modalResponsable = !1),
@@ -8302,7 +8302,7 @@ const Yi = (e, t) => {
                 fechaCreado: Jr(new Date(), "yyyy-MM-dd KK:mm:ss"),
                 activo: n.array.activo,
               }
-              ;(await (await fetch("https://maphg.com/europa/api_auditorias/", { method: "POST", body: JSON.stringify(u) })).json()).response == "SUCCESS" && ((o.value = ""), t("obtenerAll"))
+              ;(await (await fetch("../api_auditorias/", { method: "POST", body: JSON.stringify(u) })).json()).response == "SUCCESS" && ((o.value = ""), t("obtenerAll"))
             } catch (u) {
               console.log(u)
             }
@@ -8323,7 +8323,7 @@ const Yi = (e, t) => {
                 $.append("extension", p.type),
                 $.append("file", p),
                 $.append("fechaCreado", Jr(new Date(), "yyyy-MM-dd KK:mm:ss")),
-                (await (await fetch("https://maphg.com/europa/api_auditorias/adjuntos.php", { method: "POST", body: $ })).json()).response == "SUCCESS" && t("obtenerAll")
+                (await (await fetch("../api_auditorias/adjuntos.php", { method: "POST", body: $ })).json()).response == "SUCCESS" && t("obtenerAll")
             } catch (p) {
               console.log(p)
             }
@@ -8765,7 +8765,7 @@ const u0 = Yi(s0, [
                 fechaSubsanacion: "",
                 fechaCreado: Jr(new Date(), "yyyy-MM-dd KK:mm:ss"),
               }
-              ;(await (await fetch("https://maphg.com/europa/api_auditorias/", { method: "POST", body: JSON.stringify(u) })).json()).response == "SUCCESS" &&
+              ;(await (await fetch("../api_auditorias/", { method: "POST", body: JSON.stringify(u) })).json()).response == "SUCCESS" &&
                 ((o.value = ""), (i.value = !1), t("obtenerAll"))
             } catch (u) {
               console.log(u)
@@ -8783,7 +8783,7 @@ const u0 = Yi(s0, [
               idResponsable: 1,
               activo: n.array.activo,
             }
-            ;(await (await fetch("https://maphg.com/europa/api_auditorias/", { method: "POST", body: JSON.stringify(u) })).json()).response == "SUCCESS" &&
+            ;(await (await fetch("../api_auditorias/", { method: "POST", body: JSON.stringify(u) })).json()).response == "SUCCESS" &&
               ((o.value = ""), (i.value = !1), t("obtenerAll"))
           } catch (u) {
             console.log(u)
@@ -9465,7 +9465,7 @@ const Sb = { class: "navbar px-4 md:px-16 z-50" },
         (async () => {
           try {
             const d = { idUsuario: localStorage.getItem("usuario"), idDestino: localStorage.getItem("idDestino"), apartado: "auditorias", accion: "sesion" },
-              u = await (await fetch("https://maphg.com/europa/api_auditorias/", { method: "POST", body: JSON.stringify(d) })).json()
+              u = await (await fetch("../api_auditorias/", { method: "POST", body: JSON.stringify(d) })).json()
             u.response == "SUCCESS" &&
               ((o.value = u.data.menuDestinos),
               u.data.destinosPermitidos.forEach((c) => {
@@ -9670,7 +9670,7 @@ const Ee = (e) => (ll("data-v-27c5319a"), (e = e()), ul(), e),
                 palabra: a.value.palabra,
                 estado: a.value.estado,
               },
-              c = await (await fetch("https://maphg.com/europa/api_auditorias/", { method: "POST", body: JSON.stringify(f) })).json()
+              c = await (await fetch("../api_auditorias/", { method: "POST", body: JSON.stringify(f) })).json()
             c.response == "SUCCESS" && ((s.value = c.data.data), (i.value = c.data.dataGlobales))
           } catch (f) {
             ;(s.value = []), console.log(f)
@@ -9688,7 +9688,7 @@ const Ee = (e) => (ll("data-v-27c5319a"), (e = e()), ul(), e),
                 grupo: o.value,
                 fechaCreado: Jr(new Date(), "yyyy-MM-dd KK:mm:ss"),
               },
-              c = await (await fetch("https://maphg.com/europa/api_auditorias/", { method: "POST", body: JSON.stringify(f) })).json()
+              c = await (await fetch("../api_auditorias/", { method: "POST", body: JSON.stringify(f) })).json()
             c.response == "SUCCESS" && ((s.value = c.data.data), (i.value = c.data.dataGlobales), (o.value = ""), (t.value = !1))
           } catch (f) {
             ;(s.value = []), console.log(f)
