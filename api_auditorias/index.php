@@ -5,7 +5,7 @@ date_default_timezone_set('America/Cancun');
 #ARRAY GLOBAL
 $array = array();
 $array['status'] = 'OK';
-$array['version'] = '3.0.1 BETA';
+$array['version'] = '1.0.1 Produción';
 $array['response'] = 'ERROR';
 $array['data'] = array();
 
