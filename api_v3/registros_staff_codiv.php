@@ -18,7 +18,6 @@ class StaffCovid extends Conexion
       staff.id 'idRegistro',
       staff.fecha_creado 'fechaCreado',
       staff.fecha_estimada 'fechaEstimada',
-      staff.pais,
       staff.mes,
       staff.año,
       staff.staff_aprovado 'staffAprobado',
@@ -28,6 +27,7 @@ class StaffCovid extends Conexion
       staff.observaciones,
       staff.activo,
       CONCAT(col.nombre, ' ', col.apellido) 'creadoPor',
+      destino.pais,
       destino.id 'idDestino',
       destino.destino
       FROM t_registro_staff AS staff
