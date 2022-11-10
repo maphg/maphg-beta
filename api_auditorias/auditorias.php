@@ -565,4 +565,66 @@ class Auditorias extends Conexion
 
         return $array;
     }
+
+
+    public static function login($post)
+    {
+        // DEVULVE LOS DESTINOS ENCONTRADOS (DESTINO)
+        $conexion = new Conexion();
+        $conexion->conectar();
+
+        $query = "SELECT
+        id 'idUsuario',
+        id_destino 'idDestino'
+        FROM  t_users
+        WHERE status = 'A' AND activo = 1 AND username = ? AND password = ?";
+
+        $prepare = mysqli_prepare($conexion->con, $query);
+        $prepare->bind_param("ss", $post['usuario'], $post['contraseña']);
+        $prepare->execute();
+        $response = $prepare->get_result();
+
+        #ARRAYS
+        $array = array();
+
+        foreach ($response as $x) {
+            $x['token'] = "lkj232kj323jkl123jk32lk3d";
+            $x['fechaVencimiento'] = "";
+            $array[] = $x;
+        }
+
+
+        return $array;
+    }
+
+
+    public static function validarSesion($post)
+    {
+        // DEVULVE LOS DESTINOS ENCONTRADOS (DESTINO)
+        $conexion = new Conexion();
+        $conexion->conectar();
+
+        $query = "SELECT
+        id 'idUsuario',
+        id_destino 'idDestino'
+        FROM  t_users
+        WHERE status = 'A' AND activo = 1 AND id = ?";
+
+        $prepare = mysqli_prepare($conexion->con, $query);
+        $prepare->bind_param("s", $post['idUsuario']);
+        $prepare->execute();
+        $response = $prepare->get_result();
+
+        #ARRAYS
+        $array = array();
+
+        foreach ($response as $x) {
+            $x['token'] = "lkj232kj323jkl123jk32lk3d";
+            $x['fechaVencimiento'] = "";
+            $array[] = $x;
+        }
+
+
+        return $array;
+    }
 }

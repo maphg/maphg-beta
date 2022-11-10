@@ -124,6 +124,30 @@ if ($peticion === 'POST') {
             $array['response'] = "SUCCESS";
             $array['data'] = $data;
         }
+
+        if ($accion === "login") {
+            #OBTENER RESPONSABLES PARA ASIGNAR A TAREAS
+            $data = Auditorias::login($_POST);
+            $array['data'] = array();
+
+            #ARRAY DE RESULTADOS
+            if (COUNT($data)) {
+                $array['response'] = "SUCCESS";
+                $array['data'] = $data;
+            }
+        }
+
+        if ($accion === "validarSesion") {
+            #OBTENER RESPONSABLES PARA ASIGNAR A TAREAS
+            $data = Auditorias::validarSesion($_POST);
+            $array['data'] = array();
+
+            #ARRAY DE RESULTADOS
+            if (COUNT($data)) {
+                $array['response'] = "SUCCESS";
+                $array['data'] = $data;
+            }
+        }
     }
 }
 
