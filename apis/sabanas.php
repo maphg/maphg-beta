@@ -476,7 +476,7 @@ if ($peticion === "POST") {
          $filtroDestinoHotel = "";
          $filtroDestinoEquipo = "";
       } else {
-         $filtroDestino = "and id_destino = $idDestino";
+         $filtroDestino = "and e.id_destino = $idDestino";
          $filtroDestinoHotel = "and h.id_destino = $idDestino";
          $filtroDestinoEquipo = "and e.id_destino = $idDestino";
       }
@@ -484,12 +484,28 @@ if ($peticion === "POST") {
       if ($idSabana == "TODOS")
          $filtroSabana = "";
       else
-         $filtroSabana = "and id_sabana = '$idSabana'";
+         $filtroSabana = "and e.id_sabana = '$idSabana'";
 
       if ($villa == "TODOS")
          $filtroVilla = "";
       else
-         $filtroVilla = "and villa_edificio = '$villa'";
+         $filtroVilla = "and e.villa_edificio = '$villa'";
+
+
+      #FILTRO TIPO DE EQUIPOS !TODOS
+      $filtroTipoActivo = "";
+
+      if ($idSabana !== "TODOS") {
+         $query = "SELECT t.id_tipo_activo 'idTipoActivo'
+         FROM t_sabanas_hoteles_tipos_activos AS t
+         INNER JOIN t_sabanas AS s ON t.id = s.id_registro_tipo_activo
+         WHERE s.id_publico = '$idSabana'";
+         if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+               $filtroTipoActivo = "and id_tipo_activo = " . $x['idTipoActivo'];
+            }
+         }
+      }
 
       // SABANAS
       $query = "SELECT id 'idHotel', hotel
@@ -501,9 +517,10 @@ if ($peticion === "POST") {
             $hotel = $x['hotel'];
 
             $equipos = array();
-            $query = "SELECT id_equipo 'idEquipo', equipo
-            FROM t_sabanas_equipos
-            WHERE id_hotel = '$idHotel' and activo = 1 $filtroDestino $filtroVilla";
+            $query = "SELECT e.id_equipo 'idEquipo', e.quipo
+            FROM t_sabanas_equipos AS e
+            WHERE e.id_hotel = '$idHotel' and e.activo = 1
+            $filtroDestino $filtroVilla $filtroSabana $filtroTipoActivo";
             if ($result = mysqli_query($conn_2020, $query)) {
                foreach ($result as $x) {
                   $totalRegistros = 0;
