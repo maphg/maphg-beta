@@ -7611,7 +7611,7 @@ if (isset($_POST['action'])) {
             $query = "UPDATE t_proyectos SET
             activo = '0',
             eliminado_por = $idUsuario,
-            eliminado_fecha = date('Y-m-d H:m:s')
+            eliminado_fecha = '" . date('Y-m-d H:m:s') . "'
             WHERE id = $idProyecto";
             if ($result = mysqli_query($conn_2020, $query)) {
                 $resp = 6;
