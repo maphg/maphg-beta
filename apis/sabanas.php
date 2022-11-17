@@ -476,20 +476,20 @@ if ($peticion === "POST") {
          $filtroDestinoHotel = "";
          $filtroDestinoEquipo = "";
       } else {
-         $filtroDestino = "and e.id_destino = $idDestino";
+         $filtroDestino = "and id_destino = $idDestino";
          $filtroDestinoHotel = "and h.id_destino = $idDestino";
-         $filtroDestinoEquipo = "and e.id_destino = $idDestino";
+         $filtroDestinoEquipo = "and id_destino = $idDestino";
       }
 
       if ($idSabana == "TODOS")
          $filtroSabana = "";
       else
-         $filtroSabana = "and e.id_sabana = '$idSabana'";
+         $filtroSabana = "and id_sabana = '$idSabana'";
 
       if ($villa == "TODOS")
          $filtroVilla = "";
       else
-         $filtroVilla = "and e.villa_edificio = '$villa'";
+         $filtroVilla = "and villa_edificio = '$villa'";
 
 
       #FILTRO TIPO DE EQUIPOS !TODOS
@@ -517,9 +517,9 @@ if ($peticion === "POST") {
             $hotel = $x['hotel'];
 
             $equipos = array();
-            $query = "SELECT e.id_equipo 'idEquipo', e.quipo
-            FROM t_sabanas_equipos AS e
-            WHERE e.id_hotel = '$idHotel' and e.activo = 1
+            $query = "SELECT id_equipo 'idEquipo', equipo
+            FROM t_sabanas_equipos
+            WHERE id_hotel = '$idHotel' and activo = 1
             $filtroDestino $filtroVilla $filtroSabana $filtroTipoActivo";
             if ($result = mysqli_query($conn_2020, $query)) {
                foreach ($result as $x) {
