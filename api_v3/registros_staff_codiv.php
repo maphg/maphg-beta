@@ -11,6 +11,11 @@ class StaffCovid extends Conexion
       $conexion = new Conexion();
       $conexion->conectar();
 
+      $filtroDestino = "and staff.id_destino = $idDestino";
+
+      if ($idDestino == 10)
+         $filtroDestino = "";
+
       #ARRAY DE LOS MESES POR NUMERO DE MES.
       $meses = ["?", "ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO", "JULIO", "AGOSTO", "SEPTIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE"];
 
@@ -34,11 +39,11 @@ class StaffCovid extends Conexion
       INNER JOIN c_destinos AS destino ON staff.id_destino = destino.id
       INNER JOIN t_users AS u ON staff.creado_por = u.id
       INNER JOIN t_colaboradores AS col ON u.id_colaborador = col.id
-      WHERE staff.id_destino = ? and staff.año = ? and staff.activo = 1
+      WHERE staff.año = ? and staff.activo = 1 $filtroDestino
       ORDER BY staff.fecha_estimada ASC";
 
       $prepare = mysqli_prepare($conexion->con, $query);
-      $prepare->bind_param("ii", $idDestino, $año);
+      $prepare->bind_param("i", $año);
       $prepare->execute();
       $response = $prepare->get_result();
 
