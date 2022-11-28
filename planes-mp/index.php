@@ -408,7 +408,7 @@
                         GUARDAR CAMBIOS
                     </button>
 
-                    <button id="desactivarActividadPlanMP" class="btn btn-red">
+                    <button id="desactivarActividadPlanMP" class="btn btn-red hidden">
                         DESACTIVAR ACTIVIDAD
                     </button>
                 </div>
