@@ -269,10 +269,10 @@ class Auditorias extends Conexion
         fecha_alta,
         fecha_caducidad,
         fecha_subsanacion,
-        fecha_creado,
         año_natural,
         importe_previo,
         importe_actual,
+        fecha_creado,
         creado_por,
         activo
         )
