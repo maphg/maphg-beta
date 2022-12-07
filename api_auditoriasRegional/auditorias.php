@@ -264,6 +264,7 @@ class Auditorias extends Conexion
         (
         id_auditoria,
         descripcion,
+        justificacion,
         id_responsable,
         estado,
         fecha_alta,
@@ -276,13 +277,14 @@ class Auditorias extends Conexion
         creado_por,
         activo
         )
-        VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         $prepare = mysqli_prepare($conexion->con, $query);
         $prepare->bind_param(
-            "isissssssssii",
+            "ississssssssii",
             $post['idAuditoria'],
             $post['descripcion'],
+            $post['justificacion'],
             $post['idUsuario'],
             $post['estado'],
             $post['fechaAlta'],
