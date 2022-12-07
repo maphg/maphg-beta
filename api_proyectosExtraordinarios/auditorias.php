@@ -281,7 +281,7 @@ class Auditorias extends Conexion
 
         $prepare = mysqli_prepare($conexion->con, $query);
         $prepare->bind_param(
-            "ississssisssii",
+            "ississssssssii",
             $post['idAuditoria'],
             $post['descripcion'],
             $post['justificacion'],
