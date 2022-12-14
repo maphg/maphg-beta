@@ -476,6 +476,162 @@ if (isset($_GET['action'])) {
                     }
                 }
 
+                $array[] = array(
+                    "idItem" => intval($idItem),
+                    "titulo" => $titulo,
+                    "creadoPor" => $creadoPor,
+                    "status" => $status,
+                    "tipo" => "INCIDENCIA",
+                    "tipoIncidencia" => $tipoIncidencia,
+                    "sMaterial" => $sMaterial,
+                    "sTrabajando" => $sTrabajando,
+                    "sEnergetico" => $sEnergetico,
+                    "sDepartamento" => $sDepartamento,
+                    "sEP" => $sEP,
+                    "comentario" => $comentario,
+                    "comentarioFecha" => $fecha,
+                    "ComentarioDe" => $ComentarioDe,
+                    "idSeccion" => intval($idSeccion),
+                    "idSubseccion" => intval($idSubseccion),
+                    "totalAdjuntos" => intval($totalAdjuntos),
+                    "adjuntos" => $adjuntos,
+                    "equipoPrincial" => $equipoPrincial,
+                    "equipoSecundario" => $equipoSecundario,
+                    "seccion" => $seccion,
+                    "subseccion" => $subseccion,
+                    "idEquipo" => $idEquipo,
+                    "idEquipoSecundario" => intval($idEquipoSecundario),
+                    "idEquipoPrincipal" => intval($idEquipoPrincipal),
+                    "empresa" => $empresa
+                );
+            }
+        }
+
+        #INCIDENCIAS GENERALES
+        # i = INCIDENCIA
+        $query = "SELECT 
+        i.id, 
+        i.id_usuario,
+        i.titulo, 
+        i.tipo_incidencia,
+        i.responsable,
+        i.responsable_empresa,
+        i.fecha,
+        i.rango_fecha,
+        i.status,
+        i.status_material,
+        i.status_trabajando,
+        i.energetico_electricidad,
+        i.energetico_agua,
+        i.energetico_diesel,
+        i.energetico_gas,
+        i.departamento_calidad,
+        i.departamento_compras,
+        i.departamento_direccion,
+        i.departamento_finanzas,
+        i.departamento_rrhh,
+        i.cod2bend,
+        i.status_ep,
+        i.fecha_llegada,
+        i.orden_compra,
+        i.coste,
+        c_secciones.seccion, c_secciones.id 'idSeccion',
+        c_subsecciones.grupo, c_subsecciones.id 'idSubseccion'
+        FROM t_mp_np AS i
+        INNER JOIN c_secciones ON i.id_seccion = c_secciones.id
+        INNER JOIN c_subsecciones ON i.id_subseccion = c_subsecciones.id
+        WHERE i.id_destino = $idDestino and i.activo = 1";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idItem = $x['id'];
+                $titulo = $x['titulo'];
+                $creadoPor = $X['id_usuario'];
+                $status = $x['status'];
+                $rangoFecha = $x['rango_fecha'];
+                $tipoIncidencia = $x['tipo_incidencia'];
+                $sMaterial = intval($x['status_material']);
+                $sTrabajando = intval($x['status_trabajando']);
+                $sEnergetico = intval($x['energetico_electricidad']) + intval($x['energetico_agua']) + intval($x['energetico_diesel']) + intval($x['energetico_gas']);
+                $sDepartamento = intval($x['departamento_calidad']) + intval($x['departamento_compras']) + intval($x['departamento_direccion']) + intval($x['departamento_finanzas']) + intval($x['departamento_rrhh']);
+                $sEP = $x['status_ep'];
+                $fecha = (new \DateTime($x['fecha']))->format('d/m/Y');
+                $idSeccion = $X['idSeccion'];
+                $seccion = $X['seccion'];
+                $idSubseccion = $X['idSubseccion'];
+                $subseccion = $X['grupo'];
+
+                $equipoPrincial = "";
+                $equipoSecundario = "";
+                $idEquipo = 0;
+                $idEquipoSecundario = 0;
+                $idEquipoPrincipal = 0;
+                $idEmpresa = $X['responsable_empresa'];
+
+                #STATUS
+                if ($status == "SOLUCIONADO" || $status == "F" || $status == "FINALIZADO") {
+                    $status = "SOLUCIONADO";
+                } else {
+                    $status = "PENDIENTE";
+                }
+
+                #CREADO POR
+                $creadoPor = "";
+                $query = "SELECT t_colaboradores.nombre, t_colaboradores.apellido 
+                FROM t_users
+                INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                WHERE t_users.id = $idCreadoPor";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $creadoPor = strtok($x['nombre'], ' ') . " " . strtok($x['apellido'], ' ');
+                    }
+                }
+
+                #ULTIMO COMENTARIO
+                $comentario = "";
+                $fecha = "";
+                $ComentarioDe = "";
+                $query = "SELECT c.comentario, c.fecha, col.nombre, col.apellido
+                FROM comentarios_mp_np AS c 
+                INNER JOIN t_users ON c.id_usuario = t_users.id
+                INNER JOIN t_colaboradores AS col ON t_users.id_colaborador = col.id
+                WHERE c.id_mp_np = $idItem and c.activo = 1
+                ORDER BY c.id DESC";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $comentario = $x['comentario'];
+                        $fecha = (new \DateTime($x['fecha']))->format('d/m/Y');
+                        $ComentarioDe = strtok($x['nombre'], ' ') . " " . strtok($x['apellido'], ' ');
+                    }
+                }
+
+                #DOCUMENTOS
+                $totalAdjuntos = 0;
+                $adjuntos = array();
+                $query = "SELECT id, url 
+                FROM adjuntos_mp_np 
+                WHERE id_mp_np = $idItem and activo = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $totalAdjuntos++;
+                        $urlAdjunto = $x['url'];
+                        $tipo = pathinfo($urlAdjunto, PATHINFO_EXTENSION);
+
+                        $adjuntos[] = array(
+                            "url" => $urlAdjunto,
+                            "tipo" => $tipo
+                        );
+                    }
+                }
+
+                #EMPRESA RESPONSABLE
+                $empresa = "";
+                $query = "SELECT empresa FROM t_empresas_responsables WHERE id = $idEmpresa";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $empresa = $x['empresa'];
+                    }
+                }
+
 
                 $array[] = array(
                     "idItem" => intval($idItem),
@@ -507,6 +663,7 @@ if (isset($_GET['action'])) {
                 );
             }
         }
+
         echo json_encode($array);
     }
 
