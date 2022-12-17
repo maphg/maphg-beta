@@ -190,7 +190,8 @@ function powerbi() {
 
             {
                 "id": 1,
-                "URL": "https://app.powerbi.com/view?r=eyJrIjoiYmZlNzRkMGQtOGMyYi00MmU1LThhNjYtNTU4NjY3MmJlZGQwIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9"
+                "URL": "https://app.powerbi.com/view?r=eyJrIjoiYmZlNzRkMGQtOGMyYi00MmU1LThhNjYtNTU4NjY3MmJlZGQwIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9",
+                "descripcion": "NA"
             },
 
             {
