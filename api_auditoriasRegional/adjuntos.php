@@ -40,7 +40,7 @@ if ($peticion === 'POST') {
             $_POST['url'] = $adjunto;
 
 
-            if (move_uploaded_file($rutaTemporal, "../proyectosExtraordinarios/adjuntos/" . $adjunto)) {
+            if (move_uploaded_file($rutaTemporal, "../auditoriasRegional/adjuntos/" . $adjunto)) {
                 #AGREGA TAREA
                 $data = Auditorias::addTareasAdjuntos($_POST);
 
