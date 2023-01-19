@@ -36,7 +36,7 @@ if ($peticion === 'POST') {
 
             #ARRAY DE RESULTADOS
             $array['response'] = "SUCCESS";
-            $array['data'] = "$auditorias";
+            $array['data'] = $auditorias;
         }
 
         if ($accion === "addGrupo") {
