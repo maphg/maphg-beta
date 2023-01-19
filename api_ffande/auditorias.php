@@ -107,7 +107,7 @@ class Auditorias extends Conexion
         d.id 'idDestino',
         d.destino,
         d.ubicacion
-        FROM  t_ff&e AS a
+        FROM  t_ffande AS a
         INNER JOIN c_destinos AS d ON a.id_destino = d.id
         WHERE a.activo = 1 $filtroDestino
         ORDER BY a.id DESC";
@@ -133,7 +133,7 @@ class Auditorias extends Conexion
         $activo = 1;
         $array = array();
 
-        $query = "INSERT INTO t_ff&e(
+        $query = "INSERT INTO t_ffande(
         id_destino,
         grupo,
         fecha_creado,
@@ -165,7 +165,7 @@ class Auditorias extends Conexion
 
         $array = array();
 
-        $query = "UPDATE t_ff&e SET grupo = ?, activo = ? WHERE id = ?";
+        $query = "UPDATE t_ffande SET grupo = ?, activo = ? WHERE id = ?";
 
         $prepare = mysqli_prepare($conexion->con, $query);
         $prepare->bind_param(
@@ -226,8 +226,8 @@ class Auditorias extends Conexion
         at.campo10,
         CONCAT(c.nombre, ' ', c.apellido) 'responsable',
         at.activo
-        FROM  t_ff&e AS a
-        INNER JOIN t_ff&e_tareas AS at ON a.id = at.id_auditoria
+        FROM  t_ffande AS a
+        INNER JOIN t_ffande_tareas AS at ON a.id = at.id_auditoria
         INNER JOIN c_destinos AS d ON a.id_destino = d.id
         INNER JOIN t_users AS u ON at.id_responsable = u.id
         INNER JOIN t_colaboradores AS c ON u.id_colaborador = c.id
@@ -271,7 +271,7 @@ class Auditorias extends Conexion
         $activo = 1;
         $array = "ERROR";
 
-        $query = "INSERT INTO t_ff&e_tareas
+        $query = "INSERT INTO t_ffande_tareas
         (
         id_auditoria,
         descripcion,
@@ -343,7 +343,7 @@ class Auditorias extends Conexion
         $activo = 1;
         $array = "ERROR";
 
-        $query = "UPDATE t_ff&e_tareas SET
+        $query = "UPDATE t_ffande_tareas SET
         descripcion = ?,
         justificacion = ?,
         id_responsable = ?,
@@ -412,7 +412,7 @@ class Auditorias extends Conexion
         atc.comentario,
         atc.fecha_creado 'fechaCreado',
         CONCAT(c.nombre, ' ', c.apellido) 'creadoPor'
-        FROM  t_ff&e_tareas_comentarios AS atc
+        FROM  t_ffande_tareas_comentarios AS atc
         INNER JOIN t_users AS u ON atc.creado_por = u.id
         INNER JOIN t_colaboradores AS c ON u.id_colaborador = c.id
         WHERE atc.activo = 1 AND atc.id_auditoria_tarea = ?
@@ -440,7 +440,7 @@ class Auditorias extends Conexion
         $activo = 1;
         $array = array();
 
-        $query = "INSERT INTO t_ff&e_tareas_comentarios(id_auditoria_tarea, comentario, fecha_creado, creado_por, activo) VALUES(?,?,?,?,?)";
+        $query = "INSERT INTO t_ffande_tareas_comentarios(id_auditoria_tarea, comentario, fecha_creado, creado_por, activo) VALUES(?,?,?,?,?)";
 
         $prepare = mysqli_prepare($conexion->con, $query);
         $prepare->bind_param(
@@ -467,13 +467,13 @@ class Auditorias extends Conexion
 
         $rutaAbsoluta = "https://maphg.com/america/planner/avatars/AVATAR_ID_0_0.svg";
         if (strpos($_SERVER['REQUEST_URI'], "america") == true)
-            $rutaAbsoluta = "https://maphg.com/america/ff&e/adjuntos/";
+            $rutaAbsoluta = "https://maphg.com/america/ffande/adjuntos/";
 
         if (strpos($_SERVER['REQUEST_URI'], "europa") == true)
-            $rutaAbsoluta = "https://maphg.com/europa/ff&e/adjuntos/";
+            $rutaAbsoluta = "https://maphg.com/europa/ffande/adjuntos/";
 
         if (strpos($_SERVER['REQUEST_URI'], "maphg-beta") == true)
-            $rutaAbsoluta = "../maphg-beta/ff&e/adjuntos/";
+            $rutaAbsoluta = "../maphg-beta/ffande/adjuntos/";
 
 
         $query = "SELECT
@@ -485,7 +485,7 @@ class Auditorias extends Conexion
         ata.fecha_creado 'fechaCreado',
         ata.creado_por 'idCreadoPor',
         CONCAT(c.nombre, ' ', c.apellido) 'creadoPor'
-        FROM  t_ff&e_tareas_adjuntos AS ata
+        FROM  t_ffande_tareas_adjuntos AS ata
         INNER JOIN t_users AS u ON ata.creado_por = u.id
         INNER JOIN t_colaboradores AS c ON u.id_colaborador = c.id
         WHERE ata.activo = 1 AND ata.id_auditoria_tarea = ?
@@ -515,7 +515,7 @@ class Auditorias extends Conexion
         $activo = 1;
         $array = array();
 
-        $query = "INSERT INTO t_ff&e_tareas_adjuntos(id_auditoria_tarea, url, descripcion, posicion, extension, fecha_creado, creado_por, activo) VALUES(?,?,?,?,?,?,?,?)";
+        $query = "INSERT INTO t_ffande_tareas_adjuntos(id_auditoria_tarea, url, descripcion, posicion, extension, fecha_creado, creado_por, activo) VALUES(?,?,?,?,?,?,?,?)";
 
         $prepare = mysqli_prepare($conexion->con, $query);
         $prepare->bind_param(

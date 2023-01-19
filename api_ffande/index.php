@@ -5,7 +5,7 @@ date_default_timezone_set('America/Cancun');
 #ARRAY GLOBAL
 $array = array();
 $array['status'] = 'OK';
-$array['version'] = '1.0.1 Produción';
+$array['version'] = '1.0.1 Producion';
 $array['response'] = 'ERROR';
 $array['data'] = array();
 
@@ -36,7 +36,7 @@ if ($peticion === 'POST') {
 
             #ARRAY DE RESULTADOS
             $array['response'] = "SUCCESS";
-            $array['data'] = $auditorias;
+            $array['data'] = "$auditorias";
         }
 
         if ($accion === "addGrupo") {
