@@ -7,19 +7,26 @@ class Auditorias extends Conexion
         #OBTIENE TODOS LOS RESULTADOS
         $array = array();
         $tareasTotalGlobal = 0;
-        $tareasEnProcesoGlobal = 0;
-        $tareasPProveedorGlobal = 0;
-        $tareasPAprovacionGlobal = 0;
-        $tareasFinalizadoGlobal = 0;
+
+        // Estados
+        $FinalizadoGlobal = 0;
+        $CotizacionGlobal = 0;
+        $CatalogodeConceptosGlobal = 0;
+        $AprobacionGlobal = 0;
+        $PendientedeProveedorGlobal = 0;
+        $EjecucionGlobal = 0;
 
         $auditorias = Auditorias::Grupos($_POST);
 
         foreach ($auditorias as $x) {
             $tareasTotal = 0;
-            $tareasEnProceso = 0;
-            $tareasPProveedor = 0;
-            $tareasPAprovacion = 0;
-            $tareasFinalizado = 0;
+
+            $Finalizado = 0;
+            $Cotizacion = 0;
+            $CatalogodeConceptos = 0;
+            $Aprobacion = 0;
+            $PendientedeProveedor = 0;
+            $Ejecucion = 0;
 
             $post['idGrupo'] = $x['idGrupo'];
             $tareas = Auditorias::Tareas($post);
@@ -29,40 +36,36 @@ class Auditorias extends Conexion
 
                 $tareasTotal++;
 
-                if ($estado == "En Proceso") {
-                    $tareasEnProceso++;
-                }
-
-                if ($estado == "P. Proveedor") {
-                    $tareasPProveedor++;
-                }
-
-                if ($estado == "P. Aprobación") {
-                    $tareasPAprovacion++;
-                }
-
-                if ($estado == "Finalizado") {
-                    $tareasFinalizado++;
-                }
+                if ($estado == "Finalizado") $Finalizado++;
+                if ($estado == "Cotizacion") $Cotizacion++;
+                if ($estado == "Catalogo de Conceptos") $CatalogodeConceptos++;
+                if ($estado == "Aprovación") $Aprobacion++;
+                if ($estado == "Pendiente de Proveedor")
+                    $PendientedeProveedor++;
+                if ($estado == "Ejecucion") $Ejecucion++;
             }
 
             $x['tareasTotalPorcentaje'] =
                 $tareasTotal > 0 ? 100 / $tareasTotal : 0;
 
             $x['tareasTotal'] = $tareasTotal;
-            $x['tareasEnProceso'] = $tareasEnProceso;
-            $x['tareasPProveedor'] = $tareasPProveedor;
-            $x['tareasPAprovacion'] = $tareasPAprovacion;
-            $x['tareasFinalizado'] = $tareasFinalizado;
+            $x['Finalizado'] = $Finalizado;
+            $x['Cotizacion'] = $Cotizacion;
+            $x['CatalogodeConceptos'] = $CatalogodeConceptos;
+            $x['Aprobacion'] = $Aprobacion;
+            $x['PendientedeProveedor'] = $PendientedeProveedor;
+            $x['Ejecucion'] = $Ejecucion;
 
             $x['tareas'] = $tareas;
 
             #DATOS GLOBALES
             $tareasTotalGlobal += $tareasTotal;
-            $tareasEnProcesoGlobal += $tareasEnProceso;
-            $tareasPProveedorGlobal += $tareasPProveedor;
-            $tareasPAprovacionGlobal += $tareasPAprovacion;
-            $tareasFinalizadoGlobal += $tareasFinalizado;
+            $FinalizadoGlobal += $Finalizado;
+            $CotizacionGlobal += $Cotizacion;
+            $CatalogodeConceptosGlobal += $CatalogodeConceptos;
+            $AprobacionGlobal += $Aprobacion;
+            $PendientedeProveedorGlobal += $PendientedeProveedor;
+            $EjecucionGlobal += $Ejecucion;
 
             $array['data'][] = $x;
         }
@@ -74,17 +77,23 @@ class Auditorias extends Conexion
         $array['dataGlobales']['tareasTotalPorcentajeGlobal'] =
             $tareasTotalGlobal > 0 ? 100 / $tareasTotalGlobal : 0;
 
-        $array['dataGlobales']['tareasEnProcesoGlobal'] =
-            $tareasEnProcesoGlobal;
+        $array['dataGlobales']['FinalizadoGlobal'] =
+            $FinalizadoGlobal;
 
-        $array['dataGlobales']['tareasPProveedorGlobal'] =
-            $tareasPProveedorGlobal;
+        $array['dataGlobales']['CotizacionGlobal'] =
+            $CotizacionGlobal;
 
-        $array['dataGlobales']['tareasPAprovacionGlobal'] =
-            $tareasPAprovacionGlobal;
+        $array['dataGlobales']['CatalogodeConceptosGlobal'] =
+            $CatalogodeConceptosGlobal;
 
-        $array['dataGlobales']['tareasFinalizadoGlobal'] =
-            $tareasFinalizadoGlobal;
+        $array['dataGlobales']['AprobacionGlobal'] =
+            $AprobacionGlobal;
+
+        $array['dataGlobales']['PendientedeProveedorGlobal'] =
+            $PendientedeProveedorGlobal;
+
+        $array['dataGlobales']['EjecucionGlobal'] =
+            $EjecucionGlobal;
 
         return $array;
     }
