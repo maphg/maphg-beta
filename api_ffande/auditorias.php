@@ -11,10 +11,11 @@ class Auditorias extends Conexion
         // Estados
         $FinalizadoGlobal = 0;
         $CotizacionGlobal = 0;
-        $CatalogodeConceptosGlobal = 0;
+        $CatalogoConceptosGlobal = 0;
         $AprobacionGlobal = 0;
-        $PendientedeProveedorGlobal = 0;
-        $EjecucionGlobal = 0;
+        $PProveedorGlobal = 0;
+        $Ejecucion60Global = 0;
+        $Ejecucion80Global = 0;
 
         $auditorias = Auditorias::Grupos($_POST);
 
@@ -23,10 +24,11 @@ class Auditorias extends Conexion
 
             $Finalizado = 0;
             $Cotizacion = 0;
-            $CatalogodeConceptos = 0;
+            $CatalogoConceptos = 0;
             $Aprobacion = 0;
-            $PendientedeProveedor = 0;
-            $Ejecucion = 0;
+            $PProveedor = 0;
+            $Ejecucion60 = 0;
+            $Ejecucion80 = 0;
 
             $post['idGrupo'] = $x['idGrupo'];
             $tareas = Auditorias::Tareas($post);
@@ -38,11 +40,12 @@ class Auditorias extends Conexion
 
                 if ($estado == "Finalizado") $Finalizado++;
                 if ($estado == "Cotizacion") $Cotizacion++;
-                if ($estado == "Catalogo de Conceptos") $CatalogodeConceptos++;
+                if ($estado == "Catalogo Conceptos") $CatalogoConceptos++;
                 if ($estado == "Aprovación") $Aprobacion++;
-                if ($estado == "Pendiente de Proveedor")
-                    $PendientedeProveedor++;
-                if ($estado == "Ejecucion") $Ejecucion++;
+                if ($estado == "P. Proveedor")
+                    $PProveedor++;
+                if ($estado == "Ejecución 60%") $Ejecucion60++;
+                if ($estado == "Ejecución 80%") $Ejecucion80++;
             }
 
             $x['tareasTotalPorcentaje'] =
@@ -51,10 +54,11 @@ class Auditorias extends Conexion
             $x['tareasTotal'] = $tareasTotal;
             $x['Finalizado'] = $Finalizado;
             $x['Cotizacion'] = $Cotizacion;
-            $x['CatalogodeConceptos'] = $CatalogodeConceptos;
+            $x['CatalogoConceptos'] = $CatalogoConceptos;
             $x['Aprobacion'] = $Aprobacion;
-            $x['PendientedeProveedor'] = $PendientedeProveedor;
-            $x['Ejecucion'] = $Ejecucion;
+            $x['PProveedor'] = $PProveedor;
+            $x['Ejecucion60'] = $Ejecucion60;
+            $x['Ejecucion80'] = $Ejecucion80;
 
             $x['tareas'] = $tareas;
 
@@ -62,10 +66,11 @@ class Auditorias extends Conexion
             $tareasTotalGlobal += $tareasTotal;
             $FinalizadoGlobal += $Finalizado;
             $CotizacionGlobal += $Cotizacion;
-            $CatalogodeConceptosGlobal += $CatalogodeConceptos;
+            $CatalogoConceptosGlobal += $CatalogoConceptos;
             $AprobacionGlobal += $Aprobacion;
-            $PendientedeProveedorGlobal += $PendientedeProveedor;
-            $EjecucionGlobal += $Ejecucion;
+            $PProveedorGlobal += $PProveedor;
+            $Ejecucion60Global += $Ejecucion60;
+            $Ejecucion80Global += $Ejecucion80;
 
             $array['data'][] = $x;
         }
@@ -83,17 +88,20 @@ class Auditorias extends Conexion
         $array['dataGlobales']['CotizacionGlobal'] =
             $CotizacionGlobal;
 
-        $array['dataGlobales']['CatalogodeConceptosGlobal'] =
-            $CatalogodeConceptosGlobal;
+        $array['dataGlobales']['CatalogoConceptosGlobal'] =
+            $CatalogoConceptosGlobal;
 
         $array['dataGlobales']['AprobacionGlobal'] =
             $AprobacionGlobal;
 
-        $array['dataGlobales']['PendientedeProveedorGlobal'] =
-            $PendientedeProveedorGlobal;
+        $array['dataGlobales']['PProveedorGlobal'] =
+            $PProveedorGlobal;
 
         $array['dataGlobales']['EjecucionGlobal'] =
-            $EjecucionGlobal;
+            $Ejecucion60Global;
+
+        $array['dataGlobales']['EjecucionGlobal'] =
+            $Ejecucion80Global;
 
         return $array;
     }
