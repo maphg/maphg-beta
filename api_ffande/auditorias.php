@@ -107,10 +107,10 @@ class Auditorias extends Conexion
         $array['dataGlobales']['PProveedorGlobal'] =
             $PProveedorGlobal;
 
-        $array['dataGlobales']['EjecucionGlobal'] =
+        $array['dataGlobales']['Ejecucion60Global'] =
             $Ejecucion60Global;
 
-        $array['dataGlobales']['EjecucionGlobal'] =
+        $array['dataGlobales']['Ejecucion80Global'] =
             $Ejecucion80Global;
 
         return $array;
