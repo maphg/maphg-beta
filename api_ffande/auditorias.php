@@ -39,13 +39,23 @@ class Auditorias extends Conexion
                 $tareasTotal++;
 
                 if ($estado == "Finalizado") $Finalizado++;
-                if ($estado == "Cotizacion") $Cotizacion++;
+
+                if ($estado == "Cotización" || $estado == "Cotizacion")
+                    $Cotizacion++;
+
                 if ($estado == "Catalogo Conceptos") $CatalogoConceptos++;
-                if ($estado == "Aprovación") $Aprobacion++;
+
+                if ($estado == "Aprovación" || $estado == "Aprovación")
+                    $Aprobacion++;
+
                 if ($estado == "P. Proveedor")
                     $PProveedor++;
-                if ($estado == "Ejecución 60%") $Ejecucion60++;
-                if ($estado == "Ejecución 80%") $Ejecucion80++;
+
+                if ($estado == "Ejecución 60%" || $estado == "Ejecucion 60%")
+                    $Ejecucion60++;
+
+                if ($estado == "Ejecución 80%" || $estado == "Ejecucion 80%")
+                    $Ejecucion80++;
             }
 
             $x['tareasTotalPorcentaje'] =
