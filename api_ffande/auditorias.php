@@ -45,7 +45,7 @@ class Auditorias extends Conexion
 
                 if ($estado == "Catalogo Conceptos") $CatalogoConceptos++;
 
-                if ($estado == "Aprobación" || $estado == "Aprobación")
+                if ($estado == "Aprobación" || $estado == "Aprobacion")
                     $Aprobacion++;
 
                 if ($estado == "P. Proveedor")
