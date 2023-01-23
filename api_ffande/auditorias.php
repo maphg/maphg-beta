@@ -494,13 +494,13 @@ class Auditorias extends Conexion
 
         $rutaAbsoluta = "https://maphg.com/america/planner/avatars/AVATAR_ID_0_0.svg";
         if (strpos($_SERVER['REQUEST_URI'], "america") == true)
-            $rutaAbsoluta = "https://maphg.com/america/ffande/adjuntos/";
+            $rutaAbsoluta = "https://maphg.com/america/ff&e/adjuntos/";
 
         if (strpos($_SERVER['REQUEST_URI'], "europa") == true)
-            $rutaAbsoluta = "https://maphg.com/europa/ffande/adjuntos/";
+            $rutaAbsoluta = "https://maphg.com/europa/ff&e/adjuntos/";
 
         if (strpos($_SERVER['REQUEST_URI'], "maphg-beta") == true)
-            $rutaAbsoluta = "../maphg-beta/ffande/adjuntos/";
+            $rutaAbsoluta = "../maphg-beta/ff&e/adjuntos/";
 
 
         $query = "SELECT
