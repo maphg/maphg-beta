@@ -1111,6 +1111,23 @@ if ($peticion === 'POST') {
          $array['data'] = AuditoriaProyectos::actualizarFase($_POST);
       }
    }
+
+
+   #APARTADO checkList
+   if ($apartado === 'checkList') {
+      include_once "conexion.php";
+      include_once "checkList.php";
+
+      if ($accion === 'all') {
+
+         #OBTIENE INFORMACIÓN DEL EQUIPO
+         $post = $_POST = json_decode(file_get_contents('php://input'), true);
+
+         #ARRAY DE RESULTADOS
+         $array['response'] = "SUCCESS";
+         $array['data'] = CheckList::all($post);
+      }
+   }
 }
 
 echo json_encode($array);
