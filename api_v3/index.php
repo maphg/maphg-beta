@@ -1135,7 +1135,7 @@ if ($peticion === 'POST') {
 
          #ARRAY DE RESULTADOS
          $array['response'] = "SUCCESS";
-         $array['data'] = CheckList::all($post);
+         $array['data'] = CheckList::all2($post);
       }
    }
 
