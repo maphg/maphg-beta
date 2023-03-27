@@ -1138,6 +1138,23 @@ if ($peticion === 'POST') {
          $array['data'] = CheckList::all($post);
       }
    }
+
+
+   #APARTADO PLANES DE EQUIPOS
+   if ($apartado === 'PlaneacionEquipos') {
+      include_once "conexion.php";
+      include_once "planeacionEquipos.php";
+
+      if ($accion === 'all') {
+
+         #OBTIENE INFORMACIÓN DEL EQUIPO
+         $post = $_POST = json_decode(file_get_contents('php://input'), true);
+
+         #ARRAY DE RESULTADOS
+         $array['response'] = "SUCCESS";
+         $array['data'] = PlaneacionEquipos::all($post);
+      }
+   }
 }
 
 echo json_encode($array);
