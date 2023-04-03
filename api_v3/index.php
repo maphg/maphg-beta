@@ -1137,6 +1137,16 @@ if ($peticion === 'POST') {
          $array['response'] = "SUCCESS";
          $array['data'] = CheckList::all2($post);
       }
+
+      if ($accion === 'actualizarActividad') {
+
+         #OBTIENE INFORMACIÓN DEL EQUIPO
+         $post = $_POST = json_decode(file_get_contents('php://input'), true);
+
+         #ARRAY DE RESULTADOS
+         $array['response'] = "SUCCESS";
+         $array['data'] = CheckList::actualizarActividad($post);
+      }
    }
 
 

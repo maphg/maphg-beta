@@ -29,6 +29,7 @@ class CheckList extends Conexion
     r.fecha_creado fechaCreado,
     r.fecha_finalizado fechaFinalizado,
     aa.actividad,
+    rc.id_publico idActividad,
     rc.valor,
     rc.comentario,
     rc.reportado
@@ -49,7 +50,7 @@ class CheckList extends Conexion
     $prepare->execute();
     $response = $prepare->get_result();
     $array = array();
-    
+
     $meses = ['NULL', 'ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'];
 
     foreach ($response as $x) {
@@ -63,6 +64,30 @@ class CheckList extends Conexion
     }
     return $array;
   }
+
+
+
+  public static function actualizarActividad($post)
+  {
+    $conexion = new Conexion();
+    $conexion->conectar();
+    $array = array();
+    $idActividad = $post['idActividad'];
+    $valor = $post['valor'];
+
+    $query = "UPDATE t_sabanas_registros_capturas
+    SET reportado = ?
+    WHERE id_publico = ? AND activo = 1";
+
+    $prepare = mysqli_prepare($conexion->con, $query);
+    $prepare->bind_param("ss", $valor, $idActividad);
+    $array = "ERROR";
+
+    if ($prepare->get_result()) $array = "SUCCESS";
+
+    return $array;
+  }
+
 
 
   public static function all($post)
