@@ -32,6 +32,7 @@ class CheckList extends Conexion
     rc.id_publico idActividad,
     rc.valor,
     rc.comentario,
+    rc.url_adjunto adjunto,
     rc.reportado
     FROM t_sabanas_registros AS r
     INNER JOIN t_sabanas AS s ON r.id_sabana = s.id_publico
@@ -54,11 +55,11 @@ class CheckList extends Conexion
     $meses = ['NULL', 'ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'];
 
     foreach ($response as $x) {
-
-
-
       $array['totalActividades']++;
       $x['mes'] = $meses[intval((new DateTime($x['fechaCreado']))->format('m'))];
+
+      if ($x['adjunto'] != "")
+        $x['adjunto'] = 'https://maphg.com/america/sabanas/fotos/' . $x['adjunto'];
 
       $array['actividades'][] = $x;
     }
@@ -72,18 +73,20 @@ class CheckList extends Conexion
     $conexion = new Conexion();
     $conexion->conectar();
     $array = array();
+    $array = "ERROR";
     $idActividad = $post['idActividad'];
+    $idUsuario = $post['idUsuario'];
     $valor = $post['valor'];
 
     $query = "UPDATE t_sabanas_registros_capturas
-    SET reportado = ?
+    SET reportado = ?, reportado_por = ?
     WHERE id_publico = ? AND activo = 1";
 
     $prepare = mysqli_prepare($conexion->con, $query);
-    $prepare->bind_param("ss", $valor, $idActividad);
-    $array = "ERROR";
+    $prepare->bind_param("sss", $valor, $idUsuario, $idActividad);
 
-    if ($prepare->get_result()) $array = "SUCCESS";
+
+    if ($prepare->execute()) $array = "SUCCESS";
 
     return $array;
   }
