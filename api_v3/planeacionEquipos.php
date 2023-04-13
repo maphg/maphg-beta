@@ -10,6 +10,17 @@ class PlaneacionEquipos extends Conexion
 
     $idDestino = $post['idDestino'];
     $año = $post['año'];
+    $idSeccion = intval($post['idSeccion']);
+    $idSubseccion = intval($post['idSubseccion']);
+
+    $filtroSeccion = "";
+    $filtroSubseccion = "";
+
+    if ($idSeccion > 0)
+      $filtroSeccion = "AND e.id_seccion = $idSeccion";
+
+    if ($idSubseccion > 0)
+      $filtroSubseccion = "AND e.id_subseccion = $idSubseccion";
 
     $query = "
     SELECT
@@ -29,6 +40,7 @@ class PlaneacionEquipos extends Conexion
     fmp.frecuencia,
     pm.grado,
     pm.tipo_plan,
+    t.tipo,
     pp.semana_1 pp_1,
     pp.semana_2 pp_2,
     pp.semana_3 pp_3,
@@ -141,7 +153,8 @@ class PlaneacionEquipos extends Conexion
     INNER JOIN c_subsecciones AS sub ON sub.id = e.id_subseccion
     INNER JOIN t_mp_planes_mantenimiento AS pm ON pm.id = pp.id_plan
     INNER JOIN c_frecuencias_mp AS fmp ON fmp.id = pm.id_periodicidad
-    WHERE e.activo = 1 AND pp.activo = 1 AND pp.año = ? AND e.id_destino = ?
+    INNER JOIN c_tipos AS t ON t.id = e.id_tipo
+    WHERE e.activo = 1 AND pp.activo = 1 AND pp.año = ? AND e.id_destino = ? $filtroSeccion $filtroSubseccion
     ORDER BY pp.ultima_modificacion ASC LIMIT 6000";
     $prepare = mysqli_prepare($conexion->con, $query);
     $prepare->bind_param("si", $año, $idDestino);
@@ -175,19 +188,22 @@ class PlaneacionEquipos extends Conexion
       #SEMANAS
       $planeacion = array();
       for ($i = 1; $i < 53; $i++) {
-        $planeacion[$i] = 0;
 
-        if ($x["ps_" . $i] == "PLANIFICADO") $planeacion[$i] = 1;
+        $valor = 0;
 
-        if ($x["pp_" . $i] == "SOLUCIONADO") $planeacion[$i] = 2;
+        if ($x["ps_" . $i] == "PLANIFICADO") $valor = 1;
 
-        if ($x["pp_" . $i] == "PROCESO") $planeacion[$i] = 3;
+        if ($x["pp_" . $i] == "SOLUCIONADO") $valor = 2;
+
+        if ($x["pp_" . $i] == "PROCESO") $valor = 3;
 
         if ($x["ps_" . $i] == "PLANIFICADO" && $x["pp_" . $i] == "SOLUCIONADO")
-          $planeacion[$i] = 4;
+          $valor = 4;
 
         if ($x["ps_" . $i] == "PLANIFICADO" && $x["pp_" . $i] == "PROCESO")
-          $planeacion[$i] = 5;
+          $valor = 5;
+
+        $planeacion[] = $valor;
 
         unset($x['ps_' . $i]);
         unset($x['pp_' . $i]);
@@ -201,14 +217,15 @@ class PlaneacionEquipos extends Conexion
         "tipoPlan" => $tipoPlan,
         "frecuencia" => $frecuencia,
         "grado" => $grado,
-        "planeacion" => $planeacion
+        "planeacion" => $planeacion,
       );
     }
 
     foreach ($array as $x) {
       $arrayTemp[] =
         array(
-          "destino" => $x[0]['ubicacion'],
+          "destino" => $x[0]['destino'],
+          "nombreDestino" => $x[0]['nombreDestino'],
           "idEquipo" => $x[0]['idEquipo'],
           "equipo" => $x[0]['equipo'],
           "idSeccion" => $x[0]['idSeccion'],
@@ -216,6 +233,7 @@ class PlaneacionEquipos extends Conexion
           "idSubseccion" => $x[0]['idSubseccion'],
           "subseccion" => $x[0]['subseccion'],
           "totalPlanes" => count($x['planes']),
+          "status" => $x['status'],
           "planes" => $x['planes'],
 
         );
