@@ -156,7 +156,7 @@ class PlaneacionEquipos extends Conexion
     INNER JOIN c_frecuencias_mp AS fmp ON fmp.id = pm.id_periodicidad
     INNER JOIN c_tipos AS t ON t.id = e.id_tipo
     WHERE e.activo = 1 AND pp.activo = 1 AND pp.año = ? AND e.id_destino = ? $filtroSeccion $filtroSubseccion
-    ORDER BY pp.ultima_modificacion ASC LIMIT 6000";
+    ORDER BY pp.ultima_modificacion ASC";
     $prepare = mysqli_prepare($conexion->con, $query);
     $prepare->bind_param("si", $año, $idDestino);
     $prepare->execute();
