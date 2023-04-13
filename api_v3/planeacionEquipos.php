@@ -234,6 +234,7 @@ class PlaneacionEquipos extends Conexion
           "subseccion" => $x[0]['subseccion'],
           "totalPlanes" => count($x['planes']),
           "status" => $x['status'],
+          "tipoEquipo" => $x['tipo'],
           "planes" => $x['planes'],
 
         );
