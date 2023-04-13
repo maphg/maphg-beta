@@ -41,7 +41,7 @@ class PlaneacionEquipos extends Conexion
     pm.grado,
     pm.tipo_plan,
     t.id idTipoEquipo,
-    t.tipoEquipo,
+    t.tipo tipoEquipo,
     pp.semana_1 pp_1,
     pp.semana_2 pp_2,
     pp.semana_3 pp_3,
