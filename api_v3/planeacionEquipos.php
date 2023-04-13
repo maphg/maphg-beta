@@ -40,7 +40,8 @@ class PlaneacionEquipos extends Conexion
     fmp.frecuencia,
     pm.grado,
     pm.tipo_plan,
-    t.tipo,
+    t.id idTipoEquipo,
+    t.tipoEquipo,
     pp.semana_1 pp_1,
     pp.semana_2 pp_2,
     pp.semana_3 pp_3,
@@ -234,9 +235,9 @@ class PlaneacionEquipos extends Conexion
           "subseccion" => $x[0]['subseccion'],
           "totalPlanes" => count($x['planes']),
           "status" => $x[0]['status'],
-          "tipoEquipo" => $x[0]['tipo'],
+          "idTipoEquipo" => $x[0]['idTipoEquipo'],
+          "tipoEquipo" => $x[0]['tipoEquipo'],
           "planes" => $x['planes'],
-
         );
     }
     return $arrayTemp;
