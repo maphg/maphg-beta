@@ -385,7 +385,7 @@ if ($peticion === "POST") {
       $array['existe'] = $existe;
 
       // SE ACTUALIZA EL REGISTRO
-      if ($existe == 1) {
+      if ($existe >= 1) {
          $query = "UPDATE t_sabanas_registros_capturas SET
          valor = '$valor',
          comentario = '$comentario',
@@ -400,12 +400,22 @@ if ($peticion === "POST") {
 
       // SE CAPTURA REGISTRO NUEVO
       if ($existe == 0) {
-         $query = "INSERT INTO t_sabanas_registros_capturas(id_publico, id_registro, id_equipo, id_actividad, valor, comentario, url_adjunto, creado_por, fecha_creado, activo)
-         VALUE('$idCaptura', '$idRegistro', '$idEquipo', '$idActividad', '$valor', '$comentario', '$adjunto', $idUsuario, '$fechaCreado', 1)";
+
+         $existe2 = 0;
+         $query = "SELECT id_publico FROM t_sabanas_registros_capturas
+         WHERE id_publico = '$idCaptura'";
          if ($result = mysqli_query($conn_2020, $query)) {
-            $array['response'] = 'SUCCESS';
-            $array['accion'] = "CAPTURADO";
-            $array['data'] = $valor;
+            $existe = mysqli_num_rows($result);
+         }
+
+         if ($existe2 == 0) {
+            $query = "INSERT INTO t_sabanas_registros_capturas(id_publico, id_registro, id_equipo, id_actividad, valor, comentario, url_adjunto, creado_por, fecha_creado, activo)
+            VALUE('$idCaptura', '$idRegistro', '$idEquipo', '$idActividad', '$valor', '$comentario', '$adjunto', $idUsuario, '$fechaCreado', 1)";
+            if ($result = mysqli_query($conn_2020, $query)) {
+               $array['response'] = 'SUCCESS';
+               $array['accion'] = "CAPTURADO";
+               $array['data'] = $valor;
+            }
          }
       }
    }
