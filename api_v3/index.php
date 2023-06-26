@@ -1057,7 +1057,7 @@ if ($peticion === 'POST') {
 
          #ARRAY DE RESULTADOS
          $array['response'] = "SUCCESS";
-         $array['data'] = $equipo;
+         $array['data'] = $resultado;
       }
 
       if ($accion === 'detalle') {
