@@ -1048,6 +1048,18 @@ if ($peticion === 'POST') {
       include_once "preventivos.php";
       include_once "otMp.php";
 
+      if ($accion === 'equipo') {
+         $idEquipo = $_POST['idEquipo'];
+
+         #OBTIENE INFORMACIÓN DEL EQUIPO
+         $resultado = Equipos::equiposFiltrados($idEquipo, $idDestino, 0, 0, 0, '');
+         $equipo = array();
+
+         #ARRAY DE RESULTADOS
+         $array['response'] = "SUCCESS";
+         $array['data'] = $equipo;
+      }
+
       if ($accion === 'detalle') {
          $idEquipo = $_POST['idEquipo'];
 
@@ -1067,9 +1079,6 @@ if ($peticion === 'POST') {
             #PREVENTIVOS(Ots)
             $equipo[0]['preventivos'] = OtMp::otEquipo($idDestino, $idEquipo);
          }
-
-
-
 
          #ARRAY DE RESULTADOS
          $array['response'] = "SUCCESS";
